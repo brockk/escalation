@@ -4,16 +4,16 @@ source('R/phase1_outcomes_to_cohorts.R')
 source('R/parse_phase1_outcomes.R')
 source('R/dfcrm_selector.R')
 source('R/derived_dose_selector.R')
+source('R/selector.R')
 source('R/n_at_dose_selector.R')
 
 library(magrittr)
 
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
-coh <- phase1_outcomes_to_cohorts(outcomes)
-coh
-df <- parse_phase1_outcomes(outcomes)
-df
+phase1_outcomes_to_cohorts(outcomes)
+parse_phase1_outcomes(outcomes)
+parse_phase1_outcomes(outcomes, as_list = FALSE)
 
 
 # Model fitting ----
@@ -25,29 +25,42 @@ crm_fitter <- get_dfcrm(skeleton, target)
 # Factory interface
 x <- fit(crm_fitter, outcomes)
 # Selector interface
+class(x)
+model_frame(x)
+doses_given(x)
+tox(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
 n_at_dose(x)
+tox_at_dose(x)
 
 
 ## tidyverse R
 crm_fit <- get_dfcrm(skeleton, target) %>%
   fit(outcomes)
 crm_fit %>% class()
+crm_fit %>% model_frame()
+crm_fit %>% doses_given()
+crm_fit %>% tox()
 crm_fit %>% num_doses()
 crm_fit %>% recommended_dose()
 crm_fit %>% continue()
 crm_fit %>% n_at_dose()
+crm_fit %>% tox_at_dose()
 
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 3, dose = 2) %>%
   fit(outcomes)
 crm_fit %>% class()
+crm_fit %>% model_frame()
+crm_fit %>% doses_given()
+crm_fit %>% tox()
 crm_fit %>% num_doses()
 crm_fit %>% recommended_dose()
 crm_fit %>% continue()
 crm_fit %>% n_at_dose()
+crm_fit %>% tox_at_dose()
 
 
 # Tests

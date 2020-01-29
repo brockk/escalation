@@ -20,13 +20,13 @@
 #'
 #' @param outcomes character string, conveying doses given and outcomes
 #' observed.
-#' @param as.list TRUE (the default) to return a \code{list};
+#' @param as_list TRUE (the default) to return a \code{list};
 #' FALSE to return a \code{data.frame}
 #'
-#' @return If \code{as.list == TRUE}, a list with elements \code{tox},
+#' @return If \code{as_list == TRUE}, a list with elements \code{tox},
 #' \code{doses} and \code{num_patients}. These elements are congruent with those
 #' of the same name in \code{crm_params}, for example.
-#' If \code{as.list == FALSE}, a data.frame with columns \code{tox} and
+#' If \code{as_list == FALSE}, a data.frame with columns \code{tox} and
 #' \code{doses}.
 #'
 #' @export
@@ -47,7 +47,7 @@
 #' BMC Medical Research Methodology, 17(1), 112.
 #' https://doi.org/10.1186/s12874-017-0381-x
 #'
-parse_phase1_outcomes <- function(outcomes, as.list = TRUE) {
+parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
   # TODO add patient and cohort ids
 
@@ -66,7 +66,7 @@ parse_phase1_outcomes <- function(outcomes, as.list = TRUE) {
     tox = c(tox, these_tox)
   }
 
-  if(as.list) {
+  if(as_list) {
     return(list(
       dose = dose, tox = tox, num_patients = length(dose)
     ))

@@ -5,6 +5,18 @@ fit <- function(selector_factory, outcomes, ...) {
 }
 
 # selector interface
+doses_given <- function(selector, ...) {
+  UseMethod('doses_given')
+}
+
+tox <- function(selector, ...) {
+  UseMethod('tox')
+}
+
+model_frame <- function(selector, ...) {
+  UseMethod('model_frame')
+}
+
 num_doses <- function(selector, ...) {
   UseMethod('num_doses')
 }
@@ -21,4 +33,6 @@ n_at_dose <- function(selector, ...) {
   UseMethod('n_at_dose')
 }
 
-
+tox_at_dose <- function(selector, ...) {
+  UseMethod('tox_at_dose')
+}

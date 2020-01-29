@@ -33,6 +33,14 @@ fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
 }
 
 # Selector interface
+doses_given.dfcrm_selector <- function(selector, ...) {
+  return(selector$dfcrm_fit$level)
+}
+
+tox.dfcrm_selector <- function(selector, ...) {
+  return(selector$dfcrm_fit$tox)
+}
+
 num_doses.dfcrm_selector <- function(selector, ...) {
   return(length(selector$skeleton))
 }
@@ -47,5 +55,15 @@ continue.dfcrm_selector <- function(selector, ...) {
 
 n_at_dose.dfcrm_selector <- function(selector, ...) {
   dose_indices <- 1:(selector %>% num_doses())
-  purrr::map_int(dose_indices, ~ sum(selector$dfcrm_fit$level == .x))
+  purrr::map_int(dose_indices, ~ sum(selector %>% doses_given() == .x))
+}
+
+tox_at_dose.dfcrm_selector <- function(selector, ...) {
+  # df <- selector %>% model_frame()
+  # df
+  dose_indices <- 1:(selector %>% num_doses())
+  tox_seen <- selector %>% tox()
+  purrr::map_int(dose_indices,
+                 ~ sum(tox_seen[selector %>% doses_given() == .x])
+  )
 }
