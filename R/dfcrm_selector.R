@@ -13,7 +13,8 @@ dfcrm_selector <- function(outcomes, skeleton, target) {
 
   df <- parse_phase1_outcomes(outcomes)
   x <- dfcrm::crm(prior = skeleton, target = target,
-                  tox = df$tox, level = df$dose)
+                  tox = df$tox, level = df$dose,
+                  var.est = TRUE)
 
   l <- list(
     cohort = df$cohort,
@@ -68,11 +69,47 @@ n_at_dose.dfcrm_selector <- function(selector, ...) {
 }
 
 tox_at_dose.dfcrm_selector <- function(selector, ...) {
-  # df <- selector %>% model_frame()
-  # df
   dose_indices <- 1:(selector %>% num_doses())
   tox_seen <- selector %>% tox()
   purrr::map_int(dose_indices,
                  ~ sum(tox_seen[selector %>% doses_given() == .x])
   )
 }
+
+mean_prob_tox.dfcrm_selector <- function(selector, ...) {
+  return(selector$dfcrm_fit$ptox)
+}
+
+median_prob_tox.dfcrm_selector <- function(selector, ...) {
+  stop('dfcrm does not calculate an estimate for median_prob_tox.')
+}
+
+prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, iter = 1000,
+                                            ...) {
+
+  if(selector$dfcrm_fit$model == 'empiric') {
+    # Sample beta from normal distribution with mean and stdev that match
+    # posterior parameter estimates:
+    beta <- rnorm(n = iter, mean = selector$dfcrm_fit$estimate,
+                  sd = sqrt(selector$dfcrm_fit$post.var))
+    # MAtrix with skeleton in each row
+    skeleton_matrix <- matrix(selector$skeleton, nrow = iter,
+                              ncol = selector %>% num_doses, byrow = TRUE)
+    # Raise each row to one of the sampled beta values:
+    prob_tox_sample <- skeleton_matrix ^ exp(beta)
+    # Prob(Prob(Tox) > threshold) is approximated by:
+    colMeans(prob_tox_sample > threshold)
+  } else if(selector$dfcrm_fit$model == 'logistic') {
+    # dfcrm fixes the intercept value:
+    alpha <- selector$dfcrm_fit$intcpt
+    # Sample beta from normal distribution with mean and stdev that match
+    # posterior parameter estimates:
+    beta <- rnorm(n = iter, mean = selector$dfcrm_fit$estimate,
+                  sd = sqrt(selector$dfcrm_fit$post.var))
+    stop('TODO - code not finished yet')
+  } else {
+    stop(paste0("Don't know what to do with dfcrm model '",
+                selector$dfcrm_fit$model, "'"))
+  }
+}
+

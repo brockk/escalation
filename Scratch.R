@@ -37,60 +37,27 @@ recommended_dose(x)
 continue(x)
 n_at_dose(x)
 tox_at_dose(x)
-
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
 
 
 ## tidyverse R
 crm_fit <- get_dfcrm(skeleton, target) %>%
   fit(outcomes)
-crm_fit %>% class()
-crm_fit %>% num_patients()
-crm_fit %>% cohort()
-crm_fit %>% doses_given()
-crm_fit %>% tox()
-crm_fit %>% model_frame()
-crm_fit %>% num_doses()
-crm_fit %>% recommended_dose()
-crm_fit %>% continue()
-crm_fit %>% n_at_dose()
-crm_fit %>% tox_at_dose()
-
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 6, dose = 2) %>%
   fit(outcomes)
-crm_fit %>% class()
-crm_fit %>% num_patients()
-crm_fit %>% cohort()
-crm_fit %>% doses_given()
-crm_fit %>% tox()
-crm_fit %>% model_frame()
-crm_fit %>% num_doses()
-crm_fit %>% recommended_dose()
-crm_fit %>% continue()
-crm_fit %>% n_at_dose()
-crm_fit %>% tox_at_dose()
-
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 15) %>%
   fit(outcomes)
-crm_fit %>% class()
-crm_fit %>% num_patients()
-crm_fit %>% cohort()
-crm_fit %>% doses_given()
-crm_fit %>% tox()
-crm_fit %>% model_frame()
-crm_fit %>% num_doses()
-crm_fit %>% recommended_dose()
-crm_fit %>% continue()
-crm_fit %>% n_at_dose()
-crm_fit %>% tox_at_dose()
-
-
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
   fit(outcomes)
+
 crm_fit %>% class()
 crm_fit %>% num_patients()
 crm_fit %>% cohort()
@@ -102,24 +69,14 @@ crm_fit %>% recommended_dose()
 crm_fit %>% continue()
 crm_fit %>% n_at_dose()
 crm_fit %>% tox_at_dose()
-
-crm_fit <- get_dfcrm(skeleton, target) %>%
-  stop_when_n_at_dose(n = 9, dose = 3) %>%
-  stop_at_n(n = 21) %>%
-  fit(outcomes)
-crm_fit %>% continue()
-crm_fit %>% recommended_dose()
-
-crm_fit <- get_dfcrm(skeleton, target) %>%
-  stop_at_n(n = 21) %>%
-  stop_when_n_at_dose(n = 9, dose = 3) %>%
-  fit(outcomes)
-crm_fit %>% continue()
-crm_fit %>% recommended_dose()
+crm_fit %>% empiric_tox_rate()
+crm_fit %>% mean_prob_tox()
+crm_fit %>% median_prob_tox()
+crm_fit %>% prob_tox_exceeds(0.5)
 
 
 
-# Tests
+# Tests ----
 
 # of stop_when_n_at_dose
 get_dfcrm(skeleton, target) %>%
@@ -142,5 +99,22 @@ get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 4, dose = 2) %>%
   fit('1NNN 2NTN') %>%
   continue()
+
+
+# Order of embellishments should not matter:
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 3) %>%
+  stop_at_n(n = 21) %>%
+  fit(outcomes)
+crm_fit %>% continue()
+crm_fit %>% recommended_dose()
+
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_at_n(n = 21) %>%
+  stop_when_n_at_dose(n = 9, dose = 3) %>%
+  fit(outcomes)
+crm_fit %>% continue()
+crm_fit %>% recommended_dose()
+
 
 # of stop_at_n

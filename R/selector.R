@@ -7,3 +7,8 @@ model_frame.selector <- function(selector, ...) {
     tox = selector %>% tox()
   )
 }
+
+empiric_tox_rate.selector <- function(selector, ...) {
+  return(selector %>% tox_at_dose() / selector %>% n_at_dose())
+}
+
