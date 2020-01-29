@@ -30,14 +30,7 @@ fit.stop_at_n_selector_factory <- function(selector_factory, outcomes, ...) {
 
 # Selector interface
 continue.stop_at_n_selector <- function(selector, ...) {
-  return(selector %>% num_patients() < selector$n)
-
-  # if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-  #   if(n_at_dose[selector$dose] >= selector$n) {
-  #     return(FALSE)
-  #   }
-  # }
-  #
-  # # By default:
-  # return(TRUE)
+  parent_continue <- selector$parent %>% continue()
+  this_continue <- selector %>% num_patients() < selector$n
+  return(parent_continue & this_continue)
 }

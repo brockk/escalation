@@ -33,7 +33,6 @@ fit.n_at_dose_selector_factory <- function(selector_factory, outcomes, ...) {
 
 # Selector interface
 continue.n_at_dose_selector <- function(selector, ...) {
-  # n_at_dose <- selector$parent %>% n_at_dose()
   n_at_dose <- selector %>% n_at_dose()
   if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
     if(n_at_dose[selector$dose] >= selector$n) {
@@ -42,5 +41,5 @@ continue.n_at_dose_selector <- function(selector, ...) {
   }
 
   # By default:
-  return(TRUE)
+  return(selector$parent %>% continue())
 }

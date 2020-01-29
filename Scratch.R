@@ -103,6 +103,21 @@ crm_fit %>% continue()
 crm_fit %>% n_at_dose()
 crm_fit %>% tox_at_dose()
 
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 3) %>%
+  stop_at_n(n = 21) %>%
+  fit(outcomes)
+crm_fit %>% continue()
+crm_fit %>% recommended_dose()
+
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_at_n(n = 21) %>%
+  stop_when_n_at_dose(n = 9, dose = 3) %>%
+  fit(outcomes)
+crm_fit %>% continue()
+crm_fit %>% recommended_dose()
+
+
 
 # Tests
 
