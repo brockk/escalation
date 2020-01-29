@@ -11,10 +11,9 @@ get_dfcrm <- function(skeleton, target) {
 
 dfcrm_selector <- function(outcomes, skeleton, target) {
 
-  # Parse outcomes
+  df <- parse_phase1_outcomes(outcomes)
   x <- dfcrm::crm(prior = skeleton, target = target,
-                  tox = c(0,0,0, 0,1,0),
-                  level = c(1,1,1, 2,2,2))
+                  tox = df$tox, level = df$dose)
 
   l <- list(
     outcomes = outcomes,
@@ -26,16 +25,27 @@ dfcrm_selector <- function(outcomes, skeleton, target) {
   l
 }
 
+# Factory interface
 fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
   return(dfcrm_selector(outcomes,
                         selector_factory$skeleton,
                         selector_factory$target))
 }
 
+# Selector interface
+num_doses.dfcrm_selector <- function(selector, ...) {
+  return(length(selector$skeleton))
+}
+
 recommended_dose.dfcrm_selector <- function(selector, ...) {
-  selector$dfcrm_fit$mtd
+  return(selector$dfcrm_fit$mtd)
+}
+
+continue.dfcrm_selector <- function(selector, ...) {
+  return(TRUE)
 }
 
 n_at_dose.dfcrm_selector <- function(selector, ...) {
-  return(c(3,3,0,0,0)) # TODO
+  dose_indices <- 1:(selector %>% num_doses())
+  purrr::map_int(dose_indices, ~ sum(selector$dfcrm_fit$level == .x))
 }

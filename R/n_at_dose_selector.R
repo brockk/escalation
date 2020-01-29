@@ -18,10 +18,11 @@ n_at_dose_selector <- function(parent_selector, n, dose) {
     dose = dose
   )
 
-  class(l) = c('selector', 'n_at_dose_selector')
+  class(l) = c('selector', 'derived_dose_selector', 'n_at_dose_selector')
   l
 }
 
+# Factory interface
 fit.n_at_dose_selector_factory <- function(selector_factory, outcomes, ...) {
   parent_selector <- selector_factory$parent %>%
     fit(outcomes, ...)
@@ -30,19 +31,15 @@ fit.n_at_dose_selector_factory <- function(selector_factory, outcomes, ...) {
                             dose = selector_factory$dose))
 }
 
-recommended_dose.n_at_dose_selector <- function(selector, ...) {
+# Selector interface
+continue.n_at_dose_selector <- function(selector, ...) {
   n_at_dose <- selector$parent %>% n_at_dose()
-  if(selector$dose >= 1 & selector$dose <= length(n_at_dose)) {
-    if(n_at_dose[selector$dose] >= selector$n)
-      return(NA)
-    else
-      return(selector$parent %>% recommended_dose(...))
-  } else {
-    return(selector$parent %>% recommended_dose(...))
+  if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
+    if(n_at_dose[selector$dose] >= selector$n) {
+      return(FALSE)
+    }
   }
-}
 
-n_at_dose.n_at_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% n_at_dose(...))
+  # By default:
+  return(TRUE)
 }
-
