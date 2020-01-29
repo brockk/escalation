@@ -5,6 +5,14 @@ fit <- function(selector_factory, outcomes, ...) {
 }
 
 # selector interface
+num_patients <- function(selector, ...) {
+  UseMethod('num_patients')
+}
+
+cohort <- function(selector, ...) {
+  UseMethod('cohort')
+}
+
 doses_given <- function(selector, ...) {
   UseMethod('doses_given')
 }

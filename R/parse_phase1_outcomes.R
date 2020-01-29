@@ -49,11 +49,11 @@
 #'
 parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
-  # TODO add patient and cohort ids
-
   cohorts <- phase1_outcomes_to_cohorts(outcomes)
-  dose = integer(length = 0)
-  tox = integer(length = 0)
+  dose <- integer(length = 0)
+  tox <- integer(length = 0)
+  cohort_ids <- integer(length = 0)
+  cohort_id <- 1
   for(cohort in cohorts) {
     c_dl <- cohort$dose
     c_outcomes <- cohort$outcomes
@@ -64,13 +64,20 @@ parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
     dose <- c(dose, these_dose)
     tox = c(tox, these_tox)
+    cohort_ids <- c(cohort_ids, rep(cohort_id, length(these_dose)))
+    cohort_id <- cohort_id + 1
   }
 
   if(as_list) {
     return(list(
+      cohort = cohort_ids, patient = 1:length(dose),
       dose = dose, tox = tox, num_patients = length(dose)
     ))
   } else {
-    return(data.frame(dose = dose, tox = tox))
+    return(tibble::tibble(
+      cohort = cohort_ids %>% as.integer(),
+      patient = 1:length(dose),
+      dose = dose,
+      tox = tox))
   }
 }

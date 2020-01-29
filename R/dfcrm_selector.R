@@ -16,6 +16,7 @@ dfcrm_selector <- function(outcomes, skeleton, target) {
                   tox = df$tox, level = df$dose)
 
   l <- list(
+    cohort = df$cohort,
     outcomes = outcomes,
     skeleton = skeleton,
     dfcrm_fit = x
@@ -33,6 +34,14 @@ fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
 }
 
 # Selector interface
+num_patients.dfcrm_selector <- function(selector, ...) {
+  return(selector$dfcrm_fit$level %>% length)
+}
+
+cohort.dfcrm_selector <- function(selector, ...) {
+  return(selector$cohort)
+}
+
 doses_given.dfcrm_selector <- function(selector, ...) {
   return(selector$dfcrm_fit$level)
 }

@@ -6,6 +6,7 @@ source('R/dfcrm_selector.R')
 source('R/derived_dose_selector.R')
 source('R/selector.R')
 source('R/n_at_dose_selector.R')
+source('R/stop_at_n_selector.R')
 
 library(magrittr)
 
@@ -26,9 +27,11 @@ crm_fitter <- get_dfcrm(skeleton, target)
 x <- fit(crm_fitter, outcomes)
 # Selector interface
 class(x)
-model_frame(x)
+num_patients(x)
+cohort(x)
 doses_given(x)
 tox(x)
+model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
@@ -36,13 +39,16 @@ n_at_dose(x)
 tox_at_dose(x)
 
 
+
 ## tidyverse R
 crm_fit <- get_dfcrm(skeleton, target) %>%
   fit(outcomes)
 crm_fit %>% class()
-crm_fit %>% model_frame()
+crm_fit %>% num_patients()
+crm_fit %>% cohort()
 crm_fit %>% doses_given()
 crm_fit %>% tox()
+crm_fit %>% model_frame()
 crm_fit %>% num_doses()
 crm_fit %>% recommended_dose()
 crm_fit %>% continue()
@@ -50,12 +56,47 @@ crm_fit %>% n_at_dose()
 crm_fit %>% tox_at_dose()
 
 crm_fit <- get_dfcrm(skeleton, target) %>%
-  stop_when_n_at_dose(n = 3, dose = 2) %>%
+  stop_when_n_at_dose(n = 6, dose = 2) %>%
   fit(outcomes)
 crm_fit %>% class()
-crm_fit %>% model_frame()
+crm_fit %>% num_patients()
+crm_fit %>% cohort()
 crm_fit %>% doses_given()
 crm_fit %>% tox()
+crm_fit %>% model_frame()
+crm_fit %>% num_doses()
+crm_fit %>% recommended_dose()
+crm_fit %>% continue()
+crm_fit %>% n_at_dose()
+crm_fit %>% tox_at_dose()
+
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 2) %>%
+  stop_at_n(n = 15) %>%
+  fit(outcomes)
+crm_fit %>% class()
+crm_fit %>% num_patients()
+crm_fit %>% cohort()
+crm_fit %>% doses_given()
+crm_fit %>% tox()
+crm_fit %>% model_frame()
+crm_fit %>% num_doses()
+crm_fit %>% recommended_dose()
+crm_fit %>% continue()
+crm_fit %>% n_at_dose()
+crm_fit %>% tox_at_dose()
+
+
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 2) %>%
+  stop_at_n(n = 21) %>%
+  fit(outcomes)
+crm_fit %>% class()
+crm_fit %>% num_patients()
+crm_fit %>% cohort()
+crm_fit %>% doses_given()
+crm_fit %>% tox()
+crm_fit %>% model_frame()
 crm_fit %>% num_doses()
 crm_fit %>% recommended_dose()
 crm_fit %>% continue()
@@ -64,6 +105,8 @@ crm_fit %>% tox_at_dose()
 
 
 # Tests
+
+# of stop_when_n_at_dose
 get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 3, dose = 2) %>%
   fit('1NNN 2NTN') %>%
@@ -84,3 +127,5 @@ get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 4, dose = 2) %>%
   fit('1NNN 2NTN') %>%
   continue()
+
+# of stop_at_n

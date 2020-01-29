@@ -1,5 +1,13 @@
 
 # Selector interface
+num_patients.derived_dose_selector <- function(selector, ...) {
+  return(selector$parent %>% num_patients(...))
+}
+
+cohort.derived_dose_selector <- function(selector, ...) {
+  return(selector$parent %>% cohort(...))
+}
+
 doses_given.derived_dose_selector <- function(selector, ...) {
   return(selector$parent %>% doses_given(...))
 }
