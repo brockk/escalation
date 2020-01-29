@@ -7,6 +7,7 @@ source('R/derived_dose_selector.R')
 source('R/selector.R')
 source('R/n_at_dose_selector.R')
 source('R/stop_at_n_selector.R')
+source('R/stop_when_too_toxic.R')
 
 library(magrittr)
 
@@ -56,6 +57,21 @@ crm_fit <- get_dfcrm(skeleton, target) %>%
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
+  fit(outcomes)
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 2) %>%
+  stop_at_n(n = 21) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.5, confidence = 0.7) %>%
+  fit(outcomes)
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 2) %>%
+  stop_at_n(n = 21) %>%
+  stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
+  fit(outcomes)
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
+  stop_at_n(n = 21) %>%
+  stop_when_n_at_dose(n = 9, dose = 2) %>%
   fit(outcomes)
 
 crm_fit %>% class()
