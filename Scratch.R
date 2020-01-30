@@ -122,6 +122,9 @@ crm_fit <- get_dfcrm(skeleton, target) %>%
   show_examples()
 
 
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  fit(outcomes)
+crm_fit %>% class
 
 # Tests ----
 

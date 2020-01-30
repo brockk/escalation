@@ -81,7 +81,7 @@ mean_prob_tox.dfcrm_selector <- function(selector, ...) {
 }
 
 median_prob_tox.dfcrm_selector <- function(selector, ...) {
-  warning('dfcrm does not calculate an estimate for median_prob_tox.')
+  message('Note that dfcrm does not estimate median_prob_tox.')
   rep(NA, selector %>% num_doses())
 }
 

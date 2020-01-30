@@ -37,6 +37,24 @@ continue <- function(selector, ...) {
   UseMethod('continue')
 }
 
+#' Number of patients treated at the doses under investigation.
+#'
+#' @param selector Object of class \code{\link{selector}}
+#' @param ... arguments passed to other methods
+#'
+#' @return integer vector
+#' @export
+#'
+#' @examples
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
+#' n_at_dose(fit)
+#' # Or
+#' fit %>% n_at_dose()
+#'
 n_at_dose <- function(selector, ...) {
   UseMethod('n_at_dose')
 }
