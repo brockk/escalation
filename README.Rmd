@@ -1,1 +1,5 @@
 # dosefinding
+
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.org/brockk/dosefinding.svg?branch=master)](https://travis-ci.org/brockk/dosefinding)
+  <!-- badges: end -->

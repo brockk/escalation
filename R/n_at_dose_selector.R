@@ -1,4 +1,5 @@
 
+#' @export
 stop_when_n_at_dose <- function(parent_selector_factory, n, dose) {
 
   x <- list(
@@ -23,6 +24,8 @@ n_at_dose_selector <- function(parent_selector, n, dose) {
 }
 
 # Factory interface
+
+#' @export
 fit.n_at_dose_selector_factory <- function(selector_factory, outcomes, ...) {
   parent_selector <- selector_factory$parent %>%
     fit(outcomes, ...)
@@ -32,6 +35,8 @@ fit.n_at_dose_selector_factory <- function(selector_factory, outcomes, ...) {
 }
 
 # Selector interface
+
+#' @export
 continue.n_at_dose_selector <- function(selector, ...) {
   n_at_dose <- selector %>% n_at_dose()
   if(selector$dose == 'any') {

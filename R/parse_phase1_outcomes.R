@@ -47,6 +47,8 @@
 #' BMC Medical Research Methodology, 17(1), 112.
 #' https://doi.org/10.1186/s12874-017-0381-x
 #'
+#' @importFrom magrittr "%>%"
+#'
 parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
   cohorts <- phase1_outcomes_to_cohorts(outcomes)
@@ -75,7 +77,7 @@ parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
     ))
   } else {
     return(tibble::tibble(
-      cohort = cohort_ids %>% as.integer(),
+      cohort = as.integer(cohort_ids),
       patient = 1:length(dose),
       dose = dose,
       tox = tox))

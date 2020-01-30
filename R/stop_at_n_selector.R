@@ -1,4 +1,5 @@
 
+#' @export
 stop_at_n <- function(parent_selector_factory, n) {
 
   x <- list(
@@ -21,6 +22,8 @@ stop_at_n_selector <- function(parent_selector, n) {
 }
 
 # Factory interface
+
+#' @export
 fit.stop_at_n_selector_factory <- function(selector_factory, outcomes, ...) {
   parent_selector <- selector_factory$parent %>%
     fit(outcomes, ...)
@@ -29,6 +32,8 @@ fit.stop_at_n_selector_factory <- function(selector_factory, outcomes, ...) {
 }
 
 # Selector interface
+
+#' @export
 continue.stop_at_n_selector <- function(selector, ...) {
   parent_continue <- selector$parent %>% continue()
   this_continue <- selector %>% num_patients() < selector$n

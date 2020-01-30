@@ -1,4 +1,5 @@
 
+#' @export
 stop_when_too_toxic <- function(parent_selector_factory, dose, tox_threshold,
                                 confidence) {
 
@@ -28,6 +29,8 @@ stop_when_too_toxic_selector <- function(parent_selector, dose, tox_threshold,
 }
 
 # Factory interface
+
+#' @export
 fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
                                                      ...) {
   parent_selector <- selector_factory$parent %>%
@@ -42,6 +45,8 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
 }
 
 # Selector interface
+
+#' @export
 recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
   prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
   if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
@@ -54,6 +59,7 @@ recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
   return(selector$parent %>% recommended_dose())
 }
 
+#' @export
 continue.stop_when_too_toxic_selector <- function(selector, ...) {
   prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
   if(selector$dose == 'any') {

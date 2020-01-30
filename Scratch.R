@@ -1,15 +1,16 @@
 
-source('R/interface.R')
-source('R/phase1_outcomes_to_cohorts.R')
-source('R/parse_phase1_outcomes.R')
-source('R/dfcrm_selector.R')
-source('R/derived_dose_selector.R')
-source('R/selector.R')
-source('R/n_at_dose_selector.R')
-source('R/stop_at_n_selector.R')
-source('R/stop_when_too_toxic.R')
+# source('R/interface.R')
+# source('R/phase1_outcomes_to_cohorts.R')
+# source('R/parse_phase1_outcomes.R')
+# source('R/dfcrm_selector.R')
+# source('R/derived_dose_selector.R')
+# source('R/selector.R')
+# source('R/n_at_dose_selector.R')
+# source('R/stop_at_n_selector.R')
+# source('R/stop_when_too_toxic.R')
 
-library(magrittr)
+library(dosefinding)
+# library(magrittr)
 
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
@@ -63,6 +64,7 @@ show_examples <- function(crm_fit) {
   cat('prob_tox_exceeds_0.5:', crm_fit %>% prob_tox_exceeds(0.5), '\n')
 }
 
+library(magrittr)
 crm_fit <- get_dfcrm(skeleton, target) %>%
   fit(outcomes) %>%
   show_examples()
@@ -122,10 +124,6 @@ crm_fit <- get_dfcrm(skeleton, target) %>%
   show_examples()
 
 
-crm_fit <- get_dfcrm(skeleton, target) %>%
-  fit(outcomes)
-crm_fit %>% class
-
 # Tests ----
 
 # of stop_when_n_at_dose
@@ -166,5 +164,21 @@ crm_fit <- get_dfcrm(skeleton, target) %>%
 crm_fit %>% continue()
 crm_fit %>% recommended_dose()
 
-
 # of stop_at_n
+
+
+# Help files
+? fit # TODO This needs much more detail. It is a key function.
+? num_patients
+? cohort
+? doses_given
+? tox
+# ? model_frame
+? num_doses
+? recommended_dose
+? continue
+? n_at_dose
+? tox_at_dose
+? empiric_tox_rate
+? mean_prob_tox
+? median_prob_tox

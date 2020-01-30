@@ -3,3 +3,4 @@
 Scratch.R
 Control.R
 ^cran-comments\.md$
+^\.travis\.yml$
