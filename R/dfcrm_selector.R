@@ -7,7 +7,9 @@
 #' @param target We seek a dose with this probability of toxicity.
 #' @param ... Extra args are passed to \code{\link[dfcrm]{crm}}.
 #'
-#' @return an object that can fit the CRM model to outcomes.
+#' @return an object of type \code{\link{selector_factory}} that can fit the
+#' CRM model to outcomes.
+#'
 #' @export
 #'
 #' @examples
@@ -62,10 +64,6 @@ fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
   )
   args <- append(args, selector_factory$extra_args)
   do.call(dfcrm_selector, args = args)
-
-  # return(dfcrm_selector(outcomes,
-  #                       selector_factory$skeleton,
-  #                       selector_factory$target))
 }
 
 # Selector interface
@@ -111,7 +109,7 @@ continue.dfcrm_selector <- function(selector, ...) {
 #' @export
 n_at_dose.dfcrm_selector <- function(selector, ...) {
   dose_indices <- 1:(selector %>% num_doses())
-  purrr::map_int(dose_indices, ~ sum(selector %>% doses_given() == .x))
+  map_int(dose_indices, ~ sum(selector %>% doses_given() == .x))
 }
 
 #' @importFrom magrittr %>%
@@ -120,7 +118,7 @@ n_at_dose.dfcrm_selector <- function(selector, ...) {
 tox_at_dose.dfcrm_selector <- function(selector, ...) {
   dose_indices <- 1:(selector %>% num_doses())
   tox_seen <- selector %>% tox()
-  purrr::map_int(dose_indices,
+  map_int(dose_indices,
                  ~ sum(tox_seen[selector %>% doses_given() == .x])
   )
 }
@@ -167,4 +165,3 @@ prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, iter = 1000,
                 selector$dfcrm_fit$model, "'"))
   }
 }
-

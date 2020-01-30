@@ -50,6 +50,8 @@
 #' (2017). Implementing the EffTox dose-finding design in the Matchpoint trial.
 #' BMC Medical Research Methodology, 17(1), 112.
 #' https://doi.org/10.1186/s12874-017-0381-x
+#'
+#' @importFrom stringr str_extract str_detect str_extract_all
 phase1_outcomes_to_cohorts <- function(outcomes) {
 
   if(outcomes == '') return(list())
@@ -69,13 +71,13 @@ phase1_outcomes_to_cohorts <- function(outcomes) {
   cohorts <- list()
   cohort_id <- 1
 
-  if(stringr::str_detect(outcomes, valid_str_match)) {
-    cohort_strs <- stringr::str_extract_all(
+  if(str_detect(outcomes, valid_str_match)) {
+    cohort_strs <- str_extract_all(
       outcomes, cohort_str_match)[[1]]
     for(cohort_str in cohort_strs) {
-      c_dl <- as.integer(stringr::str_extract(cohort_str, dl_str_match))
+      c_dl <- as.integer(str_extract(cohort_str, dl_str_match))
       if(c_dl <= 0) stop('Dose-levels must be strictly positive integers.')
-      c_outcomes <- stringr::str_extract(cohort_str, outcomes_match_str)
+      c_outcomes <- str_extract(cohort_str, outcomes_match_str)
       cohorts[[cohort_id]] <- list(dose = c_dl, outcomes = c_outcomes)
       cohort_id <- cohort_id + 1
     }

@@ -48,6 +48,7 @@
 #' https://doi.org/10.1186/s12874-017-0381-x
 #'
 #' @importFrom magrittr "%>%"
+#' @importFrom stringr str_split
 #'
 parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
@@ -60,7 +61,7 @@ parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
     c_dl <- cohort$dose
     c_outcomes <- cohort$outcomes
 
-    these_outcomes <- stringr::str_split(c_outcomes, '')[[1]]
+    these_outcomes <- str_split(c_outcomes, '')[[1]]
     these_tox = as.integer((these_outcomes == 'T'))
     these_dose <- rep(c_dl, length(these_tox))
 

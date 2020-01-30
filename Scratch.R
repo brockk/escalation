@@ -1,16 +1,5 @@
 
-# source('R/interface.R')
-# source('R/phase1_outcomes_to_cohorts.R')
-# source('R/parse_phase1_outcomes.R')
-# source('R/dfcrm_selector.R')
-# source('R/derived_dose_selector.R')
-# source('R/selector.R')
-# source('R/n_at_dose_selector.R')
-# source('R/stop_at_n_selector.R')
-# source('R/stop_when_too_toxic.R')
-
 library(dosefinding)
-# library(magrittr)
 
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
@@ -168,12 +157,14 @@ crm_fit %>% recommended_dose()
 
 
 # Help files
+
+# Interface
 ? fit # TODO This needs much more detail. It is a key function.
 ? num_patients
 ? cohort
 ? doses_given
 ? tox
-# ? model_frame
+? model_frame
 ? num_doses
 ? recommended_dose
 ? continue
@@ -182,3 +173,6 @@ crm_fit %>% recommended_dose()
 ? empiric_tox_rate
 ? mean_prob_tox
 ? median_prob_tox
+
+# selector_factorys
+? stop_when_n_at_dose

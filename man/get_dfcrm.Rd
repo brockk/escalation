@@ -15,7 +15,8 @@ probabilities.}
 \item{...}{Extra args are passed to \code{\link[dfcrm]{crm}}.}
 }
 \value{
-an object that can fit the CRM model to outcomes.
+an object of type \code{\link{selector_factory}} that can fit the
+CRM model to outcomes.
 }
 \description{
 Get an object to fit the CRM model using the dfcrm package.
