@@ -56,7 +56,12 @@ recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
 
 continue.stop_when_too_toxic_selector <- function(selector, ...) {
   prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
-  if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
+  if(selector$dose == 'any') {
+    if(any(prob_too_tox >= selector$confidence)) {
+      return(FALSE)
+    }
+  }
+  else if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
     if(prob_too_tox[selector$dose] >= selector$confidence) {
       return(FALSE)
     }

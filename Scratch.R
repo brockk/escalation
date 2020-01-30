@@ -45,50 +45,81 @@ prob_tox_exceeds(x, 0.5)
 
 
 ## tidyverse R
+show_examples <- function(crm_fit) {
+  cat('class:', crm_fit %>% class(), '\n')
+  cat('num_patients:', crm_fit %>% num_patients(), '\n')
+  cat('cohort:', crm_fit %>% cohort(), '\n')
+  cat('doses_given:', crm_fit %>% doses_given(), '\n')
+  cat('tox:', crm_fit %>% tox(), '\n')
+  # print('model_frame:', crm_fit %>% model_frame(), '\n')
+  cat('num_doses:', crm_fit %>% num_doses(), '\n')
+  cat('recommended_dose:', crm_fit %>% recommended_dose(), '\n')
+  cat('continue:', crm_fit %>% continue(), '\n')
+  cat('n_at_dose:', crm_fit %>% n_at_dose(), '\n')
+  cat('tox_at_dose:', crm_fit %>% tox_at_dose(), '\n')
+  cat('empiric_tox_rate:', crm_fit %>% empiric_tox_rate(), '\n')
+  cat('mean_prob_tox:', crm_fit %>% mean_prob_tox(), '\n')
+  cat('median_prob_tox:', crm_fit %>% median_prob_tox(), '\n')
+  cat('prob_tox_exceeds_0.5:', crm_fit %>% prob_tox_exceeds(0.5), '\n')
+}
+
 crm_fit <- get_dfcrm(skeleton, target) %>%
-  fit(outcomes)
+  fit(outcomes) %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 6, dose = 2) %>%
-  fit(outcomes)
+  fit(outcomes) %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 15) %>%
-  fit(outcomes)
+  fit(outcomes) %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
-  fit(outcomes)
+  fit(outcomes) %>%
+  show_examples()
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 9, dose = 'any') %>%
+  stop_at_n(n = 21) %>%
+  fit(outcomes) %>%
+  show_examples()
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_n_at_dose(n = 12, dose = 'any') %>%
+  stop_at_n(n = 21) %>%
+  fit(outcomes) %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
   stop_when_too_toxic(dose = 1, tox_threshold = 0.5, confidence = 0.7) %>%
-  fit(outcomes)
+  fit(outcomes) %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
   stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
-  fit(outcomes)
+  fit(outcomes) %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
   stop_at_n(n = 21) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
-  fit(outcomes)
-
-crm_fit %>% class()
-crm_fit %>% num_patients()
-crm_fit %>% cohort()
-crm_fit %>% doses_given()
-crm_fit %>% tox()
-crm_fit %>% model_frame()
-crm_fit %>% num_doses()
-crm_fit %>% recommended_dose()
-crm_fit %>% continue()
-crm_fit %>% n_at_dose()
-crm_fit %>% tox_at_dose()
-crm_fit %>% empiric_tox_rate()
-crm_fit %>% mean_prob_tox()
-crm_fit %>% median_prob_tox()
-crm_fit %>% prob_tox_exceeds(0.5)
+  fit(outcomes) %>%
+  show_examples()
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_too_toxic(tox_threshold = 0.5, confidence = 0.9, dose = 'any') %>%
+  stop_at_n(n = 21) %>%
+  stop_when_n_at_dose(n = 12, dose = 'any') %>%
+  fit(outcomes) %>%
+  show_examples()
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  stop_when_too_toxic(tox_threshold = 0.5, confidence = 0.75, dose = 'any') %>%
+  stop_at_n(n = 21) %>%
+  stop_when_n_at_dose(n = 12, dose = 'any') %>%
+  fit(outcomes) %>%
+  show_examples()
 
 
 
