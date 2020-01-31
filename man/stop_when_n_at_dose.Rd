@@ -7,6 +7,8 @@
 stop_when_n_at_dose(parent_selector_factory, n, dose)
 }
 \arguments{
+\item{parent_selector_factory}{Object of type \code{\link{selector_factory}}.}
+
 \item{n}{Stop when there are n at a dose.}
 
 \item{dose}{\code{'any'} to stop when there are n at any dose;
@@ -20,7 +22,7 @@ dose-finding model to outcomes.
 \description{
 This method stops a dose-finding trial when there are n patients at a dose.
 It can stop when the rule is triggered at the recommended dose, at a
-particular dose, or an any dose.
+particular dose, or at any dose.
 }
 \examples{
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)

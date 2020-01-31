@@ -13,6 +13,8 @@
 #'
 #' @export
 #'
+#' @seealso \code{\link{selector}}, \code{\link{selector_factory}}
+#'
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25

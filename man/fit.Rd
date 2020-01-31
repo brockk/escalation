@@ -26,3 +26,6 @@ model <- get_dfcrm(skeleton, target)
 fit <- model \%>\% fit('1NNN 2NTN')
 fit \%>\% recommended_dose()  # Etc
 }
+\seealso{
+\code{\link{selector}}, \code{\link{selector_factory}}
+}

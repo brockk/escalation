@@ -1,5 +1,29 @@
 
+#' Stop when there are n patients in total.
+#'
+#' This method adds together the number of patients treated at all doses and
+#' stops a dose-finding trial when there are at least n patients in total.
+#'
+#' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
+#' @param n Stop when there are this many patients.
+#'
+#' @return an object of type \code{\link{selector_factory}} that can fit a
+#' dose-finding model to outcomes.
+#'
 #' @export
+#'
+#' @examples
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model1 <- get_dfcrm(skeleton, target) %>%
+#'   stop_at_n(n = 15)
+#'
+#' fit1 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN')
+#' fit1 %>% recommended_dose()
+#' fit1 %>% continue()
+#' fit2 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
+#' fit2 %>% recommended_dose()
+#' fit2 %>% continue()
 stop_at_n <- function(parent_selector_factory, n) {
 
   x <- list(

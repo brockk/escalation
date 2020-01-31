@@ -3,9 +3,9 @@
 #'
 #' This method stops a dose-finding trial when there are n patients at a dose.
 #' It can stop when the rule is triggered at the recommended dose, at a
-#' particular dose, or an any dose.
+#' particular dose, or at any dose.
 #'
-#' @param parent_selector_factory
+#' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param n Stop when there are n at a dose.
 #' @param dose \code{'any'} to stop when there are n at any dose;
 #' \code{'recommended'} to stop when there are n at the recommended dose; or an

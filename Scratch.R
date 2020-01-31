@@ -159,6 +159,8 @@ crm_fit %>% recommended_dose()
 # Help files
 
 # Interface
+? selector
+? selector_factory
 ? fit # TODO This needs much more detail. It is a key function.
 ? num_patients
 ? cohort
@@ -175,4 +177,7 @@ crm_fit %>% recommended_dose()
 ? median_prob_tox
 
 # selector_factorys
+? get_dfcrm
 ? stop_when_n_at_dose
+? stop_at_n
+? stop_when_too_toxic
