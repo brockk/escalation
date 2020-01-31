@@ -7,6 +7,8 @@
 prob_tox_exceeds(selector, threshold, ...)
 }
 \arguments{
+\item{selector}{Object of type \code{\link{selector}}}
+
 \item{threshold}{Probability that toxicity rate exceeds what?}
 
 \item{...}{arguments passed to other methods}

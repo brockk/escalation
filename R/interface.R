@@ -327,7 +327,7 @@ median_prob_tox <- function(selector, ...) {
 #' Get the probability that the toxicity rate at each dose exceeds some
 #' threshold.
 #'
-#' @param selector Object of type \code{\link{selector}
+#' @param selector Object of type \code{\link{selector}}
 #' @param threshold  Probability that toxicity rate exceeds what?
 #' @param ... arguments passed to other methods
 #'

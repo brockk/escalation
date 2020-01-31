@@ -20,14 +20,47 @@ objects can be daisy-chained togther using \code{magrittr}'s pipe operator.
 For instance, the CRM fitting method in \code{dfcrm} is fantastic because it
 runs quickly and is simple to call. However, it does not recommend that a
 trial stops if a dose is too toxic or if n patients have already been treated
-at the recommended dose. Each of these behaviours can be bolted on.
-Furthermore, those behaviours and more can be bolted on to any dose selector
-because of the modular approach implemented in \code{dosefinding}.
-See Examples.
+at the recommended dose. Each of these behaviours can be bolted on via
+additional selectors. Furthermore, those behaviours and more can be bolted
+on to any dose selector because of the modular approach implemented in
+\code{dosefinding}. See Examples.
+
+\code{selector} objects are obtained by calling the \code{\link{fit}}
+function on a \code{\link{selector_factory}} object. A
+\code{\link{selector_factory}} object is obtained by initially calling a
+function like \code{\link{get_dfcrm}} (TODO: more examples needed), and then
+optionally adding extra behaviour with subsequent calls to functions like
+\code{\link{stop_when_n_at_dose}} or \code{\link{stop_when_too_toxic}}.
+Refer to examples to see how this works.
 
 The \code{selector} class also supports that an object will be able to
-perform inferential calculations on the rates of toxicity, although naturally
-the sophistication of those calculations will vary by model implementation.
+perform inferential calculations on the rates of toxicity via functions like
+\code{\link{mean_prob_tox}}, \code{\link{median_prob_tox}}, and
+\code{\link{prob_tox_exceeds}}. However, naturally the sophistication of
+those calculations will vary by model implementation. For example, a full
+MCMC method will be able to quantify any probability you like by working with
+posterior samples. In contrast, a method like the \code{\link[dfcrm]{crm}}
+function in \code{dfcrm} that uses the plug-in method to estimate posterior
+dose-toxicity curves cannot natively estimate the median probability of tox.
+}
+\details{
+Every \code{selector} object implements the following functions:
+\itemize{
+  \item \code{\link{num_patients}}
+  \item \code{\link{cohort}}
+  \item \code{\link{doses_given}}
+  \item \code{\link{tox}}
+  \item \code{\link{model_frame}}
+  \item \code{\link{num_doses}}
+  \item \code{\link{recommended_dose}}
+  \item \code{\link{continue}}
+  \item \code{\link{n_at_dose}}
+  \item \code{\link{tox_at_dose}}
+  \item \code{\link{empiric_tox_rate}}
+  \item \code{\link{mean_prob_tox}}
+  \item \code{\link{median_prob_tox}}
+  \item \code{\link{prob_tox_exceeds}}
+}
 }
 \examples{
 
@@ -75,9 +108,30 @@ fit1 \%>\% continue()
 fit2 \%>\% recommended_dose()
 fit2 \%>\% continue()
 
-# Model1 wants to continue - in fact it will never stop,
+# Model1 wants to continue - in fact it will never stop.
 # In contrast, model2 has seen 9 at dose 1 so, rather than suggest dose 1
 # again, it suggests the trial should stop.
 
-# TODO non-CRM examples
+# TODO non-CRM example
+
+# Full selector interface:
+fit <- fit2
+fit \%>\% num_patients()
+fit \%>\% cohort()
+fit \%>\% doses_given()
+fit \%>\% tox()
+fit \%>\% model_frame()
+fit \%>\% num_doses()
+fit \%>\% recommended_dose()
+fit \%>\% continue()
+fit \%>\% n_at_dose()
+fit \%>\% tox_at_dose()
+fit \%>\% empiric_tox_rate()
+fit \%>\% mean_prob_tox()
+fit \%>\% median_prob_tox()
+fit \%>\% prob_tox_exceeds()
+
+}
+\seealso{
+\code{\link{selector_factory}}
 }
