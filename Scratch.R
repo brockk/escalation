@@ -179,36 +179,44 @@ mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 
-x <- fit(boin_fitter, '1NNN 2NNN' )
+# Figure 10 of Yan, Pan, Zhang, Liu & Yuan
+
+num_doses <- 5
+target <- 0.3
+boin_fitter <- get_boin(num_doses = num_doses, target = target)
+
+x <- fit(boin_fitter, '1NNN')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN' )
+x <- fit(boin_fitter, '1NNN 2NNN')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN 3NNT' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN 3NNT 3NNN' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN')
 recommended_dose(x)
 
-x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN 3NNT 3NNN 3TNN' )
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN 3NNT')
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN 3NNT 3TNN')
 recommended_dose(x)
 
 n_at_dose(x)
 tox_at_dose(x)
-
 
 
 # 3+3 ----

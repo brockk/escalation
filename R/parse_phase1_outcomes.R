@@ -49,6 +49,7 @@
 #'
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_split
+#' @importFrom tibble tibble
 #'
 parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
@@ -77,7 +78,7 @@ parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
       dose = dose, tox = tox, num_patients = length(dose)
     ))
   } else {
-    return(tibble::tibble(
+    return(tibble(
       cohort = as.integer(cohort_ids),
       patient = seq_along(dose),
       dose = dose,

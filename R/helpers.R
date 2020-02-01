@@ -1,6 +1,7 @@
 
 
 #' @export
+#' @importFrom tibble tibble
 phase1_outcomes_to_counts <- function(num_doses, outcomes) {
   df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   dose_indices <- 1:num_doses
