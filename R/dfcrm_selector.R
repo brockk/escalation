@@ -1,5 +1,4 @@
 
-
 #' Get an object to fit the CRM model using the dfcrm package.
 #'
 #' @param skeleton Dose-toxicity skeleton, a non-decreasing vector of
@@ -24,7 +23,12 @@
 #' model2 %>% fit(outcomes) %>% recommended_dose()
 #'
 #' @references
-#' TODO
+#' Ken Cheung (2019). dfcrm: Dose-Finding by the Continual Reassessment Method.
+#' R package version 0.2-2.1. https://CRAN.R-project.org/package=dfcrm
+#'
+#' O’Quigley J, Pepe M, Fisher L. Continual reassessment method: a practical
+#' design for phase 1 clinical trials in cancer. Biometrics. 1990;46(1):33-48.
+#' doi:10.2307/2531628
 get_dfcrm <- function(skeleton, target, ...) {
 
   x <- list(

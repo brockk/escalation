@@ -3,11 +3,11 @@
 #'
 #' @description
 #' This is a core class in this package. It encapsulates that an object (e.g. a
-#' CRM model) is able to recommend doses, keep track of how many patients have
-#' been treated at what doses, what toxicity outcomes have been seen, and
-#' whether a trial should continue. It offers a consistent interface to
-#' dose-finding methods from several packages, including \code{dfcrm},
-#' \code{bcrm}, \code{trialr}, etc (TODO).
+#' CRM model, a 3+3 model) is able to recommend doses, keep track of how many
+#' patients have been treated at what doses, what toxicity outcomes have been
+#' seen, and whether a trial should continue. It offers a consistent interface
+#' to dose-finding methods from several packages, including \code{dfcrm} and
+#' \code{BOIN}.  \code{bcrm} and \code{trialr} will be added.
 #'
 #' Once you have a standardised interface, modularisation offers a powerful way
 #' to adorn dose-finding methods with extra desirable behaviour. \code{selector}
@@ -21,12 +21,12 @@
 #' \code{dosefinding}. See Examples.
 #'
 #' \code{selector} objects are obtained by calling the \code{\link{fit}}
-#' function on a \code{\link{selector_factory}} object. A
-#' \code{\link{selector_factory}} object is obtained by initially calling a
-#' function like \code{\link{get_dfcrm}} (TODO: more examples needed), and then
-#' optionally adding extra behaviour with subsequent calls to functions like
-#' \code{\link{stop_when_n_at_dose}} or \code{\link{stop_when_too_toxic}}.
-#' Refer to examples to see how this works.
+#' function on a \code{\link{selector_factory}} object.
+#' A \code{\link{selector_factory}} object is obtained by initially calling a
+#' function like \code{\link{get_dfcrm}}, \code{\link{get_three_plus_three}} or
+#' \code{\link{get_boin}}. Users may then add desired extra behaviour with
+#' subsequent calls to functions like \code{\link{stop_when_n_at_dose}} or
+#' \code{\link{stop_when_too_toxic}}.
 #'
 #' The \code{selector} class also supports that an object will be able to
 #' perform inferential calculations on the rates of toxicity via functions like
@@ -110,7 +110,11 @@
 #' # In contrast, model2 has seen 9 at dose 1 so, rather than suggest dose 1
 #' # again, it suggests the trial should stop.
 #'
-#' # TODO non-CRM example
+#' # For contrast, let us consider a BOIN model on the same outcomes
+#' boin_fitter <- get_boin(num_doses = length(skeleton), target = target)
+#' fit4 <- boin_fitter %>% fit(outcomes)
+#' fit4 %>% recommended_dose()
+#' fit4 %>% continue()
 #'
 #' # Full selector interface:
 #' fit <- fit2
@@ -130,7 +134,7 @@
 #' fit %>% prob_tox_exceeds()
 #'
 selector <- function() {
-  # This function exists merely to document the abstract class "selector".
+  # This function exists only to document the abstract class "selector".
 }
 
 #' @export

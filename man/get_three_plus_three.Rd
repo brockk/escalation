@@ -31,5 +31,6 @@ fit2 \%>\% continue()
 
 }
 \references{
-TODO
+Storer BE. Design and Analysis of Phase I Clinical Trials. Biometrics.
+1989;45(3):925-937. doi:10.2307/2531693
 }

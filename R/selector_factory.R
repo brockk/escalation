@@ -7,12 +7,13 @@
 #' dose-finding trials to the models we use to select doses.
 #'
 #' A \code{\link{selector_factory}} object is obtained by initially calling a
-#' function like \code{\link{get_dfcrm}} (TODO: more examples needed), and then
-#' optionally adding extra behaviour with subsequent calls to functions like
-#' \code{\link{stop_when_n_at_dose}} or \code{\link{stop_when_too_toxic}}.
-#' \code{selector} objects are then obtained by calling the \code{\link{fit}}
-#' function on a \code{\link{selector_factory}} object.
-#' Refer to examples to see how this works.
+#' function like \code{\link{get_dfcrm}}, \code{\link{get_three_plus_three}} or
+#' \code{\link{get_boin}}. Users may then add desired extra behaviour with
+#' subsequent calls to functions like \code{\link{stop_when_n_at_dose}} or
+#' \code{\link{stop_when_too_toxic}}.
+#' \code{selector} objects are obtained by calling the \code{\link{fit}}
+#' function on a \code{\link{selector_factory}} object. Refer to examples to see
+#' how this works.
 #'
 #' @seealso \code{\link{selector}}
 #'
@@ -68,7 +69,11 @@
 #' # In contrast, model2 has seen 9 at dose 1 so, rather than suggest dose 1
 #' # again, it suggests the trial should stop.
 #'
-#' # TODO non-CRM examples
+#' # For contrast, let us consider a BOIN model on the same outcomes
+#' boin_fitter <- get_boin(num_doses = length(skeleton), target = target)
+#' fit4 <- boin_fitter %>% fit(outcomes)
+#' fit4 %>% recommended_dose()
+#' fit4 %>% continue()
 selector_factory <- function() {
-
+  # This function exists only to document the abstract class "selector_factory".
 }

@@ -15,6 +15,10 @@
 #' @examples
 #'
 #' three_plus_three('2NNN 3NNT', num_doses = 7)
+#'
+#' @references
+#' Storer BE. Design and Analysis of Phase I Clinical Trials. Biometrics.
+#' 1989;45(3):925-937. doi:10.2307/2531693
 three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
                              strict_mode = TRUE) {
 

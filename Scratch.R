@@ -245,7 +245,7 @@ prob_tox_exceeds(x, 0.5)
 # Interface
 ? selector
 ? selector_factory
-? fit # TODO This needs much more detail. It is a key function.
+? fit
 ? num_patients
 ? cohort
 ? doses_given

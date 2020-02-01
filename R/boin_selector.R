@@ -22,7 +22,16 @@
 #' model2 %>% fit(outcomes) %>% recommended_dose()
 #'
 #' @references
-#' TODO
+#' Yan, F., Pan, H., Zhang, L., Liu, S., & Yuan, Y. (2019).
+#' BOIN: An R Package for Designing Single-Agent and Drug-Combination
+#' Dose-Finding Trials Using Bayesian Optimal Interval Designs.
+#' Journal of Statistical Software, 27(November 2017), 0–35.
+#' https://doi.org/10.18637/jss.v000.i00
+#'
+#' Liu, S., & Yuan, Y. (2015).
+#' Bayesian optimal designs for Phase I clinical trials.
+#' J. R. Stat. Soc. C, 64, 507–523.
+#' https://doi.org/10.1111/rssc.12089
 get_boin <- function(num_doses, target, ...) {
 
   x <- list(
