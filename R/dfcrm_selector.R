@@ -22,6 +22,9 @@
 #'
 #' model2 <- get_dfcrm(skeleton, target, model = 'logistic')
 #' model2 %>% fit(outcomes) %>% recommended_dose()
+#'
+#' @references
+#' TODO
 get_dfcrm <- function(skeleton, target, ...) {
 
   x <- list(

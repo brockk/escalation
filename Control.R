@@ -18,8 +18,7 @@
 # usethis::use_cran_comments()
 # usethis::use_news_md()
 # usethis::use_travis()
-
-
+# usethis::use_testthat()
 
 # Something else ----
 library(dosefinding)

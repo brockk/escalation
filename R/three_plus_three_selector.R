@@ -1,0 +1,135 @@
+
+#' Get an object to fit the 3+3 model.
+#'
+#' @param num_doses Number of doses under investigation.
+#' @param ... Extra args are not currently used.
+#'
+#' @return an object of type \code{\link{selector_factory}} that can fit the
+#' 3+3 model to outcomes.
+#'
+#' @export
+#'
+#' @examples
+#' model <- get_three_plus_three(num_doses = 5)
+#'
+#' fit1 <- model %>% fit('1NNN 2NTN')
+#' fit1 %>% recommended_dose()
+#' fit1 %>% continue()
+#'
+#' fit2 <- model %>% fit('1NNN 2NTN 2NNT')
+#' fit2 %>% recommended_dose()
+#' fit2 %>% continue()
+#'
+#' @references
+#' TODO
+get_three_plus_three <- function(num_doses, ...) {
+
+  x <- list(
+    num_doses = num_doses,
+    extra_args = list(...)
+  )
+
+  class(x) <- c('selector_factory', 'three_plus_three_selector_factory')
+  return(x)
+}
+
+three_plus_three_selector <- function(outcomes, num_doses, ...) {
+
+  df <- parse_phase1_outcomes(outcomes)
+  df_c <- phase1_outcomes_to_counts(outcomes = outcomes, num_doses = num_doses)
+  three_plus_three_fit <- three_plus_three(outcomes = outcomes,
+                                           num_doses = num_doses)
+
+  l <- list(
+    cohort = df$cohort,
+    outcomes = outcomes,
+    num_doses = num_doses,
+    df = df,
+    df_c = df_c,
+    three_plus_three_fit = three_plus_three_fit
+  )
+
+  class(l) = c('selector', 'three_plus_three_selector')
+  l
+}
+
+# Factory interface
+
+#' @export
+fit.three_plus_three_selector_factory <- function(selector_factory, outcomes,
+                                                  ...) {
+
+  args <- list(
+    outcomes = outcomes,
+    num_doses = selector_factory$num_doses
+  )
+  args <- append(args, selector_factory$extra_args)
+  do.call(three_plus_three_selector, args = args)
+}
+
+# Selector interface
+
+#' @export
+num_patients.three_plus_three_selector <- function(selector, ...) {
+  return(selector$df$num_patients)
+}
+
+#' @export
+cohort.three_plus_three_selector <- function(selector, ...) {
+  return(selector$df$cohort)
+}
+
+#' @export
+doses_given.three_plus_three_selector <- function(selector, ...) {
+  return(selector$df$dose)
+}
+
+#' @export
+tox.three_plus_three_selector <- function(selector, ...) {
+  return(selector$df$tox)
+}
+
+#' @export
+num_doses.three_plus_three_selector <- function(selector, ...) {
+  return(selector$num_doses)
+}
+
+#' @export
+recommended_dose.three_plus_three_selector <- function(selector, warn = TRUE,
+                                                       ...) {
+  return(selector$three_plus_three_fit$recommended_dose)
+}
+
+#' @export
+continue.three_plus_three_selector <- function(selector, ...) {
+  return(selector$three_plus_three_fit$continue)
+}
+
+#' @export
+n_at_dose.three_plus_three_selector <- function(selector, ...) {
+  return(selector$df_c$n)
+}
+
+#' @export
+tox_at_dose.three_plus_three_selector <- function(selector, ...) {
+  return(selector$df_c$tox)
+}
+
+#' @export
+mean_prob_tox.three_plus_three_selector <- function(selector, ...) {
+  message('Note that 3+3 does not estimate mean_prob_tox.')
+  rep(NA, num_doses(selector))
+}
+
+#' @export
+median_prob_tox.three_plus_three_selector <- function(selector, ...) {
+  message('Note that 3+3 does not estimate median_prob_tox.')
+  rep(NA, num_doses(selector))
+}
+
+#' @export
+prob_tox_exceeds.three_plus_three_selector <- function(selector, threshold, iter = 1000,
+                                           ...) {
+  message('Note that 3+3 does not estimate prob_tox_exceeds.')
+  return(rep(NA, num_doses(selector)))
+}

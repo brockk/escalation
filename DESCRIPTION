@@ -12,7 +12,10 @@ License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
 Imports:
-  dfcrm,
   magrittr,
-  stringr
+  stringr,
+  dfcrm,
+  BOIN
 RoxygenNote: 7.0.2
+Suggests: 
+    testthat

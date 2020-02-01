@@ -73,13 +73,13 @@ parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
   if(as_list) {
     return(list(
-      cohort = cohort_ids, patient = 1:length(dose),
+      cohort = cohort_ids, patient = seq_along(dose),
       dose = dose, tox = tox, num_patients = length(dose)
     ))
   } else {
     return(tibble::tibble(
       cohort = as.integer(cohort_ids),
-      patient = 1:length(dose),
+      patient = seq_along(dose),
       dose = dose,
       tox = tox))
   }

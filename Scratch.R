@@ -8,7 +8,7 @@ parse_phase1_outcomes(outcomes)
 parse_phase1_outcomes(outcomes, as_list = FALSE)
 
 
-# Model fitting ----
+# dfcrm ----
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 
@@ -113,7 +113,7 @@ crm_fit <- get_dfcrm(skeleton, target) %>%
   show_examples()
 
 
-# Tests ----
+# Tests
 
 # of stop_when_n_at_dose
 get_dfcrm(skeleton, target) %>%
@@ -156,7 +156,83 @@ crm_fit %>% recommended_dose()
 # of stop_at_n
 
 
-# Help files
+# BOIN ----
+num_doses <- 5
+target <- 0.3
+
+boin_fitter <- get_boin(num_doses = num_doses, target = target)
+
+x <- fit(boin_fitter, '1NNN')
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
+
+x <- fit(boin_fitter, '1NNN 2NNN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN 3NNT' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN 3NNT 3NNN' )
+recommended_dose(x)
+
+x <- fit(boin_fitter, '1NNN 2NNN 3NNN 4TNN 4TNN 4TTN 3TTN 3NNT 3NNN 3TNN' )
+recommended_dose(x)
+
+n_at_dose(x)
+tox_at_dose(x)
+
+
+
+# 3+3 ----
+factory <- get_three_plus_three(num_doses = 5)
+x <- factory %>% fit('1NNN 2T')
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
+
+
+
+# Help files ----
 
 # Interface
 ? selector
