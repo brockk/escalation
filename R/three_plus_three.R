@@ -24,33 +24,33 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
 
   # TODO - plumb in allow_deescalate told by Korn et al.
 
+  if(strict_mode) {
+    enforce_three_plus_three(outcomes)
+    # # Stop the trial if you detect the algo has not been followed:
+    # mid_cohort <- (df_c$n %% 3) != 0
+    # if(sum(mid_cohort) > 1)
+    #   stop('Inconsistent 3+3 - there are several cohorts in progress.')
+    #
+    # if(any(df_c[df_c$dose != last_dose, 'n'] %% 3 != 0))
+    #   stop('Inconsistent 3+3 - some intermediate cohorts are not complete.')
+    #
+    # given_doses <- df_c[df_c$n > 0, 'dose', drop = TRUE]
+    # if(length(given_doses) > 0) {
+    #   if( max(given_doses) - min(given_doses) + 1 != length(given_doses))
+    #     stop('Inconsistent 3+3 - some doses have been skipped.')
+    # }
+    #
+    # if(nrow(df_c[df_c$n > 3 & df_c$tox == 0, ]))
+    #   stop('Inconsistent 3+3 - toxless doses given to more than 3 patients.')
+    #
+    # if(any(df_c$n > 6))
+    #   stop('Inconsistent 3+3 - doses have ben given to more than 6 patients.')
+  }
+
   df <- parse_phase1_outcomes(outcomes)
   df_c <- phase1_outcomes_to_counts(outcomes = outcomes, num_doses = num_doses)
   last_dose <- df$dose %>% tail(1)
   if(length(last_dose) == 0) last_dose <- 1
-
-  if(strict_mode) {
-    # Stop the trial if you detect the algo has not been followed:
-    mid_cohort <- (df_c$n %% 3) != 0
-    if(sum(mid_cohort) > 1)
-      stop('Inconsistent 3+3 - there are several cohorts in progress.')
-
-    if(any(df_c[df_c$dose != last_dose, 'n'] %% 3 != 0))
-      stop('Inconsistent 3+3 - some intermediate cohorts are not complete.')
-
-    given_doses <- df_c[df_c$n > 0, 'dose', drop = TRUE]
-    if(length(given_doses) > 0) {
-      if( max(given_doses) - min(given_doses) + 1 != length(given_doses))
-        stop('Inconsistent 3+3 - some doses have been skipped.')
-    }
-
-    if(nrow(df_c[df_c$n > 3 & df_c$tox == 0, ]))
-      stop('Inconsistent 3+3 - toxless doses given to more than 3 patients.')
-
-    if(any(df_c$n > 6))
-      stop('Inconsistent 3+3 - doses have ben given to more than 6 patients.')
-  }
-
   n_d <- df_c$n[last_dose]
   tox_d <- df_c$tox[last_dose]
 
