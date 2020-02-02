@@ -54,7 +54,9 @@
 #' @importFrom stringr str_extract str_detect str_extract_all
 phase1_outcomes_to_cohorts <- function(outcomes) {
 
-  if(outcomes == '') return(list())
+  if(is.character(outcomes)) {
+    if(outcomes == '') return(list())
+  }
 
   # Matching is done by regex.
   # This pattern ensures that outcomes is valid. It is the gate-keeper.

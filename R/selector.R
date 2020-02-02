@@ -142,9 +142,9 @@ selector <- function() {
 model_frame.selector <- function(selector, ...) {
   tibble(
     patient = seq(1, selector %>% num_patients()),
-    cohort = selector %>% cohort(),
-    dose = selector %>% doses_given(),
-    tox = selector %>% tox()
+    cohort = selector %>% cohort() %>% as.integer(),
+    dose = selector %>% doses_given() %>% as.integer(),
+    tox = selector %>% tox() %>% as.integer()
   )
 }
 

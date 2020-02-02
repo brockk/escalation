@@ -34,6 +34,32 @@ median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 
 
+# Using tibble
+outcomes <- tibble(
+  cohort = c(1,1, 2,2, 3,3),
+  dose = c(1,1, 2,2, 3,3),
+  tox = c(0,0, 0,0, 1,1)
+)
+x <- fit(crm_fitter, outcomes)
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
+
+
+
 ## tidyverse R
 show_examples <- function(crm_fit) {
   cat('class:', crm_fit %>% class(), '\n')
@@ -179,6 +205,32 @@ mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 
+
+# Using tibble
+outcomes <- tibble(
+  cohort = c(1,1, 2,2, 3,3),
+  dose = c(1,1, 2,2, 3,3),
+  tox = c(0,0, 0,0, 1,1)
+)
+x <- fit(boin_fitter, outcomes)
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
+
+
 # Figure 10 of Yan, Pan, Zhang, Liu & Yuan
 
 num_doses <- 5
@@ -220,8 +272,8 @@ tox_at_dose(x)
 
 
 # 3+3 ----
-factory <- get_three_plus_three(num_doses = 5)
-x <- factory %>% fit('1NNN 2T')
+three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
+x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
 class(x)
 num_patients(x)
 cohort(x)
@@ -238,6 +290,31 @@ mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 
+
+# Using tibble
+outcomes <- tibble(
+  cohort = c(1,1,1, 2,2,2),
+  dose = c(1,1,1, 2,2,2),
+  tox = c(0,0, 0,0, 1,1)
+)
+three_plus_three(outcomes = outcomes, num_doses = num_doses)
+x <- fit(three_plus_three_fitter, outcomes)
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
 
 
 

@@ -46,12 +46,16 @@ get_boin <- function(num_doses, target, ...) {
   return(x)
 }
 
-# outcomes <- '1NNN 2NNN 3NTT 2NTN 3NNN'
-
 boin_selector <- function(outcomes, num_doses, target, ...) {
 
-  df <- parse_phase1_outcomes(outcomes)
-  df_c <- phase1_outcomes_to_counts(outcomes = outcomes, num_doses = num_doses)
+  if(is.character(outcomes)) {
+    df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
+  } else if(is.data.frame(outcomes)) {
+    df <- spruce_outcomes_df(outcomes)
+  } else {
+    stop('outcomes should be a character string or a data-frame.')
+  }
+  df_c <- model_frame_to_counts(df, num_doses = num_doses)
   x <- BOIN::select.mtd(target = target, npts = df_c$n, ntox = df_c$tox, ...)
 
   # Checks
@@ -59,7 +63,7 @@ boin_selector <- function(outcomes, num_doses, target, ...) {
     stop('boin_selector - maximum dose given exceeds number of doses.')
   }
 
-  if(outcomes == '') {
+  if(nrow(df) == 0) {
     recommended_dose <- 1
     continue <- TRUE
   } else {
@@ -105,7 +109,7 @@ boin_selector <- function(outcomes, num_doses, target, ...) {
   l <- list(
     cohort = df$cohort,
     outcomes = outcomes,
-    num_doses = num_doses,
+    num_doses = as.integer(num_doses),
     target = target,
     boin_fit = x,
     df = df,
@@ -136,7 +140,7 @@ fit.boin_selector_factory <- function(selector_factory, outcomes, ...) {
 
 #' @export
 num_patients.boin_selector <- function(selector, ...) {
-  return(selector$df$num_patients)
+  return(length(selector$df$dose))
 }
 
 #' @export
@@ -161,7 +165,7 @@ num_doses.boin_selector <- function(selector, ...) {
 
 #' @export
 recommended_dose.boin_selector <- function(selector, ...) {
-  return(selector$recommended_dose)
+  return(as.integer(selector$recommended_dose))
 
   # last_dose <- selector$df$dose %>% tail(1)
   # if(length(last_dose) == 0) last_dose <- 1

@@ -45,10 +45,20 @@ get_dfcrm <- function(skeleton, target, ...) {
 
 dfcrm_selector <- function(outcomes, skeleton, target, ...) {
 
-  df <- parse_phase1_outcomes(outcomes)
-  x <- dfcrm::crm(prior = skeleton, target = target,
-                  tox = df$tox, level = df$dose,
-                  var.est = TRUE, ...)
+  if(is.character(outcomes)) {
+    df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
+  } else if(is.data.frame(outcomes)) {
+    df <- spruce_outcomes_df(outcomes)
+  } else {
+    stop('outcomes should be a character string or a data-frame.')
+  }
+
+  x <- dfcrm::crm(prior = skeleton,
+                  target = target,
+                  tox = df$tox %>% as.integer(),
+                  level = df$dose,
+                  var.est = TRUE,
+                  ...)
 
   # Checks
   if(max(df$dose) > length(skeleton)) {

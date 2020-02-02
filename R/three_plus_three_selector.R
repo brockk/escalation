@@ -38,8 +38,14 @@ get_three_plus_three <- function(num_doses, ...) {
 
 three_plus_three_selector <- function(outcomes, num_doses, ...) {
 
-  df <- parse_phase1_outcomes(outcomes)
-  df_c <- phase1_outcomes_to_counts(outcomes = outcomes, num_doses = num_doses)
+  if(is.character(outcomes)) {
+    df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
+  } else if(is.data.frame(outcomes)) {
+    df <- spruce_outcomes_df(outcomes)
+  } else {
+    stop('outcomes should be a character string or a data-frame.')
+  }
+  df_c <- model_frame_to_counts(df, num_doses = num_doses)
 
   # Checks
   if(max(df$dose) > num_doses) {
@@ -53,7 +59,7 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
   l <- list(
     cohort = df$cohort,
     outcomes = outcomes,
-    num_doses = num_doses,
+    num_doses = as.integer(num_doses),
     df = df,
     df_c = df_c,
     three_plus_three_fit = three_plus_three_fit
@@ -81,7 +87,7 @@ fit.three_plus_three_selector_factory <- function(selector_factory, outcomes,
 
 #' @export
 num_patients.three_plus_three_selector <- function(selector, ...) {
-  return(selector$df$num_patients)
+  return(length(selector$df$dose))
 }
 
 #' @export

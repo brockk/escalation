@@ -40,7 +40,11 @@ sim1.tox_selector_factory <- function(
   i_like_big_trials = FALSE # Safety net if stop_trial_func is misspecified...
 ) {
 
-  base_df <- parse_phase1_outcomes(previous_outcomes, as_list = TRUE)
+  if(is.character(previous_outcomes)) {
+    base_df <- parse_phase1_outcomes(previous_outcomes, as_list = FALSE)
+  } else if(is.data.frame(outcomes)) {
+    base_df <- spruce_outcomes_df(previous_outcomes)
+  }
 
   i <- 0 # loop counter
   max_i <- 30
