@@ -38,6 +38,13 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
 
   df <- parse_phase1_outcomes(outcomes)
   df_c <- phase1_outcomes_to_counts(outcomes = outcomes, num_doses = num_doses)
+
+  # Checks
+  if(max(df$dose) > num_doses) {
+    stop(
+      'three_plus_three_selector - maximum dose given exceeds number of doses.')
+  }
+
   three_plus_three_fit <- three_plus_three(outcomes = outcomes,
                                            num_doses = num_doses)
 

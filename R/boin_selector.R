@@ -44,13 +44,61 @@ get_boin <- function(num_doses, target, ...) {
   return(x)
 }
 
+# outcomes <- '1NNN 2NNN 3NTT 2NTN 3NNN'
+
 boin_selector <- function(outcomes, num_doses, target, ...) {
 
   df <- parse_phase1_outcomes(outcomes)
-  # TODO stop if df$dose > num_doses
   df_c <- phase1_outcomes_to_counts(outcomes = outcomes, num_doses = num_doses)
-
   x <- BOIN::select.mtd(target = target, npts = df_c$n, ntox = df_c$tox, ...)
+
+  # Checks
+  if(max(df$dose) > num_doses) {
+    stop('boin_selector - maximum dose given exceeds number of doses.')
+  }
+
+  if(outcomes == '') {
+    recommended_dose <- 1
+    continue <- TRUE
+  } else {
+    last_dose <- df$dose %>% tail(1)
+    n_d <- df_c$n[last_dose]
+    tox_d <- df_c$tox[last_dose]
+    bound <- BOIN::get.boundary(target = target, ncohort = 1,
+                                cohortsize = n_d + 1)
+    this_bound <- bound$full_boundary_tab[, n_d]
+    if(tox_d <= this_bound['Escalate if # of DLT <=']) {
+      # Escalate if possible
+      recommended_dose <- pmin(num_doses, last_dose + 1)
+      continue <- TRUE
+    } else if(tox_d >= this_bound['Deescalate if # of DLT >=']) {
+      # De-escalate and possibly eliminate
+      if(!is.na(this_bound['Eliminate if # of DLT >=']) &
+         tox_d >= this_bound['Eliminate if # of DLT >=']){
+
+        # TODO is elimination path-dependent?? If so this approach could fail.
+
+        if(last_dose == 1) {
+          # Stop and recommend no dose.
+          recommended_dose <- NA
+          continue <- FALSE
+        } else {
+          # Eliminate this dose and all higher doses.
+          # Select highest non-elimnated dose
+          recommended_dose <- last_dose - 1
+          continue <- TRUE
+        }
+      } else {
+        # De-escalate if possible
+        recommended_dose <- pmax(1, last_dose - 1)
+        continue <- TRUE
+      }
+    } else {
+      # As you were
+      recommended_dose <- last_dose
+      continue <- TRUE
+    }
+  }
 
   l <- list(
     cohort = df$cohort,
@@ -59,7 +107,9 @@ boin_selector <- function(outcomes, num_doses, target, ...) {
     target = target,
     boin_fit = x,
     df = df,
-    df_c = df_c
+    df_c = df_c,
+    recommended_dose = recommended_dose,
+    continue = continue
   )
 
   class(l) = c('selector', 'boin_selector')
@@ -109,32 +159,35 @@ num_doses.boin_selector <- function(selector, ...) {
 
 #' @export
 recommended_dose.boin_selector <- function(selector, ...) {
-  last_dose <- selector$df$dose %>% tail(1)
-  if(length(last_dose) == 0) last_dose <- 1
-  n_d <- n_at_dose(selector)[last_dose]
-  tox_d <- tox_at_dose(selector)[last_dose]
-  bound <- BOIN::get.boundary(target = selector$target,
-                              ncohort = 1, cohortsize = n_d)
-  this_bound <- bound$full_boundary_tab[, n_d]
-  if(tox_d <= this_bound['Escalate if # of DLT <=']) {
-    # Escalate if possible
-    return(pmin(selector$num_doses, last_dose + 1))
-  } else if(tox_d >= this_bound['Deescalate if # of DLT >=']) {
-    # De-escalate if possible
-    # TODO what to do if cannot de-escalate?
-    return(pmax(1, last_dose - 1))
-    # TODO what about stopping and elimination?
-  } else {
-    # Remain
-    return(last_dose)
-  }
+  return(selector$recommended_dose)
+
+  # last_dose <- selector$df$dose %>% tail(1)
+  # if(length(last_dose) == 0) last_dose <- 1
+  # n_d <- n_at_dose(selector)[last_dose]
+  # tox_d <- tox_at_dose(selector)[last_dose]
+  # bound <- BOIN::get.boundary(target = selector$target,
+  #                             ncohort = 1, cohortsize = n_d)
+  # this_bound <- bound$full_boundary_tab[, n_d]
+  # if(tox_d <= this_bound['Escalate if # of DLT <=']) {
+  #   # Escalate if possible
+  #   return(pmin(selector$num_doses, last_dose + 1))
+  # } else if(tox_d >= this_bound['Deescalate if # of DLT >=']) {
+  #   # De-escalate if possible
+  #   # TODO what to do if cannot de-escalate?
+  #   return(pmax(1, last_dose - 1))
+  #   # TODO what about stopping and elimination?
+  # } else {
+  #   # Remain
+  #   return(last_dose)
+  # }
 }
 
 #' @export
 continue.boin_selector <- function(selector, ...) {
-  # TODO BOIN provides stopping rules natively. How to implement those?
-  # Perhaps creation level parameter use_stopping_rules that defaults to TRUE
-  return(TRUE)
+  return(selector$continue)
+  # # TODO BOIN provides stopping rules natively. How to implement those?
+  # # Perhaps creation level parameter use_stopping_rules that defaults to TRUE
+  # return(TRUE)
 }
 
 #' @export

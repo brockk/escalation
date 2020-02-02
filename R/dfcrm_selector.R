@@ -48,6 +48,11 @@ dfcrm_selector <- function(outcomes, skeleton, target, ...) {
                   tox = df$tox, level = df$dose,
                   var.est = TRUE, ...)
 
+  # Checks
+  if(max(df$dose) > length(skeleton)) {
+    stop('dfcrm_selector - maximum dose given exceeds number of doses.')
+  }
+
   l <- list(
     cohort = df$cohort,
     outcomes = outcomes,
