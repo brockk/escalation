@@ -63,7 +63,9 @@ stop_when_too_toxic <- function(parent_selector_factory, dose, tox_threshold,
     tox_threshold = tox_threshold,
     confidence = confidence
   )
-  class(x) <- c('selector_factory', 'stop_when_too_toxic_selector_factory')
+  class(x) <- c('selector_factory',
+                'derived_dose_selector_factory',
+                'stop_when_too_toxic_selector_factory')
   return(x)
 }
 

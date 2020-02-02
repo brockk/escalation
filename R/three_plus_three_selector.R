@@ -30,7 +30,9 @@ get_three_plus_three <- function(num_doses, ...) {
     extra_args = list(...)
   )
 
-  class(x) <- c('selector_factory', 'three_plus_three_selector_factory')
+  class(x) <- c('selector_factory',
+                'tox_selector_factory',
+                'three_plus_three_selector_factory')
   return(x)
 }
 
@@ -57,7 +59,7 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
     three_plus_three_fit = three_plus_three_fit
   )
 
-  class(l) = c('selector', 'three_plus_three_selector')
+  class(l) = c('selector', 'tox_selector', 'three_plus_three_selector')
   l
 }
 

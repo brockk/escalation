@@ -30,7 +30,9 @@ stop_at_n <- function(parent_selector_factory, n) {
     parent = parent_selector_factory,
     n = n
   )
-  class(x) <- c('selector_factory', 'stop_at_n_selector_factory')
+  class(x) <- c('selector_factory',
+                'derived_dose_selector_factory',
+                'stop_at_n_selector_factory')
   return(x)
 }
 

@@ -37,7 +37,9 @@ get_dfcrm <- function(skeleton, target, ...) {
     extra_args = list(...)
   )
 
-  class(x) <- c('selector_factory', 'dfcrm_selector_factory')
+  class(x) <- c('selector_factory',
+                'tox_selector_factory',
+                'dfcrm_selector_factory')
   return(x)
 }
 
@@ -60,7 +62,7 @@ dfcrm_selector <- function(outcomes, skeleton, target, ...) {
     dfcrm_fit = x
   )
 
-  class(l) = c('selector', 'dfcrm_selector')
+  class(l) = c('selector', 'tox_selector', 'dfcrm_selector')
   l
 }
 

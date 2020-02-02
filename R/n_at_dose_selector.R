@@ -37,7 +37,9 @@ stop_when_n_at_dose <- function(parent_selector_factory, n, dose) {
     n = n,
     dose = dose
   )
-  class(x) <- c('selector_factory', 'n_at_dose_selector_factory')
+  class(x) <- c('selector_factory',
+                'derived_dose_selector_factory',
+                'n_at_dose_selector_factory')
   return(x)
 }
 

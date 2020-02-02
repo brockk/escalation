@@ -240,6 +240,19 @@ prob_tox_exceeds(x, 0.5)
 
 
 
+
+# Simulation ----
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+true_prob_tox <- c(0.15, 0.3, 0.4, 0.5, 0.6)
+
+## Classic R
+crm_fitter <- get_dfcrm(skeleton, target) %>% stop_at_n(n = 21)
+previous_outcomes <- '1NNN'
+crm_fitter %>% sim1(true_prob_tox = true_prob_tox,
+                    previous_outcomes = previous_outcomes,
+                    next_dose = 2)
+
 # Help files ----
 
 # Interface
