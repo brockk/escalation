@@ -43,6 +43,7 @@ get_dfcrm <- function(skeleton, target, ...) {
   return(x)
 }
 
+#' @importFrom dfcrm crm
 dfcrm_selector <- function(outcomes, skeleton, target, ...) {
 
   if(is.character(outcomes)) {
@@ -53,12 +54,12 @@ dfcrm_selector <- function(outcomes, skeleton, target, ...) {
     stop('outcomes should be a character string or a data-frame.')
   }
 
-  x <- dfcrm::crm(prior = skeleton,
-                  target = target,
-                  tox = df$tox %>% as.integer(),
-                  level = df$dose,
-                  var.est = TRUE,
-                  ...)
+  x <- crm(prior = skeleton,
+           target = target,
+           tox = df$tox %>% as.integer(),
+           level = df$dose,
+           var.est = TRUE,
+           ...)
 
   # Checks
   if(max(df$dose) > length(skeleton)) {
