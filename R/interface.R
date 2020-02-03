@@ -317,7 +317,6 @@ mean_prob_tox <- function(selector, ...) {
 #' outcomes <- '1NNN 2NTN'
 #' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
 #' fit %>% median_prob_tox()
-#' # TODO add example from model that calculates median.
 median_prob_tox <- function(selector, ...) {
   UseMethod('median_prob_tox')
 }

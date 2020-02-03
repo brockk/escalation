@@ -154,39 +154,19 @@ mean_prob_tox.dfcrm_selector <- function(selector, ...) {
 }
 
 #' @export
-median_prob_tox.dfcrm_selector <- function(selector, ...) {
-  message('Note that dfcrm does not estimate median_prob_tox.')
-  rep(NA, selector %>% num_doses())
+median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
+  prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+  # Median(Prob(Tox) | data) is approximated by:
+  apply(prob_tox_sample, 2, median)
 }
 
 #' @importFrom magrittr %>%
 #' @importFrom stats rnorm
+#' @importFrom gtools inv.logit
 #' @export
 prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, iter = 1000,
                                             ...) {
-
-  if(selector$dfcrm_fit$model == 'empiric') {
-    # Sample beta from normal distribution with mean and stdev that match
-    # posterior parameter estimates:
-    beta <- rnorm(n = iter, mean = selector$dfcrm_fit$estimate,
-                  sd = sqrt(selector$dfcrm_fit$post.var))
-    # Matrix with skeleton in each row
-    skeleton_matrix <- matrix(selector$skeleton, nrow = iter,
-                              ncol = selector %>% num_doses, byrow = TRUE)
-    # Raise each row to one of the sampled beta values:
-    prob_tox_sample <- skeleton_matrix ^ exp(beta)
-    # Prob(Prob(Tox) > threshold) is approximated by:
-    colMeans(prob_tox_sample > threshold)
-  } else if(selector$dfcrm_fit$model == 'logistic') {
-    # dfcrm fixes the intercept value:
-    alpha <- selector$dfcrm_fit$intcpt
-    # Sample beta from normal distribution with mean and stdev that match
-    # posterior parameter estimates:
-    beta <- rnorm(n = iter, mean = selector$dfcrm_fit$estimate,
-                  sd = sqrt(selector$dfcrm_fit$post.var))
-    stop('TODO - code not finished yet')
-  } else {
-    stop(paste0("Don't know what to do with dfcrm model '",
-                selector$dfcrm_fit$model, "'"))
-  }
+  prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+  # Prob(Prob(Tox) > threshold | data) is approximated by:
+  colMeans(prob_tox_sample > threshold)
 }

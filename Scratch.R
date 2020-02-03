@@ -35,7 +35,7 @@ prob_tox_exceeds(x, 0.5)
 
 
 # Using tibble
-outcomes <- tibble(
+outcomes <- tibble::tibble(
   cohort = c(1,1, 2,2, 3,3),
   dose = c(1,1, 2,2, 3,3),
   tox = c(0,0, 0,0, 1,1)
@@ -58,7 +58,25 @@ mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 
-
+## logit model
+crm_fitter <- get_dfcrm(skeleton = skeleton, target = target, intcpt = 4,
+                        model = 'logistic')
+x <- crm_fitter %>% fit(outcomes)
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+prob_tox_exceeds(x, 0.5)
 
 ## tidyverse R
 show_examples <- function(crm_fit) {

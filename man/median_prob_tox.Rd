@@ -27,5 +27,4 @@ target <- 0.25
 outcomes <- '1NNN 2NTN'
 fit <- get_dfcrm(skeleton, target) \%>\% fit(outcomes)
 fit \%>\% median_prob_tox()
-# TODO add example from model that calculates median.
 }
