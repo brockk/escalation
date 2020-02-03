@@ -3,6 +3,10 @@
 #'
 #' @param num_doses Number of doses under investigation.
 #' @param target We seek a dose with this probability of toxicity.
+#' @param use_stopping_rule TRUE to use the toxicity stopping rule described in
+#' Yan et al. (2019). FALSE to suppress the authors' stopping rule, with the
+#' assumption being that you will test the necessity to stop early in some other
+#' way.
 #' @param ... Extra args are passed to \code{\link[BOIN]{select.mtd}}.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -32,11 +36,12 @@
 #' Bayesian optimal designs for Phase I clinical trials.
 #' J. R. Stat. Soc. C, 64, 507–523.
 #' https://doi.org/10.1111/rssc.12089
-get_boin <- function(num_doses, target, ...) {
+get_boin <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 
   x <- list(
     num_doses = num_doses,
     target = target,
+    use_stopping_rule = use_stopping_rule,
     extra_args = list(...)
   )
 
@@ -46,7 +51,7 @@ get_boin <- function(num_doses, target, ...) {
   return(x)
 }
 
-boin_selector <- function(outcomes, num_doses, target, ...) {
+boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
 
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
@@ -74,12 +79,13 @@ boin_selector <- function(outcomes, num_doses, target, ...) {
                                 cohortsize = n_d + 1)
     this_bound <- bound$full_boundary_tab[, n_d]
     if(tox_d <= this_bound['Escalate if # of DLT <=']) {
-      # Escalate if possible
+      # Escalate, if possible
       recommended_dose <- pmin(num_doses, last_dose + 1)
       continue <- TRUE
     } else if(tox_d >= this_bound['Deescalate if # of DLT >=']) {
       # De-escalate and possibly eliminate
-      if(!is.na(this_bound['Eliminate if # of DLT >=']) &
+      if(use_stopping_rule &
+         !is.na(this_bound['Eliminate if # of DLT >=']) &
          tox_d >= this_bound['Eliminate if # of DLT >=']){
 
         # TODO is elimination path-dependent?? If so this approach could fail.
@@ -95,7 +101,7 @@ boin_selector <- function(outcomes, num_doses, target, ...) {
           continue <- TRUE
         }
       } else {
-        # De-escalate if possible
+        # De-escalate, if possible
         recommended_dose <- pmax(1, last_dose - 1)
         continue <- TRUE
       }
@@ -130,7 +136,8 @@ fit.boin_selector_factory <- function(selector_factory, outcomes, ...) {
   args <- list(
     outcomes = outcomes,
     num_doses = selector_factory$num_doses,
-    target = selector_factory$target
+    target = selector_factory$target,
+    use_stopping_rule = selector_factory$use_stopping_rule
   )
   args <- append(args, selector_factory$extra_args)
   do.call(boin_selector, args = args)
@@ -166,34 +173,11 @@ num_doses.boin_selector <- function(selector, ...) {
 #' @export
 recommended_dose.boin_selector <- function(selector, ...) {
   return(as.integer(selector$recommended_dose))
-
-  # last_dose <- selector$df$dose %>% tail(1)
-  # if(length(last_dose) == 0) last_dose <- 1
-  # n_d <- n_at_dose(selector)[last_dose]
-  # tox_d <- tox_at_dose(selector)[last_dose]
-  # bound <- BOIN::get.boundary(target = selector$target,
-  #                             ncohort = 1, cohortsize = n_d)
-  # this_bound <- bound$full_boundary_tab[, n_d]
-  # if(tox_d <= this_bound['Escalate if # of DLT <=']) {
-  #   # Escalate if possible
-  #   return(pmin(selector$num_doses, last_dose + 1))
-  # } else if(tox_d >= this_bound['Deescalate if # of DLT >=']) {
-  #   # De-escalate if possible
-  #   # TODO what to do if cannot de-escalate?
-  #   return(pmax(1, last_dose - 1))
-  #   # TODO what about stopping and elimination?
-  # } else {
-  #   # Remain
-  #   return(last_dose)
-  # }
 }
 
 #' @export
 continue.boin_selector <- function(selector, ...) {
   return(selector$continue)
-  # # TODO BOIN provides stopping rules natively. How to implement those?
-  # # Perhaps creation level parameter use_stopping_rules that defaults to TRUE
-  # return(TRUE)
 }
 
 #' @export

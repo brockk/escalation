@@ -141,3 +141,74 @@ test_that('boin_selector supports correct interface.', {
   expect_true(is.numeric(mean_prob_tox(x)))
 
 })
+
+
+test_that('BOIN advises stopping when indicated', {
+
+  num_doses <- 5
+  target <- 0.3
+
+  # Under these parameters, 0/1 tox will see escalation, 1/2 tox will see
+  # descalation, and 3/3 or 3/4 will see elimination.
+  # BOIN::get.boundary(target = target, ncohort = 1, cohortsize = 5)
+
+  boin_fitter <- get_boin(num_doses = num_doses, target = target,
+                          use_stopping_rule = TRUE)
+
+
+  # Design should escalate
+  x <- fit(boin_fitter, '1N')
+  expect_equal(recommended_dose(x), 2)
+  expect_true(continue(x))
+
+  # Design should de-escalate
+  x <- fit(boin_fitter, '1N 2TN')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+
+  # Design should not yet stop
+  x <- fit(boin_fitter, '1N 2TN 1TT')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+
+  # Now design should stop
+  x <- fit(boin_fitter, '1N 2TN 1TTT')
+  expect_true(is.na(recommended_dose(x)))
+  expect_false(continue(x))
+})
+
+test_that('BOIN stopping rule can be turned off.', {
+
+  num_doses <- 5
+  target <- 0.3
+
+  # Under these parameters, 0/1 tox will see escalation, 1/2 tox will see
+  # descalation, and 3/3 or 3/4 will see elimination.
+  # BOIN::get.boundary(target = target, ncohort = 1, cohortsize = 5)
+
+  boin_fitter <- get_boin(num_doses = num_doses, target = target,
+                          use_stopping_rule = FALSE)
+
+
+  # Design should escalate
+  x <- fit(boin_fitter, '1N')
+  expect_equal(recommended_dose(x), 2)
+  expect_true(continue(x))
+
+  # Design should de-escalate
+  x <- fit(boin_fitter, '1N 2TN')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+
+  # Design should not stop here
+  x <- fit(boin_fitter, '1N 2TN 1TT')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+
+  # Design should not stop here either
+  x <- fit(boin_fitter, '1N 2TN 1TTT')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+
+  # Compare to tests above, this shows that the stopping rule has been disabled.
+})

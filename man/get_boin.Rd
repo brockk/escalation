@@ -4,12 +4,17 @@
 \alias{get_boin}
 \title{Get an object to fit the CRM model using the dfcrm package.}
 \usage{
-get_boin(num_doses, target, ...)
+get_boin(num_doses, target, use_stopping_rule = TRUE, ...)
 }
 \arguments{
 \item{num_doses}{Number of doses under investigation.}
 
 \item{target}{We seek a dose with this probability of toxicity.}
+
+\item{use_stopping_rule}{TRUE to use the toxicity stopping rule described in
+Yan et al. (2019). FALSE to suppress the authors' stopping rule, with the
+assumption being that you will test the necessity to stop early in some other
+way.}
 
 \item{...}{Extra args are passed to \code{\link[BOIN]{select.mtd}}.}
 }
