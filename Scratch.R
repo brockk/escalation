@@ -1,5 +1,6 @@
 
 library(dosefinding)
+library(magrittr)
 
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
@@ -345,9 +346,21 @@ true_prob_tox <- c(0.15, 0.3, 0.4, 0.5, 0.6)
 ## Classic R
 crm_fitter <- get_dfcrm(skeleton, target) %>% stop_at_n(n = 21)
 previous_outcomes <- '1NNN'
-crm_fitter %>% sim1(true_prob_tox = true_prob_tox,
-                    previous_outcomes = previous_outcomes,
-                    next_dose = 2)
+
+# crm_fitter %>% sim1(true_prob_tox = true_prob_tox,
+#                     previous_outcomes = previous_outcomes,
+#                     next_dose = 2) -> my_sim
+print(class(crm_fitter))
+crm_fitter %>% simulate(num_sims = 1,
+                        true_prob_tox = true_prob_tox,
+                        previous_outcomes = previous_outcomes,
+                        next_dose = 2) -> my_sim
+
+length(my_sim)
+my_sim %>% tail(1) %>% .[[1]] %>% recommended_dose()
+my_sim %>% tail(1) %>% .[[1]] %>% continue()
+my_sim %>% tail(1) %>% .[[1]] %>% n_at_dose()
+my_sim %>% tail(1) %>% .[[1]] %>% tox_at_dose()
 
 # Help files ----
 

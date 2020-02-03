@@ -7,31 +7,50 @@ cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
 # cohorts_of_n()
 
 # selector_factory.R? interface.R?
-sim1 <- function(
-  selector_factory,
-  true_prob_tox,
-  sample_patient_arrivals,
-  previous_outcomes,
-  next_dose,
-  i_like_big_trials) {
-  UseMethod('sim1')
-}
-
+# sim1 <- function(
+#   selector_factory,
+#   true_prob_tox,
+#   sample_patient_arrivals,
+#   previous_outcomes,
+#   next_dose,
+#   i_like_big_trials) {
+#   UseMethod('sim1')
+# }
 
 # ?
 #' @export
-sim1.derived_dose_selector_factory <- function(selector_factory, ...) {
-  return(selector_factory$parent %>% sim1(...))
-}
+# sim1.derived_dose_selector_factory <- function(selector_factory, ...) {
+#   return(selector_factory$parent %>% sim1(...))
+# }
 
 # ?
 # selector_factory <- crm_fitter
+# true_prob_tox = c(0.1, 0.27, 0.38, 0.45, 0.61)
 # sample_patient_arrivals = function() cohorts_of_n(n = 3, mean_time_delta = 1)
-# previous_outcomes = ''
+# previous_outcomes = '1NNN 2NNT'
 # next_dose = NULL
 # i_like_big_trials = FALSE
 
-sim1.tox_selector_factory <- function(
+simulation_function <- function(selector_factory) {
+  UseMethod('simulation_function')
+}
+
+simulation_function.derived_dose_selector_factory <- function(selector_factory){
+  # print('C')
+  return(selector_factory$parent %>% simulation_function())
+}
+simulation_function.tox_selector_factory <- function(selector_factory) {
+  # print('D')
+  return(phase1_sim)
+}
+
+simulate <- function(selector_factory, num_sims, ...) {
+  sim_func <- selector_factory %>% simulation_function()
+  sim_func(selector_factory, ...)
+}
+
+# sim1.tox_selector_factory
+phase1_sim <- function(
   selector_factory,
   true_prob_tox,
   sample_patient_arrivals = function() cohorts_of_n(n = 3, mean_time_delta = 1),
@@ -39,26 +58,72 @@ sim1.tox_selector_factory <- function(
   next_dose = NULL,
   i_like_big_trials = FALSE # Safety net if stop_trial_func is misspecified...
 ) {
-
   if(is.character(previous_outcomes)) {
     base_df <- parse_phase1_outcomes(previous_outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
     base_df <- spruce_outcomes_df(previous_outcomes)
+  } else{
+    base_df <- parse_phase1_outcomes('', as_list = FALSE)
+  }
+  dose <- base_df$dose
+  tox <- base_df$tox
+  cohort <- base_df$cohort
+  next_cohort <- ifelse(length(cohort) > 0, max(cohort) + 1, 1)
+  if('time' %in% colnames(base_df)) {
+    time <- previous_outcomes$time
+  } else {
+    time <- rep(0, length(dose))
   }
 
-  i <- 0 # loop counter
-  max_i <- 30
+  i <- 1 # loop counter
+  max_i <- 10
+  time_now <- 0
+  fit <- selector_factory %>% fit(base_df)
 
-  fit <- selector_factory %>% fit(previous_outcomes)
+  print(0)
+  print(class(selector_factory))
+  print(class(fit))
+  print(fit %>% continue())
+
   if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
+  fits <- list()
+  fits[[1]] <- fit
+
   while(fit %>% continue() & (i_like_big_trials | i < max_i)) {
 
-    # next_dose <-
+    print(i)
+    print(class(selector_factory))
+    print(class(fit))
+    print(fit %>% continue())
 
+    new_pts <- sample_patient_arrivals()
+    arrival_time_deltas <- cumsum(new_pts$time_delta)
+    n_new_pts <- nrow(new_pts)
+    new_dose <- rep(next_dose, n_new_pts)
+    new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
+    new_cohort <- rep(next_cohort, n_new_pts)
+
+    dose <- c(dose, new_dose)
+    tox <- c(tox, new_tox)
+    cohort <- c(cohort, new_cohort)
+    time <- c(time, time_now + arrival_time_deltas)
+    new_data = data.frame(
+      cohort = cohort,
+      patient = 1:length(dose),
+      dose = dose,
+      tox = tox,
+      time = time
+    )
+
+    fit <- selector_factory %>% fit(new_data)
+    fits[[i + 1]] <- fit
+    next_dose <- fit %>% recommended_dose()
     i <- i + 1
+    next_cohort <- next_cohort + 1
+    time_now <- time_now + max(arrival_time_deltas)
   }
 
-  print(sample_patient_arrivals)
+  fits
 }
 
 
