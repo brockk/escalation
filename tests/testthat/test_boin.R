@@ -177,6 +177,7 @@ test_that('BOIN advises stopping when indicated', {
   expect_false(continue(x))
 })
 
+
 test_that('BOIN stopping rule can be turned off.', {
 
   num_doses <- 5
@@ -211,4 +212,33 @@ test_that('BOIN stopping rule can be turned off.', {
   expect_true(continue(x))
 
   # Compare to tests above, this shows that the stopping rule has been disabled.
+})
+
+
+test_that('BOIN prob_tox_exceeds matches boin package', {
+
+  num_doses <- 5
+  target <- 0.3
+  boin_fitter <- get_boin(num_doses = num_doses, target = target)
+
+  outcomes <- data.frame(
+    cohort = c(1,1, 2,2, 3,3, 5,5),
+    dose = c(1,1, 2,2, 3,3, 5,5),
+    tox = c(0,0, 0,0, 1,1, 1,0)
+  )
+  x <- fit(boin_fitter, outcomes)
+
+  prob_tox_1 <- prob_tox_exceeds(x, threshold = target)
+
+  prob_tox_2 <- as.character(x$boin_fit$p_overdose)
+  prob_tox_2[prob_tox_2 == '----'] <- NA
+  prob_tox_2 <- as.numeric(prob_tox_2)
+
+  # Expect NAs in same place:
+  expect_true(all(is.na(prob_tox_1) == is.na(prob_tox_2)))
+
+  # And similar values where not NA
+  expect_true(all(abs(prob_tox_1[!is.na(prob_tox_1)] -
+                        prob_tox_2[!is.na(prob_tox_2)]) < 0.01))
+
 })

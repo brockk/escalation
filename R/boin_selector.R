@@ -205,11 +205,23 @@ median_prob_tox.boin_selector <- function(selector, ...) {
   rep(NA, selector %>% num_doses())
 }
 
-#' @importFrom magrittr %>%
-#' @importFrom stats rnorm
+#' @importFrom stats pbeta
+#' @importFrom purrr map_dbl
 #' @export
-prob_tox_exceeds.boin_selector <- function(selector, threshold, iter = 1000,
-                                            ...) {
-  # TODO - use beta-binomial conjugate approach
-  return(rep(NA, selector %>% num_doses()))
+prob_tox_exceeds.boin_selector <- function(selector, threshold, ...) {
+  # The authors use beta-binomial conjugate approach. They use a
+  # Beta(0.05, 0.05) prior. I could not find an explanation why.
+  # They also use isotonic regression to ensure Either way:
+  prob_od <- pbeta(q = threshold,
+                   shape1 = 0.05 + tox_at_dose(selector),
+                   shape2 = 0.05 + n_at_dose(selector) - tox_at_dose(selector),
+                   lower.tail = FALSE)
+  names(prob_od) <- 1:num_doses(selector)
+  given <- n_at_dose(selector) > 0
+  prob_od2 <- boin_pava(prob_od[given])
+  prob_od3 <- map_dbl(
+    1:num_doses(selector),
+    ~ ifelse(.x %in% names(prob_od2), prob_od2[as.character(.x)], NA)
+  )
+  return(prob_od3)
 }

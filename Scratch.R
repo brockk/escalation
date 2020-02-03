@@ -203,8 +203,8 @@ tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
-prob_tox_exceeds(x, 0.5)
-
+prob_tox_exceeds(x, target)
+x$boin_fit$p_overdose
 
 # Using tibble
 outcomes <- tibble(
@@ -228,8 +228,9 @@ tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
-prob_tox_exceeds(x, 0.5)
-
+prob_tox_exceeds(x, target)
+x$boin_fit$p_overdose
+prob_tox_exceeds(x, target + 0.1)
 
 # Figure 10 of Yan, Pan, Zhang, Liu & Yuan
 
