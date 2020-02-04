@@ -6,23 +6,6 @@ cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
 }
 # cohorts_of_n()
 
-# selector_factory.R? interface.R?
-# sim1 <- function(
-#   selector_factory,
-#   true_prob_tox,
-#   sample_patient_arrivals,
-#   previous_outcomes,
-#   next_dose,
-#   i_like_big_trials) {
-#   UseMethod('sim1')
-# }
-
-# ?
-#' @export
-# sim1.derived_dose_selector_factory <- function(selector_factory, ...) {
-#   return(selector_factory$parent %>% sim1(...))
-# }
-
 # ?
 # selector_factory <- crm_fitter
 # true_prob_tox = c(0.1, 0.27, 0.38, 0.45, 0.61)
@@ -31,25 +14,75 @@ cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
 # next_dose = NULL
 # i_like_big_trials = FALSE
 
+# Factory interface
 simulation_function <- function(selector_factory) {
   UseMethod('simulation_function')
 }
 
+# Simulations interface
+prob_recommend <- function(simulations) {
+  UseMethod('prob_recommend')
+}
+
+# And concrete factory Implementations
 simulation_function.derived_dose_selector_factory <- function(selector_factory){
-  # print('C')
   return(selector_factory$parent %>% simulation_function())
 }
 simulation_function.tox_selector_factory <- function(selector_factory) {
-  # print('D')
   return(phase1_sim)
 }
 
+library(purrr)
 simulate <- function(selector_factory, num_sims, ...) {
   sim_func <- selector_factory %>% simulation_function()
-  sim_func(selector_factory, ...)
+  l <- lapply(1:num_sims, function(x) sim_func(selector_factory, ...))
+  class(l) <- 'simulations'
+  l
 }
 
-# sim1.tox_selector_factory
+num_patients.simulations <- function(simulations, ...) {
+  simulations %>%
+    map(~ tail(.x, 1)[[1]]) %>%
+    map_int(num_patients)
+}
+
+recommended_dose.simulations <- function(simulations, ...) {
+  simulations %>%
+    map(~ tail(.x, 1)[[1]]) %>%
+    map_int(recommended_dose)
+}
+
+n_at_dose.simulations <- function(simulations, ...) {
+  simulations %>%
+    map(~ tail(.x, 1)[[1]]) %>%
+    map(n_at_dose) %>%
+    do.call(what = rbind)
+}
+
+tox_at_dose.simulations <- function(simulations, ...) {
+  simulations %>%
+    map(~ tail(.x, 1)[[1]]) %>%
+    map(tox_at_dose) %>%
+    do.call(what = rbind)
+}
+
+
+# New interface
+prob_recommend.simulations <- function(simulations, ...) {
+  if(length(simulations) > 0) {
+    # Nesting!
+    n_doses <- num_doses(head(simulations, 1)[[1]][[1]])
+    rec_d <- recommended_dose(simulations)
+    x <- c(sum(is.na(rec_d)),
+           map_int(1:n_doses, ~ sum(rec_d == .x, na.rm = TRUE)))
+    names(x) <- c('NoDose', 1:n_doses)
+    x / sum(x)
+  } else {
+    return(NULL)
+  }
+}
+
+# Which file?
 phase1_sim <- function(
   selector_factory,
   true_prob_tox,
@@ -79,22 +112,10 @@ phase1_sim <- function(
   max_i <- 10
   time_now <- 0
   fit <- selector_factory %>% fit(base_df)
-
-  print(0)
-  print(class(selector_factory))
-  print(class(fit))
-  print(fit %>% continue())
-
   if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
   fits <- list()
   fits[[1]] <- fit
-
   while(fit %>% continue() & (i_like_big_trials | i < max_i)) {
-
-    print(i)
-    print(class(selector_factory))
-    print(class(fit))
-    print(fit %>% continue())
 
     new_pts <- sample_patient_arrivals()
     arrival_time_deltas <- cumsum(new_pts$time_delta)

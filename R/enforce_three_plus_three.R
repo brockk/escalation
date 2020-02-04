@@ -18,16 +18,14 @@
 enforce_three_plus_three <- function(outcomes) {
 
   if(is.character(outcomes)) {
-    if(outcomes == '') return()
-  }
-
-  if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
     df <- spruce_outcomes_df(outcomes)
   } else {
     stop('outcomes should be a character string or a data-frame.')
   }
+  if(nrow(df) == 0) return()
+
   df_c <- model_frame_to_counts(df)
   last_dose <- df$dose %>% tail(1)
 

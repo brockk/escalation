@@ -1,6 +1,7 @@
 
 library(dosefinding)
 library(magrittr)
+1
 
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
@@ -99,6 +100,9 @@ show_examples <- function(crm_fit) {
 }
 
 library(magrittr)
+crm_fit <- get_dfcrm(skeleton, target) %>%
+  fit(outcomes = '') %>%
+  show_examples()
 crm_fit <- get_dfcrm(skeleton, target) %>%
   fit(outcomes) %>%
   show_examples()
@@ -341,26 +345,144 @@ prob_tox_exceeds(x, 0.5)
 # Simulation ----
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
-true_prob_tox <- c(0.15, 0.3, 0.4, 0.5, 0.6)
 
-## Classic R
-crm_fitter <- get_dfcrm(skeleton, target) %>% stop_at_n(n = 21)
-previous_outcomes <- '1NNN'
+# Sc 1
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+plot(true_prob_tox)
 
-# crm_fitter %>% sim1(true_prob_tox = true_prob_tox,
-#                     previous_outcomes = previous_outcomes,
-#                     next_dose = 2) -> my_sim
-print(class(crm_fitter))
-crm_fitter %>% simulate(num_sims = 1,
-                        true_prob_tox = true_prob_tox,
-                        previous_outcomes = previous_outcomes,
-                        next_dose = 2) -> my_sim
+get_three_plus_three(num_doses = length(skeleton)) %>%
+  simulate(num_sims = 500, true_prob_tox = true_prob_tox) -> threeps
+prob_recommend(threeps)
 
-length(my_sim)
-my_sim %>% tail(1) %>% .[[1]] %>% recommended_dose()
-my_sim %>% tail(1) %>% .[[1]] %>% continue()
-my_sim %>% tail(1) %>% .[[1]] %>% n_at_dose()
-my_sim %>% tail(1) %>% .[[1]] %>% tox_at_dose()
+# ThreePlusThree in bcrm
+bcrm_3p3 <- bcrm::threep3(
+  truep = true_prob_tox,
+  threep3.start = 1, threep3.esc.only = TRUE)
+bcrm_3p3
+
+summary(num_patients(threeps))
+length(threeps)
+class(threeps)
+recommended_dose(threeps)
+n_at_dose(threeps) %>% colMeans()
+tox_at_dose(threeps) %>% colMeans() %>% sum
+object.size(threeps) %>% format(units = 'MB')
+
+crm_fitter <- get_dfcrm(skeleton, target) %>%
+  stop_at_n(n = 12)
+crm_fitter %>% simulate(
+  num_sims = 500,
+  true_prob_tox = true_prob_tox,
+  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
+  next_dose = 2) -> crm_sims
+
+prob_recommend(crm_sims)
+num_patients(crm_sims)
+n_at_dose(crm_sims) %>% colMeans()
+n_at_dose(crm_sims) %>% colMeans() %>% sum
+tox_at_dose(crm_sims) %>% colMeans()
+tox_at_dose(crm_sims) %>% colMeans() %>% sum
+# sum((n_at_dose(crm_sims) %>% colMeans()) * true_prob_tox)
+
+boin_fitter <- get_boin(num_doses = length(skeleton), target = target) %>%
+  stop_at_n(n = 12)
+boin_fitter %>% simulate(
+  num_sims = 500,
+  true_prob_tox = true_prob_tox,
+  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
+  next_dose = 2) -> boin_sims
+prob_recommend(boin_sims)
+num_patients(boin_sims)
+n_at_dose(boin_sims) %>% colMeans()
+n_at_dose(boin_sims) %>% colMeans() %>% sum
+tox_at_dose(boin_sims) %>% colMeans()
+tox_at_dose(boin_sims) %>% colMeans() %>% sum
+
+prob_recommend(threeps)
+prob_recommend(crm_sims)
+prob_recommend(boin_sims)
+
+# Sc 2
+true_prob_tox <- c(0.03, 0.09, 0.16, 0.27, 0.42)
+
+get_three_plus_three(num_doses = length(skeleton)) %>%
+  simulate(num_sims = 500, true_prob_tox = true_prob_tox) -> threeps
+crm_fitter %>% simulate(
+  num_sims = 500,
+  true_prob_tox = true_prob_tox,
+  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
+  next_dose = 2) -> crm_sims
+boin_fitter %>% simulate(
+  num_sims = 500,
+  true_prob_tox = true_prob_tox,
+  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
+  next_dose = 2) -> boin_sims
+
+prob_recommend(threeps)
+prob_recommend(crm_sims)
+prob_recommend(boin_sims)
+
+# ThreePlusThree in bcrm
+bcrm_3p3 <- bcrm::threep3(
+  truep = true_prob_tox,
+  threep3.start = 1, threep3.esc.only = TRUE)
+bcrm_3p3
+
+
+
+
+# Iasonos
+iasonos_summarise_crm_sims <- function(sims) {
+
+}
+
+target <- 0.25
+
+sc1_prob_tox <- c(0.03, 0.05, 0.10, 0.18, 0.22)
+sc1_skeleton <- c(0.25, 0.30, 0.40, 0.50, 0.55)
+
+sc2_prob_tox <- c(0.06, 0.09, 0.13, 0.16, 0.25)
+sc2_skeleton <- c(0.15, 0.20, 0.25, 0.30, 0.40)
+
+sc3_prob_tox <- c(0.06, 0.10, 0.15, 0.19, 0.28)
+sc3_skeleton <- c(0.10, 0.15, 0.20, 0.25, 0.35)
+
+
+gcrm1 <- get_dfcrm(skeleton = sc1_skeleton, target = target) %>%
+  stop_when_n_at_dose(dose = 'recommended', n = 6)
+
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+
+# Sc 1
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+plot(true_prob_tox)
+
+get_three_plus_three(num_doses = length(skeleton)) %>%
+  simulate(num_sims = 500, true_prob_tox = true_prob_tox) -> threeps
+prob_recommend(threeps)
+
+# ThreePlusThree in bcrm
+bcrm_3p3 <- bcrm::threep3(
+  truep = true_prob_tox,
+  threep3.start = 1, threep3.esc.only = TRUE)
+bcrm_3p3
+
+summary(num_patients(threeps))
+length(threeps)
+class(threeps)
+recommended_dose(threeps)
+n_at_dose(threeps) %>% colMeans()
+tox_at_dose(threeps) %>% colMeans() %>% sum
+object.size(threeps) %>% format(units = 'MB')
+
+crm_fitter <- get_dfcrm(skeleton, target) %>%
+  stop_at_n(n = 12)
+crm_fitter %>% simulate(
+  num_sims = 500,
+  true_prob_tox = true_prob_tox,
+  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
+  next_dose = 2) -> crm_sims
 
 # Help files ----
 

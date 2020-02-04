@@ -1,4 +1,6 @@
 
 TODO:
 
-* Add boin select.mtd function
+* tests that selector interface is supported when zero outcomes
+* In max(df$dose) : no non-missing arguments to max; returning -Inf
+* Add boin select.mtd function fitter

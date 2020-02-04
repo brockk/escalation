@@ -54,16 +54,23 @@ dfcrm_selector <- function(outcomes, skeleton, target, ...) {
     stop('outcomes should be a character string or a data-frame.')
   }
 
-  x <- crm(prior = skeleton,
-           target = target,
-           tox = df$tox %>% as.integer(),
-           level = df$dose,
-           var.est = TRUE,
-           ...)
-
-  # Checks
-  if(max(df$dose) > length(skeleton)) {
-    stop('dfcrm_selector - maximum dose given exceeds number of doses.')
+  if(nrow(df) > 0) {
+    # Checks
+    if(max(df$dose) > length(skeleton)) {
+      stop('dfcrm_selector - maximum dose given exceeds number of doses.')
+    }
+    x <- crm(prior = skeleton,
+             target = target,
+             tox = df$tox %>% as.integer(),
+             level = df$dose,
+             var.est = TRUE,
+             ...)
+  } else {
+    x <- list(
+      level = integer(length = 0),
+      tox = integer(length = 0),
+      mtd = 1,
+      ptox = skeleton)
   }
 
   l <- list(
@@ -121,7 +128,7 @@ num_doses.dfcrm_selector <- function(selector, ...) {
 
 #' @export
 recommended_dose.dfcrm_selector <- function(selector, ...) {
-  return(selector$dfcrm_fit$mtd)
+  return(as.integer(selector$dfcrm_fit$mtd))
 }
 
 #' @export
@@ -155,9 +162,13 @@ mean_prob_tox.dfcrm_selector <- function(selector, ...) {
 
 #' @export
 median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
-  prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
-  # Median(Prob(Tox) | data) is approximated by:
-  apply(prob_tox_sample, 2, median)
+  if(num_patients(selector) <= 0) {
+    return(rep(NA, num_doses(selector)))
+  } else {
+    prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+    # Median(Prob(Tox) | data) is approximated by:
+    apply(prob_tox_sample, 2, median)
+  }
 }
 
 #' @importFrom magrittr %>%
@@ -166,7 +177,11 @@ median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
 #' @export
 prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, iter = 1000,
                                             ...) {
-  prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
-  # Prob(Prob(Tox) > threshold | data) is approximated by:
-  colMeans(prob_tox_sample > threshold)
+  if(num_patients(selector) <= 0) {
+    return(rep(NA, num_doses(selector)))
+  } else {
+    prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+    # Prob(Prob(Tox) > threshold | data) is approximated by:
+    colMeans(prob_tox_sample > threshold)
+  }
 }

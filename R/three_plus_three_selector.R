@@ -48,9 +48,11 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
 
   # Checks
-  if(max(df$dose) > num_doses) {
-    stop(
-      'three_plus_three_selector - maximum dose given exceeds number of doses.')
+  if(nrow(df) > 0) {
+    if(max(df$dose) > num_doses) {
+      stop(
+        'three_plus_three_selector - maximum dose given exceeds number of doses.')
+    }
   }
 
   three_plus_three_fit <- three_plus_three(outcomes = outcomes,

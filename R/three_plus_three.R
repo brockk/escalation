@@ -33,6 +33,7 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
   } else {
     stop('outcomes should be a character string or a data-frame.')
   }
+
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
   last_dose <- df$dose %>% tail(1)
   if(length(last_dose) == 0) last_dose <- 1
