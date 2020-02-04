@@ -451,12 +451,12 @@ sc3_skeleton <- c(0.10, 0.15, 0.20, 0.25, 0.35)
 gcrm1 <- get_dfcrm(skeleton = sc1_skeleton, target = target) %>%
   stop_when_n_at_dose(dose = 'recommended', n = 6)
 
-skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-target <- 0.25
+crm_fitter %>% simulate(
+  num_sims = 500,
+  true_prob_tox = true_prob_tox,
+  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
+  next_dose = 2) -> crm_sims
 
-# Sc 1
-true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
-plot(true_prob_tox)
 
 get_three_plus_three(num_doses = length(skeleton)) %>%
   simulate(num_sims = 500, true_prob_tox = true_prob_tox) -> threeps
