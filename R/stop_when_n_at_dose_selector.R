@@ -39,11 +39,11 @@ stop_when_n_at_dose <- function(parent_selector_factory, n, dose) {
   )
   class(x) <- c('selector_factory',
                 'derived_dose_selector_factory',
-                'n_at_dose_selector_factory')
+                'stop_when_n_at_dose_selector_factory')
   return(x)
 }
 
-n_at_dose_selector <- function(parent_selector, n, dose) {
+stop_when_n_at_dose_selector <- function(parent_selector, n, dose) {
 
   l <- list(
     parent = parent_selector,
@@ -51,7 +51,9 @@ n_at_dose_selector <- function(parent_selector, n, dose) {
     dose = dose
   )
 
-  class(l) = c('selector', 'derived_dose_selector', 'n_at_dose_selector')
+  class(l) = c('selector',
+               'derived_dose_selector',
+               'stop_when_n_at_dose_selector')
   l
 }
 
@@ -59,19 +61,20 @@ n_at_dose_selector <- function(parent_selector, n, dose) {
 
 #' @importFrom magrittr %>%
 #' @export
-fit.n_at_dose_selector_factory <- function(selector_factory, outcomes, ...) {
+fit.stop_when_n_at_dose_selector_factory <- function(selector_factory,
+                                                     outcomes, ...) {
   parent_selector <- selector_factory$parent %>%
     fit(outcomes, ...)
-  return(n_at_dose_selector(parent_selector = parent_selector,
-                            n = selector_factory$n,
-                            dose = selector_factory$dose))
+  return(stop_when_n_at_dose_selector(parent_selector = parent_selector,
+                                      n = selector_factory$n,
+                                      dose = selector_factory$dose))
 }
 
 # Selector interface
 
 #' @importFrom magrittr %>%
 #' @export
-continue.n_at_dose_selector <- function(selector, ...) {
+continue.stop_when_n_at_dose_selector <- function(selector, ...) {
   n_at_dose <- selector %>% n_at_dose()
   if(selector$dose == 'any') {
     if(any(n_at_dose >= selector$n)) {

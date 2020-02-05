@@ -509,3 +509,4 @@ crm_fitter %>% simulate(
 ? stop_when_n_at_dose
 ? stop_at_n
 ? stop_when_too_toxic
+? demand_n_at_dose
