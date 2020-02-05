@@ -6,7 +6,7 @@
 #' Fit a dose-finding model to some outcomes.
 #'
 #' @param selector_factory Object of type \code{\link{selector_factory}}.
-#' @param outcomes Outcome string. See \code{\link{THING}}.
+#' @param outcomes Outcome string. See \code{\link{parse_phase1_outcomes}}.
 #' @param ... Extra args are passed onwards.
 #'
 #' @return Object of generic type \code{\link{selector}}.

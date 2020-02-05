@@ -9,7 +9,7 @@ fit(selector_factory, outcomes, ...)
 \arguments{
 \item{selector_factory}{Object of type \code{\link{selector_factory}}.}
 
-\item{outcomes}{Outcome string. See \code{\link{THING}}.}
+\item{outcomes}{Outcome string. See \code{\link{parse_phase1_outcomes}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

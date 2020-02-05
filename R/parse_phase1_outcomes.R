@@ -4,10 +4,10 @@
 #' @description Parse a string of phase I dose-finding outcomes to a binary
 #' vector notation necessary for model invocation.
 #'
-#' The outcome string describes the doses given, outcomes observed and the
-#' timing of analyses that recommend a dose. The format of the string is
-#' described in Brock (2019), and that itself is the phase I analogue of the
-#' similar idea described in Brock _et al_. (2017).
+#' The outcome string describes the doses given, outcomes observed and groups
+#' patients into cohorts. The format of the string is described in Brock (2019),
+#' and that itself is the phase I analogue of the similar idea described in
+#' Brock et al. (2017). See Examples.
 #'
 #' The letters T and N are used to represents patients that experienced
 #' (T)oxicity and (N)o toxicity. These letters are concatenated after numerical
@@ -33,11 +33,18 @@
 #'
 #' @examples
 #' x = parse_phase1_outcomes('1NNN 2NTN 3TTT')
+#' # Three cohorts of three patients. The first cohort was treated at dose 1 and
+#' # non had toxicity. The seond cohort was treated at dose 2 and one of the
+#' # three had toxicity. Finally, cohort three was treated at dose 3 and all
+#' # patients had toxicity. See:
 #' x$num_patients  # 9
 #' x$doses         # c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' x$tox           # c(0, 0, 0, 0, 1, 0, 1, 1, 1)
 #' sum(x$tox)      # 4
 #'
+#' # The same information can be parsed to a data-frame:
+#' y = parse_phase1_outcomes('1NNN 2NTN 3TTT', as_lisr = FALSE)
+#' y
 #' @references
 #' Brock, K. (2019). trialr: Bayesian Clinical Trial Designs in R and Stan.
 #' arXiv:1907.00161 [stat.CO]

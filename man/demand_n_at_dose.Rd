@@ -34,12 +34,12 @@ model1 <- get_dfcrm(skeleton, target) \%>\%
   demand_n_at_dose(n = 9, dose = 'any')
 
 model1 \%>\% fit('1NNT 1NNN 2TNN 2NNN') \%>\% continue()
-# This tells you to continue because there is no selector consiering when you
-# should stop - dfcrm implements no stopping rule by default.
+# This tells you to continue because there is no selector considering when
+# you should stop - dfcrm implements no stopping rule by default.
 
 # In contrast:
 model2 <- get_dfcrm(skeleton, target) \%>\%
-  stop_at_n(n = 12) \%>\%
+  stop_at_n(n = 12)
 model3 <- get_dfcrm(skeleton, target) \%>\%
   stop_at_n(n = 12) \%>\%
   demand_n_at_dose(n = 9, dose = 'any')
@@ -47,5 +47,5 @@ model3 <- get_dfcrm(skeleton, target) \%>\%
 model2 \%>\% fit('1NNN 1NNN 2TNN 2NNN') \%>\% continue()
 model3 \%>\% fit('1NNN 1NNN 2TNN 2NNN') \%>\% continue()
 # Now model2 tells you to stop but model3 tells you to continue because 9
-# have not been seen at any dose.
+# have not been seen at any dose yet.
 }
