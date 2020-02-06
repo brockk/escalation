@@ -8,9 +8,7 @@ TODO:
 
 Write tests for:
 
-* dont_skip_selector
 * stop_at_n_selector
 * n_at_dose_selector
 * stop_when_too_toxic_selector
-* dont_skip_doses
 * demand_n_at_dose

@@ -94,11 +94,15 @@ recommended_dose.dont_skip_selector <- function(selector, ...) {
   } else {
     last_d <- tail(doses_given(selector), 1)
     if(selector$when_escalating & parent_rec_d > last_d + 1) {
-      return(last_d + 1)
+      return(as.integer(last_d + 1))
     } else if(selector$when_deescalating & parent_rec_d < last_d - 1) {
-      return(last_d - 1)
+      return(as.integer(last_d - 1))
     } else {
       return(parent_rec_d)
     }
   }
+}
+
+continue.dont_skip_selector <- function(selector, ...) {
+  return(continue(selector$parent))
 }

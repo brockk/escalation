@@ -224,7 +224,7 @@ mean_prob_tox.dfcrm_selector <- function(selector, ...) {
 #' @export
 median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
   if(num_patients(selector) <= 0) {
-    return(rep(NA, num_doses(selector)))
+    return(as.numeric(rep(NA, num_doses(selector))))
   } else {
     prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
     # Median(Prob(Tox) | data) is approximated by:
@@ -236,7 +236,7 @@ median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
 prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, iter = 1000,
                                             ...) {
   if(num_patients(selector) <= 0) {
-    return(rep(NA, num_doses(selector)))
+    return(as.numeric(rep(NA, num_doses(selector))))
   } else {
     prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
     # Prob(Prob(Tox) > threshold | data) is approximated by:
