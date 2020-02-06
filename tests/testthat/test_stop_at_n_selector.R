@@ -1,62 +1,31 @@
 
-test_that('dont_skip_selector does what it should.', {
+test_that('stop_at_n_selector does what it should', {
 
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
   target <- 0.25
 
-  # Escalation CRM example
-
-  ## Just CRM
-  model0 <- get_dfcrm(skeleton = skeleton, target = target)
-  fit0 <- model0 %>% fit('1NNN')
-
-  ## CRM Skipping not allowed
+  # Create CRM model that will stop when 15 patients are evaluated:
   model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses()
-  fit1 <- model1 %>% fit('1NNN')
+    stop_at_n(n = 15)
 
-  expect_equal(recommended_dose(fit1), 2)
-  expect_equal(continue(fit1), TRUE)
-  expect_true(recommended_dose(fit0) >= recommended_dose(fit1))
+  # With 12 patients, this trial should not stop:
+  fit <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN')
+  expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
+  expect_equal(continue(fit), TRUE)
 
-  ## Skipping forcibly allowed, effectively replicating model0
-  model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses(when_escalating = FALSE, when_deescalating = FALSE)
-  fit2 <- model2 %>% fit('1NNN')
-  expect_equal(recommended_dose(fit0), recommended_dose(fit2))
-  expect_equal(continue(fit0), continue(fit2))
-
-
-  # De-escalation CRM example
-
-  ## Just CRM
-  fit3 <- model0 %>% fit('1NNN 2N 3TTT')
-
-  ## CRM Skipping not allowed
-  model4 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses(when_deescalating = TRUE)
-  fit4 <- model4 %>% fit('1NNN 2N 3TTT')
-
-  expect_equal(recommended_dose(fit4), 2)
-  expect_equal(continue(fit4), TRUE)
-  expect_true(recommended_dose(fit3) <= recommended_dose(fit4))
-
-  ## Skipping forcibly allowed, effectively replicating fit3
-  model5 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses(when_escalating = FALSE, when_deescalating = FALSE)
-  fit5 <- model2 %>% fit('1NNN 2N 3TTT')
-  expect_equal(recommended_dose(fit3), recommended_dose(fit5))
-  expect_equal(continue(fit3), continue(fit5))
+  # With 15 patients, this trial should stop:
+  fit <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
+  expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
+  expect_equal(continue(fit), FALSE)
 })
 
-
-test_that('dont_skip_selector supports correct interface.', {
+test_that('stop_at_n_selector supports correct interface.', {
 
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
   target <- 0.25
 
   model_fitter <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses(when_escalating = TRUE, when_deescalating = FALSE)
+    stop_at_n(n = 15)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NNN')
@@ -81,7 +50,7 @@ test_that('dont_skip_selector supports correct interface.', {
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
 
-  expect_equal(recommended_dose(x), 3)
+  expect_equal(recommended_dose(x), 5)
   expect_true(is.integer(recommended_dose(x)))
 
   expect_equal(continue(x), TRUE)
@@ -194,4 +163,73 @@ test_that('dont_skip_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
 })
+
+test_that('stop_at_n_selector interacts appropriately with other selectors.', {
+
+  # Originating from follow_path
+  # In model1, demanding n at recommended dose trumps stopping at 12
+  model1 <- follow_path('1NNN 2NNN 2NNN 3NNN 3NNN 3NNN 3NNN') %>%
+    stop_at_n(n = 12) %>%
+    demand_n_at_dose(dose = 'recommended', n = 9)
+
+  # In model2, stopping at 12 trumps demanding n at recommended dose
+  model2 <- follow_path('1NNN 2NNN 2NNN 3NNN 3NNN 3NNN 3NNN') %>%
+    demand_n_at_dose(dose = 'recommended', n = 9) %>%
+    stop_at_n(n = 12)
+
+  fit1 <- model1 %>% fit('1NNN 2NNN 2NNN 3NNN')
+  expect_equal(recommended_dose(fit1), 3)
+  expect_equal(continue(fit1), TRUE)
+
+  fit2 <- model2 %>% fit('1NNN 2NNN 2NNN 3NNN')
+  expect_equal(recommended_dose(fit2), 3)
+  expect_equal(continue(fit2), FALSE)
+
+
+  # With more outcomes, both should advocate stopping
+  fit3 <- model1 %>% fit('1NNN 2NNN 2NNN 3NNN 3NNN 3NNN')
+  expect_equal(recommended_dose(fit3), 3)
+  expect_equal(continue(fit3), FALSE)
+
+  fit4 <- model2 %>% fit('1NNN 2NNN 2NNN 3NNN 3NNN 3NNN')
+  expect_equal(recommended_dose(fit4), 3)
+  expect_equal(continue(fit4), FALSE)
+
+
+
+  # Originating from get_dfcrm
+  skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+  target <- 0.25
+
+  # In model3, demanding n at recommended dose trumps stopping at 12
+  model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    stop_at_n(n = 12) %>%
+    demand_n_at_dose(dose = 'recommended', n = 9)
+
+  # In model4, stopping at 12 trumps demanding n at recommended dose
+  model4 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    demand_n_at_dose(dose = 'recommended', n = 9) %>%
+    stop_at_n(n = 12)
+
+  fit1 <- model3 %>% fit('1NNN 2NNN 2NNN 3NNN')
+  expect_equal(recommended_dose(fit1), 5)
+  expect_equal(continue(fit1), TRUE)
+
+  fit2 <- model4 %>% fit('1NNN 2NNN 2NNN 3NNN')
+  expect_equal(recommended_dose(fit2), 5)
+  expect_equal(continue(fit2), FALSE)
+
+
+  # With more outcomes, both should advocate stopping
+  fit3 <- model3 %>% fit('1NNN 2NNN 2NNN 5NNN 5NNN 5NNN')
+  expect_equal(recommended_dose(fit3), 5)
+  expect_equal(continue(fit3), FALSE)
+
+  fit4 <- model4 %>% fit('1NNN 2NNN 2NNN 5NNN 5NNN 5NNN')
+  expect_equal(recommended_dose(fit4), 5)
+  expect_equal(continue(fit4), FALSE)
+
+})
+
