@@ -24,9 +24,9 @@ enforce_three_plus_three <- function(outcomes) {
   } else {
     stop('outcomes should be a character string or a data-frame.')
   }
-  if(nrow(df) == 0) return()
 
-  df_c <- model_frame_to_counts(df)
+  if(nrow(df) == 0) return()
+  df_c <- model_frame_to_counts(df, num_doses = max(df$dose))
   last_dose <- df$dose %>% tail(1)
 
   if(any(df_c$n > 6)) {

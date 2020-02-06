@@ -31,11 +31,11 @@ of these behaviours can be altered.
 \examples{
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
-model1 <- get_dfcrm(skeleton, target) \%>\%
+model1 <- get_dfcrm(skeleton = skeleton, target = target) \%>\%
   dont_skip_doses()
 fit1 <- model1 \%>\% fit('1NNN')
 
-model2 <- get_dfcrm(skeleton, target)
+model2 <- get_dfcrm(skeleton = skeleton, target = target)
 fit2 <- model2 \%>\% fit('1NNN')
 
 # fit1 will not skip doses
@@ -44,11 +44,11 @@ fit1 \%>\% recommended_dose()
 fit2 \%>\% recommended_dose()
 
 # Similar demonstration for de-escalation
-model1 <- get_dfcrm(skeleton, target) \%>\%
+model1 <- get_dfcrm(skeleton = skeleton, target = target) \%>\%
   dont_skip_doses(when_deescalating = TRUE)
 fit1 <- model1 \%>\% fit('1NNN 2N 3TTT')
 
-model2 <- get_dfcrm(skeleton, target)
+model2 <- get_dfcrm(skeleton = skeleton, target = target)
 fit2 <- model2 \%>\% fit('1NNN 2N 3TTT')
 
 # fit1 will not skip doses

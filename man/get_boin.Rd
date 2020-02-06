@@ -26,15 +26,11 @@ BOIN model to outcomes.
 Get an object to fit the CRM model using the dfcrm package.
 }
 \examples{
-skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
-model1 <- get_dfcrm(skeleton, target)
+model1 <- get_boin(num_doses = 5, target = target)
 
 outcomes <- '1NNN 2NTN'
 model1 \%>\% fit(outcomes) \%>\% recommended_dose()
-
-model2 <- get_dfcrm(skeleton, target, model = 'logistic')
-model2 \%>\% fit(outcomes) \%>\% recommended_dose()
 
 }
 \references{

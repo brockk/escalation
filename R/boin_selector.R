@@ -15,15 +15,11 @@
 #' @export
 #'
 #' @examples
-#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model1 <- get_dfcrm(skeleton, target)
+#' model1 <- get_boin(num_doses = 5, target = target)
 #'
 #' outcomes <- '1NNN 2NTN'
 #' model1 %>% fit(outcomes) %>% recommended_dose()
-#'
-#' model2 <- get_dfcrm(skeleton, target, model = 'logistic')
-#' model2 %>% fit(outcomes) %>% recommended_dose()
 #'
 #' @references
 #' Yan, F., Pan, H., Zhang, L., Liu, S., & Yuan, Y. (2019).
@@ -203,7 +199,7 @@ mean_prob_tox.boin_selector <- function(selector, ...) {
 #' @export
 median_prob_tox.boin_selector <- function(selector, ...) {
   message('Note that BOIN does not estimate median_prob_tox.')
-  rep(NA, selector %>% num_doses())
+  rep(NA, num_doses(selector))
 }
 
 #' @importFrom stats pbeta

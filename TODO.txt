@@ -14,4 +14,3 @@ Write tests for:
 * stop_when_too_toxic_selector
 * dont_skip_doses
 * demand_n_at_dose
-* follow_path

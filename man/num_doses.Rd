@@ -20,7 +20,7 @@ Get the number of doses under investigation in a dose-finding trial.
 \examples{
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
-model <- get_dfcrm(skeleton, target)
+model <- get_dfcrm(skeleton = skeleton, target = target)
 fit <- model \%>\% fit('1NNN 2NTN')
 fit \%>\% num_doses()
 }

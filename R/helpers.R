@@ -10,13 +10,18 @@ spruce_outcomes_df <- function(df) {
 
 
 #' @importFrom tibble tibble
-model_frame_to_counts <- function(model_frame, num_doses = NULL) {
-  df <- model_frame
-  if(is.null(num_doses)) num_doses <- max(df$dose)
-  dose_indices <- 1:num_doses
-  dose_counts <- map_int(dose_indices, ~ sum(df$dose == .x))
-  tox_counts <- map_int(dose_indices, ~ sum(df$tox[df$dose == .x]))
-  df_c <- tibble(dose = dose_indices, n = dose_counts, tox = tox_counts)
+model_frame_to_counts <- function(model_frame, num_doses) {
+
+  if(num_doses <= 0) {
+    df_c <- tibble(dose = integer(length = 0), n = integer(length = 0),
+                  tox = integer(length = 0))
+  } else {
+    df <- model_frame
+    dose_indices <- 1:num_doses
+    dose_counts <- map_int(dose_indices, ~ sum(df$dose == .x))
+    tox_counts <- map_int(dose_indices, ~ sum(df$tox[df$dose == .x]))
+    df_c <- tibble(dose = dose_indices, n = dose_counts, tox = tox_counts)
+  }
 
   if('eff' %in% colnames(df)) {
     df_c$eff <- map_int(dose_indices, ~ sum(df$eff[df$dose == .x]))

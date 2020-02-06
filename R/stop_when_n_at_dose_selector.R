@@ -19,13 +19,13 @@
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model1 <- get_dfcrm(skeleton, target) %>%
+#' model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 12, dose = 'any')
 #'
 #' model1 %>% fit('1NNN 2NTN 2TNN 2NNN') %>% continue()
 #' model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT') %>% continue()
 #'
-#' model2 <- get_dfcrm(skeleton, target) %>%
+#' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 12, dose = 'recommended')
 #' fit2 <- model2 %>% fit('1NNN 2NTN 2TNN 2NNN')
 #' fit2 %>% recommended_dose()

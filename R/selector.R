@@ -65,14 +65,14 @@
 #' # Start with a simple CRM model
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model1 <- get_dfcrm(skeleton, target)
+#' model1 <- get_dfcrm(skeleton = skeleton, target = target)
 #'
 #' # Add a rule to stop when 9 patients are treated at the recommended dose
-#' model2 <- get_dfcrm(skeleton, target) %>%
+#' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 9, dose = 'recommended')
 #'
 #' # Add a rule to stop if toxicity rate at lowest dose likely exceeds target
-#' model3 <- get_dfcrm(skeleton, target) %>%
+#' model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 9, dose = 'recommended') %>%
 #'   stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.5)
 #'
@@ -140,12 +140,22 @@ selector <- function() {
 #' @export
 #' @importFrom tibble tibble
 model_frame.selector <- function(selector, ...) {
-  tibble(
-    patient = seq(1, selector %>% num_patients()),
-    cohort = selector %>% cohort() %>% as.integer(),
-    dose = selector %>% doses_given() %>% as.integer(),
-    tox = selector %>% tox() %>% as.integer()
-  )
+
+  if(num_patients(selector) > 0) {
+    tibble(
+      patient = seq(1, num_patients(selector)),
+      cohort = cohort(selector) %>% as.integer(),
+      dose = doses_given(selector) %>% as.integer(),
+      tox = tox(selector) %>% as.integer()
+    )
+  } else {
+    tibble(
+      patient = integer(length = 0),
+      cohort = integer(length = 0),
+      dose = integer(length = 0),
+      tox = integer(length = 0)
+    )
+  }
 }
 
 #' @export

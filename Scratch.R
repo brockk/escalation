@@ -15,7 +15,7 @@ skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 
 ## Classic R
-crm_fitter <- get_dfcrm(skeleton, target)
+crm_fitter <- get_dfcrm(skeleton = skeleton, target = target)
 # Factory interface
 x <- fit(crm_fitter, outcomes)
 # Selector interface
@@ -100,61 +100,61 @@ show_examples <- function(crm_fit) {
 }
 
 library(magrittr)
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   fit(outcomes = '') %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 6, dose = 2) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 15) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 9, dose = 'any') %>%
   stop_at_n(n = 21) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 12, dose = 'any') %>%
   stop_at_n(n = 21) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
   stop_when_too_toxic(dose = 1, tox_threshold = 0.5, confidence = 0.7) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   stop_at_n(n = 21) %>%
   stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
   stop_at_n(n = 21) %>%
   stop_when_n_at_dose(n = 9, dose = 2) %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_too_toxic(tox_threshold = 0.5, confidence = 0.9, dose = 'any') %>%
   stop_at_n(n = 21) %>%
   stop_when_n_at_dose(n = 12, dose = 'any') %>%
   fit(outcomes) %>%
   show_examples()
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_too_toxic(tox_threshold = 0.5, confidence = 0.75, dose = 'any') %>%
   stop_at_n(n = 21) %>%
   stop_when_n_at_dose(n = 12, dose = 'any') %>%
@@ -165,37 +165,37 @@ crm_fit <- get_dfcrm(skeleton, target) %>%
 # Tests
 
 # of stop_when_n_at_dose
-get_dfcrm(skeleton, target) %>%
+get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 3, dose = 2) %>%
   fit('1NNN 2NTN') %>%
   continue()
-get_dfcrm(skeleton, target) %>%
+get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 3, dose = -1) %>%
   fit('1NNN 2NTN') %>%
   continue()
-get_dfcrm(skeleton, target) %>%
+get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 3, dose = 0) %>%
   fit('1NNN 2NTN') %>%
   continue()
-get_dfcrm(skeleton, target) %>%
+get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 3, dose = 6) %>%
   fit('1NNN 2NTN') %>%
   continue()
-get_dfcrm(skeleton, target) %>%
+get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 4, dose = 2) %>%
   fit('1NNN 2NTN') %>%
   continue()
 
 
 # Order of embellishments should not matter:
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_when_n_at_dose(n = 9, dose = 3) %>%
   stop_at_n(n = 21) %>%
   fit(outcomes)
 crm_fit %>% continue()
 crm_fit %>% recommended_dose()
 
-crm_fit <- get_dfcrm(skeleton, target) %>%
+crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 21) %>%
   stop_when_n_at_dose(n = 9, dose = 3) %>%
   fit(outcomes)
@@ -368,7 +368,7 @@ n_at_dose(threeps) %>% colMeans()
 tox_at_dose(threeps) %>% colMeans() %>% sum
 object.size(threeps) %>% format(units = 'MB')
 
-crm_fitter <- get_dfcrm(skeleton, target) %>%
+crm_fitter <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 12)
 crm_fitter %>% simulate(
   num_sims = 500,
@@ -476,7 +476,7 @@ n_at_dose(threeps) %>% colMeans()
 tox_at_dose(threeps) %>% colMeans() %>% sum
 object.size(threeps) %>% format(units = 'MB')
 
-crm_fitter <- get_dfcrm(skeleton, target) %>%
+crm_fitter <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 12)
 crm_fitter %>% simulate(
   num_sims = 500,

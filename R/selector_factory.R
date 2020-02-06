@@ -24,14 +24,14 @@
 #' # Start with a simple CRM model
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model1 <- get_dfcrm(skeleton, target)
+#' model1 <- get_dfcrm(skeleton = skeleton, target = target)
 #'
 #' # Add a rule to stop when 9 patients are treated at the recommended dose
-#' model2 <- get_dfcrm(skeleton, target) %>%
+#' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 9, dose = 'recommended')
 #'
 #' # Add a rule to stop if toxicity rate at lowest dose likely exceeds target
-#' model3 <- get_dfcrm(skeleton, target) %>%
+#' model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 9, dose = 'recommended') %>%
 #'   stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.5)
 #'

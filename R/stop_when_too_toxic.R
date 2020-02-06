@@ -39,8 +39,8 @@
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #'
-#' model1 <- get_dfcrm(skeleton, target)
-#' model2 <- get_dfcrm(skeleton, target) %>%
+#' model1 <- get_dfcrm(skeleton = skeleton, target = target)
+#' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_too_toxic(dose = 'any', tox_threshold = 0.5, confidence = 0.7)
 #'
 #' outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'

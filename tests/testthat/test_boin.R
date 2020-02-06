@@ -77,7 +77,7 @@ test_that('boin_selector supports correct interface.', {
                                                tox = c(0,0,0,0,1,1))) == 0))
 
   expect_equal(num_doses(x), 5)
-  expect_true(is.integer(tox(x)))
+  expect_true(is.integer(num_doses(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
@@ -122,7 +122,7 @@ test_that('boin_selector supports correct interface.', {
                                                tox = c(0,0,0,0,1,1))) == 0))
 
   expect_equal(num_doses(x), 5)
-  expect_true(is.integer(tox(x)))
+  expect_true(is.integer(num_doses(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))

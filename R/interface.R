@@ -18,7 +18,7 @@
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% recommended_dose()  # Etc
 fit <- function(selector_factory, outcomes, ...) {
@@ -41,7 +41,7 @@ fit <- function(selector_factory, outcomes, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% num_patients()
 num_patients <- function(selector, ...) {
@@ -63,7 +63,7 @@ num_patients <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% cohort()
 cohort <- function(selector, ...) {
@@ -84,7 +84,7 @@ cohort <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% doses_given()
 doses_given <- function(selector, ...) {
@@ -105,7 +105,7 @@ doses_given <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% tox()
 tox <- function(selector, ...) {
@@ -128,7 +128,7 @@ tox <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% model_frame()
 model_frame <- function(selector, ...) {
@@ -149,7 +149,7 @@ model_frame <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% num_doses()
 num_doses <- function(selector, ...) {
@@ -171,7 +171,7 @@ num_doses <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model <- get_dfcrm(skeleton, target)
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% recommended_dose()
 recommended_dose <- function(selector, ...) {
@@ -196,11 +196,11 @@ recommended_dose <- function(selector, ...) {
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model1 <- get_dfcrm(skeleton, target)
+#' model1 <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit1 <- model1 %>% fit('1NNN 2NTN')
 #' fit1 %>% continue()
 #'
-#' model2 <- get_dfcrm(skeleton, target) %>%
+#' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_at_n(n = 6)
 #' fit2 <- model2 %>% fit('1NNN 2NTN')
 #' fit2 %>% continue()
@@ -223,7 +223,7 @@ continue <- function(selector, ...) {
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #' outcomes <- '1NNN 2NTN'
-#' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
 #' fit %>% n_at_dose()
 n_at_dose <- function(selector, ...) {
   UseMethod('n_at_dose')
@@ -244,7 +244,7 @@ n_at_dose <- function(selector, ...) {
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #' outcomes <- '1NNN 2NTN'
-#' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
 #' fit %>% tox_at_dose()
 tox_at_dose <- function(selector, ...) {
   UseMethod('tox_at_dose')
@@ -267,7 +267,7 @@ tox_at_dose <- function(selector, ...) {
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #' outcomes <- '1NNN 2NTN'
-#' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
 #' fit %>% empiric_tox_rate()
 empiric_tox_rate <- function(selector, ...) {
   UseMethod('empiric_tox_rate')
@@ -291,7 +291,7 @@ empiric_tox_rate <- function(selector, ...) {
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #' outcomes <- '1NNN 2NTN'
-#' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
 #' fit %>% mean_prob_tox()
 mean_prob_tox <- function(selector, ...) {
   UseMethod('mean_prob_tox')
@@ -315,7 +315,7 @@ mean_prob_tox <- function(selector, ...) {
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #' outcomes <- '1NNN 2NTN'
-#' fit <- get_dfcrm(skeleton, target) %>% fit(outcomes)
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
 #' fit %>% median_prob_tox()
 median_prob_tox <- function(selector, ...) {
   UseMethod('median_prob_tox')

@@ -42,15 +42,6 @@ follow_path <- function(path) {
 
 follow_path_selector <- function(outcomes, path) {
 
-  if(is.character(outcomes)) {
-    df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
-  } else if(is.data.frame(outcomes)) {
-    df <- spruce_outcomes_df(outcomes)
-  } else {
-    stop('outcomes should be a character string or a data-frame.')
-  }
-  df_c <- model_frame_to_counts(df)
-
   if(is.character(path)) {
     path_df <- parse_phase1_outcomes(path, as_list = FALSE)
   } else if(is.data.frame(path)) {
@@ -58,7 +49,24 @@ follow_path_selector <- function(outcomes, path) {
   } else {
     stop('path should be a character string or a data-frame.')
   }
+  if(nrow(path_df) > 0) {
+    num_doses <- max(path_df$dose)
+  } else {
+    num_doses <- 0
+  }
 
+  if(is.character(outcomes)) {
+    df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
+  } else if(is.data.frame(outcomes)) {
+    df <- spruce_outcomes_df(outcomes)
+  } else {
+    stop('outcomes should be a character string or a data-frame.')
+  }
+  if(nrow(df) > 0) {
+    num_doses <- max(max(df$dose), num_doses)
+  }
+
+  df_c <- model_frame_to_counts(df, num_doses = num_doses)
   num_pats <- nrow(df)
   length_path <- nrow(path_df)
   if(length_path == 0) {
@@ -75,7 +83,8 @@ follow_path_selector <- function(outcomes, path) {
   }
 
   l <- list(
-    df = df, df_c = df_c,
+    df = df,
+    df_c = df_c,
     recommended_dose = rec_d
   )
   class(l) = c('selector', 'follow_path_selector')
@@ -93,12 +102,61 @@ fit.follow_path_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
+num_patients.follow_path_selector <- function(selector, ...) {
+  return(length(selector$df$dose))
+}
+
+#' @export
+cohort.follow_path_selector <- function(selector, ...) {
+  return(selector$df$cohort)
+}
+
+#' @export
+doses_given.follow_path_selector <- function(selector, ...) {
+  return(selector$df$dose)
+}
+
+#' @export
+tox.follow_path_selector <- function(selector, ...) {
+  return(selector$df$tox)
+}
+
+#' @export
+num_doses.follow_path_selector <- function(selector, ...) {
+  return(nrow(selector$df_c))
+}
+
+#' @export
 recommended_dose.follow_path_selector <- function(selector, ...) {
   return(selector$recommended_dose)
 }
 
-
 #' @export
 continue.follow_path_selector <- function(selector, ...) {
   return(!is.na(selector$recommended_dose))
+}
+
+#' @export
+n_at_dose.follow_path_selector <- function(selector, ...) {
+  return(selector$df_c$n)
+}
+
+#' @export
+tox_at_dose.follow_path_selector <- function(selector, ...) {
+  return(selector$df_c$tox)
+}
+
+#' @export
+mean_prob_tox.follow_path_selector <- function(selector, ...) {
+  return(rep(NA, num_doses(selector)))
+}
+
+#' @export
+median_prob_tox.follow_path_selector <- function(selector, ...) {
+  return(rep(NA, num_doses(selector)))
+}
+
+#' @export
+prob_tox_exceeds.follow_path_selector <- function(selector, threshold, ...) {
+  return(rep(NA, num_doses(selector)))
 }

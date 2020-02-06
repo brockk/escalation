@@ -15,7 +15,7 @@
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
-#' model1 <- get_dfcrm(skeleton, target) %>%
+#' model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_at_n(n = 15)
 #'
 #' fit1 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN')

@@ -48,7 +48,7 @@ test_that('dfcrm_dose_selector matches dfcrm', {
 test_that('dfcrm_selector supports correct interface.', {
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
   target <- 0.25
-  crm_fitter <- get_dfcrm(skeleton, target)
+  crm_fitter <- get_dfcrm(skeleton = skeleton, target = target)
 
   # Using outcome string
   x <- fit(crm_fitter, '1NNN 2NTT')
