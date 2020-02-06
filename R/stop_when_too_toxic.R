@@ -39,20 +39,24 @@
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #'
+#' # We compare a CRM model without a toxicity stopping rule to one with it:
 #' model1 <- get_dfcrm(skeleton = skeleton, target = target)
 #' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_too_toxic(dose = 'any', tox_threshold = 0.5, confidence = 0.7)
 #'
 #' outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
-#'
 #' fit1 <- model1 %>% fit(outcomes)
 #' fit2 <- model2 %>% fit(outcomes)
 #'
+#' # Naturally the first does not advocate stopping:
 #' fit1 %>% recommended_dose()
 #' fit1 %>% continue()
 #'
+#' # However, after the material toxicity at dose 3, ithe rule is fired:
 #' fit2 %>% recommended_dose()
 #' fit2 %>% continue()
+#' # To verify the requirement to stop, let's calculate the probability that the
+#' # toxicity rate exceeds 50%
 #' fit2 %>% prob_tox_exceeds(0.5)
 stop_when_too_toxic <- function(parent_selector_factory, dose, tox_threshold,
                                 confidence) {
@@ -119,17 +123,19 @@ recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
 continue.stop_when_too_toxic_selector <- function(selector, ...) {
   prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
   if(selector$dose == 'any') {
-    if(any(prob_too_tox >= selector$confidence)) {
+    if(any(!is.na(prob_too_tox) & prob_too_tox >= selector$confidence)) {
       return(FALSE)
     }
   } else if(selector$dose == 'recommended') {
     rec_dose <- selector %>% recommended_dose()
-    if(prob_too_tox[rec_dose] >= selector$confidence) {
+    if(!is.na(prob_too_tox[rec_dose]) &
+       prob_too_tox[rec_dose] >= selector$confidence) {
       return(FALSE)
     }
   }
   else if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-    if(prob_too_tox[selector$dose] >= selector$confidence) {
+    if(!is.na(prob_too_tox[selector$dose]) &
+       prob_too_tox[selector$dose] >= selector$confidence) {
       return(FALSE)
     }
   }

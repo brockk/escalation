@@ -49,19 +49,23 @@ dose-toxicity curve.
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 
+# We compare a CRM model without a toxicity stopping rule to one with it:
 model1 <- get_dfcrm(skeleton = skeleton, target = target)
 model2 <- get_dfcrm(skeleton = skeleton, target = target) \%>\%
   stop_when_too_toxic(dose = 'any', tox_threshold = 0.5, confidence = 0.7)
 
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
-
 fit1 <- model1 \%>\% fit(outcomes)
 fit2 <- model2 \%>\% fit(outcomes)
 
+# Naturally the first does not advocate stopping:
 fit1 \%>\% recommended_dose()
 fit1 \%>\% continue()
 
+# However, after the material toxicity at dose 3, ithe rule is fired:
 fit2 \%>\% recommended_dose()
 fit2 \%>\% continue()
+# To verify the requirement to stop, let's calculate the probability that the
+# toxicity rate exceeds 50\%
 fit2 \%>\% prob_tox_exceeds(0.5)
 }

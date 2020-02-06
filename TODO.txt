@@ -1,13 +1,9 @@
 
 TODO:
 
-* tests that selector interface is supported when zero outcomes
-* In max(df$dose) : no non-missing arguments to max; returning -Inf
 * Add boin select.mtd function fitter
-
 
 Write tests for:
 
 * n_at_dose_selector
-* stop_when_too_toxic_selector
 * demand_n_at_dose
