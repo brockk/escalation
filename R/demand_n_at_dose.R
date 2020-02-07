@@ -23,24 +23,37 @@
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
+#'
+#' # This model will demand 9 at any dose before it countenances stopping.
 #' model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   demand_n_at_dose(n = 9, dose = 'any')
 #'
+#' # This model will recommend continuing:
 #' model1 %>% fit('1NNT 1NNN 2TNN 2NNN') %>% continue()
-#' # This tells you to continue because there is no selector considering when
+#' # It tells you to continue because there is no selector considering when
 #' # you should stop - dfcrm implements no stopping rule by default.
 #'
-#' # In contrast:
+#' # In contrast, we can add a stopping selector to discern the behaviour of
+#' # demand_n_at_dose. We will demand 9 are seen at the recommended dose before
+#' # stopping is permitted in model3:
 #' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_at_n(n = 12)
 #' model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_at_n(n = 12) %>%
-#'   demand_n_at_dose(n = 9, dose = 'any')
+#'   demand_n_at_dose(n = 9, dose = 'recommended')
 #'
+#' # This model advocates stopping because 12 patients are seen in total:
 #' model2 %>% fit('1NNN 1NNN 2TNN 2NNN') %>% continue()
+#' # But this model advocates continuing because 9 patients have not been seen
+#' # at any dose yet:
 #' model3 %>% fit('1NNN 1NNN 2TNN 2NNN') %>% continue()
-#' # Now model2 tells you to stop but model3 tells you to continue because 9
-#' # have not been seen at any dose yet.
+#' # This shows how demand_n_at_dose overrides stopping behaviours that come
+#' # before it in the daisychain.
+#'
+#' # Once 9 are seen at the recommended dose, the decision to stop is made:
+#' fit <- model3 %>% fit('1NNN 1NNN 2TNN 2NNN 2TTN')
+#' fit %>% continue()
+#' fit %>% recommended_dose()
 demand_n_at_dose <- function(parent_selector_factory, n, dose) {
 
   x <- list(

@@ -4,5 +4,4 @@ TODO:
 * Add boin select.mtd function fitter
 
 Write tests for:
-
-* demand_n_at_dose
+<done>

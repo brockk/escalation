@@ -19,17 +19,28 @@
 #' @examples
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
+#'
+#'# This model will stop when 12 are seen at any dose:
 #' model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 12, dose = 'any')
 #'
+#' # This model fit will not stop:
 #' model1 %>% fit('1NNN 2NTN 2TNN 2NNN') %>% continue()
+#' # But this model fit will stop:
 #' model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT') %>% continue()
 #'
+#' # This model will stop when 12 are seen at the recommended dose:
 #' model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
 #'   stop_when_n_at_dose(n = 12, dose = 'recommended')
+#'
+#' # This model fit will not stop:
 #' fit2 <- model2 %>% fit('1NNN 2NTN 2TNN 2NNN')
 #' fit2 %>% recommended_dose()
 #' fit2 %>% continue()
+#' # But this model fit will stop:
+#' fit3 <- model2 %>% fit('1NNN 2NTN 2TNN 2NNN 2NNT')
+#' fit3 %>% recommended_dose()
+#' fit3 %>% continue()
 stop_when_n_at_dose <- function(parent_selector_factory, n, dose) {
 
   x <- list(

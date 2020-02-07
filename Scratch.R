@@ -1,6 +1,6 @@
 
 library(dosefinding)
-library(magrittr)
+# library(magrittr)
 1
 
 # Parsing ----
@@ -162,49 +162,6 @@ crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
   show_examples()
 
 
-# Tests
-
-# of stop_when_n_at_dose
-get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 3, dose = 2) %>%
-  fit('1NNN 2NTN') %>%
-  continue()
-get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 3, dose = -1) %>%
-  fit('1NNN 2NTN') %>%
-  continue()
-get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 3, dose = 0) %>%
-  fit('1NNN 2NTN') %>%
-  continue()
-get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 3, dose = 6) %>%
-  fit('1NNN 2NTN') %>%
-  continue()
-get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 4, dose = 2) %>%
-  fit('1NNN 2NTN') %>%
-  continue()
-
-
-# Order of embellishments should not matter:
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 9, dose = 3) %>%
-  stop_at_n(n = 21) %>%
-  fit(outcomes)
-crm_fit %>% continue()
-crm_fit %>% recommended_dose()
-
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_at_n(n = 21) %>%
-  stop_when_n_at_dose(n = 9, dose = 3) %>%
-  fit(outcomes)
-crm_fit %>% continue()
-crm_fit %>% recommended_dose()
-
-# of stop_at_n
-
-
 # BOIN ----
 num_doses <- 5
 target <- 0.3
@@ -230,7 +187,7 @@ prob_tox_exceeds(x, target)
 x$boin_fit$p_overdose
 
 # Using tibble
-outcomes <- tibble(
+outcomes <- data.frame(
   cohort = c(1,1, 2,2, 3,3),
   dose = c(1,1, 2,2, 3,3),
   tox = c(0,0, 0,0, 1,1)
@@ -316,7 +273,7 @@ prob_tox_exceeds(x, 0.5)
 
 
 # Using tibble
-outcomes <- tibble(
+outcomes <- data.frame(
   cohort = c(1,1,1, 2,2,2),
   dose = c(1,1,1, 2,2,2),
   tox = c(0,0, 0,0, 1,1)

@@ -54,6 +54,7 @@ boin_pava <- function(x, wt = rep(1, length(x))) {
   x
 }
 
+#' @importFrom gtools inv.logit
 get_posterior_prob_tox_sample <- function(dfcrm_selector, iter) {
   selector <- dfcrm_selector
   if(selector$dfcrm_fit$model == 'empiric') {
