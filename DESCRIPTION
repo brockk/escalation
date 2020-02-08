@@ -32,4 +32,7 @@ Imports:
   BOIN
 RoxygenNote: 7.0.2
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

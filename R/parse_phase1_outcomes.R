@@ -43,7 +43,7 @@
 #' sum(x$tox)      # 4
 #'
 #' # The same information can be parsed to a data-frame:
-#' y = parse_phase1_outcomes('1NNN 2NTN 3TTT', as_lisr = FALSE)
+#' y = parse_phase1_outcomes('1NNN 2NTN 3TTT', as_list = FALSE)
 #' y
 #' @references
 #' Brock, K. (2019). trialr: Bayesian Clinical Trial Designs in R and Stan.

@@ -19,6 +19,8 @@
 # usethis::use_news_md()
 # usethis::use_travis()
 # usethis::use_testthat()
+# usethis::use_vignette(name = 'DoseSelectorInterface',
+#                       title = 'Working with dose selectors')
 
 # Something else ----
 library(dose)

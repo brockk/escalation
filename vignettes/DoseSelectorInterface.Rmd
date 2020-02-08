@@ -1,0 +1,19 @@
+---
+title: "Working with dose selectors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with dose selectors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dose)
+```
