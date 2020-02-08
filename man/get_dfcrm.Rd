@@ -7,6 +7,10 @@
 get_dfcrm(parent_selector_factory = NULL, skeleton, target, ...)
 }
 \arguments{
+\item{parent_selector_factory}{optional object of type
+\code{\link{selector_factory}} that is in charge of dose selection before
+this class gets involved. Leave as NULL to just use CRM from the start.}
+
 \item{skeleton}{Dose-toxicity skeleton, a non-decreasing vector of
 probabilities.}
 

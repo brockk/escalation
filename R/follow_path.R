@@ -40,6 +40,7 @@ follow_path <- function(path) {
   return(x)
 }
 
+#' @importFrom utils head
 follow_path_selector <- function(outcomes, path) {
 
   if(is.character(path)) {

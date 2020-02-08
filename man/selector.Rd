@@ -133,8 +133,7 @@ fit \%>\% tox_at_dose()
 fit \%>\% empiric_tox_rate()
 fit \%>\% mean_prob_tox()
 fit \%>\% median_prob_tox()
-fit \%>\% prob_tox_exceeds()
-
+fit \%>\% prob_tox_exceeds(0.5)
 }
 \seealso{
 \code{\link{selector_factory}}

@@ -5,4 +5,4 @@ Control.R
 ^cran-comments\.md$
 ^\.travis\.yml$
 TODO.txt
-
+^README.Rmd

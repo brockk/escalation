@@ -131,8 +131,7 @@
 #' fit %>% empiric_tox_rate()
 #' fit %>% mean_prob_tox()
 #' fit %>% median_prob_tox()
-#' fit %>% prob_tox_exceeds()
-#'
+#' fit %>% prob_tox_exceeds(0.5)
 selector <- function() {
   # This function exists only to document the abstract class "selector".
 }

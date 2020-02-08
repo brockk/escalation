@@ -23,7 +23,6 @@ LazyData: true
 Depends: 
   magrittr
 Imports:
-  magrittr,
   stringr,
   purrr,
   tibble,

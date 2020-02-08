@@ -15,6 +15,9 @@
 #' fixed path elects not to continue and responsibility passes to this class.
 #' See Examples.
 #'
+#' @param parent_selector_factory optional object of type
+#' \code{\link{selector_factory}} that is in charge of dose selection before
+#' this class gets involved. Leave as NULL to just use CRM from the start.
 #' @param skeleton Dose-toxicity skeleton, a non-decreasing vector of
 #' probabilities.
 #' @param target We seek a dose with this probability of toxicity.
@@ -222,6 +225,7 @@ mean_prob_tox.dfcrm_selector <- function(selector, ...) {
 }
 
 #' @export
+#' @importFrom stats median
 median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
   if(num_patients(selector) <= 0) {
     return(as.numeric(rep(NA, num_doses(selector))))

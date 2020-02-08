@@ -1,5 +1,6 @@
 
 # Helpers.R
+#' @importFrom stats rexp
 cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
   time_delta <- rexp(n = n, rate = 1 / mean_time_delta) %>% round(1)
   data.frame(time_delta = time_delta)
@@ -40,18 +41,22 @@ simulate <- function(selector_factory, num_sims, ...) {
   l
 }
 
+#' @importFrom purrr map map_int
 num_patients.simulations <- function(simulations, ...) {
   simulations %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map_int(num_patients)
 }
 
+#' @importFrom purrr map map_int
 recommended_dose.simulations <- function(simulations, ...) {
   simulations %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map_int(recommended_dose)
 }
 
+#' @importFrom purrr map
+#' @importFrom utils tail
 n_at_dose.simulations <- function(simulations, ...) {
   simulations %>%
     map(~ tail(.x, 1)[[1]]) %>%
@@ -59,6 +64,8 @@ n_at_dose.simulations <- function(simulations, ...) {
     do.call(what = rbind)
 }
 
+#' @importFrom purrr map
+#' @importFrom utils tail
 tox_at_dose.simulations <- function(simulations, ...) {
   simulations %>%
     map(~ tail(.x, 1)[[1]]) %>%
@@ -68,6 +75,8 @@ tox_at_dose.simulations <- function(simulations, ...) {
 
 
 # New interface
+#' @importFrom utils head
+#' @importFrom purrr map_int
 prob_recommend.simulations <- function(simulations, ...) {
   if(length(simulations) > 0) {
     # Nesting!
@@ -83,6 +92,7 @@ prob_recommend.simulations <- function(simulations, ...) {
 }
 
 # Which file?
+#' @importFrom stats rbinom
 phase1_sim <- function(
   selector_factory,
   true_prob_tox,
@@ -93,7 +103,7 @@ phase1_sim <- function(
 ) {
   if(is.character(previous_outcomes)) {
     base_df <- parse_phase1_outcomes(previous_outcomes, as_list = FALSE)
-  } else if(is.data.frame(outcomes)) {
+  } else if(is.data.frame(previous_outcomes)) {
     base_df <- spruce_outcomes_df(previous_outcomes)
   } else{
     base_df <- parse_phase1_outcomes('', as_list = FALSE)

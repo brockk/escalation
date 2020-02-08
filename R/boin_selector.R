@@ -48,6 +48,8 @@ get_boin <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 }
 
 #' @importFrom BOIN select.mtd get.boundary
+#' @importFrom utils tail
+#' @importFrom magrittr %>%
 boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
 
   if(is.character(outcomes)) {

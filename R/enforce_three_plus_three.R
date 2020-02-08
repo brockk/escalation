@@ -7,6 +7,8 @@
 #' @param outcomes Outcomes observed. See \code{\link{parse_phase1_outcomes}}.
 #'
 #' @return Nothing. Function stops if problem detected.
+#'
+#' @importFrom utils tail
 #' @export
 #'
 #' @examples
