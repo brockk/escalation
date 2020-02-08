@@ -103,6 +103,7 @@ recommended_dose.dont_skip_selector <- function(selector, ...) {
   }
 }
 
+#' @export
 continue.dont_skip_selector <- function(selector, ...) {
   return(continue(selector$parent))
 }

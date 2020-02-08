@@ -14,6 +14,96 @@ knitr::opts_chunk$set(
 )
 ```
 
+To provide dose selection decisions, the `dose` package daisy-chains together objects that support a common interface, each deriving from type `selector`.
+We illustrate here that interface using a BOIN selector but the same functions will work on every type of dose selector in `dose`.
+
 ```{r setup}
 library(dose)
 ```
+
+```{r}
+model <- get_boin(num_doses = 5, target = 0.3)
+fit <- model %>% fit('1NN 2NN 3NT 2NT')
+```
+
+## Supported Interface
+
+The number of patients treated:
+```{r}
+num_patients(fit)
+```
+
+Cohort IDs for the treated patients:
+```{r}
+cohort(fit)
+```
+The code infers from the spaces in the outcome string that a dose-decision was made after the second, fourth , and sixth patients.
+
+Integers representing the dose-levels given:
+```{r}
+doses_given(fit)
+```
+
+Bits representing whether toxicity event was observed:
+```{r}
+tox(fit)
+```
+
+A data-frame containing the above information:
+```{r}
+model_frame(fit)
+```
+
+The number of doses under investigation:
+```{r}
+num_doses(fit)
+```
+
+The dose-level recommended for the next patient:
+```{r}
+recommended_dose(fit)
+```
+After seeing some toxicity at doses 2 and 3, the design sensibly sticks at dose 2 for the time being.
+
+A logical value for whether accrual should continue:
+```{r}
+continue(fit)
+```
+We infer from this that no stopping condition has yet been triggered.
+
+The total number of patients treated at each dose:
+```{r}
+n_at_dose(fit)
+```
+
+The total number of toxicities seen at each dose:
+```{r}
+tox_at_dose(fit)
+```
+
+The empirical toxicity rate, i.e. the number of toxicities divided by the number of patients:
+```{r}
+empiric_tox_rate(fit)
+```
+
+The model-derived expected toxicity rate at each dose: 
+```{r}
+mean_prob_tox(fit)
+```
+The BOIN design makes no estimate for doses it has not yet administered.
+
+The model-derived median toxicity rate at each dose: 
+```{r}
+median_prob_tox(fit)
+```
+BOIN does not actually calculate posterior median estimates.
+Sometimes it will be necessary to return missing values if functionality is not supported by a model.
+Median estimates could be added to the BOIN class in due course.
+
+The posterior probability that the toxicity rate exceeds some threshold value, here 50%:
+```{r}
+prob_tox_exceeds(fit, 0.5)
+```
+Once again, no estimate is made for non-administered doses.
+We see that the model estimates a trivial chance that the toxicity rate at the lowest dose exceeds 50%.
+
