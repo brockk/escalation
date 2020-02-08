@@ -1,4 +1,4 @@
 library(testthat)
-library(dose)
+library(escalation)
 
-test_check("dose")
+test_check("escalation")

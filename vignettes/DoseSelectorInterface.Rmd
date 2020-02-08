@@ -14,11 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-To provide dose selection decisions, the `dose` package daisy-chains together objects that support a common interface, each deriving from type `selector`.
-We illustrate here that interface using a BOIN selector but the same functions will work on every type of dose selector in `dose`.
+To provide dose selection decisions, the `escalation` package daisy-chains together objects that support a common interface, each deriving from type `selector`.
+We illustrate here that interface using a BOIN selector but the same functions will work on every type of dose selector in `escalation`.
 
 ```{r setup}
-library(dose)
+library(escalation)
 ```
 
 ```{r}

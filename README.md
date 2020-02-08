@@ -1,4 +1,4 @@
-dose
+escalation
 ================
 Kritian Brock
 
@@ -7,16 +7,16 @@ Kritian Brock
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/brockk/dose.svg?branch=master)](https://travis-ci.org/brockk/dose)
+status](https://travis-ci.org/brockk/escalation.svg?branch=master)](https://travis-ci.org/brockk/escalation)
 [![cran
-version](http://www.r-pkg.org/badges/version/dose)](https://cran.r-project.org/package=dose)
-![](https://cranlogs.r-pkg.org/badges/dose)
-![](https://cranlogs.r-pkg.org/badges/grand-total/dose)
+version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
+![](https://cranlogs.r-pkg.org/badges/escalation)
+![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
 <!-- badges: end -->
 
 ## Overview
 
-`dose` provides a grammar for dose-finding clinical trials.
+`escalation` provides a grammar for dose-finding clinical trials.
 
 It starts by providing functions to use dose-escalation methodologies
 like CRM, BOIN, and 3+3. Largely, model-fitting code is imported from
@@ -36,8 +36,8 @@ With a little bit of plumbing, a dose-selection function could be
 imported from practically any dose-finding package in R and made to act
 the same way.
 
-`dose` then adds optional embellishments to provide extra desirable
-behaviour:
+`escalation` then adds optional embellishments to provide extra
+desirable behaviour:
 
   - `dont_skip_doses()`
   - `stop_at_n()`
@@ -46,8 +46,8 @@ behaviour:
   - `demand_n_at_dose()`
 
 Each of these functions overrides the way doses are selected or when a
-design decides to stop. A powerful feature of `dose` is that all of
-these objects supports exactly the same interface, so they can be
+design decides to stop. A powerful feature of `escalation` is that all
+of these objects supports exactly the same interface, so they can be
 daisy-chained together using `%>%` operator from the `magrittr` package
 to create dose-selectors that perform exactly how you want.
 
@@ -61,24 +61,24 @@ See Usage.
 
 ``` r
 # Install the latest official version from CRAN with:
-install.packages("dose")
+install.packages("escalation")
 
 # Alternatively, install the latest code from GitHub:
-devtools::install_github("brockk/dose")
+devtools::install_github("brockk/escalation")
 ```
 
 ## Describing outcomes in dose-finding trials
 
-`dose` uses a succinct syntax for describing dose-finding outcomes,
-described in Brock (2019) for the phase I setting and in Brock et al.
-(2017) for the phase I/II setting.
+`escalation` uses a succinct syntax for describing dose-finding
+outcomes, described in Brock (2019) for the phase I setting and in Brock
+et al. (2017) for the phase I/II setting.
 
 TODO
 
 ## Usage
 
 ``` r
-library(dose)
+library(escalation)
 ```
 
 ### CRM
@@ -302,9 +302,9 @@ by Zohar and Chevret (2001).
 
 Finally, I want to add general sunctions to perform simulations and
 calculate all possible future dose paths. Given the standard interface
-implemented in `dose`, each of these approaches will be opened up to
-every specifiable dose selector. That is the beauty of object-oriented
-programming.
+implemented in `escalation`, each of these approaches will be opened up
+to every specifiable dose selector. That is the beauty of
+object-oriented programming.
 
 ## Getting help
 
@@ -313,7 +313,7 @@ contact me.
 
 If you have found a bug, please drop me a line and also log it here:
 
-<https://github.com/brockk/dose/issues>
+<https://github.com/brockk/escalation/issues>
 
 ## References
 

@@ -1,4 +1,4 @@
-Package: dose
+Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
 Version: 0.0.1

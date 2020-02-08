@@ -23,7 +23,7 @@
 #                       title = 'Working with dose selectors')
 
 # Something else ----
-library(dose)
+library(escalation)
 getwd()
 # setwd('/Users/k/Dropbox/Code/trialr/')
 # setwd('C:/Users/Kristian Brock/Dropbox/Code/trialr/')
@@ -42,7 +42,7 @@ rstudioapi::previewRd('man/eff_at_dose.Rd')
 devtools::install(build = FALSE) # Skip recompilation
 
 # .rs.restartR()
-library(dose)
+library(escalation)
 
 # Run tests
 devtools::test()

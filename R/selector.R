@@ -18,7 +18,7 @@
 #' at the recommended dose. Each of these behaviours can be bolted on via
 #' additional selectors. Furthermore, those behaviours and more can be bolted
 #' on to any dose selector because of the modular approach implemented in
-#' \code{dose}. See Examples.
+#' \code{escalation}. See Examples.
 #'
 #' \code{selector} objects are obtained by calling the \code{\link{fit}}
 #' function on a \code{\link{selector_factory}} object.
