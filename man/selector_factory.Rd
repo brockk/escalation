@@ -8,7 +8,7 @@ selector_factory()
 }
 \description{
 Along with \code{\link{selector}}, this is the second core class in the
-\code{dosefinding} package. It exists to do one thing: fit outcomes from
+\code{dose} package. It exists to do one thing: fit outcomes from
 dose-finding trials to the models we use to select doses.
 
 A \code{\link{selector_factory}} object is obtained by initially calling a

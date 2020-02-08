@@ -7,7 +7,7 @@ test_that('dfcrm_dose_selector matches dfcrm', {
   scale = sqrt(0.75)
   outcomes <- '2NNT 2NNN 3NTT 2NNT'
 
-  # dosefinding model
+  # Dose selection model
   model <- get_dfcrm(skeleton = skeleton, target = target, scale = scale)
   x <- model %>% fit(outcomes)
 
@@ -27,7 +27,7 @@ test_that('dfcrm_dose_selector matches dfcrm', {
   target <- 0.33
   outcomes <- '1NNN 2NNN 3NTT 2NNN 3TNN 3TNT 2NNN'
 
-  # dosefinding model
+  # Dose selection model
   model <- get_dfcrm(skeleton = skeleton, target = target, intcpt = 4,
                      model = 'logistic')
   x <- model %>% fit(outcomes)

@@ -1,5 +1,5 @@
 
-library(dosefinding)
+library(dose)
 # library(magrittr)
 1
 
