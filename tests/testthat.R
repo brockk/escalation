@@ -1,4 +1,4 @@
 library(testthat)
-library(dosefinding)
+library(dose)
 
-test_check("dosefinding")
+test_check("dose")

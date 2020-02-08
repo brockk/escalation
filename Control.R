@@ -21,7 +21,7 @@
 # usethis::use_testthat()
 
 # Something else ----
-library(dosefinding)
+library(dose)
 getwd()
 # setwd('/Users/k/Dropbox/Code/trialr/')
 # setwd('C:/Users/Kristian Brock/Dropbox/Code/trialr/')
@@ -40,7 +40,7 @@ rstudioapi::previewRd('man/eff_at_dose.Rd')
 devtools::install(build = FALSE) # Skip recompilation
 
 # .rs.restartR()
-library(dosefinding)
+library(dose)
 
 # Run tests
 devtools::test()
