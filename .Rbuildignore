@@ -9,3 +9,4 @@ Control.R
 TODO.txt
 ^README.Rmd
 logo.png
+^pkgdown$
