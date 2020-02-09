@@ -10,3 +10,4 @@ TODO.txt
 ^README.Rmd
 logo.png
 ^pkgdown$
+^codecov\.yml$
