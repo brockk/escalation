@@ -21,6 +21,7 @@
 # usethis::use_testthat()
 # usethis::use_vignette(name = 'DoseSelectorInterface',
 #                       title = 'Working with dose selectors')
+# usethis::use_logo('logo.png')
 
 # Something else ----
 library(escalation)
@@ -62,4 +63,3 @@ devtools::build_manual()
 
 # Build
 devtools::build()
-

@@ -1,8 +1,7 @@
-escalation
-================
-Kritian Brock
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# escalation <img src="man/figures/logo.png" align="right" height=140/>
 
 <!-- badges: start -->
 
@@ -14,6 +13,8 @@ version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project
 ![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
 <!-- badges: end -->
 
+by Kristian Brock
+
 ## Overview
 
 `escalation` provides a grammar for dose-finding clinical trials.
@@ -24,13 +25,12 @@ existing packages:
 
   - `get_dfcrm()` uses `dfcrm`
   - `get_boin()` uses `BOIN`
-  - there is also `get_three_plus_three()`
+  - `get_three_plus_three()`
 
-These approaches are then fit to trial outcomes to produce dose selector
-objects that support a common interface. The two most important methods
-are `recommended_dose()` to get the current dose selection, and
-`continue()` to learn whether the model advocates continuing patient
-recruitment.
+These models are fit to trial outcomes to produce dose selector objects
+that support a common interface. The two most important methods are
+`recommended_dose()` to get the current dose selection, and `continue()`
+to learn whether the model advocates continuing patient recruitment.
 
 With a little bit of plumbing, a dose-selection function could be
 imported from practically any dose-finding package in R and made to act
@@ -55,7 +55,7 @@ Furthermore, having defined this flexible interface for creating
 dose-finding designs, it is simple to run simulations or calculate
 dose-pathways for future cohorts of patients.
 
-See Usage.
+See [Usage](#usage)
 
 # Installation
 
@@ -73,7 +73,38 @@ devtools::install_github("brockk/escalation")
 outcomes, described in Brock (2019) for the phase I setting and in Brock
 et al. (2017) for the phase I/II setting.
 
-TODO
+In a phase I trial, we use the letters:
+
+  - `T` to show that toxicity occurred in a patient;
+  - `N` to show that toxicity did not occur in a patient.
+
+In a joint phase I/II trial, like those supported by EffTox, where we
+have coincident efficacy and toxicity outcomes, those relevant letters
+are:
+
+  - `T` to show that toxicity without efficacy occurred in a patient;
+  - `E` to show that efficacy without toxicity occurred in a patient;
+  - `N` to show that neither occurred;
+  - `B` to show that both occurred.
+
+These outcome letters are strewn behind integer dose-levels to show the
+outcomes of patients in cohorts. To show that a cohort a three patients
+was given dose 2, that the first two patients were without toxicity, but
+the third patient experienced toxicity, we would use the outcome string:
+
+``` r
+outcomes <- '2NNT'
+```
+
+If that cohort was followed by another cohort of three, all of which
+were without toxicity, the overall outcome string would be:
+
+``` r
+outcomes <- '2NNT 2NNN'
+```
+
+And so on. These strings are used in the `escalate` package to make it
+easy to fit models to observed outcomes. There are many examples below.
 
 ## Usage
 
@@ -81,11 +112,13 @@ TODO
 library(escalation)
 ```
 
+    ## Loading required package: magrittr
+
 ### CRM
 
 Let’s fit a continual reassessment method (CRM) (O’Quigley, Pepe, and
-Fisher 1990) model to some outcomes using the implementation in the
-[dfcrm](https://CRAN.R-project.org/package=dfcrm) package by Cheung
+Fisher 1990) model to some outcomes using the code implementation in the
+[`dfcrm`](https://CRAN.R-project.org/package=dfcrm) package by Cheung
 (2013).
 
 The very least information we need to provide is a dose-toxicity
@@ -221,8 +254,9 @@ rate closest to the target of 25%.
 
 ### BOIN
 
-This package also implements the BOIN dose-finding design by Liu and
-Yuan (2015) via the BOIN package (Yuan and Liu 2018).
+`escalate` also implements the BOIN dose-finding design by Liu and Yuan
+(2015) via the [`BOIN`](https://CRAN.R-project.org/package=BOIN) package
+(Yuan and Liu 2018).
 
 In contrast to CRM, BOIN does not require a dose-toxicity skeleton. In
 its simplest case, it requires merely the number of doses under
@@ -250,8 +284,8 @@ fit %>% continue()
     ## [1] TRUE
 
 The BOIN dose selector natively implements stopping rules, as described
-by Suyu & Yuan. For instance, if the bottom dose is too toxic, thhe
-design will advise to halt:
+by Suyu & Yuan. For instance, if the bottom dose is too toxic, the
+design will advise the trial halts:
 
 ``` r
 fit <- model %>% fit('2NTN 1TTT')
@@ -300,7 +334,7 @@ I plan to add model-fitting functions for:
 I want to add stopping functions for each of the approaches investigated
 by Zohar and Chevret (2001).
 
-Finally, I want to add general sunctions to perform simulations and
+Finally, I want to add general functions to perform simulations and
 calculate all possible future dose paths. Given the standard interface
 implemented in `escalation`, each of these approaches will be opened up
 to every specifiable dose selector. That is the beauty of
