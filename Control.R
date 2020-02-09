@@ -56,9 +56,6 @@ devtools::build_vignettes()
 
 # pkgdown site
 pkgdown::build_site()
-# options(warn = 2)
-# pkgdown::build_site(new_process = FALSE)
-# traceback()
 
 # Check
 devtools::check()
