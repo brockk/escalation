@@ -22,6 +22,8 @@
 # usethis::use_vignette(name = 'DoseSelectorInterface',
 #                       title = 'Working with dose selectors')
 # usethis::use_logo('logo.png')
+# usethis::use_pkgdown()
+
 
 # Something else ----
 library(escalation)
@@ -54,6 +56,9 @@ devtools::build_vignettes()
 
 # pkgdown site
 pkgdown::build_site()
+# options(warn = 2)
+# pkgdown::build_site(new_process = FALSE)
+# traceback()
 
 # Check
 devtools::check()
