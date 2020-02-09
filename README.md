@@ -13,7 +13,8 @@ version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project
 ![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
 <!-- badges: end -->
 
-by Kristian Brock
+by Kristian Brock. Documentation is hosted at
+<https://brockk.github.io/escalation/>
 
 ## Overview
 
