@@ -6,36 +6,21 @@
 
 
 ## Test environments
-* local OS X install, R 3.6.1
-* Travis-CI, Ubuntu 16.04.6 LTS, R 3.6.2
-* win-builder (devel and release)
+* local OS X install, R 3.6.2, using --as-cran
+* Travis-CI, Ubuntu 16.04.6 LTS, R 3.6.2, using --as-cran
+* local Win10 install, R3.6.0, using --as-cran
 
 
-## OS-X check results
+## local OS X check results
 
-0 errors | 0 warnings | 1 note
-
-TODO
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 
 ## Travis-CI check results
 
-0 errors | 0 warnings | 1 note
-
-* checking Rd cross-references ... NOTE
-Package unavailable to check Rd xrefs: ‘trialr’
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 
 
-## win-builder (release) check results
+## local Win10 check results
 
-0 errors | 0 warnings | 1 note
-
-TODO
-
-
-## win-builder (devel) check results
-
-0 errors | 0 warnings | 1 note
-
-TODO
-
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓

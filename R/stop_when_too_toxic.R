@@ -15,7 +15,7 @@
 #' posterior distribution. Thus, to perform inference on the posterior
 #' probability of toxicity, this package assumes the dfcrm slope parameter
 #' follows a normal distribution with the mean and variance calculated by dfcrm.
-#' In contrast, the \code{\link[trialr]{stan_crm}} function in the trialr
+#' In contrast, the \code{stan_crm} function in the \code{trialr}
 #' package needs no such assumption because it samples from the posterior
 #' parameter distribution and uses those samples to infer on the posterior
 #' probability of toxicity at each dose, dependent on the chosen model for the

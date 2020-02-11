@@ -23,14 +23,12 @@
 #                       title = 'Working with dose selectors')
 # usethis::use_logo('logo.png')
 # usethis::use_pkgdown()
+usethis::use_coverage()
 
 
 # Something else ----
 library(escalation)
 getwd()
-# setwd('/Users/k/Dropbox/Code/trialr/')
-# setwd('C:/Users/Kristian Brock/Dropbox/Code/trialr/')
-# setwd('/Users/k/ownCloud/Code/trialr/')
 
 # Remake man files
 .rs.restartR()

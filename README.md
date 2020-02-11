@@ -7,6 +7,8 @@
 
 [![Travis build
 status](https://travis-ci.org/brockk/escalation.svg?branch=master)](https://travis-ci.org/brockk/escalation)
+[![Codecov test
+coverage](https://codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg)](https://codecov.io/gh/brockk/escalation?branch=master)
 [![cran
 version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
 ![](https://cranlogs.r-pkg.org/badges/escalation)
