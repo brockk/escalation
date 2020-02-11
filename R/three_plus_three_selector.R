@@ -146,8 +146,14 @@ median_prob_tox.three_plus_three_selector <- function(selector, ...) {
 }
 
 #' @export
-prob_tox_exceeds.three_plus_three_selector <- function(selector, threshold, iter = 1000,
-                                           ...) {
+prob_tox_quantile.three_plus_three_selector <- function(selector, p, ...) {
+  message('Note that 3+3 does not estimate prob_tox_quantile.')
+  rep(NA, num_doses(selector))
+}
+
+#' @export
+prob_tox_exceeds.three_plus_three_selector <- function(selector, threshold,
+                                                       iter = 1000, ...) {
   message('Note that 3+3 does not estimate prob_tox_exceeds.')
   return(rep(NA, num_doses(selector)))
 }

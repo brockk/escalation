@@ -112,6 +112,27 @@ tox <- function(selector, ...) {
   UseMethod('tox')
 }
 
+#' Total number of toxicities seen.
+#'
+#' Get the number of toxicities seen in a dose-finding trial.
+#'
+#' @param selector Object of type \code{\link{selector}}.
+#' @param ... Extra args are passed onwards.
+#'
+#' @return integer
+#'
+#' @export
+#'
+#' @examples
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
+#' fit <- model %>% fit('1NNN 2NTN')
+#' fit %>% num_tox()
+num_tox <- function(simulations, ...) {
+  UseMethod('num_tox')
+}
+
 #' Model data-frame.
 #'
 #' Get the model data-frame for a dose-finding analysis, inlcuding columns for
@@ -229,6 +250,27 @@ n_at_dose <- function(selector, ...) {
   UseMethod('n_at_dose')
 }
 
+#' Percentage of patients treated at each dose.
+#'
+#' Get the percentage of patients evaluated at each dose under investigation.
+#'
+#' @param selector Object of class \code{\link{selector}}
+#' @param ... arguments passed to other methods
+#'
+#' @return integer
+#' @export
+#'
+#' @examples
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
+#' fit %>% prob_administer()
+prob_administer <- function(simulations, ...) {
+  UseMethod('prob_administer')
+}
+
 #' Number of toxicities seen at each dose.
 #'
 #' Get the number of toxicities seen at each dose under investigation.
@@ -319,6 +361,32 @@ mean_prob_tox <- function(selector, ...) {
 #' fit %>% median_prob_tox()
 median_prob_tox <- function(selector, ...) {
   UseMethod('median_prob_tox')
+}
+
+#' Quantile of the toxicity rate at each dose.
+#'
+#' Get the estimated quantile of the toxicity rate at each dose under
+#' investigation. This is a set of modelled statistics. The underlying models
+#' estimate toxicity probabilities in different ways. If no model-based
+#' estimate of the median is available, this function will return a vector of
+#' NAs.
+#'
+#' @param selector Object of class \code{\link{selector}}
+#' @param p quantile probability, decimal value between 0 and 1
+#' @param ... arguments passed to other methods
+#'
+#' @return numeric
+#' @export
+#'
+#' @examples
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
+#' fit %>% prob_tox_quantile(p = 0.9)
+prob_tox_quantile <- function(selector, p, ...) {
+  UseMethod('prob_tox_quantile')
 }
 
 #' Probability that the toxicity rate exceeds some threshold.

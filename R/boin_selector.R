@@ -1,5 +1,5 @@
 
-#' Get an object to fit the CRM model using the dfcrm package.
+#' Get an object to fit the BOIN model using the BOIN package.
 #'
 #' @param num_doses Number of doses under investigation.
 #' @param target We seek a dose with this probability of toxicity.
@@ -63,8 +63,10 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
   x <- select.mtd(target = target, npts = df_c$n, ntox = df_c$tox, ...)
 
   # Checks
-  if(max(df$dose) > num_doses) {
-    stop('boin_selector - maximum dose given exceeds number of doses.')
+  if(nrow(df) > 0) {
+    if(max(df$dose) > num_doses) {
+      stop('boin_selector - maximum dose given exceeds number of doses.')
+    }
   }
 
   if(nrow(df) == 0) {
@@ -201,7 +203,13 @@ mean_prob_tox.boin_selector <- function(selector, ...) {
 #' @export
 median_prob_tox.boin_selector <- function(selector, ...) {
   message('Note that BOIN does not estimate median_prob_tox.')
-  rep(NA, num_doses(selector))
+  as.numeric(rep(NA, num_doses(selector)))
+}
+
+#' @export
+prob_tox_quantile.boin_selector <- function(selector, p, ...) {
+  message('Note that BOIN does not estimate prob_tox_quantile')
+  as.numeric(rep(NA, num_doses(selector)))
 }
 
 #' @importFrom stats pbeta

@@ -137,6 +137,11 @@ selector <- function() {
 }
 
 #' @export
+num_tox.selector <- function(selector, ...) {
+  sum(tox(selector))
+}
+
+#' @export
 #' @importFrom tibble tibble
 model_frame.selector <- function(selector, ...) {
 
@@ -155,6 +160,14 @@ model_frame.selector <- function(selector, ...) {
       tox = integer(length = 0)
     )
   }
+}
+
+#' @export
+prob_administer.selector <- function(selector, ...) {
+  n_doses <- num_doses(selector)
+  n_d <- n_at_dose(selector)
+  names(n_d) <- 1:n_doses
+  n_d / sum(n_d)
 }
 
 #' @export

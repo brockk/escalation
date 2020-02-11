@@ -2,7 +2,7 @@
 % Please edit documentation in R/boin_selector.R
 \name{get_boin}
 \alias{get_boin}
-\title{Get an object to fit the CRM model using the dfcrm package.}
+\title{Get an object to fit the BOIN model using the BOIN package.}
 \usage{
 get_boin(num_doses, target, use_stopping_rule = TRUE, ...)
 }
@@ -23,7 +23,7 @@ an object of type \code{\link{selector_factory}} that can fit the
 BOIN model to outcomes.
 }
 \description{
-Get an object to fit the CRM model using the dfcrm package.
+Get an object to fit the BOIN model using the BOIN package.
 }
 \examples{
 target <- 0.25

@@ -158,6 +158,11 @@ median_prob_tox.follow_path_selector <- function(selector, ...) {
 }
 
 #' @export
+prob_tox_quantile.follow_path_selector <- function(selector, p, ...) {
+  return(rep(NA, num_doses(selector)))
+}
+
+#' @export
 prob_tox_exceeds.follow_path_selector <- function(selector, threshold, ...) {
   return(rep(NA, num_doses(selector)))
 }

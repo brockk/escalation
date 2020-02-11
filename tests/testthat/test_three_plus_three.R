@@ -253,9 +253,10 @@ test_that('3+3 advice is sensible even when path has diverged from algorithm', {
 
 
 test_that('three_plus_three_selector supports correct interface.', {
+
   three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
 
-  # Using outcome string
+  # Example 1, using outcome string
   x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
 
   expect_equal(num_patients(x), 6)
@@ -269,6 +270,9 @@ test_that('three_plus_three_selector supports correct interface.', {
 
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
+
+  expect_equal(num_tox(x), 2)
+  expect_true(is.integer(num_tox(x)))
 
   expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                           cohort = c(1,1,1,2,2,2),
@@ -287,12 +291,58 @@ test_that('three_plus_three_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
 
+  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+  expect_true(is.numeric(prob_administer(x)))
+
   expect_equal(tox_at_dose(x), c(0,2,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))
 
   expect_true(is.numeric(empiric_tox_rate(x)))
 
-  # Using tibble
+
+  # Example 2, empty outcome string..
+  x <- three_plus_three_fitter %>% fit('')
+
+  expect_equal(num_patients(x), 0)
+  expect_true(is.integer(num_patients(x)))
+
+  expect_equal(cohort(x), integer(0))
+  expect_true(is.integer(cohort(x)))
+
+  expect_equal(doses_given(x), integer(0))
+  expect_true(is.integer(doses_given(x)))
+
+  expect_equal(tox(x), integer(0))
+  expect_true(is.integer(tox(x)))
+
+  expect_equal(num_tox(x), 0)
+  expect_true(is.integer(num_tox(x)))
+
+  mf <- model_frame(x)
+  expect_equal(nrow(mf), 0)
+  expect_equal(ncol(mf), 4)
+
+  expect_equal(num_doses(x), 5)
+  expect_true(is.integer(num_doses(x)))
+
+  expect_equal(recommended_dose(x), 1)
+  expect_true(is.integer(recommended_dose(x)))
+
+  expect_equal(continue(x), TRUE)
+  expect_true(is.logical(continue(x)))
+
+  expect_equal(n_at_dose(x), c(0,0,0,0,0))
+  expect_true(is.integer(n_at_dose(x)))
+
+  expect_true(is.numeric(prob_administer(x)))
+
+  expect_equal(tox_at_dose(x), c(0,0,0,0,0))
+  expect_true(is.integer(tox_at_dose(x)))
+
+  expect_true(is.numeric(empiric_tox_rate(x)))
+
+
+  # Example 3, using tibble
   outcomes <- tibble::tibble(
     cohort = c(1,1,1, 2,2,2),
     dose = c(1,1,1, 2,2,2),
@@ -312,6 +362,9 @@ test_that('three_plus_three_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
 
+  expect_equal(num_tox(x), 2)
+  expect_true(is.integer(num_tox(x)))
+
   expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                cohort = c(1,1,1,2,2,2),
                                                dose = c(1,1,1,2,2,2),
@@ -328,6 +381,9 @@ test_that('three_plus_three_selector supports correct interface.', {
 
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
+
+  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+  expect_true(is.numeric(prob_administer(x)))
 
   expect_equal(tox_at_dose(x), c(0,2,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))

@@ -227,23 +227,70 @@ mean_prob_tox.dfcrm_selector <- function(selector, ...) {
 #' @export
 #' @importFrom stats median
 median_prob_tox.dfcrm_selector <- function(selector, iter = 1000, ...) {
+  return(prob_tox_quantile(selector, p = 0.5))
+  # if(num_patients(selector) <= 0) {
+  #   return(as.numeric(rep(NA, num_doses(selector))))
+  # } else {
+  #   prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+  #   # Median(Prob(Tox) | data) is approximated by:
+  #   apply(prob_tox_sample, 2, median)
+  # }
+}
+
+#' @export
+#' @importFrom gtools inv.logit
+#' @importFrom stats qnorm
+prob_tox_quantile.dfcrm_selector <- function(selector, p, ...) {
   if(num_patients(selector) <= 0) {
     return(as.numeric(rep(NA, num_doses(selector))))
   } else {
-    prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
-    # Median(Prob(Tox) | data) is approximated by:
-    apply(prob_tox_sample, 2, median)
+    beta_hat <- selector$dfcrm_fit$estimate
+    beta_var <- selector$dfcrm_fit$post.var
+    # High values for beta lead to low values of prob_tox, so flip the tails:
+    beta_q <- qnorm(p = 1 - p, mean = beta_hat, sd = sqrt(beta_var))
+    if(selector$dfcrm_fit$model == 'empiric') {
+      return(selector$skeleton ^ exp(beta_q))
+    } else if(selector$dfcrm_fit$model == 'logistic') {
+      alpha <- selector$dfcrm_fit$intcpt
+      dose_scaled <- selector$dfcrm_fit$dosescaled
+      inv.logit(alpha + exp(beta_hat) * dose_scaled)
+    } else {
+      stop(paste0("Don't know what to do with dfcrm model '",
+                  selector$dfcrm_fit$model, "'"))
+    }
   }
 }
 
 #' @export
-prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, iter = 1000,
-                                            ...) {
+#' @importFrom gtools logit
+#' @importFrom stats pnorm
+prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, ...) {
+
   if(num_patients(selector) <= 0) {
     return(as.numeric(rep(NA, num_doses(selector))))
   } else {
-    prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
-    # Prob(Prob(Tox) > threshold | data) is approximated by:
-    colMeans(prob_tox_sample > threshold)
+    beta_hat <- selector$dfcrm_fit$estimate
+    beta_var <- selector$dfcrm_fit$post.var
+    if(selector$dfcrm_fit$model == 'empiric') {
+      return(pnorm(q = log(log(threshold) / log(selector$skeleton)),
+              mean = beta_hat, sd = sqrt(beta_var)))
+    } else if(selector$dfcrm_fit$model == 'logistic') {
+      alpha <- selector$dfcrm_fit$intcpt
+      dose_scaled <- selector$dfcrm_fit$dosescaled
+      pnorm(log((logit(threshold) - alpha) / dose_scaled), mean = beta_hat,
+            sd = sqrt(beta_var))
+
+    } else {
+      stop(paste0("Don't know what to do with dfcrm model '",
+                  selector$dfcrm_fit$model, "'"))
+    }
   }
+
+  # if(num_patients(selector) <= 0) {
+  #   return(as.numeric(rep(NA, num_doses(selector))))
+  # } else {
+  #   prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+  #   # Prob(Prob(Tox) > threshold | data) is approximated by:
+  #   colMeans(prob_tox_sample > threshold)
+  # }
 }

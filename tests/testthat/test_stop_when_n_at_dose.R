@@ -79,6 +79,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,0,0))
   expect_true(is.integer(tox(x)))
 
+  expect_equal(num_tox(x), 0)
+  expect_true(is.integer(num_tox(x)))
+
   expect_true(all(model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                               cohort = c(1,1,1,2,2,2),
                                               dose = c(1,1,1,2,2,2),
@@ -96,6 +99,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
 
+  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+  expect_true(is.numeric(prob_administer(x)))
+
   expect_equal(tox_at_dose(x), c(0,0,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))
 
@@ -104,6 +110,8 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_true(is.numeric(mean_prob_tox(x)))
 
   expect_true(is.numeric(median_prob_tox(x)))
+
+  expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
 
@@ -124,6 +132,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
 
+  expect_equal(num_tox(x), 0)
+  expect_true(is.integer(num_tox(x)))
+
   mf <- model_frame(x)
   expect_equal(nrow(mf), 0)
   expect_equal(ncol(mf), 4)
@@ -140,6 +151,8 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(0,0,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
 
+  expect_true(is.numeric(prob_administer(x)))
+
   expect_equal(tox_at_dose(x), c(0,0,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))
 
@@ -148,6 +161,8 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_true(is.numeric(mean_prob_tox(x)))
 
   expect_true(is.numeric(median_prob_tox(x)))
+
+  expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
 
@@ -173,6 +188,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,0,1))
   expect_true(is.integer(tox(x)))
 
+  expect_equal(num_tox(x), 1)
+  expect_true(is.integer(num_tox(x)))
+
   expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                cohort = c(1,1,1,2,2,2),
                                                dose = c(1,1,1,2,2,2),
@@ -190,6 +208,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
 
+  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+  expect_true(is.numeric(prob_administer(x)))
+
   expect_equal(tox_at_dose(x), c(0,1,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))
 
@@ -198,6 +219,8 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_true(is.numeric(mean_prob_tox(x)))
 
   expect_true(is.numeric(median_prob_tox(x)))
+
+  expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
 

@@ -54,10 +54,10 @@ test_that('boin_selector supports correct interface.', {
   num_doses <- 5
   target <- 0.3
 
-  boin_fitter <- get_boin(num_doses = num_doses, target = target)
+  model_fitter <- get_boin(num_doses = num_doses, target = target)
 
-  # Using outcome string
-  x <- fit(boin_fitter, '1NNN 2NTT')
+  # Example 1, using outcome string
+  x <- fit(model_fitter, '1NNN 2NTT')
 
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
@@ -88,6 +88,9 @@ test_that('boin_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
 
+  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+  expect_true(is.numeric(prob_administer(x)))
+
   expect_equal(tox_at_dose(x), c(0,2,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))
 
@@ -95,14 +98,69 @@ test_that('boin_selector supports correct interface.', {
 
   expect_true(is.numeric(mean_prob_tox(x)))
 
+  expect_true(is.numeric(median_prob_tox(x)))
 
-  # Using tibble
+  expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
+
+  expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
+
+
+  # Example 2, using trivial outcome string
+  x <- fit(model_fitter, '')
+
+  expect_equal(num_patients(x), 0)
+  expect_true(is.integer(num_patients(x)))
+
+  expect_equal(cohort(x), integer(0))
+  expect_true(is.integer(cohort(x)))
+
+  expect_equal(doses_given(x), integer(0))
+  expect_true(is.integer(doses_given(x)))
+
+  expect_equal(tox(x), integer(0))
+  expect_true(is.integer(tox(x)))
+
+  expect_equal(num_tox(x), 0)
+  expect_true(is.integer(num_tox(x)))
+
+  mf <- model_frame(x)
+  expect_equal(nrow(mf), 0)
+  expect_equal(ncol(mf), 4)
+
+  expect_equal(num_doses(x), 5)
+  expect_true(is.integer(num_doses(x)))
+
+  expect_equal(recommended_dose(x), 1)
+  expect_true(is.integer(recommended_dose(x)))
+
+  expect_equal(continue(x), TRUE)
+  expect_true(is.logical(continue(x)))
+
+  expect_equal(n_at_dose(x), c(0,0,0,0,0))
+  expect_true(is.integer(n_at_dose(x)))
+
+  expect_true(is.numeric(prob_administer(x)))
+
+  expect_equal(tox_at_dose(x), c(0,0,0,0,0))
+  expect_true(is.integer(tox_at_dose(x)))
+
+  expect_true(is.numeric(empiric_tox_rate(x)))
+
+  expect_true(is.numeric(mean_prob_tox(x)))
+
+  expect_true(is.numeric(median_prob_tox(x)))
+
+  expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
+
+  # Example 3, using tibble
   outcomes <- tibble(
     cohort = c(1,1,1, 2,2,2),
     dose = c(1,1,1, 2,2,2),
     tox = c(0,0, 0,0, 1,1)
   )
-  x <- fit(boin_fitter, outcomes)
+  x <- fit(model_fitter, outcomes)
 
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
@@ -133,6 +191,9 @@ test_that('boin_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
 
+  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+  expect_true(is.numeric(prob_administer(x)))
+
   expect_equal(tox_at_dose(x), c(0,2,0,0,0))
   expect_true(is.integer(tox_at_dose(x)))
 
@@ -140,6 +201,11 @@ test_that('boin_selector supports correct interface.', {
 
   expect_true(is.numeric(mean_prob_tox(x)))
 
+  expect_true(is.numeric(median_prob_tox(x)))
+
+  expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
+
+  expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
 })
 
 

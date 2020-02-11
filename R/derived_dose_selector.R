@@ -57,6 +57,11 @@ median_prob_tox.derived_dose_selector <- function(selector, ...) {
 }
 
 #' @export
+prob_tox_quantile.derived_dose_selector <- function(selector, p, ...) {
+  return(selector$parent %>% prob_tox_quantile(p, ...))
+}
+
+#' @export
 prob_tox_exceeds.derived_dose_selector <- function(selector, threshold, ...) {
   return(selector$parent %>% prob_tox_exceeds(threshold, ...))
 }
