@@ -129,7 +129,7 @@ tox <- function(selector, ...) {
 #' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
 #' fit %>% num_tox()
-num_tox <- function(simulations, ...) {
+num_tox <- function(selector, ...) {
   UseMethod('num_tox')
 }
 
@@ -267,7 +267,7 @@ n_at_dose <- function(selector, ...) {
 #' outcomes <- '1NNN 2NTN'
 #' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
 #' fit %>% prob_administer()
-prob_administer <- function(simulations, ...) {
+prob_administer <- function(selector, ...) {
   UseMethod('prob_administer')
 }
 

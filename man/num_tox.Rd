@@ -4,12 +4,12 @@
 \alias{num_tox}
 \title{Total number of toxicities seen.}
 \usage{
-num_tox(simulations, ...)
+num_tox(selector, ...)
 }
 \arguments{
-\item{...}{Extra args are passed onwards.}
-
 \item{selector}{Object of type \code{\link{selector}}.}
+
+\item{...}{Extra args are passed onwards.}
 }
 \value{
 integer
