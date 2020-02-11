@@ -49,6 +49,11 @@ Bits representing whether toxicity event was observed:
 tox(fit)
 ```
 
+The total number of toxicities seen at all doses combined:
+```{r}
+num_tox(fit)
+```
+
 A data-frame containing the above information:
 ```{r}
 model_frame(fit)
@@ -76,6 +81,12 @@ The total number of patients treated at each dose:
 n_at_dose(fit)
 ```
 
+The proportion of patients treated at each dose:
+```{r}
+prob_administer(fit)
+```
+
+
 The total number of toxicities seen at each dose:
 ```{r}
 tox_at_dose(fit)
@@ -99,6 +110,13 @@ median_prob_tox(fit)
 BOIN does not actually calculate posterior median estimates.
 Sometimes it will be necessary to return missing values if functionality is not supported by a model.
 Median estimates could be added to the BOIN class in due course.
+
+The model-derived quantile of the toxicity rate at each dose: 
+```{r}
+prob_tox_quantile(fit, 0.9)
+```
+BOIN does not calculate this either.
+It could also be added.
 
 The posterior probability that the toxicity rate exceeds some threshold value, here 50%:
 ```{r}

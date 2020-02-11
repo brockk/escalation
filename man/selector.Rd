@@ -50,15 +50,18 @@ Every \code{selector} object implements the following functions:
   \item \code{\link{cohort}}
   \item \code{\link{doses_given}}
   \item \code{\link{tox}}
+  \item \code{\link{num_tox}}
   \item \code{\link{model_frame}}
   \item \code{\link{num_doses}}
   \item \code{\link{recommended_dose}}
   \item \code{\link{continue}}
   \item \code{\link{n_at_dose}}
+  \item \code{\link{prob_administer}}
   \item \code{\link{tox_at_dose}}
   \item \code{\link{empiric_tox_rate}}
   \item \code{\link{mean_prob_tox}}
   \item \code{\link{median_prob_tox}}
+  \item \code{\link{prob_tox_quantile}}
   \item \code{\link{prob_tox_exceeds}}
 }
 }
