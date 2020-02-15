@@ -2,12 +2,13 @@
 ^_pkgdown\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-Scratch.R
-Control.R
 ^cran-comments\.md$
 ^\.travis\.yml$
-TODO.txt
 ^README.Rmd
 logo.png
 ^pkgdown$
 ^codecov\.yml$
+^\Scratch$
+Scratch.R
+Control.R
+TODO.txt
