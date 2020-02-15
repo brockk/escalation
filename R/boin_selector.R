@@ -202,14 +202,33 @@ mean_prob_tox.boin_selector <- function(selector, ...) {
 
 #' @export
 median_prob_tox.boin_selector <- function(selector, ...) {
-  message('Note that BOIN does not estimate median_prob_tox.')
-  as.numeric(rep(NA, num_doses(selector)))
+  prob_tox_quantile(selector, p = 0.5, ...)
 }
 
+#' @importFrom tibble tibble
+#' @importFrom purrr map
+#' @importFrom dplyr mutate group_by slice ungroup select
+#' @importFrom tidyr unnest
 #' @export
-prob_tox_quantile.boin_selector <- function(selector, p, ...) {
-  message('Note that BOIN does not estimate prob_tox_quantile')
-  as.numeric(rep(NA, num_doses(selector)))
+prob_tox_quantile.boin_selector <- function(
+  selector, p,
+  quantile_candidates = seq(0, 1, length.out = 101),
+  ...) {
+
+  dose <- prob <- . <- NULL
+
+  x <- tibble(
+    q = quantile_candidates
+  ) %>% mutate(
+    dose = map(q, .f = ~ dose_indices(selector)),
+    prob = map(q, .f = ~ 1 - prob_tox_exceeds(selector, threshold = .x))
+  ) %>% unnest(cols = c(dose, prob)) %>%
+    group_by(dose) %>%
+    slice(which.min(abs(prob - p))) %>%
+    ungroup() %>%
+    select(q) %>% .[[1]]
+  # names(x) <- dose_indices(selector)
+  x
 }
 
 #' @importFrom stats pbeta

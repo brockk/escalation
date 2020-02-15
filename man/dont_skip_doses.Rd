@@ -4,8 +4,11 @@
 \alias{dont_skip_doses}
 \title{Prevent skipping of doses.}
 \usage{
-dont_skip_doses(parent_selector_factory, when_escalating = TRUE,
-  when_deescalating = FALSE)
+dont_skip_doses(
+  parent_selector_factory,
+  when_escalating = TRUE,
+  when_deescalating = FALSE
+)
 }
 \arguments{
 \item{parent_selector_factory}{Object of type \code{\link{selector_factory}}.}

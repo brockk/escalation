@@ -4,8 +4,12 @@
 \alias{three_plus_three}
 \title{Fit the 3+3 model to some outcomes.}
 \usage{
-three_plus_three(outcomes, num_doses, allow_deescalate = FALSE,
-  strict_mode = TRUE)
+three_plus_three(
+  outcomes,
+  num_doses,
+  allow_deescalate = FALSE,
+  strict_mode = TRUE
+)
 }
 \arguments{
 \item{outcomes}{Outcomes observed. See \code{\link{parse_phase1_outcomes}}.}

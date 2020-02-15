@@ -23,6 +23,8 @@ LazyData: true
 Depends: 
   magrittr
 Imports:
+  dplyr,
+  tidyr (>= 1.0),
   stringr,
   purrr,
   tibble,
