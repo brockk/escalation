@@ -13,7 +13,7 @@ stop_when_too_toxic(parent_selector_factory, dose, tox_threshold, confidence)
 \code{'recommended'} to stop when the recommended dose is too toxic; or an
 integer to stop when a particular dose-level is too toxic.}
 
-\item{tox_threshold}{We ae interested in toxicity probabilities greater than
+\item{tox_threshold}{We are interested in toxicity probabilities greater than
 this threshold.}
 
 \item{confidence}{Stop when there is this much total probability mass

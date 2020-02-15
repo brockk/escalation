@@ -33,6 +33,8 @@ empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
+prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.95)
 
 
 # Using tibble

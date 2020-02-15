@@ -207,7 +207,7 @@ median_prob_tox.boin_selector <- function(selector, ...) {
 
 #' @importFrom tibble tibble
 #' @importFrom purrr map
-#' @importFrom dplyr mutate group_by slice ungroup select
+#' @importFrom dplyr mutate group_by slice ungroup select arrange
 #' @importFrom tidyr unnest
 #' @export
 prob_tox_quantile.boin_selector <- function(
@@ -215,7 +215,19 @@ prob_tox_quantile.boin_selector <- function(
   quantile_candidates = seq(0, 1, length.out = 101),
   ...) {
 
-  dose <- prob <- . <- NULL
+  dose <- prob <- . <- distance <- NULL
+
+  # x <- tibble(
+  #   q = quantile_candidates
+  # ) %>% mutate(
+  #   dose = map(q, .f = ~ dose_indices(selector)),
+  #   prob = map(q, .f = ~ 1 - prob_tox_exceeds(selector, threshold = .x))
+  # ) %>% unnest(cols = c(dose, prob)) %>%
+  #   group_by(dose) %>%
+  #   slice(which.min(abs(prob - p))) %>%
+  #   ungroup() %>%
+  #   select(q) %>% .[[1]]
+  # names(x) <- dose_indices(selector)
 
   x <- tibble(
     q = quantile_candidates
@@ -223,11 +235,14 @@ prob_tox_quantile.boin_selector <- function(
     dose = map(q, .f = ~ dose_indices(selector)),
     prob = map(q, .f = ~ 1 - prob_tox_exceeds(selector, threshold = .x))
   ) %>% unnest(cols = c(dose, prob)) %>%
+    mutate(distance = abs(prob - p)) %>%
+    arrange(dose, distance) %>%
     group_by(dose) %>%
-    slice(which.min(abs(prob - p))) %>%
+    slice(1) %>%
     ungroup() %>%
     select(q) %>% .[[1]]
-  # names(x) <- dose_indices(selector)
+  x[n_at_dose(selector) == 0] <- NA
+  names(x) <- dose_indices(selector)
   x
 }
 

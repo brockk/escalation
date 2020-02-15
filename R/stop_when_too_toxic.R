@@ -25,7 +25,7 @@
 #' @param dose \code{'any'} to stop when any dose is too toxic;
 #' \code{'recommended'} to stop when the recommended dose is too toxic; or an
 #' integer to stop when a particular dose-level is too toxic.
-#' @param tox_threshold We ae interested in toxicity probabilities greater than
+#' @param tox_threshold We are interested in toxicity probabilities greater than
 #' this threshold.
 #' @param confidence Stop when there is this much total probability mass
 #' supporting that the toxicity rate exceeds the threshold.
