@@ -282,6 +282,9 @@ test_that('three_plus_three_selector supports correct interface.', {
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(tox(x)))
 
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
+
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
 
@@ -324,6 +327,9 @@ test_that('three_plus_three_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
+
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
@@ -372,6 +378,9 @@ test_that('three_plus_three_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(tox(x)))
+
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))

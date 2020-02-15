@@ -90,6 +90,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
 
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
+
   expect_equal(recommended_dose(x), 5)
   expect_true(is.integer(recommended_dose(x)))
 
@@ -141,6 +144,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
+
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
@@ -198,6 +204,9 @@ test_that('stop_when_n_at_dose_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
+
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), 2)
   expect_true(is.integer(recommended_dose(x)))

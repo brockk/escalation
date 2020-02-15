@@ -79,6 +79,9 @@ test_that('boin_selector supports correct interface.', {
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
 
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
+
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
 
@@ -123,6 +126,9 @@ test_that('boin_selector supports correct interface.', {
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
+
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
 
   mf <- model_frame(x)
   expect_equal(nrow(mf), 0)
@@ -181,6 +187,9 @@ test_that('boin_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 5)
   expect_true(is.integer(num_doses(x)))
+
+  expect_equal(dose_indices(x), 1:5)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))

@@ -50,6 +50,7 @@
 #'   \item \code{\link{recommended_dose}}
 #'   \item \code{\link{continue}}
 #'   \item \code{\link{n_at_dose}}
+#'   \item \code{\link{dose_indices}}
 #'   \item \code{\link{prob_administer}}
 #'   \item \code{\link{tox_at_dose}}
 #'   \item \code{\link{empiric_tox_rate}}
@@ -125,15 +126,19 @@
 #' fit %>% cohort()
 #' fit %>% doses_given()
 #' fit %>% tox()
+#' fit %>% num_tox()
 #' fit %>% model_frame()
 #' fit %>% num_doses()
+#' fit %>% dose_indices()
 #' fit %>% recommended_dose()
 #' fit %>% continue()
 #' fit %>% n_at_dose()
+#' fit %>% prob_administer()
 #' fit %>% tox_at_dose()
 #' fit %>% empiric_tox_rate()
 #' fit %>% mean_prob_tox()
 #' fit %>% median_prob_tox()
+#' fit %>% prob_tox_quantile(0.9)
 #' fit %>% prob_tox_exceeds(0.5)
 selector <- function() {
   # This function exists only to document the abstract class "selector".
@@ -162,6 +167,16 @@ model_frame.selector <- function(selector, ...) {
       dose = integer(length = 0),
       tox = integer(length = 0)
     )
+  }
+}
+
+#' @export
+dose_indices.selector <- function(selector, ...) {
+  n <- num_doses(selector)
+  if(n > 0) {
+    return(1:n)
+  } else {
+    return(integer(length = 0))
   }
 }
 

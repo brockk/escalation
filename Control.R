@@ -23,7 +23,7 @@
 #                       title = 'Working with dose selectors')
 # usethis::use_logo('logo.png')
 # usethis::use_pkgdown()
-usethis::use_coverage()
+# usethis::use_coverage()
 
 
 # Something else ----

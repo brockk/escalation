@@ -55,6 +55,9 @@ test_that('follow_path_selector supports correct interface.', {
   expect_equal(num_doses(x), 4)
   expect_true(is.integer(num_doses(x)))
 
+  expect_equal(dose_indices(x), 1:4)
+  expect_true(is.integer(dose_indices(x)))
+
   expect_equal(recommended_dose(x), 3)
   expect_true(is.integer(recommended_dose(x)))
 
@@ -98,6 +101,9 @@ test_that('follow_path_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 4)
   expect_true(is.integer(num_doses(x)))
+
+  expect_equal(dose_indices(x), 1:4)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
@@ -148,6 +154,9 @@ test_that('follow_path_selector supports correct interface.', {
   expect_equal(num_doses(x), 4)
   expect_true(is.integer(num_doses(x)))
 
+  expect_equal(dose_indices(x), 1:4)
+  expect_true(is.integer(dose_indices(x)))
+
   expect_equal(recommended_dose(x), NA)
 
   expect_equal(continue(x), FALSE)
@@ -191,6 +200,9 @@ test_that('follow_path_selector supports correct interface.', {
 
   expect_equal(num_doses(x), 2)
   expect_true(is.integer(num_doses(x)))
+
+  expect_equal(dose_indices(x), 1:2)
+  expect_true(is.integer(dose_indices(x)))
 
   expect_equal(recommended_dose(x), NA)
 

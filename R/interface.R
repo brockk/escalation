@@ -177,6 +177,27 @@ num_doses <- function(selector, ...) {
   UseMethod('num_doses')
 }
 
+#' Dose indices
+#'
+#' Get the integers from 1 to the number of doses under investigation.
+#'
+#' @param selector Object of type \code{\link{selector}}.
+#' @param ... Extra args are passed onwards.
+#'
+#' @return integer
+#'
+#' @export
+#'
+#' @examples
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
+#' fit <- model %>% fit('1NNN 2NTN')
+#' fit %>% dose_indices()
+dose_indices <- function(selector, ...) {
+  UseMethod('dose_indices')
+}
+
 #' Recommended dose for next patient or cohort.
 #'
 #' Get the dose recommended for the next patient or cohort in a dose-finding

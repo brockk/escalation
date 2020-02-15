@@ -4,7 +4,8 @@
 \alias{stop_when_too_toxic}
 \title{Stop when a dose is too toxic.}
 \usage{
-stop_when_too_toxic(parent_selector_factory, dose, tox_threshold, confidence)
+stop_when_too_toxic(parent_selector_factory, dose, tox_threshold,
+  confidence)
 }
 \arguments{
 \item{parent_selector_factory}{Object of type \code{\link{selector_factory}}.}
