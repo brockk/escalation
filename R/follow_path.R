@@ -166,3 +166,13 @@ prob_tox_quantile.follow_path_selector <- function(selector, p, ...) {
 prob_tox_exceeds.follow_path_selector <- function(selector, threshold, ...) {
   return(rep(NA, num_doses(selector)))
 }
+
+#' @export
+supports_sampling.follow_path_selector <- function(selector, ...) {
+  return(FALSE)
+}
+
+#' @export
+prob_tox_samples.follow_path_selector <- function(selector, tall = FALSE, ...) {
+  stop('follow_path_selector does not support sampling.')
+}

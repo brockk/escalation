@@ -266,3 +266,13 @@ prob_tox_exceeds.boin_selector <- function(selector, threshold, ...) {
   )
   return(prob_od3)
 }
+
+#' @export
+supports_sampling.boin_selector <- function(selector, ...) {
+  return(FALSE)
+}
+
+#' @export
+prob_tox_samples.boin_selector <- function(selector, tall = FALSE, ...) {
+  stop('boin_selector does not support sampling.')
+}

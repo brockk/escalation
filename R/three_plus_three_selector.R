@@ -157,3 +157,13 @@ prob_tox_exceeds.three_plus_three_selector <- function(selector, threshold,
   message('Note that 3+3 does not estimate prob_tox_exceeds.')
   return(rep(NA, num_doses(selector)))
 }
+
+#' @export
+supports_sampling.three_plus_three_selector <- function(selector, ...) {
+  return(FALSE)
+}
+
+#' @export
+prob_tox_samples.three_plus_three_selector <- function(selector, tall = FALSE, ...) {
+  stop('three_plus_three_selector does not support sampling.')
+}

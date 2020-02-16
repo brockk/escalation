@@ -1,7 +1,7 @@
 Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
-Version: 0.0.1.9001
+Version: 0.0.1.9002
 Date: 2020-01-30
 Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com", 
          role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3921-0166"))
@@ -25,6 +25,7 @@ Depends:
 Imports:
   dplyr,
   tidyr (>= 1.0),
+  tidyselect,
   stringr,
   purrr,
   tibble,

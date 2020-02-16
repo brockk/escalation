@@ -119,6 +119,11 @@ test_that('stop_when_tox_ci_covered_selector supports correct interface.', {
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
 
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_true(is.data.frame(prob_tox_samples(x)))
+  expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
+
 
 
   # Example 2, using trivial outcome string
@@ -172,6 +177,11 @@ test_that('stop_when_tox_ci_covered_selector supports correct interface.', {
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_true(is.data.frame(prob_tox_samples(x)))
+  expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
 
 
 
@@ -233,5 +243,10 @@ test_that('stop_when_tox_ci_covered_selector supports correct interface.', {
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_true(is.data.frame(prob_tox_samples(x)))
+  expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
 
 })

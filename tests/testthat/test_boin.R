@@ -107,6 +107,10 @@ test_that('boin_selector supports correct interface.', {
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
 
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_error(prob_tox_samples(x))
+  expect_error(prob_tox_samples(x, tall = TRUE))
 
 
   # Example 2, using trivial outcome string
@@ -158,6 +162,11 @@ test_that('boin_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_error(prob_tox_samples(x))
+  expect_error(prob_tox_samples(x, tall = TRUE))
 
 
   # Example 3, using tibble
@@ -215,6 +224,12 @@ test_that('boin_selector supports correct interface.', {
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
 
   expect_true(is.numeric(prob_tox_exceeds(x, 0.5)))
+
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_error(prob_tox_samples(x))
+  expect_error(prob_tox_samples(x, tall = TRUE))
+
 })
 
 

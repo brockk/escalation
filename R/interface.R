@@ -426,7 +426,73 @@ prob_tox_quantile <- function(selector, p, ...) {
 #' @rdname prob_tox_exceeds
 #'
 #' @examples
-#' 1==1
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
+#' # What is probability that tox rate at each dose exceeds target by >= 10%?
+#' fit %>% prob_tox_exceeds(threshold = target + 0.1)
 prob_tox_exceeds <- function(selector, threshold, ...) {
   UseMethod('prob_tox_exceeds')
+}
+
+#' Does this selector support sampling of outcomes?
+#'
+#' Learn whether this selector supports sampling of outcomes. For instance, is
+#' it possible to get posterior samples of the probability of toxicity at each
+#' dose? If true, prob_tox_samples will return a data-frame of samples.
+#'
+#' @param selector Object of type \code{\link{selector}}
+#' @param ... arguments passed to other methods
+#'
+#' @return numerical vector of probabilities
+#'
+#' @export
+#'
+#' @rdname supports_sampling
+#'
+#' @examples
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
+#' fit %>% supports_sampling()
+supports_sampling <- function(selector, ...) {
+  UseMethod('supports_sampling')
+}
+
+#' Get samples of the probability of toxicity.
+#'
+#' Get samples of the probability of toxicity. For instance, a Bayesian approach
+#' that supports sampling would be expected to return posterior samples of the
+#' probability of toxicity. If this class does not support sampling, this
+#' function will raise an error. You can check whether this class supports
+#' sampling by calling \code{\link{supports_sampling}}.
+#'
+#' @param selector Object of type \code{\link{selector}}
+#' @param tall logical, if FALSE, a wide data-frame is returned with columns
+#' pertaining to the doses and column names the dose indices.
+#' If TRUE, a tall data-frame is returned with data for all doses stacked
+#' vertically. In this mode, column names will include \code{dose} and
+#' \code{prob_tox}.
+#' @param ... arguments passed to other methods
+#'
+#' @return data-frame like object
+#'
+#' @export
+#'
+#' @rdname prob_tox_samples
+#'
+#' @examples
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
+#' fit %>% prob_tox_samples()
+#' fit %>% prob_tox_samples(tall = TRUE)
+prob_tox_samples <- function(selector, tall = FALSE, ...) {
+  UseMethod('prob_tox_samples')
 }

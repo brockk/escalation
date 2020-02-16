@@ -302,6 +302,11 @@ test_that('three_plus_three_selector supports correct interface.', {
 
   expect_true(is.numeric(empiric_tox_rate(x)))
 
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_error(prob_tox_samples(x))
+  expect_error(prob_tox_samples(x, tall = TRUE))
+
 
   # Example 2, empty outcome string..
   x <- three_plus_three_fitter %>% fit('')
@@ -346,6 +351,11 @@ test_that('three_plus_three_selector supports correct interface.', {
   expect_true(is.integer(tox_at_dose(x)))
 
   expect_true(is.numeric(empiric_tox_rate(x)))
+
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_error(prob_tox_samples(x))
+  expect_error(prob_tox_samples(x, tall = TRUE))
 
 
   # Example 3, using tibble
@@ -398,5 +408,10 @@ test_that('three_plus_three_selector supports correct interface.', {
   expect_true(is.integer(tox_at_dose(x)))
 
   expect_true(is.numeric(empiric_tox_rate(x)))
+
+  expect_true(is.logical(supports_sampling(x)))
+
+  expect_error(prob_tox_samples(x))
+  expect_error(prob_tox_samples(x, tall = TRUE))
 
 })

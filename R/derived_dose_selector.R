@@ -65,3 +65,13 @@ prob_tox_quantile.derived_dose_selector <- function(selector, p, ...) {
 prob_tox_exceeds.derived_dose_selector <- function(selector, threshold, ...) {
   return(selector$parent %>% prob_tox_exceeds(threshold, ...))
 }
+
+#' @export
+supports_sampling.derived_dose_selector <- function(selector, ...) {
+  return(supports_sampling(selector$parent))
+}
+
+#' @export
+prob_tox_samples.derived_dose_selector <- function(selector, tall = FALSE, ...) {
+  return(prob_tox_samples(selector$parent, tall = tall, ...))
+}
