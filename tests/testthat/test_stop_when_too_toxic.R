@@ -19,11 +19,10 @@ test_that('stop_when_too_toxic_selector does what it should', {
   set.seed(123)
   fit <- model1 %>% fit('2NTN 1TTT')
   prob_too_toxic <- prob_tox_exceeds(fit, target + 0.1)
-  expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
   expect_equal(continue(fit), prob_too_toxic[1] < 0.8)
 })
 
-test_that('stop_at_n_selector supports correct interface.', {
+test_that('stop_when_too_toxic_selector supports correct interface.', {
 
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
   target <- 0.25

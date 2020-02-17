@@ -61,9 +61,9 @@ demand_n_at_dose <- function(parent_selector_factory, n, dose) {
     n = n,
     dose = dose
   )
-  class(x) <- c('selector_factory',
+  class(x) <- c('demand_n_at_dose_selector_factory',
                 'derived_dose_selector_factory',
-                'demand_n_at_dose_selector_factory')
+                'selector_factory')
   return(x)
 }
 
@@ -75,9 +75,9 @@ demand_n_at_dose_selector <- function(parent_selector, n, dose) {
     dose = dose
   )
 
-  class(l) = c('selector',
+  class(l) = c('demand_n_at_dose_selector',
                'derived_dose_selector',
-               'demand_n_at_dose_selector')
+               'selector')
   l
 }
 

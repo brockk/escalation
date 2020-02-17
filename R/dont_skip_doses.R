@@ -51,9 +51,9 @@ dont_skip_doses <- function(parent_selector_factory, when_escalating = TRUE,
     when_escalating = when_escalating,
     when_deescalating = when_deescalating
   )
-  class(x) <- c('selector_factory',
+  class(x) <- c('dont_skip_selector_factory',
                 'derived_dose_selector_factory',
-                'dont_skip_selector_factory')
+                'selector_factory')
   return(x)
 }
 

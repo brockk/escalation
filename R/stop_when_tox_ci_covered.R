@@ -81,9 +81,9 @@ stop_when_tox_ci_covered <- function(parent_selector_factory, dose, lower,
     upper = upper,
     width = width
   )
-  class(x) <- c('selector_factory',
+  class(x) <- c('stop_when_tox_ci_covered_selector_factory',
                 'derived_dose_selector_factory',
-                'stop_when_tox_ci_covered_selector_factory')
+                'selector_factory')
   return(x)
 }
 
@@ -98,8 +98,9 @@ stop_when_tox_ci_covered_selector <- function(parent_selector, dose, lower,
     width = width
   )
 
-  class(l) = c('selector', 'derived_dose_selector',
-               'stop_when_tox_ci_covered_selector')
+  class(l) = c('stop_when_tox_ci_covered_selector',
+               'derived_dose_selector',
+               'selector')
   l
 }
 

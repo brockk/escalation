@@ -99,10 +99,3 @@ recommended_dose.cibp_dose_selector <- function(selector, ...) {
     which.min(colMeans(numerator / denominator)) %>% unname()
   }
 }
-
-#' @export
-continue.cibp_dose_selector <- function(selector, ...) {
-  # TODO remove
-  return(continue(selector$parent))
-}
-

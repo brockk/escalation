@@ -36,7 +36,7 @@
 #' Chapman and Hall/CRC. ISBN 9781420091519
 follow_path <- function(path) {
   x <- list(path = path)
-  class(x) <- c('selector_factory', 'follow_path_selector_factory')
+  class(x) <- c('follow_path_selector_factory', 'selector_factory')
   return(x)
 }
 
@@ -88,7 +88,7 @@ follow_path_selector <- function(outcomes, path) {
     df_c = df_c,
     recommended_dose = rec_d
   )
-  class(l) = c('selector', 'follow_path_selector')
+  class(l) = c( 'follow_path_selector', 'selector')
   l
 }
 

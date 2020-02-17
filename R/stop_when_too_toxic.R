@@ -67,9 +67,9 @@ stop_when_too_toxic <- function(parent_selector_factory, dose, tox_threshold,
     tox_threshold = tox_threshold,
     confidence = confidence
   )
-  class(x) <- c('selector_factory',
+  class(x) <- c('stop_when_too_toxic_selector_factory',
                 'derived_dose_selector_factory',
-                'stop_when_too_toxic_selector_factory')
+                'selector_factory')
   return(x)
 }
 
@@ -83,8 +83,9 @@ stop_when_too_toxic_selector <- function(parent_selector, dose, tox_threshold,
     confidence = confidence
   )
 
-  class(l) = c('selector', 'derived_dose_selector',
-               'stop_when_too_toxic_selector')
+  class(l) = c('stop_when_too_toxic_selector',
+               'derived_dose_selector',
+               'selector')
   l
 }
 
@@ -110,7 +111,8 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
 recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
   prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
   if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-    if(prob_too_tox[selector$dose] >= selector$confidence) {
+    if(!is.na(prob_too_tox[selector$dose]) &
+       prob_too_tox[selector$dose] >= selector$confidence) {
       return(NA)
     }
   }

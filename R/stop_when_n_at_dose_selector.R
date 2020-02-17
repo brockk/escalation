@@ -48,9 +48,9 @@ stop_when_n_at_dose <- function(parent_selector_factory, n, dose) {
     n = n,
     dose = dose
   )
-  class(x) <- c('selector_factory',
+  class(x) <- c('stop_when_n_at_dose_selector_factory',
                 'derived_dose_selector_factory',
-                'stop_when_n_at_dose_selector_factory')
+                'selector_factory')
   return(x)
 }
 
@@ -62,9 +62,9 @@ stop_when_n_at_dose_selector <- function(parent_selector, n, dose) {
     dose = dose
   )
 
-  class(l) = c('selector',
+  class(l) = c('stop_when_n_at_dose_selector',
                'derived_dose_selector',
-               'stop_when_n_at_dose_selector')
+               'selector')
   l
 }
 

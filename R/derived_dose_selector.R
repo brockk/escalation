@@ -32,6 +32,11 @@ recommended_dose.derived_dose_selector <- function(selector, ...) {
 }
 
 #' @export
+continue.derived_dose_selector <- function(selector, ...) {
+  return(selector$parent %>% continue(...))
+}
+
+#' @export
 n_at_dose.derived_dose_selector <- function(selector, ...) {
   return(selector$parent %>% n_at_dose(...))
 }

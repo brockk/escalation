@@ -41,9 +41,9 @@ get_boin <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
     extra_args = list(...)
   )
 
-  class(x) <- c('selector_factory',
+  class(x) <- c('boin_selector_factory',
                 'tox_selector_factory',
-                'boin_selector_factory')
+                'selector_factory')
   return(x)
 }
 
@@ -125,7 +125,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
     continue = continue
   )
 
-  class(l) = c('selector', 'tox_selector', 'boin_selector')
+  class(l) = c('boin_selector', 'tox_selector', 'selector')
   l
 }
 
