@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • escalation</title>
+<title>Select dose by the CIBP selection criterion. — select_dose_by_cibp • escalation</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,7 +42,11 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Select dose by the CIBP selection criterion. — select_dose_by_cibp" />
+<meta property="og:description" content="This method selects dose by the convex infinite bounds penalisation (CIBP)
+criterion of Mozgunov &amp;amp; Jaki. Their method is mindful of the uncertainty in
+the estimates of the probability of toxicity and uses an asymmetry parameter
+to penalise escalation to risky doses." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -63,7 +67,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -122,17 +126,71 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Select dose by the CIBP selection criterion.</h1>
+    
+    <div class="hidden name"><code>select_dose_by_cibp.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="DoseSelectorInterface.html">Working with dose selectors</a></li>
-      </ul>
+    <div class="ref-description">
+    <p>This method selects dose by the convex infinite bounds penalisation (CIBP)
+criterion of Mozgunov &amp; Jaki. Their method is mindful of the uncertainty in
+the estimates of the probability of toxicity and uses an asymmetry parameter
+to penalise escalation to risky doses.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>select_dose_by_cibp</span>(<span class='no'>parent_selector_factory</span>, <span class='no'>a</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>parent_selector_factory</th>
+      <td><p>Object of type <code><a href='selector_factory.html'>selector_factory</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <td><p>Number between 0 and 2, the asymmetry parameter. See References.</p></td>
+    </tr>
+    <tr>
+      <th>target</th>
+      <td><p>We seek a dose with this probability of toxicity. If not
+provided, the value will be sought from the parent dose-selector.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit a
+dose-finding model to outcomes.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Mozgunov P, Jaki T. Improving safety of the continual reassessment method via
+a modified allocation rule. Statistics in Medicine.1-17. doi:10.1002/sim.8450</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
+<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.33</span>
+
+<span class='co'># Let's compare escalation behaviour of a CRM model without CIBP criterion:</span>
+<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
+<span class='co'># To one with the CIBP criterion:</span>
+<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>select_dose_by_cibp</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>0.3</span>)
+
+<span class='co'># Despite one-in-three tox at first dose, regular model is ready to escalate:</span>
+<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NTN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># But the model using CIBP is more risk averse:</span>
+<span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NTN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
+</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#references">References</a></li>
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

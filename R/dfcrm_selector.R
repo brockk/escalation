@@ -123,6 +123,7 @@ dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
     cohort = df$cohort,
     outcomes = outcomes,
     skeleton = skeleton,
+    target = target,
     dfcrm_fit = x
   )
 

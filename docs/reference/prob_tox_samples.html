@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Probability that the toxicity rate exceeds some threshold. — prob_tox_exceeds • escalation</title>
+<title>Get samples of the probability of toxicity. — prob_tox_samples • escalation</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,9 +42,12 @@
 
 
 
-<meta property="og:title" content="Probability that the toxicity rate exceeds some threshold. — prob_tox_exceeds" />
-<meta property="og:description" content="Get the probability that the toxicity rate at each dose exceeds some
-threshold." />
+<meta property="og:title" content="Get samples of the probability of toxicity. — prob_tox_samples" />
+<meta property="og:description" content="Get samples of the probability of toxicity. For instance, a Bayesian approach
+that supports sampling would be expected to return posterior samples of the
+probability of toxicity. If this class does not support sampling, this
+function will raise an error. You can check whether this class supports
+sampling by calling supports_sampling." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -124,17 +127,20 @@ threshold." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Probability that the toxicity rate exceeds some threshold.</h1>
+    <h1>Get samples of the probability of toxicity.</h1>
     
-    <div class="hidden name"><code>prob_tox_exceeds.Rd</code></div>
+    <div class="hidden name"><code>prob_tox_samples.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get the probability that the toxicity rate at each dose exceeds some
-threshold.</p>
+    <p>Get samples of the probability of toxicity. For instance, a Bayesian approach
+that supports sampling would be expected to return posterior samples of the
+probability of toxicity. If this class does not support sampling, this
+function will raise an error. You can check whether this class supports
+sampling by calling <code><a href='supports_sampling.html'>supports_sampling</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>prob_tox_exceeds</span>(<span class='no'>selector</span>, <span class='no'>threshold</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>prob_tox_samples</span>(<span class='no'>selector</span>, <span class='kw'>tall</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,8 +150,12 @@ threshold.</p>
       <td><p>Object of type <code><a href='selector.html'>selector</a></code></p></td>
     </tr>
     <tr>
-      <th>threshold</th>
-      <td><p>Probability that toxicity rate exceeds what?</p></td>
+      <th>tall</th>
+      <td><p>logical, if FALSE, a wide data-frame is returned with columns
+pertaining to the doses and column names the dose indices.
+If TRUE, a tall data-frame is returned with data for all doses stacked
+vertically. In this mode, column names will include <code>dose</code> and
+<code>prob_tox</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -155,7 +165,7 @@ threshold.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>numerical vector of probabilities</p>
+    <p>data-frame like object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># CRM example</span>
@@ -163,8 +173,33 @@ threshold.</p>
 <span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
 <span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
-<span class='co'># What is probability that tox rate at each dose exceeds target by &gt;= 10%?</span>
-<span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'>prob_tox_exceeds</span>(<span class='kw'>threshold</span> <span class='kw'>=</span> <span class='no'>target</span> + <span class='fl'>0.1</span>)</div><div class='output co'>#&gt; [1] 0.06487018 0.16640298 0.53408008 0.82783385 0.98459064</div></pre>
+<span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'>prob_tox_samples</span>()</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 4,000 x 6</span><span>
+#&gt;    .draw    `1`    `2`   `3`   `4`   `5`
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     0.330  0.426  0.598 0.712 0.828
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     0.085</span><span style='text-decoration: underline;'>3</span><span> 0.151  0.320 0.471 0.657
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     0.510  0.596  0.732 0.814 0.892
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     0.114  0.188  0.366 0.515 0.691
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     0.053</span><span style='text-decoration: underline;'>1</span><span> 0.105  0.257 0.407 0.606
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     0.022</span><span style='text-decoration: underline;'>7</span><span> 0.054</span><span style='text-decoration: underline;'>5</span><span> 0.174 0.314 0.525
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     0.404  0.498  0.658 0.758 0.857
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     0.145  0.226  0.409 0.554 0.719
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     0.144  0.226  0.408 0.553 0.719
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    0.150  0.232  0.415 0.559 0.723
+#&gt; </span><span style='color: #949494;'># … with 3,990 more rows</span><span></div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'>prob_tox_samples</span>(<span class='kw'>tall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 20,000 x 3</span><span>
+#&gt;    .draw dose    prob_tox
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     1     0.223     
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     1     0.000</span><span style='text-decoration: underline;'>008</span><span>90
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     1     0.198     
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     1     0.061</span><span style='text-decoration: underline;'>0</span><span>    
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     1     0.055</span><span style='text-decoration: underline;'>3</span><span>    
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     1     0.244     
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     1     0.012</span><span style='text-decoration: underline;'>0</span><span>    
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     1     0.025</span><span style='text-decoration: underline;'>5</span><span>    
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     1     0.384     
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    1     0.289     
+#&gt; </span><span style='color: #949494;'># … with 19,990 more rows</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
