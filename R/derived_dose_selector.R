@@ -2,6 +2,11 @@
 # Selector interface
 
 #' @export
+tox_target.derived_dose_selector <- function(selector, ...) {
+  return(selector$parent %>% tox_target(...))
+}
+
+#' @export
 num_patients.derived_dose_selector <- function(selector, ...) {
   return(selector$parent %>% num_patients(...))
 }

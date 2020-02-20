@@ -27,6 +27,27 @@ fit <- function(selector_factory, outcomes, ...) {
 
 # selector interface
 
+#' Target toxicity rate
+#'
+#' Get the target toxicity rate, if supported. NULL if not.
+#'
+#' @param selector Object of type \code{\link{selector}}.
+#' @param ... Extra args are passed onwards.
+#'
+#' @return numeric
+#'
+#' @export
+#'
+#' @examples
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
+#' fit <- model %>% fit('1NNN 2NTN')
+#' fit %>% tox_target()
+tox_target <- function(selector, ...) {
+  UseMethod('tox_target')
+}
+
 #' Number of patients evaluated.
 #'
 #' Get the number of patients evaluated in a dose-finding trial.

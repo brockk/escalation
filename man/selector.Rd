@@ -46,6 +46,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox.
 \details{
 Every \code{selector} object implements the following functions:
 \itemize{
+  \item \code{\link{tox_target}}
   \item \code{\link{num_patients}}
   \item \code{\link{cohort}}
   \item \code{\link{doses_given}}
@@ -124,6 +125,7 @@ fit4 \%>\% continue()
 
 # Full selector interface:
 fit <- fit2
+fit \%>\% tox_target()
 fit \%>\% num_patients()
 fit \%>\% cohort()
 fit \%>\% doses_given()

@@ -156,6 +156,11 @@ fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
+tox_target.dfcrm_selector <- function(selector, ...) {
+  return(selector$target)
+}
+
+#' @export
 num_patients.dfcrm_selector <- function(selector, ...) {
   return(length(selector$dfcrm_fit$level))
 }

@@ -40,6 +40,7 @@
 #'
 #' @details Every \code{selector} object implements the following functions:
 #' \itemize{
+#'   \item \code{\link{tox_target}}
 #'   \item \code{\link{num_patients}}
 #'   \item \code{\link{cohort}}
 #'   \item \code{\link{doses_given}}
@@ -122,6 +123,7 @@
 #'
 #' # Full selector interface:
 #' fit <- fit2
+#' fit %>% tox_target()
 #' fit %>% num_patients()
 #' fit %>% cohort()
 #' fit %>% doses_given()
@@ -142,6 +144,12 @@
 #' fit %>% prob_tox_exceeds(0.5)
 selector <- function() {
   # This function exists only to document the abstract class "selector".
+}
+
+#' @export
+tox_target.selector <- function(selector, ...) {
+  # By default:
+  return(NULL)
 }
 
 #' @export

@@ -78,8 +78,7 @@ fit.cibp_dose_selector_factory <- function(selector_factory, outcomes, ...) {
 recommended_dose.cibp_dose_selector <- function(selector, ...) {
   parent_rec_d <- recommended_dose(selector$parent)
   if(is.null(selector$target)) {
-    # TODO: Add toxicity_target() to selector interface and use that.
-    target <- selector$parent$target
+    target <- tox_target(selector$parent)
   } else {
     target <- selector$target
   }

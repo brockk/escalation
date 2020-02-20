@@ -147,6 +147,11 @@ fit.boin_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
+tox_target.boin_selector <- function(selector, ...) {
+  return(selector$target)
+}
+
+#' @export
 num_patients.boin_selector <- function(selector, ...) {
   return(length(selector$df$dose))
 }
