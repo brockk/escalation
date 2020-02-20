@@ -9,6 +9,3 @@ logo.png
 ^pkgdown$
 ^codecov\.yml$
 ^\Scratch$
-Scratch.R
-Control.R
-TODO.txt

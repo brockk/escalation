@@ -51,7 +51,10 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
   if(nrow(df) > 0) {
     if(max(df$dose) > num_doses) {
       stop(
-        'three_plus_three_selector - maximum dose given exceeds number of doses.')
+        paste0(
+          'three_plus_three_selector - ',
+          'maximum dose given exceeds number of doses.'
+        ))
     }
   }
 
@@ -135,27 +138,27 @@ tox_at_dose.three_plus_three_selector <- function(selector, ...) {
 
 #' @export
 mean_prob_tox.three_plus_three_selector <- function(selector, ...) {
-  message('Note that 3+3 does not estimate mean_prob_tox.')
-  rep(NA, num_doses(selector))
+  # message('Note that 3+3 does not estimate mean_prob_tox.')
+  as.numeric(rep(NA, num_doses(selector)))
 }
 
 #' @export
 median_prob_tox.three_plus_three_selector <- function(selector, ...) {
-  message('Note that 3+3 does not estimate median_prob_tox.')
-  rep(NA, num_doses(selector))
+  # message('Note that 3+3 does not estimate median_prob_tox.')
+  as.numeric(rep(NA, num_doses(selector)))
 }
 
 #' @export
 prob_tox_quantile.three_plus_three_selector <- function(selector, p, ...) {
-  message('Note that 3+3 does not estimate prob_tox_quantile.')
-  rep(NA, num_doses(selector))
+  # message('Note that 3+3 does not estimate prob_tox_quantile.')
+  as.numeric(rep(NA, num_doses(selector)))
 }
 
 #' @export
 prob_tox_exceeds.three_plus_three_selector <- function(selector, threshold,
                                                        iter = 1000, ...) {
-  message('Note that 3+3 does not estimate prob_tox_exceeds.')
-  return(rep(NA, num_doses(selector)))
+  # message('Note that 3+3 does not estimate prob_tox_exceeds.')
+  as.numeric(rep(NA, num_doses(selector)))
 }
 
 #' @export
@@ -164,6 +167,7 @@ supports_sampling.three_plus_three_selector <- function(selector, ...) {
 }
 
 #' @export
-prob_tox_samples.three_plus_three_selector <- function(selector, tall = FALSE, ...) {
+prob_tox_samples.three_plus_three_selector <- function(
+  selector, tall = FALSE, ...) {
   stop('three_plus_three_selector does not support sampling.')
 }

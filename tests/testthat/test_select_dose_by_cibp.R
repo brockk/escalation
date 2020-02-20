@@ -31,6 +31,7 @@ test_that('select_dose_by_cibp supports correct interface.', {
     select_dose_by_cibp(a = 0.3)
 
   # Example 1, using outcome string
+  set.seed(123)
   x <- fit(model_fitter, '1NNN 2NNN')
 
   expect_equal(num_patients(x), 6)
@@ -92,6 +93,7 @@ test_that('select_dose_by_cibp supports correct interface.', {
 
 
   # Example 2, using trivial outcome string
+  set.seed(123)
   x <- fit(model_fitter, '')
 
   expect_equal(num_patients(x), 0)
@@ -151,6 +153,7 @@ test_that('select_dose_by_cibp supports correct interface.', {
 
 
   # Example 3, using tibble of outcomes
+  set.seed(123)
   outcomes <- tibble(
     cohort = c(1,1,1, 2,2,2),
     dose = c(1,1,1, 2,2,2),
