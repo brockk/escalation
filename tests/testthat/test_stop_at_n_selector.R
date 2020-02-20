@@ -30,6 +30,9 @@ test_that('stop_at_n_selector supports correct interface.', {
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NNN')
 
+  expect_equal(tox_target(x), 0.25)
+  expect_true(is.numeric(tox_target(x)))
+
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
 
@@ -90,6 +93,9 @@ test_that('stop_at_n_selector supports correct interface.', {
 
   # Example 2, using trivial outcome string
   x <- fit(model_fitter, '')
+
+  expect_equal(tox_target(x), 0.25)
+  expect_true(is.numeric(tox_target(x)))
 
   expect_equal(num_patients(x), 0)
   expect_true(is.integer(num_patients(x)))
@@ -154,6 +160,9 @@ test_that('stop_at_n_selector supports correct interface.', {
     tox = c(0,0,0, 0,0,1)
   )
   x <- fit(model_fitter, outcomes)
+
+  expect_equal(tox_target(x), 0.25)
+  expect_true(is.numeric(tox_target(x)))
 
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))

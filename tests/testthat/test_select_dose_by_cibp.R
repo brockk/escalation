@@ -34,6 +34,9 @@ test_that('select_dose_by_cibp supports correct interface.', {
   set.seed(123)
   x <- fit(model_fitter, '1NNN 2NNN')
 
+  expect_equal(tox_target(x), 0.33)
+  expect_true(is.numeric(tox_target(x)))
+
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
 
@@ -95,6 +98,9 @@ test_that('select_dose_by_cibp supports correct interface.', {
   # Example 2, using trivial outcome string
   set.seed(123)
   x <- fit(model_fitter, '')
+
+  expect_equal(tox_target(x), 0.33)
+  expect_true(is.numeric(tox_target(x)))
 
   expect_equal(num_patients(x), 0)
   expect_true(is.integer(num_patients(x)))
@@ -160,6 +166,9 @@ test_that('select_dose_by_cibp supports correct interface.', {
     tox = c(0,0,0, 0,0,1)
   )
   x <- fit(model_fitter, outcomes)
+
+  expect_equal(tox_target(x), 0.33)
+  expect_true(is.numeric(tox_target(x)))
 
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))

@@ -32,6 +32,8 @@ test_that('follow_path_selector supports correct interface.', {
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NNN')
 
+  expect_true(is.null(tox_target(x)))
+
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
 
@@ -84,6 +86,8 @@ test_that('follow_path_selector supports correct interface.', {
 
   # Example 2, using trivial outcome string
   x <- fit(model_fitter, '')
+
+  expect_true(is.null(tox_target(x)))
 
   expect_equal(num_patients(x), 0)
   expect_true(is.integer(num_patients(x)))
@@ -141,6 +145,8 @@ test_that('follow_path_selector supports correct interface.', {
   )
   x <- fit(model_fitter, outcomes)
 
+  expect_true(is.null(tox_target(x)))
+
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
 
@@ -194,6 +200,8 @@ test_that('follow_path_selector supports correct interface.', {
   # Example 4, using trivial path string
   model_fitter <- follow_path(path = '')
   x <- fit(model_fitter, '1NNN 2NNT')
+
+  expect_true(is.null(tox_target(x)))
 
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
@@ -251,6 +259,7 @@ test_that('follow_path_selector interacts appropriately with dfcrm', {
   fit <- model1 %>% fit('1NN 2N')
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_equal(tox_target(fit), 0.25)
 
 
   fit <- model1 %>% fit('1NN 2T')

@@ -204,7 +204,6 @@ test_that('Check 3+3 makes correct recommendations without de-escalation.', {
 })
 
 
-
 test_that('Check 3+3 makes correct recommendations with de-escalation.', {
 
   x <- three_plus_three(outcomes = '', num_doses = 5, strict_mode = FALSE,
@@ -766,6 +765,8 @@ test_that('three_plus_three_selector supports correct interface.', {
   # Example 1, using outcome string
   x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
 
+  expect_true(is.null(tox_target(x)))
+
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
 
@@ -817,6 +818,8 @@ test_that('three_plus_three_selector supports correct interface.', {
 
   # Example 2, empty outcome string..
   x <- three_plus_three_fitter %>% fit('')
+
+  expect_true(is.null(tox_target(x)))
 
   expect_equal(num_patients(x), 0)
   expect_true(is.integer(num_patients(x)))
@@ -872,6 +875,8 @@ test_that('three_plus_three_selector supports correct interface.', {
     tox = c(0,0, 0,0, 1,1)
   )
   x <- fit(three_plus_three_fitter, outcomes)
+
+  expect_true(is.null(tox_target(x)))
 
   expect_equal(num_patients(x), 6)
   expect_true(is.integer(num_patients(x)))
