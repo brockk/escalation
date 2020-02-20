@@ -77,6 +77,7 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
           } else {
             # In Korn et al's words, "The MTD is then defined as the highest dose level
             # ( >= 1) in which 6 patients have been treated with <= 1 instance of DLT"
+            n <- NULL
             df_c %>%
               dplyr::filter(n >= 6 & tox <= 1) -> korn_criteria
             if(nrow(korn_criteria) > 0) {
@@ -141,6 +142,7 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
           } else {
             # In Korn et al's words, "The MTD is then defined as the highest dose level
             # ( >= 1) in which 6 patients have been treated with <= 1 instance of DLT"
+            n <- NULL
             df_c %>%
               filter(n >= 6 & tox <= 1) -> korn_criteria
             if(nrow(korn_criteria) > 0) {

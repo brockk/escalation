@@ -1,20 +1,23 @@
 Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
-Version: 0.0.1.9005
+Version: 0.0.1.9006
 Date: 2020-02-18
 Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com", 
          role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3921-0166"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
 Description: Methods for working with dose-finding clinical trials. We start by 
-    providing a common interface to various dose-finding methodologies like CRM, 
-    BOIN, and 3+3. We then add optional embellishments to provide extra 
-    desirable behaviour, like avoiding skipping doses, stopping after n patients
-    have been treated at the recommended dose, or demanding that n patients are 
-    treated before stopping is allowed. By daisy-chaining together these 
-    embellishments using magrittr's pipe operator, it is simple to tailor the 
-    behaviour of dose-finding designs so that they perform how you want. 
-    Furthermore, using this flexible interface for creating dose-finding 
+    providing a common interface to various dose-finding methodologies like the
+    continual reassessment method (CRM) by O'Quigley et al. (1990) 
+    <doi:10.2307/2531628>, the Bayesian optimal interval design (BOIN) by Liu & 
+    Yuan (2015) <doi:10.1111/rssc.12089>, and the 3+3 described by Korn et al 
+    <doi:10.1002/sim.4780131802>. We then add optional embellishments to provide 
+    extra desirable behaviour, like avoiding skipping doses, stopping after n 
+    patients have been treated at the recommended dose, or demanding that n 
+    patients are treated before stopping is allowed. By daisy-chaining together 
+    these embellishments using the pipe operator from 'magrittr', it is simple 
+    to tailor the behaviour of dose-finding designs so that they do what you 
+    want. Furthermore, using this flexible interface for creating dose-finding 
     designs, it is simple to run simulations or calculate dose-pathways for 
     future cohorts of patients.
 License: GPL (>=3)

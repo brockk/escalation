@@ -28,6 +28,11 @@ fit <- model %>% fit('1NN 2NN 3NT 2NT')
 
 ## Supported Interface
 
+Target toxicity rate:
+```{r}
+tox_target(fit)
+```
+
 The number of patients treated:
 ```{r}
 num_patients(fit)
@@ -64,6 +69,11 @@ The number of doses under investigation:
 num_doses(fit)
 ```
 
+The indices of the dose-levels under investigation:
+```{r}
+dose_indices(fit)
+```
+
 The dose-level recommended for the next patient:
 ```{r}
 recommended_dose(fit)
@@ -85,7 +95,6 @@ The proportion of patients treated at each dose:
 ```{r}
 prob_administer(fit)
 ```
-
 
 The total number of toxicities seen at each dose:
 ```{r}
@@ -125,3 +134,10 @@ prob_tox_exceeds(fit, 0.5)
 Once again, no estimate is made for non-administered doses.
 We see that the model estimates a trivial chance that the toxicity rate at the lowest dose exceeds 50%.
 
+Learn if this model supports sampling from the posterior:
+```{r}
+supports_sampling(fit)
+```
+
+The BOIN model does not support sampling.
+If it did, we could run `prob_tox_samples(fit)`.
