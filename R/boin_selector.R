@@ -89,7 +89,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
          !is.na(this_bound['Eliminate if # of DLT >=']) &
          tox_d >= this_bound['Eliminate if # of DLT >=']){
 
-        # TODO is elimination path-dependent?? If so this approach could fail.
+        # If elimination is path-dependent this approach could fail.
 
         if(last_dose == 1) {
           # Stop and recommend no dose.

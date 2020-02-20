@@ -9,9 +9,8 @@ test_that('3+3 enforcer errors when it should.', {
 
   expect_error(enforce_three_plus_three(outcomes = '1NNN 2TTT 1N'))
 
-  # TODO:
-  # outcomes = '1NTT 1N' # this will not fail yet
-  # outcomes = '1NNN 1T' # this will not fail yet
+  # outcomes = '1NTT 1N' # does not fail
+  # outcomes = '1NNN 1T' # does not fail
 })
 
 

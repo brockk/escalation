@@ -1,5 +1,5 @@
 
-test_that('Check 3+3 makes correct recommendations.', {
+test_that('Check 3+3 makes correct recommendations without de-escalation.', {
 
   x <- three_plus_three(outcomes = '', num_doses = 5, strict_mode = FALSE)
   expect_equal(x$recommended_dose, 1)
@@ -204,7 +204,514 @@ test_that('Check 3+3 makes correct recommendations.', {
 })
 
 
-test_that('Check 3+3 errors when it should.', {
+
+test_that('Check 3+3 makes correct recommendations with de-escalation.', {
+
+  x <- three_plus_three(outcomes = '', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1N', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1T', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NN', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NT', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1TT', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNT', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NTT', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, as.integer(NA))
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1TTT', num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, as.integer(NA))
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2N', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2T', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2TT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NTT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2TTT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2N', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2T', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2NN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2NT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2TT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2NNN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2NNT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2NTT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNT 2NNN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  # Skip cohorts 3 and 4 to test advice at top dose
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5N', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNN', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NTT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5TTT', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5N', num_doses = 5,
+                        strict_mode = FALSE, allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5NN',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5NT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5NNN',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 5)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5NNT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5NTT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4N',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4T',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NN',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4TT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NNN',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NNT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 4)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4TTT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3N',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3T',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3NN',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3NT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3NNN',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3NNT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 3)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3NTT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT',
+                        num_doses = 5, strict_mode = FALSE,
+                        allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2N',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2T',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NN',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2TT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NNN',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NNT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2TTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1N',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1T',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1NN',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1NT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1TT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1NNN',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1NNT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 1)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_true(is.na(x$recommended_dose))
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1TTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_true(is.na(x$recommended_dose))
+  expect_equal(x$continue, FALSE)
+
+  expect_error(x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NNN 4NNN 5NNT 5TTT 4NTT 3TTT 2NTT 1NTT 0N',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE))
+
+
+  # A few more manual checks
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 3NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NNN 2NNN 2NNN 3NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NTN 1NNN 2NNN 3NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, TRUE)
+
+  x <- three_plus_three(
+    outcomes = '1NTN 1NNN 2NTN 2NNN 3NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NTN 1NTN 2NTN 2NNN 3NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_equal(x$recommended_dose, 2)
+  expect_equal(x$continue, FALSE)
+
+  x <- three_plus_three(
+    outcomes = '1NTN 1NTN 2NTN 2NTN 3NTT',
+    num_doses = 5, strict_mode = FALSE,
+    allow_deescalate = TRUE)
+  expect_true(is.na(x$recommended_dose))
+  expect_equal(x$continue, FALSE)
+
+})
+
+
+test_that('Check 3+3 errors when it should in strict mode.', {
 
   expect_error(three_plus_three(outcomes = '1NNN 1N', num_doses = 5,
                                 strict_mode = TRUE))
@@ -219,8 +726,8 @@ test_that('Check 3+3 errors when it should.', {
                                 strict_mode = TRUE))
 
   # TODO:
-  # outcomes = '1NTT 1N' # this will not fail yet
-  # outcomes = '1NNN 1T' # this will not fail yet
+  # outcomes = '1NTT 1N' # does not fail
+  # outcomes = '1NNN 1T' # does not fail
 })
 
 

@@ -10,6 +10,9 @@
 #'
 #' @return lits containing recommended_dose and a logical value continue saying
 #' whether the trial should continue.
+#'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr filter
 #' @export
 #'
 #' @examples
@@ -21,8 +24,6 @@
 #' 1989;45(3):925-937. doi:10.2307/2531693
 three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
                              strict_mode = TRUE) {
-
-  # TODO - plumb in allow_deescalate told by Korn et al.
 
   if(strict_mode) enforce_three_plus_three(outcomes)
 
@@ -67,8 +68,32 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
       # previous dose or no dose.
       if(allow_deescalate) {
         # Try to de-escalate
-        # TODO
-        stop('Not implemented yet')
+        if(last_dose > 1) {
+          # There is room to de-escalate
+          if(df_c$n[last_dose - 1] < 6) {
+            # Continue at lower dose
+            next_dose <- last_dose - 1
+            cont <- TRUE
+          } else {
+            # In Korn et al's words, "The MTD is then defined as the highest dose level
+            # ( >= 1) in which 6 patients have been treated with <= 1 instance of DLT"
+            df_c %>%
+              dplyr::filter(n >= 6 & tox <= 1) -> korn_criteria
+            if(nrow(korn_criteria) > 0) {
+              next_dose <- tail(korn_criteria, 1)$dose
+              cont <- FALSE
+            } else {
+              # No dose is acceptable
+              next_dose <- NA
+              cont <- FALSE
+            }
+          }
+        } else {
+          # There is no room to de-escalate and this dose is too toxic.
+          # Stop and recommend no dose
+          next_dose = NA
+          cont = FALSE
+        }
       } else {
         # Stop. Recommend previous dose if possible, or no dose if not.
         if(last_dose == 1) {
@@ -89,11 +114,14 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
   } else if(n_d == 6) {
     # We have a decision to make
     if(tox_d <= 1) {
-      # Escalate if you can, or stop if at top dose
+      # Escalate if you can. Stop if at top dose of next higher dose at 6
       if(last_dose == num_doses) {
         # Stop and recommended top dose
         next_dose = last_dose
         cont = FALSE
+      } else if(df_c$n[last_dose + 1] >= 6) {
+        next_dose <- last_dose
+        cont <- FALSE
       } else {
         # Escalate and continue
         next_dose = last_dose + 1
@@ -104,8 +132,32 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
       # previous dose or no dose.
       if(allow_deescalate) {
         # Try to de-escalate
-        # TODO
-        stop('Not implemented yet')
+        if(last_dose > 1) {
+          # There is room to de-escalate
+          if(df_c$n[last_dose - 1] < 6) {
+            # Continue at lower dose
+            next_dose <- last_dose - 1
+            cont <- TRUE
+          } else {
+            # In Korn et al's words, "The MTD is then defined as the highest dose level
+            # ( >= 1) in which 6 patients have been treated with <= 1 instance of DLT"
+            df_c %>%
+              filter(n >= 6 & tox <= 1) -> korn_criteria
+            if(nrow(korn_criteria) > 0) {
+              next_dose <- tail(korn_criteria, 1)$dose
+              cont <- FALSE
+            } else {
+              # No dose is acceptable
+              next_dose <- NA
+              cont <- FALSE
+            }
+          }
+        } else {
+          # There is no room to de-escalate and this dose is too toxic.
+          # Stop and recommend no dose
+          next_dose = NA
+          cont = FALSE
+        }
       } else {
         # Stop. Recommend previous dose if possible, or no dose if not.
         if(last_dose == 1) {
