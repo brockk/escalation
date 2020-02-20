@@ -86,6 +86,10 @@ fit.stop_when_n_at_dose_selector_factory <- function(selector_factory,
 #' @importFrom magrittr %>%
 #' @export
 continue.stop_when_n_at_dose_selector <- function(selector, ...) {
+
+  # Stop now if parent wants:
+  if(!selector$parent %>% continue()) return(FALSE)
+
   n_at_dose <- selector %>% n_at_dose()
   if(selector$dose == 'any') {
     if(any(n_at_dose >= selector$n)) {

@@ -125,6 +125,10 @@ fit.stop_when_tox_ci_covered_selector_factory <- function(
 
 #' @export
 continue.stop_when_tox_ci_covered_selector <- function(selector, ...) {
+
+  # Stop now if parent wants:
+  if(!selector$parent %>% continue()) return(FALSE)
+
   lower_bounds <- prob_tox_quantile(selector, p = (1 - selector$width) / 2)
   upper_bounds <- prob_tox_quantile(selector, p =  1 - (1 - selector$width) / 2)
 

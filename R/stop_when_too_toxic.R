@@ -123,6 +123,10 @@ recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
 
 #' @export
 continue.stop_when_too_toxic_selector <- function(selector, ...) {
+
+  # Stop now if parent wants:
+  if(!selector$parent %>% continue()) return(FALSE)
+
   prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
   if(selector$dose == 'any') {
     if(any(!is.na(prob_too_tox) & prob_too_tox >= selector$confidence)) {
