@@ -29,7 +29,8 @@
 three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
                              strict_mode = TRUE) {
 
-  if(strict_mode) enforce_three_plus_three(outcomes)
+  if(strict_mode) enforce_three_plus_three(outcomes,
+                                           allow_deescalate = allow_deescalate)
 
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
@@ -56,6 +57,11 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
       # Escalate if you can, or stop if at top dose
       if(last_dose == num_doses) {
         # Stop and recommended top dose
+        next_dose = last_dose
+        cont = FALSE
+      } else if(last_dose < num_doses &
+                (df_c$n[last_dose + 1] >= 6 | df_c$tox[last_dose + 1] >= 2)) {
+        # Stop and recommended current dose
         next_dose = last_dose
         cont = FALSE
       } else {
@@ -119,12 +125,15 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
   } else if(n_d == 6) {
     # We have a decision to make
     if(tox_d <= 1) {
-      # Escalate if you can. Stop if at top dose of next higher dose at 6
+      # Escalate if you can. Stop if at top dose or next higher dose has seen 6
+      # or next higher dose has seen at least 2 tox
       if(last_dose == num_doses) {
         # Stop and recommended top dose
         next_dose = last_dose
         cont = FALSE
-      } else if(df_c$n[last_dose + 1] >= 6) {
+      } else if(last_dose < num_doses &
+                (df_c$n[last_dose + 1] >= 6 | df_c$tox[last_dose + 1] >= 2)) {
+        # Stop and recommended current dose
         next_dose <- last_dose
         cont <- FALSE
       } else {
@@ -144,8 +153,9 @@ three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
             next_dose <- last_dose - 1
             cont <- TRUE
           } else {
-            # In Korn et al's words, "The MTD is then defined as the highest dose level
-            # ( >= 1) in which 6 patients have been treated with <= 1 instance of DLT"
+            # In Korn et al's words, "The MTD is then defined as the highest
+            # dose level ( >= 1) in which 6 patients have been treated with <= 1
+            # instance of DLT"
             n <- NULL
             df_c %>%
               filter(n >= 6 & tox <= 1) -> korn_criteria

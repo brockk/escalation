@@ -5,6 +5,8 @@
 #' trial path have diverged from that advocated by the 3+3 method.
 #'
 #' @param outcomes Outcomes observed. See \code{\link{parse_phase1_outcomes}}.
+#' @param allow_deescalate TRUE to allow de-escalation, as described by Korn et
+#' al. Default is FALSE.
 #'
 #' @return Nothing. Function stops if problem detected.
 #'
@@ -17,7 +19,7 @@
 #' enforce_three_plus_three('1NNN 2NTN 2N')  # OK too, albeit in-progress cohort
 #' enforce_three_plus_three('1NNN 1N')  # Not OK because should have escalated
 #' }
-enforce_three_plus_three <- function(outcomes) {
+enforce_three_plus_three <- function(outcomes, allow_deescalate = FALSE) {
 
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
@@ -35,8 +37,10 @@ enforce_three_plus_three <- function(outcomes) {
     stop('Inconsistent 3+3 - doses have been given to more than 6 patients.')
   }
 
-  if(nrow(df_c[df_c$n > 3 & df_c$tox == 0, ])) {
-    stop('Inconsistent 3+3 - toxless doses given to more than 3 patients.')
+  if(!allow_deescalate & nrow(df_c[df_c$n > 3 & df_c$tox == 0, ])) {
+    stop(paste0(
+      'Inconsistent 3+3 - toxless doses given to more than 3 patients in:\n',
+      as.character(outcomes)))
   }
 
   given_doses <- df_c[df_c$n > 0, 'dose', drop = TRUE]

@@ -1,4 +1,5 @@
 
+# Tests of three_plus_three
 test_that('Check 3+3 makes correct recommendations without de-escalation.', {
 
   x <- three_plus_three(outcomes = '', num_doses = 5, strict_mode = FALSE)
@@ -758,6 +759,8 @@ test_that('3+3 advice is sensible even when path has diverged from algorithm', {
 })
 
 
+
+# Tests of three_plus_three_selector
 test_that('three_plus_three_selector does what it should without de-esc', {
 
   threep_model <- get_three_plus_three(num_doses = 5, allow_deescalate = FALSE)
@@ -772,6 +775,7 @@ test_that('three_plus_three_selector does what it should without de-esc', {
 
 })
 
+
 test_that('three_plus_three_selector does what it should with de-esc', {
 
   threep_model <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE)
@@ -783,6 +787,213 @@ test_that('three_plus_three_selector does what it should with de-esc', {
   expect_true(fit1 %>% continue())
 
   # I could wholesale copy and paste down from above to further test this class
+
+})
+
+
+test_that('three_plus_three_selector de-escalates from doses higher than 1', {
+
+  threep_model <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE)
+
+  fit <- threep_model %>% fit('2NNT 2NNN')
+  expect_equal(fit %>% recommended_dose(), 3)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1N')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1T')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1NN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1NT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1TT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1NNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1NNT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1NTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NNT 1TTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1N')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1T')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1NN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1NT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1TT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1NNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1NNT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1NTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2NTT 1TTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1N')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1T')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1NN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1NT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1TT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1NNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1NNT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1NTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NNT 2TTT 1TTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1N')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1T')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1TT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1TTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1N')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1T')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1NN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1NT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1TT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1NNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1NNT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1NTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
+
+  fit <- threep_model %>% fit('2NTT 1NNT 1TTT')
+  expect_true(is.na(fit %>% recommended_dose()))
+  expect_false(fit %>% continue())
 
 })
 
