@@ -758,172 +758,375 @@ test_that('3+3 advice is sensible even when path has diverged from algorithm', {
 })
 
 
-test_that('three_plus_three_selector supports correct interface.', {
+test_that('three_plus_three_selector does what it should without de-esc', {
 
-  three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
+  threep_model <- get_three_plus_three(num_doses = 5, allow_deescalate = FALSE)
+  expect_false(threep_model$allow_deescalate)
 
-  # Example 1, using outcome string
-  x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
+  fit1 <- threep_model %>% fit('1NNN 2NTT')
+  expect_false(fit1$allow_deescalate)
+  expect_equal(fit1 %>% recommended_dose(), 1)
+  expect_false(fit1 %>% continue())
 
-  expect_true(is.null(tox_target(x)))
-
-  expect_equal(num_patients(x), 6)
-  expect_true(is.integer(num_patients(x)))
-
-  expect_equal(cohort(x), c(1,1,1, 2,2,2))
-  expect_true(is.integer(cohort(x)))
-
-  expect_equal(doses_given(x), c(1,1,1, 2,2,2))
-  expect_true(is.integer(doses_given(x)))
-
-  expect_equal(tox(x), c(0,0,0, 0,1,1))
-  expect_true(is.integer(tox(x)))
-
-  expect_equal(num_tox(x), 2)
-  expect_true(is.integer(num_tox(x)))
-
-  expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
-                          cohort = c(1,1,1,2,2,2),
-                          dose = c(1,1,1,2,2,2),
-                          tox = c(0,0,0,0,1,1))) == 0))
-
-  expect_equal(num_doses(x), 5)
-  expect_true(is.integer(tox(x)))
-
-  expect_equal(dose_indices(x), 1:5)
-  expect_true(is.integer(dose_indices(x)))
-
-  expect_equal(recommended_dose(x), 1)
-  expect_true(is.integer(recommended_dose(x)))
-
-  expect_equal(continue(x), FALSE)
-  expect_true(is.logical(continue(x)))
-
-  expect_equal(n_at_dose(x), c(3,3,0,0,0))
-  expect_true(is.integer(n_at_dose(x)))
-
-  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
-  expect_true(is.numeric(prob_administer(x)))
-
-  expect_equal(tox_at_dose(x), c(0,2,0,0,0))
-  expect_true(is.integer(tox_at_dose(x)))
-
-  expect_true(is.numeric(empiric_tox_rate(x)))
-
-  expect_true(is.logical(supports_sampling(x)))
-
-  expect_error(prob_tox_samples(x))
-  expect_error(prob_tox_samples(x, tall = TRUE))
-
-
-  # Example 2, empty outcome string..
-  x <- three_plus_three_fitter %>% fit('')
-
-  expect_true(is.null(tox_target(x)))
-
-  expect_equal(num_patients(x), 0)
-  expect_true(is.integer(num_patients(x)))
-
-  expect_equal(cohort(x), integer(0))
-  expect_true(is.integer(cohort(x)))
-
-  expect_equal(doses_given(x), integer(0))
-  expect_true(is.integer(doses_given(x)))
-
-  expect_equal(tox(x), integer(0))
-  expect_true(is.integer(tox(x)))
-
-  expect_equal(num_tox(x), 0)
-  expect_true(is.integer(num_tox(x)))
-
-  mf <- model_frame(x)
-  expect_equal(nrow(mf), 0)
-  expect_equal(ncol(mf), 4)
-
-  expect_equal(num_doses(x), 5)
-  expect_true(is.integer(num_doses(x)))
-
-  expect_equal(dose_indices(x), 1:5)
-  expect_true(is.integer(dose_indices(x)))
-
-  expect_equal(recommended_dose(x), 1)
-  expect_true(is.integer(recommended_dose(x)))
-
-  expect_equal(continue(x), TRUE)
-  expect_true(is.logical(continue(x)))
-
-  expect_equal(n_at_dose(x), c(0,0,0,0,0))
-  expect_true(is.integer(n_at_dose(x)))
-
-  expect_true(is.numeric(prob_administer(x)))
-
-  expect_equal(tox_at_dose(x), c(0,0,0,0,0))
-  expect_true(is.integer(tox_at_dose(x)))
-
-  expect_true(is.numeric(empiric_tox_rate(x)))
-
-  expect_true(is.logical(supports_sampling(x)))
-
-  expect_error(prob_tox_samples(x))
-  expect_error(prob_tox_samples(x, tall = TRUE))
-
-
-  # Example 3, using tibble
-  outcomes <- tibble::tibble(
-    cohort = c(1,1,1, 2,2,2),
-    dose = c(1,1,1, 2,2,2),
-    tox = c(0,0, 0,0, 1,1)
-  )
-  x <- fit(three_plus_three_fitter, outcomes)
-
-  expect_true(is.null(tox_target(x)))
-
-  expect_equal(num_patients(x), 6)
-  expect_true(is.integer(num_patients(x)))
-
-  expect_equal(cohort(x), c(1,1,1, 2,2,2))
-  expect_true(is.integer(cohort(x)))
-
-  expect_equal(doses_given(x), c(1,1,1, 2,2,2))
-  expect_true(is.integer(doses_given(x)))
-
-  expect_equal(tox(x), c(0,0,0, 0,1,1))
-  expect_true(is.integer(tox(x)))
-
-  expect_equal(num_tox(x), 2)
-  expect_true(is.integer(num_tox(x)))
-
-  expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
-                                               cohort = c(1,1,1,2,2,2),
-                                               dose = c(1,1,1,2,2,2),
-                                               tox = c(0,0,0,0,1,1))) == 0))
-
-  expect_equal(num_doses(x), 5)
-  expect_true(is.integer(tox(x)))
-
-  expect_equal(dose_indices(x), 1:5)
-  expect_true(is.integer(dose_indices(x)))
-
-  expect_equal(recommended_dose(x), 1)
-  expect_true(is.integer(recommended_dose(x)))
-
-  expect_equal(continue(x), FALSE)
-  expect_true(is.logical(continue(x)))
-
-  expect_equal(n_at_dose(x), c(3,3,0,0,0))
-  expect_true(is.integer(n_at_dose(x)))
-
-  expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
-  expect_true(is.numeric(prob_administer(x)))
-
-  expect_equal(tox_at_dose(x), c(0,2,0,0,0))
-  expect_true(is.integer(tox_at_dose(x)))
-
-  expect_true(is.numeric(empiric_tox_rate(x)))
-
-  expect_true(is.logical(supports_sampling(x)))
-
-  expect_error(prob_tox_samples(x))
-  expect_error(prob_tox_samples(x, tall = TRUE))
+  # I could wholesale copy and paste down from above to further test this class
 
 })
+
+test_that('three_plus_three_selector does what it should with de-esc', {
+
+  threep_model <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE)
+  expect_true(threep_model$allow_deescalate)
+
+  fit1 <- threep_model %>% fit('1NNN 2NTT')
+  expect_true(fit1$allow_deescalate)
+  expect_equal(fit1 %>% recommended_dose(), 1)
+  expect_true(fit1 %>% continue())
+
+  # I could wholesale copy and paste down from above to further test this class
+
+})
+
+test_that(
+  'three_plus_three_selector supports correct interface without de-esc.', {
+
+    three_plus_three_fitter <- get_three_plus_three(num_doses = 5,
+                                                    allow_deescalate = FALSE)
+
+    # Example 1, using outcome string
+    x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
+
+    expect_true(is.null(tox_target(x)))
+
+    expect_equal(num_patients(x), 6)
+    expect_true(is.integer(num_patients(x)))
+
+    expect_equal(cohort(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(cohort(x)))
+
+    expect_equal(doses_given(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(doses_given(x)))
+
+    expect_equal(tox(x), c(0,0,0, 0,1,1))
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(num_tox(x), 2)
+    expect_true(is.integer(num_tox(x)))
+
+    expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
+                                                 cohort = c(1,1,1,2,2,2),
+                                                 dose = c(1,1,1,2,2,2),
+                                                 tox = c(0,0,0,0,1,1))) == 0))
+
+    expect_equal(num_doses(x), 5)
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(dose_indices(x), 1:5)
+    expect_true(is.integer(dose_indices(x)))
+
+    expect_equal(recommended_dose(x), 1)
+    expect_true(is.integer(recommended_dose(x)))
+
+    expect_equal(continue(x), FALSE)
+    expect_true(is.logical(continue(x)))
+
+    expect_equal(n_at_dose(x), c(3,3,0,0,0))
+    expect_true(is.integer(n_at_dose(x)))
+
+    expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+    expect_true(is.numeric(prob_administer(x)))
+
+    expect_equal(tox_at_dose(x), c(0,2,0,0,0))
+    expect_true(is.integer(tox_at_dose(x)))
+
+    expect_true(is.numeric(empiric_tox_rate(x)))
+
+    expect_true(is.logical(supports_sampling(x)))
+
+    expect_error(prob_tox_samples(x))
+    expect_error(prob_tox_samples(x, tall = TRUE))
+
+
+    # Example 2, empty outcome string..
+    x <- three_plus_three_fitter %>% fit('')
+
+    expect_true(is.null(tox_target(x)))
+
+    expect_equal(num_patients(x), 0)
+    expect_true(is.integer(num_patients(x)))
+
+    expect_equal(cohort(x), integer(0))
+    expect_true(is.integer(cohort(x)))
+
+    expect_equal(doses_given(x), integer(0))
+    expect_true(is.integer(doses_given(x)))
+
+    expect_equal(tox(x), integer(0))
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(num_tox(x), 0)
+    expect_true(is.integer(num_tox(x)))
+
+    mf <- model_frame(x)
+    expect_equal(nrow(mf), 0)
+    expect_equal(ncol(mf), 4)
+
+    expect_equal(num_doses(x), 5)
+    expect_true(is.integer(num_doses(x)))
+
+    expect_equal(dose_indices(x), 1:5)
+    expect_true(is.integer(dose_indices(x)))
+
+    expect_equal(recommended_dose(x), 1)
+    expect_true(is.integer(recommended_dose(x)))
+
+    expect_equal(continue(x), TRUE)
+    expect_true(is.logical(continue(x)))
+
+    expect_equal(n_at_dose(x), c(0,0,0,0,0))
+    expect_true(is.integer(n_at_dose(x)))
+
+    expect_true(is.numeric(prob_administer(x)))
+
+    expect_equal(tox_at_dose(x), c(0,0,0,0,0))
+    expect_true(is.integer(tox_at_dose(x)))
+
+    expect_true(is.numeric(empiric_tox_rate(x)))
+
+    expect_true(is.logical(supports_sampling(x)))
+
+    expect_error(prob_tox_samples(x))
+    expect_error(prob_tox_samples(x, tall = TRUE))
+
+
+    # Example 3, using tibble
+    outcomes <- tibble::tibble(
+      cohort = c(1,1,1, 2,2,2),
+      dose = c(1,1,1, 2,2,2),
+      tox = c(0,0, 0,0, 1,1)
+    )
+    x <- fit(three_plus_three_fitter, outcomes)
+
+    expect_true(is.null(tox_target(x)))
+
+    expect_equal(num_patients(x), 6)
+    expect_true(is.integer(num_patients(x)))
+
+    expect_equal(cohort(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(cohort(x)))
+
+    expect_equal(doses_given(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(doses_given(x)))
+
+    expect_equal(tox(x), c(0,0,0, 0,1,1))
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(num_tox(x), 2)
+    expect_true(is.integer(num_tox(x)))
+
+    expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
+                                                 cohort = c(1,1,1,2,2,2),
+                                                 dose = c(1,1,1,2,2,2),
+                                                 tox = c(0,0,0,0,1,1))) == 0))
+
+    expect_equal(num_doses(x), 5)
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(dose_indices(x), 1:5)
+    expect_true(is.integer(dose_indices(x)))
+
+    expect_equal(recommended_dose(x), 1)
+    expect_true(is.integer(recommended_dose(x)))
+
+    expect_equal(continue(x), FALSE)
+    expect_true(is.logical(continue(x)))
+
+    expect_equal(n_at_dose(x), c(3,3,0,0,0))
+    expect_true(is.integer(n_at_dose(x)))
+
+    expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+    expect_true(is.numeric(prob_administer(x)))
+
+    expect_equal(tox_at_dose(x), c(0,2,0,0,0))
+    expect_true(is.integer(tox_at_dose(x)))
+
+    expect_true(is.numeric(empiric_tox_rate(x)))
+
+    expect_true(is.logical(supports_sampling(x)))
+
+    expect_error(prob_tox_samples(x))
+    expect_error(prob_tox_samples(x, tall = TRUE))
+
+  })
+
+
+test_that(
+  'three_plus_three_selector supports correct interface with de-esc.', {
+
+    three_plus_three_fitter <- get_three_plus_three(num_doses = 5,
+                                                    allow_deescalate = TRUE)
+
+    # Example 1, using outcome string
+    x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
+
+    expect_true(is.null(tox_target(x)))
+
+    expect_equal(num_patients(x), 6)
+    expect_true(is.integer(num_patients(x)))
+
+    expect_equal(cohort(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(cohort(x)))
+
+    expect_equal(doses_given(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(doses_given(x)))
+
+    expect_equal(tox(x), c(0,0,0, 0,1,1))
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(num_tox(x), 2)
+    expect_true(is.integer(num_tox(x)))
+
+    expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
+                                                 cohort = c(1,1,1,2,2,2),
+                                                 dose = c(1,1,1,2,2,2),
+                                                 tox = c(0,0,0,0,1,1))) == 0))
+
+    expect_equal(num_doses(x), 5)
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(dose_indices(x), 1:5)
+    expect_true(is.integer(dose_indices(x)))
+
+    expect_equal(recommended_dose(x), 1)
+    expect_true(is.integer(recommended_dose(x)))
+
+    expect_equal(continue(x), TRUE)
+    expect_true(is.logical(continue(x)))
+
+    expect_equal(n_at_dose(x), c(3,3,0,0,0))
+    expect_true(is.integer(n_at_dose(x)))
+
+    expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+    expect_true(is.numeric(prob_administer(x)))
+
+    expect_equal(tox_at_dose(x), c(0,2,0,0,0))
+    expect_true(is.integer(tox_at_dose(x)))
+
+    expect_true(is.numeric(empiric_tox_rate(x)))
+
+    expect_true(is.logical(supports_sampling(x)))
+
+    expect_error(prob_tox_samples(x))
+    expect_error(prob_tox_samples(x, tall = TRUE))
+
+
+    # Example 2, empty outcome string..
+    x <- three_plus_three_fitter %>% fit('')
+
+    expect_true(is.null(tox_target(x)))
+
+    expect_equal(num_patients(x), 0)
+    expect_true(is.integer(num_patients(x)))
+
+    expect_equal(cohort(x), integer(0))
+    expect_true(is.integer(cohort(x)))
+
+    expect_equal(doses_given(x), integer(0))
+    expect_true(is.integer(doses_given(x)))
+
+    expect_equal(tox(x), integer(0))
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(num_tox(x), 0)
+    expect_true(is.integer(num_tox(x)))
+
+    mf <- model_frame(x)
+    expect_equal(nrow(mf), 0)
+    expect_equal(ncol(mf), 4)
+
+    expect_equal(num_doses(x), 5)
+    expect_true(is.integer(num_doses(x)))
+
+    expect_equal(dose_indices(x), 1:5)
+    expect_true(is.integer(dose_indices(x)))
+
+    expect_equal(recommended_dose(x), 1)
+    expect_true(is.integer(recommended_dose(x)))
+
+    expect_equal(continue(x), TRUE)
+    expect_true(is.logical(continue(x)))
+
+    expect_equal(n_at_dose(x), c(0,0,0,0,0))
+    expect_true(is.integer(n_at_dose(x)))
+
+    expect_true(is.numeric(prob_administer(x)))
+
+    expect_equal(tox_at_dose(x), c(0,0,0,0,0))
+    expect_true(is.integer(tox_at_dose(x)))
+
+    expect_true(is.numeric(empiric_tox_rate(x)))
+
+    expect_true(is.logical(supports_sampling(x)))
+
+    expect_error(prob_tox_samples(x))
+    expect_error(prob_tox_samples(x, tall = TRUE))
+
+
+    # Example 3, using tibble
+    outcomes <- tibble::tibble(
+      cohort = c(1,1,1, 2,2,2),
+      dose = c(1,1,1, 2,2,2),
+      tox = c(0,0, 0,0, 1,1)
+    )
+    x <- fit(three_plus_three_fitter, outcomes)
+
+    expect_true(is.null(tox_target(x)))
+
+    expect_equal(num_patients(x), 6)
+    expect_true(is.integer(num_patients(x)))
+
+    expect_equal(cohort(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(cohort(x)))
+
+    expect_equal(doses_given(x), c(1,1,1, 2,2,2))
+    expect_true(is.integer(doses_given(x)))
+
+    expect_equal(tox(x), c(0,0,0, 0,1,1))
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(num_tox(x), 2)
+    expect_true(is.integer(num_tox(x)))
+
+    expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
+                                                 cohort = c(1,1,1,2,2,2),
+                                                 dose = c(1,1,1,2,2,2),
+                                                 tox = c(0,0,0,0,1,1))) == 0))
+
+    expect_equal(num_doses(x), 5)
+    expect_true(is.integer(tox(x)))
+
+    expect_equal(dose_indices(x), 1:5)
+    expect_true(is.integer(dose_indices(x)))
+
+    expect_equal(recommended_dose(x), 1)
+    expect_true(is.integer(recommended_dose(x)))
+
+    expect_equal(continue(x), TRUE)
+    expect_true(is.logical(continue(x)))
+
+    expect_equal(n_at_dose(x), c(3,3,0,0,0))
+    expect_true(is.integer(n_at_dose(x)))
+
+    expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
+    expect_true(is.numeric(prob_administer(x)))
+
+    expect_equal(tox_at_dose(x), c(0,2,0,0,0))
+    expect_true(is.integer(tox_at_dose(x)))
+
+    expect_true(is.numeric(empiric_tox_rate(x)))
+
+    expect_true(is.logical(supports_sampling(x)))
+
+    expect_error(prob_tox_samples(x))
+    expect_error(prob_tox_samples(x, tall = TRUE))
+
+  })

@@ -76,6 +76,7 @@ three_plus_three_selector <- function(outcomes,
     cohort = df$cohort,
     outcomes = outcomes,
     num_doses = as.integer(num_doses),
+    allow_deescalate = allow_deescalate,
     df = df,
     df_c = df_c,
     three_plus_three_fit = three_plus_three_fit
@@ -94,7 +95,8 @@ fit.three_plus_three_selector_factory <- function(selector_factory, outcomes,
 
   args <- list(
     outcomes = outcomes,
-    num_doses = selector_factory$num_doses
+    num_doses = selector_factory$num_doses,
+    allow_deescalate = selector_factory$allow_deescalate
   )
   args <- append(args, selector_factory$extra_args)
   do.call(three_plus_three_selector, args = args)
