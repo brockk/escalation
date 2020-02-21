@@ -22,6 +22,10 @@
 #' @references
 #' Storer BE. Design and Analysis of Phase I Clinical Trials. Biometrics.
 #' 1989;45(3):925-937. doi:10.2307/2531693
+#'
+#' Korn EL, Midthune D, Chen TT, Rubinstein LV, Christian MC, Simon RM.
+#' A comparison of two phase I trial designs. Statistics in Medicine.
+#' 1994;13(18):1799-1806. doi:10.1002/sim.4780131802
 three_plus_three <- function(outcomes, num_doses, allow_deescalate = FALSE,
                              strict_mode = TRUE) {
 

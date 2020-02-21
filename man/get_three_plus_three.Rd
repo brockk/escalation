@@ -4,10 +4,13 @@
 \alias{get_three_plus_three}
 \title{Get an object to fit the 3+3 model.}
 \usage{
-get_three_plus_three(num_doses, ...)
+get_three_plus_three(num_doses, allow_deescalate = FALSE, ...)
 }
 \arguments{
 \item{num_doses}{Number of doses under investigation.}
+
+\item{allow_deescalate}{TRUE to allow de-escalation, as described by Korn et
+al. Default is FALSE.}
 
 \item{...}{Extra args are not currently used.}
 }
@@ -33,4 +36,8 @@ fit2 \%>\% continue()
 \references{
 Storer BE. Design and Analysis of Phase I Clinical Trials. Biometrics.
 1989;45(3):925-937. doi:10.2307/2531693
+
+Korn EL, Midthune D, Chen TT, Rubinstein LV, Christian MC, Simon RM.
+A comparison of two phase I trial designs. Statistics in Medicine.
+1994;13(18):1799-1806. doi:10.1002/sim.4780131802
 }

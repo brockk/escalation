@@ -132,7 +132,7 @@
     <p>Get an object to fit the 3+3 model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_three_plus_three</span>(<span class='no'>num_doses</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>get_three_plus_three</span>(<span class='no'>num_doses</span>, <span class='kw'>allow_deescalate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +140,11 @@
     <tr>
       <th>num_doses</th>
       <td><p>Number of doses under investigation.</p></td>
+    </tr>
+    <tr>
+      <th>allow_deescalate</th>
+      <td><p>TRUE to allow de-escalation, as described by Korn et
+al. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -155,6 +160,9 @@
 
     <p>Storer BE. Design and Analysis of Phase I Clinical Trials. Biometrics.
 1989;45(3):925-937. doi:10.2307/2531693</p>
+<p>Korn EL, Midthune D, Chen TT, Rubinstein LV, Christian MC, Simon RM.
+A comparison of two phase I trial designs. Statistics in Medicine.
+1994;13(18):1799-1806. doi:10.1002/sim.4780131802</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'>get_three_plus_three</span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>)

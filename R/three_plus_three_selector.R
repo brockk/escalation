@@ -2,6 +2,8 @@
 #' Get an object to fit the 3+3 model.
 #'
 #' @param num_doses Number of doses under investigation.
+#' @param allow_deescalate TRUE to allow de-escalation, as described by Korn et
+#' al. Default is FALSE.
 #' @param ... Extra args are not currently used.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -23,10 +25,15 @@
 #' @references
 #' Storer BE. Design and Analysis of Phase I Clinical Trials. Biometrics.
 #' 1989;45(3):925-937. doi:10.2307/2531693
-get_three_plus_three <- function(num_doses, ...) {
+#'
+#' Korn EL, Midthune D, Chen TT, Rubinstein LV, Christian MC, Simon RM.
+#' A comparison of two phase I trial designs. Statistics in Medicine.
+#' 1994;13(18):1799-1806. doi:10.1002/sim.4780131802
+get_three_plus_three <- function(num_doses, allow_deescalate = FALSE, ...) {
 
   x <- list(
     num_doses = num_doses,
+    allow_deescalate = allow_deescalate,
     extra_args = list(...)
   )
 
@@ -36,7 +43,10 @@ get_three_plus_three <- function(num_doses, ...) {
   return(x)
 }
 
-three_plus_three_selector <- function(outcomes, num_doses, ...) {
+three_plus_three_selector <- function(outcomes,
+                                      num_doses,
+                                      allow_deescalate = FALSE,
+                                      ...) {
 
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
@@ -59,7 +69,8 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
   }
 
   three_plus_three_fit <- three_plus_three(outcomes = outcomes,
-                                           num_doses = num_doses)
+                                           num_doses = num_doses,
+                                           allow_deescalate = allow_deescalate)
 
   l <- list(
     cohort = df$cohort,
@@ -73,6 +84,7 @@ three_plus_three_selector <- function(outcomes, num_doses, ...) {
   class(l) = c('three_plus_three_selector', 'tox_selector', 'selector')
   l
 }
+
 
 # Factory interface
 
