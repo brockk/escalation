@@ -1,7 +1,7 @@
 
 TODO:
 
-* Add boin select.mtd function fitter
-
-Write tests for:
-<done>
+* Add a finally_select_boin_dose function fitter that uses BOIN::select.mtd
+* Also, a finally selector for Mozgunov + Jaki CIPD method.
+* finish dose paths, incl starting mid-way through trial
+* print methods

@@ -300,65 +300,110 @@ prob_tox_exceeds(x, 0.5)
 
 
 
+
+# Dose paths ----
+
+# Use 3+3
+selector_factory <- get_three_plus_three(num_doses = 5)
+cohort_sizes <- c(3, 3, 3)
+
+# Use CRM
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+selector_factory <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_at_n(n = 12)
+
+selector_factory <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  dont_skip_doses() %>%
+  stop_when_n_at_dose(dose = 'recommended', n = 9)
+
+# Use BOIN
+selector_factory <- get_boin(num_doses = length(skeleton), target = target) %>%
+  stop_at_n(n = 12)
+
+# Get paths
+paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
+as_tibble(paths) %>% print(n = 100)
+spread_paths(as_tibble(paths)) %>%
+  select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
+         'outcomes2', 'next_dose2', 'outcomes3', 'next_dose3') %>%
+  print(n=100)
+# With true_prob_tox, these paths have exact probabilities
+
+
 # Simulation ----
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 
 # Sc 1
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
-plot(true_prob_tox)
 
 get_three_plus_three(num_doses = length(skeleton)) %>%
-  simulate(num_sims = 500, true_prob_tox = true_prob_tox) -> threeps
-prob_recommend(threeps)
+  simulate(num_sims = 50, true_prob_tox = true_prob_tox) -> sims
+get_three_plus_three(num_doses = length(skeleton)) %>%
+  simulate(num_sims = 5, true_prob_tox = true_prob_tox,
+           return_all_fits = TRUE) -> sims
 
-# ThreePlusThree in bcrm
+get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_at_n(n = 12) %>%
+  simulate(
+    num_sims = 50,
+    true_prob_tox = true_prob_tox,
+    sample_patient_arrivals =
+      function() cohorts_of_n(n = 2, mean_time_delta = 1),
+    next_dose = 2) -> sims
+
+get_boin(num_doses = length(skeleton), target = target) %>%
+  stop_at_n(n = 12) %>% simulate(
+    num_sims = 50,
+    true_prob_tox = true_prob_tox,
+    sample_patient_arrivals =
+      function() cohorts_of_n(n = 2, mean_time_delta = 1),
+    next_dose = 2) -> sims
+
+class(sims) # simulations
+length(sims) # Num sims
+class(sims[[1]]) # list
+length(sims[[1]]) # Num decisions
+class(sims[[1]][[1]]) # list
+names(sims[[1]][[1]]) # "cohort" "time"   "fit"
+class(sims[[1]][[1]]$fit) # selector
+
+
+# Interface
+class(sims)
+length(sims)
+summary(num_patients(sims))
+num_doses(sims)
+dose_indices(sims)
+n_at_dose(sims) %>% colMeans()
+num_tox(sims) %>% mean
+tox_at_dose(sims) %>% colMeans()
+summary(trial_duration(sims))
+object.size(sims) %>% format(units = 'MB')
+recommended_dose(sims)
+prob_recommend(sims)
+prob_administer(sims)
+trial_duration(sims)
+as_tibble(sims) %>% print(n = 30)
+
+library(ggplot2)
+as_tibble(sims) %>%
+  ggplot(aes(x = dose, y = mean_prob_tox)) +
+  geom_line(aes(group = .iteration))
+
+as_tibble(sims) %>%
+  ggplot(aes(x = dose, y = mean_prob_tox)) +
+  geom_line(aes(group = .iteration)) +
+  facet_wrap(~ .iteration)
+
+# ThreePlusThree in bcrm calculates exact OCs.
 bcrm_3p3 <- bcrm::threep3(
   truep = true_prob_tox,
   threep3.start = 1, threep3.esc.only = TRUE)
 bcrm_3p3
 
-summary(num_patients(threeps))
-length(threeps)
-class(threeps)
-recommended_dose(threeps)
-n_at_dose(threeps) %>% colMeans()
-tox_at_dose(threeps) %>% colMeans() %>% sum
-object.size(threeps) %>% format(units = 'MB')
 
-crm_fitter <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_at_n(n = 12)
-crm_fitter %>% simulate(
-  num_sims = 500,
-  true_prob_tox = true_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
-  next_dose = 2) -> crm_sims
-
-prob_recommend(crm_sims)
-num_patients(crm_sims)
-n_at_dose(crm_sims) %>% colMeans()
-n_at_dose(crm_sims) %>% colMeans() %>% sum
-tox_at_dose(crm_sims) %>% colMeans()
-tox_at_dose(crm_sims) %>% colMeans() %>% sum
-# sum((n_at_dose(crm_sims) %>% colMeans()) * true_prob_tox)
-
-boin_fitter <- get_boin(num_doses = length(skeleton), target = target) %>%
-  stop_at_n(n = 12)
-boin_fitter %>% simulate(
-  num_sims = 500,
-  true_prob_tox = true_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 2, mean_time_delta = 1),
-  next_dose = 2) -> boin_sims
-prob_recommend(boin_sims)
-num_patients(boin_sims)
-n_at_dose(boin_sims) %>% colMeans()
-n_at_dose(boin_sims) %>% colMeans() %>% sum
-tox_at_dose(boin_sims) %>% colMeans()
-tox_at_dose(boin_sims) %>% colMeans() %>% sum
-
-prob_recommend(threeps)
-prob_recommend(crm_sims)
-prob_recommend(boin_sims)
 
 # Sc 2
 true_prob_tox <- c(0.03, 0.09, 0.16, 0.27, 0.42)
@@ -425,7 +470,8 @@ set.seed(123)
 system.time(crm_sims_1 <- crm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc1_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = which.min(abs(sc1_skeleton - target))
 ))  # 9.1s
 object.size(crm_sims_1) %>% format(units = 'MB')  # 17MB
@@ -440,7 +486,8 @@ set.seed(123)
 system.time(ecrm_sims_1 <- ecrm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc1_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = 1
 ))  # 12.9s
 object.size(ecrm_sims_1) %>% format(units = 'MB')  # 22MB
@@ -455,7 +502,8 @@ set.seed(123)
 system.time(rcrm_sims_1 <- rcrm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc1_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = 1
 ))  # 14.4s
 object.size(rcrm_sims_1) %>% format(units = 'MB')  # 24MB
@@ -497,7 +545,8 @@ set.seed(123)
 system.time(crm_sims_2 <- crm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc2_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = which.min(abs(sc1_skeleton - target))
 ))  # 9.4s
 object.size(crm_sims_2) %>% format(units = 'MB')  # 17MB
@@ -512,7 +561,8 @@ set.seed(123)
 system.time(ecrm_sims_2 <- ecrm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc2_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = 1
 ))  # 13.2s
 object.size(ecrm_sims_2) %>% format(units = 'MB')  # 22MB
@@ -527,7 +577,8 @@ set.seed(123)
 system.time(rcrm_sims_2 <- rcrm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc2_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = 1
 ))  # 14.7s
 object.size(rcrm_sims_2) %>% format(units = 'MB')  # 24MB
@@ -569,7 +620,8 @@ set.seed(123)
 system.time(crm_sims_3 <- crm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc3_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = which.min(abs(sc1_skeleton - target))
 ))  # 9.4s
 object.size(crm_sims_3) %>% format(units = 'MB')  # 17MB
@@ -584,7 +636,8 @@ set.seed(123)
 system.time(ecrm_sims_3 <- ecrm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc3_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = 1
 ))  # 13.2s
 object.size(ecrm_sims_3) %>% format(units = 'MB')  # 22MB
@@ -599,7 +652,8 @@ set.seed(123)
 system.time(rcrm_sims_3 <- rcrm_fitter %>% simulate(
   num_sims = 100,
   true_prob_tox = sc3_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 1, mean_time_delta = 1/3),
+  sample_patient_arrivals = function() cohorts_of_n(n = 1,
+                                                    mean_time_delta = 1/3),
   next_dose = 1
 ))  # 14.7s
 object.size(rcrm_sims_3) %>% format(units = 'MB')  # 24MB

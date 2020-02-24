@@ -110,18 +110,29 @@ recommended_dose.simulations <- function(simulations, ...) {
     map_int(recommended_dose)
 }
 
-#' @importFrom purrr map
+#' @importFrom purrr map imap_int
 #' @importFrom magrittr %>%
 #' @importFrom utils tail
 #' @importFrom tibble as_tibble
-n_at_dose.simulations <- function(simulations, ...) {
+n_at_dose.simulations <- function(simulations, dose = NULL, ...) {
+
   simulations %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
     map(n_at_dose) %>%
     do.call(what = rbind) -> x
   colnames(x) <- dose_indices(simulations)
-  x %>% as_tibble()
+  x <- x %>% as_tibble()
+
+  if(is.null(dose)) {
+    return(x)
+  } else if(dose == 'recommended') {
+    rec_d <- recommended_dose(simulations)
+    return(imap_int(rec_d, ~ ifelse(is.na(.x), NA, x[.y, .x, drop = TRUE])))
+  } else {
+    stop(paste0("Don't know what to do with dose = '", dose, "'"))
+  }
+
 }
 
 #' @importFrom purrr map
@@ -225,10 +236,10 @@ simulate <- function(selector_factory, num_sims, ...) {
 phase1_sim <- function(
   selector_factory,
   true_prob_tox,
-  sample_patient_arrivals = function() cohorts_of_n(n = 3, mean_time_delta = 1),
+  sample_patient_arrivals = function(df) cohorts_of_n(n=3, mean_time_delta=1),
   previous_outcomes = '',
   next_dose = NULL,
-  i_like_big_trials = FALSE, # Safety net if stop_trial_func is misspecified...
+  i_like_big_trials = FALSE, # Safety net if stop_trial_func is mis-specified...
   return_all_fits = FALSE
 ) {
   if(is.character(previous_outcomes)) {
@@ -254,13 +265,18 @@ phase1_sim <- function(
   fit <- selector_factory %>% fit(base_df)
   if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
   fits <- list()
-  # fits[[1]] <- list(cohort = next_cohort, time = time_now, fit = fit)
   fits[[1]] <- list(.depth = i, time = time_now, fit = fit)
-  while(fit %>% continue() & (i_like_big_trials | i < max_i)) {
+  while(fit %>% continue() & !is.na(next_dose) &
+        (i_like_big_trials | i < max_i)) {
 
-    # and dose not NA?
-
-    new_pts <- sample_patient_arrivals()
+    current_data = data.frame(
+      cohort = cohort,
+      patient = seq_along(dose),
+      dose = dose,
+      tox = tox,
+      time = time
+    )
+    new_pts <- sample_patient_arrivals(current_data)
     arrival_time_deltas <- cumsum(new_pts$time_delta)
     n_new_pts <- nrow(new_pts)
     new_dose <- rep(next_dose, n_new_pts)
@@ -283,7 +299,6 @@ phase1_sim <- function(
     i <- i + 1
     fit <- selector_factory %>% fit(new_data)
     next_cohort <- next_cohort + 1
-    # fits[[i]] <- list(cohort = next_cohort, time = time_now, fit = fit)
     fits[[i]] <- list(.depth = i, time = time_now, fit = fit)
     next_dose <- fit %>% recommended_dose()
   }
