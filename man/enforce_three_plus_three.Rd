@@ -4,10 +4,13 @@
 \alias{enforce_three_plus_three}
 \title{Enforce that a trial path has followed the 3+3 method.}
 \usage{
-enforce_three_plus_three(outcomes)
+enforce_three_plus_three(outcomes, allow_deescalate = FALSE)
 }
 \arguments{
 \item{outcomes}{Outcomes observed. See \code{\link{parse_phase1_outcomes}}.}
+
+\item{allow_deescalate}{TRUE to allow de-escalation, as described by Korn et
+al. Default is FALSE.}
 }
 \value{
 Nothing. Function stops if problem detected.
