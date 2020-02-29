@@ -12,7 +12,7 @@ tox(selector, ...)
 \item{...}{Extra args are passed onwards.}
 }
 \value{
-integer
+an integer vector
 }
 \description{
 Get a vector of the binary toxicity outcomes for evaluated patients.

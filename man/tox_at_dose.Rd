@@ -12,7 +12,7 @@ tox_at_dose(selector, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-integer
+an integer vector
 }
 \description{
 Get the number of toxicities seen at each dose under investigation.

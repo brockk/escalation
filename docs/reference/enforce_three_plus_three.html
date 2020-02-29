@@ -78,7 +78,7 @@ trial path have diverged from that advocated by the 3+3 method." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -134,7 +134,7 @@ trial path have diverged from that advocated by the 3+3 method." />
 trial path have diverged from that advocated by the 3+3 method.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>enforce_three_plus_three</span>(<span class='no'>outcomes</span>)</pre>
+    <pre class="usage"><span class='fu'>enforce_three_plus_three</span>(<span class='no'>outcomes</span>, <span class='kw'>allow_deescalate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,6 +142,11 @@ trial path have diverged from that advocated by the 3+3 method.</p>
     <tr>
       <th>outcomes</th>
       <td><p>Outcomes observed. See <code><a href='parse_phase1_outcomes.html'>parse_phase1_outcomes</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>allow_deescalate</th>
+      <td><p>TRUE to allow de-escalation, as described by Korn et
+al. Default is FALSE.</p></td>
     </tr>
     </table>
 

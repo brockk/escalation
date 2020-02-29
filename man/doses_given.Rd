@@ -12,7 +12,7 @@ doses_given(selector, ...)
 \item{...}{Extra args are passed onwards.}
 }
 \value{
-integer
+an integer vector
 }
 \description{
 Get a vector of the dose-levels that have been administered to patients.

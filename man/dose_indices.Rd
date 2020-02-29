@@ -12,7 +12,7 @@ dose_indices(selector, ...)
 \item{...}{Extra args are passed onwards.}
 }
 \value{
-integer
+an integer vector
 }
 \description{
 Get the integers from 1 to the number of doses under investigation.

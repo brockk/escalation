@@ -77,7 +77,7 @@ num_patients <- function(selector, ...) {
 #' @param selector Object of type \code{\link{selector}}.
 #' @param ... Extra args are passed onwards.
 #'
-#' @return integer
+#' @return an integer vector
 #'
 #' @export
 #'
@@ -98,7 +98,7 @@ cohort <- function(selector, ...) {
 #' @param selector Object of type \code{\link{selector}}.
 #' @param ... Extra args are passed onwards.
 #'
-#' @return integer
+#' @return an integer vector
 #'
 #' @export
 #'
@@ -119,7 +119,7 @@ doses_given <- function(selector, ...) {
 #' @param selector Object of type \code{\link{selector}}.
 #' @param ... Extra args are passed onwards.
 #'
-#' @return integer
+#' @return an integer vector
 #'
 #' @export
 #'
@@ -205,7 +205,7 @@ num_doses <- function(selector, ...) {
 #' @param selector Object of type \code{\link{selector}}.
 #' @param ... Extra args are passed onwards.
 #'
-#' @return integer
+#' @return an integer vector
 #'
 #' @export
 #'
@@ -252,7 +252,7 @@ recommended_dose <- function(selector, ...) {
 #' @param selector Object of type \code{\link{selector}}.
 #' @param ... Extra args are passed onwards.
 #'
-#' @return integer
+#' @return logical
 #'
 #' @export
 #'
@@ -278,7 +278,7 @@ continue <- function(selector, ...) {
 #' @param selector Object of class \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return integer
+#' @return an integer vector
 #' @export
 #'
 #' @examples
@@ -299,7 +299,7 @@ n_at_dose <- function(selector, ...) {
 #' @param selector Object of class \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return integer
+#' @return a numerical vector
 #' @export
 #'
 #' @examples
@@ -320,7 +320,7 @@ prob_administer <- function(selector, ...) {
 #' @param selector Object of class \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return integer
+#' @return an integer vector
 #' @export
 #'
 #' @examples
@@ -343,7 +343,7 @@ tox_at_dose <- function(selector, ...) {
 #' @param selector Object of class \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return numeric
+#' @return a numerical vector
 #' @export
 #'
 #' @examples
@@ -367,7 +367,7 @@ empiric_tox_rate <- function(selector, ...) {
 #' @param selector Object of class \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return numeric
+#' @return a numerical vector
 #' @export
 #'
 #' @examples
@@ -391,7 +391,7 @@ mean_prob_tox <- function(selector, ...) {
 #' @param selector Object of class \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return numeric
+#' @return a numerical vector
 #' @export
 #'
 #' @examples
@@ -417,7 +417,7 @@ median_prob_tox <- function(selector, ...) {
 #' @param p quantile probability, decimal value between 0 and 1
 #' @param ... arguments passed to other methods
 #'
-#' @return numeric
+#' @return a numerical vector
 #' @export
 #'
 #' @examples
@@ -467,7 +467,7 @@ prob_tox_exceeds <- function(selector, threshold, ...) {
 #' @param selector Object of type \code{\link{selector}}
 #' @param ... arguments passed to other methods
 #'
-#' @return numerical vector of probabilities
+#' @return logical
 #'
 #' @export
 #'

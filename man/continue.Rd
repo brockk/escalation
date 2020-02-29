@@ -12,7 +12,7 @@ continue(selector, ...)
 \item{...}{Extra args are passed onwards.}
 }
 \value{
-integer
+logical
 }
 \description{
 Should this dose-finding experiment continue? Or have circumstances prevailed

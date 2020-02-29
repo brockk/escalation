@@ -12,7 +12,7 @@ n_at_dose(selector, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-integer
+an integer vector
 }
 \description{
 Get the number of patients evaluated at each dose under investigation.

@@ -12,7 +12,7 @@ prob_administer(selector, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-integer
+a numerical vector
 }
 \description{
 Get the percentage of patients evaluated at each dose under investigation.

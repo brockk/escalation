@@ -14,7 +14,7 @@ prob_tox_quantile(selector, p, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-numeric
+a numerical vector
 }
 \description{
 Get the estimated quantile of the toxicity rate at each dose under

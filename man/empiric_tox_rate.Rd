@@ -12,7 +12,7 @@ empiric_tox_rate(selector, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-numeric
+a numerical vector
 }
 \description{
 Get the empirical or observed toxicity rate seen at each dose under

@@ -12,7 +12,7 @@ supports_sampling(selector, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-numerical vector of probabilities
+logical
 }
 \description{
 Learn whether this selector supports sampling of outcomes. For instance, is

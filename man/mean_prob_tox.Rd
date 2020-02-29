@@ -12,7 +12,7 @@ mean_prob_tox(selector, ...)
 \item{...}{arguments passed to other methods}
 }
 \value{
-numeric
+a numerical vector
 }
 \description{
 Get the estimated mean toxicity rate at each dose under investigation. This

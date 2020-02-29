@@ -1,8 +1,10 @@
 
 
-# Version 0.0.1
+# Version 0.1.1
 
 * This is the first release of a new package.
+
+Addressed issues raised by Jelena Saf.
 
 
 ## Test environments

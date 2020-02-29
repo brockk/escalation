@@ -12,7 +12,7 @@ cohort(selector, ...)
 \item{...}{Extra args are passed onwards.}
 }
 \value{
-integer
+an integer vector
 }
 \description{
 Get a vector of integers that reflect the cohorts to which the evaluated
