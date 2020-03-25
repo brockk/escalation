@@ -5,5 +5,5 @@ TODO:
 * Also, a finally selector for Mozgunov + Jaki CIPD method.
 * finish dose paths, incl starting mid-way through trial
 * print methods
-* demand_n_at_dose needs to be reactive when recommended_dose == NA
-* try_safety_dose needs to be like demand_n_at_dose but only kicks in when recommended_dose == NA.
+* Explain behaviour via table with selectors in rows and "affects dose selection" and "affects stopping" columns
+

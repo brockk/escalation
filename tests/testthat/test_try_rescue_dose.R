@@ -1,73 +1,47 @@
 
-test_that('demand_n_at_dose_selector does what it should.', {
+test_that('try_rescue_dose_selector does what it should.', {
 
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
   target <- 0.25
 
-  # To see this class work, we have to see it used in conjunction with a class
-  # that would like to stop. We sue stop_at_n for simplicity.
-
-  # Example 1 - demand n at any dose
+  # This model will demand the lowest dose is tried in at least two patients
+  # before the trial is stopped for excess toxicity
   model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    stop_at_n(n = 12) %>%
-    demand_n_at_dose(n = 12, dose = 'any')
+    stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8) %>%
+    try_rescue_dose(dose = 1, n = 2)
 
-  # Don't stop when there are at most 9 at a dose:
-  fit1 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN')
+
+  # For non-toxic outcomes, both designs will continue at sensible doses:
+  fit1 <- model1 %>% fit('2NNN')
   expect_equal(recommended_dose(fit1), fit1$parent$parent$dfcrm_fit$mtd)
   expect_true(continue(fit1))
 
-  # But do stop when there are 12 at any particular dose:
-  fit2 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
-  expect_equal(recommended_dose(fit2), fit2$parent$parent$dfcrm_fit$mtd)
-  expect_false(continue(fit2))
 
+  # For toxic outcomes, the design 1 will use dose 1 before stopping is allowed
+  fit1 <- model1 %>% fit('2TTT')
+  expect_equal(recommended_dose(fit1), 1)
+  expect_true(continue(fit1))
 
+  # After dose 1 is given the requisite number of times, dose recommendation
+  # and stopping revert to being determined by the underlying dose selector:
+  fit1 <- model1 %>% fit('2TTT 1T')
+  expect_equal(recommended_dose(fit1), 1)
+  expect_true(continue(fit1))
 
-  # Example 2 - demand n at any dose
-  model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    stop_at_n(n = 12) %>%
-    demand_n_at_dose(n = 9, dose = 'recommended')
-
-  # Don't stop when there are 12 in total:
-  fit3 <- model2 %>% fit('1TNN 1NNN 2NTN 2TNN')
-  expect_equal(recommended_dose(fit3), fit3$parent$parent$dfcrm_fit$mtd)
-  expect_true(continue(fit3))
-
-  # But do stop when there are 9 at dose 2:
-  fit4 <- model2 %>% fit('1TNN 1NNN 2NTN 2TNN 2NNN')
-  expect_equal(recommended_dose(fit4), fit4$parent$parent$dfcrm_fit$mtd)
-  expect_false(continue(fit4))
-  # Implicitly, this suggests the recommended dose is 2:
-  expect_equal(recommended_dose(fit4), 2)
-
-
-
-  # Example 3 - demand n at a particular dose
-  model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    stop_at_n(n = 12) %>%
-    demand_n_at_dose(n = 9, dose = 2)
-
-  # Don't stop when there are 12 in total:
-  fit5 <- model3 %>% fit('1TNN 1NNN 2NTN 2TNN')
-  expect_equal(recommended_dose(fit5), fit5$parent$parent$dfcrm_fit$mtd)
-  expect_true(continue(fit5))
-
-  # But do stop when there are 9 at dose 2:
-  fit6 <- model3 %>% fit('1TNN 1NNN 2NTN 2TNN 2NNN')
-  expect_equal(recommended_dose(fit6), fit6$parent$parent$dfcrm_fit$mtd)
-  expect_false(continue(fit6))
+  fit1 <- model1 %>% fit('2TTT 1TT')
+  expect_equal(recommended_dose(fit1), NA)
+  expect_false(continue(fit1))
 
 })
 
 
-test_that('demand_n_at_dose_selector supports correct interface.', {
+test_that('try_rescue_dose_selector supports correct interface.', {
 
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
   target <- 0.25
 
   model_fitter <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    demand_n_at_dose(dose = 'recommended', n = 9)
+    try_rescue_dose(dose = 1, n = 2)
 
 
   # Example 1, using outcome string
@@ -298,28 +272,5 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
 
   expect_true(is.data.frame(prob_tox_samples(x)))
   expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
-
-})
-
-
-test_that('demand_n_at_dose_selector propagates stopping by parent.', {
-
-  skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-  target <- 0.25
-
-  # Example 1 - stop for excess toxicity and demand n at dose:
-  model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8) %>%
-    demand_n_at_dose(n = 9, dose = 'recommended')
-
-  # Continue and recommend dose in absence of excess toxicity:
-  fit1 <- model1 %>% fit('1NTT')
-  expect_true(continue(fit1))
-  expect_false(is.na(recommended_dose(fit1)))
-
-  # Stop and recommend no dose in presence of excess toxicity:
-  fit2 <- model1 %>% fit('1NTT 1TTN')
-  expect_false(continue(fit2))
-  expect_true(is.na(recommended_dose(fit2)))
 
 })
