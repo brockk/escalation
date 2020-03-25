@@ -300,3 +300,26 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
   expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
 
 })
+
+
+test_that('demand_n_at_dose_selector propagates stopping by parent.', {
+
+  skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+  target <- 0.25
+
+  # Example 1 - stop for excess toxicity and demand n at dose:
+  model1 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8) %>%
+    demand_n_at_dose(n = 9, dose = 'recommended')
+
+  # Continue and recommend dose in absence of excess toxicity:
+  fit1 <- model1 %>% fit('1NTT')
+  expect_true(continue(fit1))
+  expect_false(is.na(recommended_dose(fit1)))
+
+  # Stop and recommend no dose in presence of excess toxicity:
+  fit2 <- model1 %>% fit('1NTT 1TTN')
+  expect_false(continue(fit2))
+  expect_true(is.na(recommended_dose(fit2)))
+
+})
