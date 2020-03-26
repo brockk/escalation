@@ -1,6 +1,5 @@
 
 library(escalation)
-1
 
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
@@ -16,7 +15,10 @@ target <- 0.25
 ## Classic R
 crm_fitter <- get_dfcrm(skeleton = skeleton, target = target)
 # Factory interface
+outcomes <- '1NNN 2NNN 3NNT'
 x <- fit(crm_fitter, outcomes)
+x
+
 # Selector interface
 class(x)
 num_patients(x)
@@ -34,8 +36,11 @@ mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.5)
 prob_tox_quantile(x, p = 0.95)
-
+#  and standard generics
+print(x)
+summary(x)
 
 # Using tibble
 outcomes <- tibble::tibble(
@@ -80,6 +85,12 @@ empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
+prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.5)
+prob_tox_quantile(x, p = 0.95)
+#  and standard generics
+print(x)
+summary(x)
 
 ## tidyverse R
 show_examples <- function(crm_fit) {
@@ -170,6 +181,8 @@ target <- 0.3
 boin_fitter <- get_boin(num_doses = num_doses, target = target)
 
 x <- fit(boin_fitter, '1NNN')
+x
+
 class(x)
 num_patients(x)
 cohort(x)
@@ -256,6 +269,9 @@ tox_at_dose(x)
 # 3+3 ----
 three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
 x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
+x
+tox_target(x)
+
 class(x)
 num_patients(x)
 cohort(x)

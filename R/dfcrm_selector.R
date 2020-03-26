@@ -319,3 +319,13 @@ prob_tox_samples.dfcrm_selector <- function(selector, tall = FALSE,
     return(df)
   }
 }
+
+#' @export
+#' @importFrom magrittr %>%
+#' @importFrom dplyr mutate select everything
+summary.dfcrm_selector <- function(selector, ...) {
+  Dose <- N <- Tox <- EmpiricToxRate <- Skeleton <- NULL
+  summary.selector(selector) %>%
+    mutate(Skeleton = selector$skeleton) %>%
+    select(Dose, N, Tox, EmpiricToxRate, Skeleton, everything())
+}

@@ -185,3 +185,12 @@ prob_tox_samples.three_plus_three_selector <- function(
   selector, tall = FALSE, ...) {
   stop('three_plus_three_selector does not support sampling.')
 }
+
+#' @export
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select
+summary.three_plus_three_selector <- function(selector, ...) {
+  MeanProbTox <- MedianProbTox <- NULL
+  summary.selector(selector) %>% select(-MeanProbTox, -MedianProbTox)
+}
+

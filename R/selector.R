@@ -200,3 +200,76 @@ prob_administer.selector <- function(selector, ...) {
 empiric_tox_rate.selector <- function(selector, ...) {
   return(selector %>% tox_at_dose() / selector %>% n_at_dose())
 }
+
+#' @export
+summary.selector <- function(selector, ...) {
+  Dose <- N <- Tox <- EmpiricToxRate <- MeanProbTox <- MedianProbTox <- NULL
+  tibble(
+    Dose = dose_indices(selector),
+    N = n_at_dose(selector),
+    Tox = tox_at_dose(selector),
+    EmpiricToxRate = empiric_tox_rate(selector),
+    MeanProbTox = mean_prob_tox(selector),
+    MedianProbTox = median_prob_tox(selector)
+  )
+}
+
+#' @importFrom stringr str_to_title
+#' @importFrom tibble tibble
+#' @export
+print.selector <- function(selector, ...) {
+
+  # Patient-level data
+  if(num_patients(selector) > 0) {
+    cat('Patient-level data:\n')
+    df <- model_frame(selector)
+    colnames(df) <- str_to_title(colnames(df))
+    print(df)
+  } else {
+    cat('No patients have been treated.\n')
+  }
+  cat('\n')
+
+  # Dose-level data
+  if(num_doses(selector) > 0) {
+    cat('Dose-level data:\n')
+    df <- summary(selector)
+    print(df, digits = 3)
+  } else {
+    cat('No doses are under investigation.\n')
+  }
+  cat('\n')
+
+  # Toxicity target
+  tt <- tox_target(selector)
+  if(!is.null(tt)) {
+    if(!is.na(tt)) {
+      cat(paste0('The model targets a toxicity level of ', tt, '.'))
+      cat('\n')
+    }
+  }
+
+  # Dose recommendation and continuance
+  recd <- recommended_dose(selector)
+  cont <- continue(selector)
+  if(is.na(recd)) {
+    if(cont) {
+      cat(paste0('The model advocates continuing but recommends no dose.'))
+    } else {
+      cat(paste0('The model advocates stopping and recommending no dose.'))
+    }
+  } else {
+    if(cont) {
+      cat(paste0('The model advocates continuing at dose ', recd, '.'))
+    } else {
+      cat(paste0('The model advocates stopping and recommending dose ', recd,
+                 '.'))
+    }
+  }
+  cat('\n')
+
+  # cat(paste0('The dose most likely to be the MTD is ',
+  #            x$modal_mtd_candidate, '.'))
+  # cat('\n')
+  # cat(paste0('Model entropy: ', format(round(x$entropy, 2), nsmall = 2)))
+}
