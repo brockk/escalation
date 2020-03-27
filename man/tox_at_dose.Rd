@@ -4,10 +4,10 @@
 \alias{tox_at_dose}
 \title{Number of toxicities seen at each dose.}
 \usage{
-tox_at_dose(selector, ...)
+tox_at_dose(x, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

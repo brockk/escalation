@@ -4,10 +4,10 @@
 \alias{tox_target}
 \title{Target toxicity rate}
 \usage{
-tox_target(selector, ...)
+tox_target(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

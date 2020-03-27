@@ -4,10 +4,10 @@
 \alias{dose_indices}
 \title{Dose indices}
 \usage{
-dose_indices(selector, ...)
+dose_indices(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

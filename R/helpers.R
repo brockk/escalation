@@ -104,3 +104,22 @@ get_posterior_prob_tox_sample <- function(dfcrm_selector, iter) {
     select(.draw, everything())
   as_tibble(abc)
 }
+
+#' Sample times between patient arrivals using the exponential distribution.
+#'
+#' @param n integer, sample arrival times for this many patients.
+#' @param mean_time_delta the average gap between patient arrival times. I.e.
+#' the reciprocal of the rate parameter in an Exponential distribution.
+#' @return \code{data.frame} with column time_delta containing durations of time
+#' between patient arrivals.
+#'
+#' @export
+#'
+#' @importFrom stats rexp
+#' @examples
+#' cohorts_of_n()
+#' cohorts_of_n(n = 10, mean_time_delta = 5)
+cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
+  time_delta <- rexp(n = n, rate = 1 / mean_time_delta) %>% round(1)
+  data.frame(time_delta = time_delta)
+}

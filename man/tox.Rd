@@ -4,10 +4,10 @@
 \alias{tox}
 \title{Binary toxicity outcomes.}
 \usage{
-tox(selector, ...)
+tox(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

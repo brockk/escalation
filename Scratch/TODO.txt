@@ -1,9 +1,8 @@
 
-TODO:
-
 * Add a finally_select_boin_dose function fitter that uses BOIN::select.mtd
 * Also, a finally selector for Mozgunov + Jaki CIPD method.
-* release simulations and add print method
-* finish dose paths, incl starting mid-way through trial
+* release simulations + dose_paths
+    * documentation
+    * tests
+    * print methods
 * Explain behaviour via table with selectors in rows and "affects dose selection" and "affects stopping" columns
-

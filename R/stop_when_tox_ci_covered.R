@@ -124,36 +124,36 @@ fit.stop_when_tox_ci_covered_selector_factory <- function(
 # Selector interface
 
 #' @export
-continue.stop_when_tox_ci_covered_selector <- function(selector, ...) {
+continue.stop_when_tox_ci_covered_selector <- function(x, ...) {
 
   # Stop now if parent wants:
-  if(!selector$parent %>% continue()) return(FALSE)
+  if(!x$parent %>% continue()) return(FALSE)
 
-  lower_bounds <- prob_tox_quantile(selector, p = (1 - selector$width) / 2)
-  upper_bounds <- prob_tox_quantile(selector, p =  1 - (1 - selector$width) / 2)
+  lower_bounds <- prob_tox_quantile(x, p = (1 - x$width) / 2)
+  upper_bounds <- prob_tox_quantile(x, p =  1 - (1 - x$width) / 2)
 
-  if(selector$dose == 'any') {
-    if(any(lower_bounds >= selector$lower & upper_bounds <= selector$upper,
+  if(x$dose == 'any') {
+    if(any(lower_bounds >= x$lower & upper_bounds <= x$upper,
            na.rm = TRUE)) {
       return(FALSE)
     }
-  } else if(selector$dose == 'recommended') {
-    rec_dose <- selector %>% recommended_dose()
+  } else if(x$dose == 'recommended') {
+    rec_dose <- x %>% recommended_dose()
     if(!is.na(lower_bounds[rec_dose]) &
-       lower_bounds[rec_dose] >= selector$lower &
+       lower_bounds[rec_dose] >= x$lower &
        !is.na(upper_bounds[rec_dose]) &
-       upper_bounds[rec_dose] <= selector$upper) {
+       upper_bounds[rec_dose] <= x$upper) {
       return(FALSE)
     }
-  } else if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-    if(!is.na(lower_bounds[selector$dose]) &
-       lower_bounds[selector$dose] >= selector$lower &
-       !is.na(upper_bounds[selector$dose]) &
-       upper_bounds[selector$dose] <= selector$upper) {
+  } else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+    if(!is.na(lower_bounds[x$dose]) &
+       lower_bounds[x$dose] >= x$lower &
+       !is.na(upper_bounds[x$dose]) &
+       upper_bounds[x$dose] <= x$upper) {
       return(FALSE)
     }
   }
 
   # By default:
-  return(selector$parent %>% continue())
+  return(x$parent %>% continue())
 }

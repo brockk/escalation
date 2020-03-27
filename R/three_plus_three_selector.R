@@ -105,92 +105,92 @@ fit.three_plus_three_selector_factory <- function(selector_factory, outcomes,
 # Selector interface
 
 #' @export
-num_patients.three_plus_three_selector <- function(selector, ...) {
-  return(length(selector$df$dose))
+num_patients.three_plus_three_selector <- function(x, ...) {
+  return(length(x$df$dose))
 }
 
 #' @export
-cohort.three_plus_three_selector <- function(selector, ...) {
-  return(selector$df$cohort)
+cohort.three_plus_three_selector <- function(x, ...) {
+  return(x$df$cohort)
 }
 
 #' @export
-doses_given.three_plus_three_selector <- function(selector, ...) {
-  return(selector$df$dose)
+doses_given.three_plus_three_selector <- function(x, ...) {
+  return(x$df$dose)
 }
 
 #' @export
-tox.three_plus_three_selector <- function(selector, ...) {
-  return(selector$df$tox)
+tox.three_plus_three_selector <- function(x, ...) {
+  return(x$df$tox)
 }
 
 #' @export
-num_doses.three_plus_three_selector <- function(selector, ...) {
-  return(selector$num_doses)
+num_doses.three_plus_three_selector <- function(x, ...) {
+  return(x$num_doses)
 }
 
 #' @export
-recommended_dose.three_plus_three_selector <- function(selector, warn = TRUE,
+recommended_dose.three_plus_three_selector <- function(x, warn = TRUE,
                                                        ...) {
-  return(selector$three_plus_three_fit$recommended_dose)
+  return(x$three_plus_three_fit$recommended_dose)
 }
 
 #' @export
-continue.three_plus_three_selector <- function(selector, ...) {
-  return(selector$three_plus_three_fit$continue)
+continue.three_plus_three_selector <- function(x, ...) {
+  return(x$three_plus_three_fit$continue)
 }
 
 #' @export
-n_at_dose.three_plus_three_selector <- function(selector, ...) {
-  return(selector$df_c$n)
+n_at_dose.three_plus_three_selector <- function(x, ...) {
+  return(x$df_c$n)
 }
 
 #' @export
-tox_at_dose.three_plus_three_selector <- function(selector, ...) {
-  return(selector$df_c$tox)
+tox_at_dose.three_plus_three_selector <- function(x, ...) {
+  return(x$df_c$tox)
 }
 
 #' @export
-mean_prob_tox.three_plus_three_selector <- function(selector, ...) {
+mean_prob_tox.three_plus_three_selector <- function(x, ...) {
   # message('Note that 3+3 does not estimate mean_prob_tox.')
-  as.numeric(rep(NA, num_doses(selector)))
+  as.numeric(rep(NA, num_doses(x)))
 }
 
 #' @export
-median_prob_tox.three_plus_three_selector <- function(selector, ...) {
+median_prob_tox.three_plus_three_selector <- function(x, ...) {
   # message('Note that 3+3 does not estimate median_prob_tox.')
-  as.numeric(rep(NA, num_doses(selector)))
+  as.numeric(rep(NA, num_doses(x)))
 }
 
 #' @export
-prob_tox_quantile.three_plus_three_selector <- function(selector, p, ...) {
+prob_tox_quantile.three_plus_three_selector <- function(x, p, ...) {
   # message('Note that 3+3 does not estimate prob_tox_quantile.')
-  as.numeric(rep(NA, num_doses(selector)))
+  as.numeric(rep(NA, num_doses(x)))
 }
 
 #' @export
-prob_tox_exceeds.three_plus_three_selector <- function(selector, threshold,
+prob_tox_exceeds.three_plus_three_selector <- function(x, threshold,
                                                        iter = 1000, ...) {
   # message('Note that 3+3 does not estimate prob_tox_exceeds.')
-  as.numeric(rep(NA, num_doses(selector)))
+  as.numeric(rep(NA, num_doses(x)))
 }
 
 #' @export
-supports_sampling.three_plus_three_selector <- function(selector, ...) {
+supports_sampling.three_plus_three_selector <- function(x, ...) {
   return(FALSE)
 }
 
 #' @export
 prob_tox_samples.three_plus_three_selector <- function(
-  selector, tall = FALSE, ...) {
+  x, tall = FALSE, ...) {
   stop('three_plus_three_selector does not support sampling.')
 }
 
 #' @export
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
-summary.three_plus_three_selector <- function(selector, ...) {
+summary.three_plus_three_selector <- function(object, ...) {
   MeanProbTox <- MedianProbTox <- NULL
-  summary.selector(selector) %>% select(-MeanProbTox, -MedianProbTox)
+  summary.selector(object) %>% select(-MeanProbTox, -MedianProbTox)
 }
 

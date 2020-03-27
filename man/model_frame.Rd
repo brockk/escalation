@@ -4,10 +4,10 @@
 \alias{model_frame}
 \title{Model data-frame.}
 \usage{
-model_frame(selector, ...)
+model_frame(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

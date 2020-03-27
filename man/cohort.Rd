@@ -4,10 +4,10 @@
 \alias{cohort}
 \title{Cohort numbers of evaluated patients.}
 \usage{
-cohort(selector, ...)
+cohort(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

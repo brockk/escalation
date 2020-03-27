@@ -4,10 +4,10 @@
 \alias{supports_sampling}
 \title{Does this selector support sampling of outcomes?}
 \usage{
-supports_sampling(selector, ...)
+supports_sampling(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}}
+\item{x}{Object of type \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

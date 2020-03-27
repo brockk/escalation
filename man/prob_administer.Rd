@@ -4,10 +4,10 @@
 \alias{prob_administer}
 \title{Percentage of patients treated at each dose.}
 \usage{
-prob_administer(selector, ...)
+prob_administer(x, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

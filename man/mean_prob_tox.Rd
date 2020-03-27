@@ -4,10 +4,10 @@
 \alias{mean_prob_tox}
 \title{Mean toxicity rate at each dose.}
 \usage{
-mean_prob_tox(selector, ...)
+mean_prob_tox(x, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

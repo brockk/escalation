@@ -2,86 +2,86 @@
 # Selector interface
 
 #' @export
-tox_target.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% tox_target(...))
+tox_target.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% tox_target(...))
 }
 
 #' @export
-num_patients.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% num_patients(...))
+num_patients.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% num_patients(...))
 }
 
 #' @export
-cohort.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% cohort(...))
+cohort.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% cohort(...))
 }
 
 #' @export
-doses_given.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% doses_given(...))
+doses_given.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% doses_given(...))
 }
 
 #' @export
-tox.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% tox(...))
+tox.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% tox(...))
 }
 
 #' @export
-num_doses.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% num_doses(...))
+num_doses.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% num_doses(...))
 }
 
 #' @export
-recommended_dose.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% recommended_dose(...))
+recommended_dose.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% recommended_dose(...))
 }
 
 #' @export
-continue.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% continue(...))
+continue.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% continue(...))
 }
 
 #' @export
-n_at_dose.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% n_at_dose(...))
+n_at_dose.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% n_at_dose(...))
 }
 
 #' @export
-tox_at_dose.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% tox_at_dose(...))
+tox_at_dose.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% tox_at_dose(...))
 }
 
 #' @export
-empiric_tox_rate.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% empiric_tox_rate(...))
+empiric_tox_rate.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% empiric_tox_rate(...))
 }
 
 #' @export
-mean_prob_tox.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% mean_prob_tox(...))
+mean_prob_tox.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% mean_prob_tox(...))
 }
 
 #' @export
-median_prob_tox.derived_dose_selector <- function(selector, ...) {
-  return(selector$parent %>% median_prob_tox(...))
+median_prob_tox.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% median_prob_tox(...))
 }
 
 #' @export
-prob_tox_quantile.derived_dose_selector <- function(selector, p, ...) {
-  return(selector$parent %>% prob_tox_quantile(p, ...))
+prob_tox_quantile.derived_dose_selector <- function(x, p, ...) {
+  return(x$parent %>% prob_tox_quantile(p, ...))
 }
 
 #' @export
-prob_tox_exceeds.derived_dose_selector <- function(selector, threshold, ...) {
-  return(selector$parent %>% prob_tox_exceeds(threshold, ...))
+prob_tox_exceeds.derived_dose_selector <- function(x, threshold, ...) {
+  return(x$parent %>% prob_tox_exceeds(threshold, ...))
 }
 
 #' @export
-supports_sampling.derived_dose_selector <- function(selector, ...) {
-  return(supports_sampling(selector$parent))
+supports_sampling.derived_dose_selector <- function(x, ...) {
+  return(supports_sampling(x$parent))
 }
 
 #' @export
-prob_tox_samples.derived_dose_selector <- function(selector, tall = FALSE, ...) {
-  return(prob_tox_samples(selector$parent, tall = tall, ...))
+prob_tox_samples.derived_dose_selector <- function(x, tall = FALSE, ...) {
+  return(prob_tox_samples(x$parent, tall = tall, ...))
 }

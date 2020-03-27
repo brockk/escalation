@@ -4,10 +4,10 @@
 \alias{prob_tox_exceeds}
 \title{Probability that the toxicity rate exceeds some threshold.}
 \usage{
-prob_tox_exceeds(selector, threshold, ...)
+prob_tox_exceeds(x, threshold, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}}
+\item{x}{Object of type \code{\link{selector}}}
 
 \item{threshold}{Probability that toxicity rate exceeds what?}
 

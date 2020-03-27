@@ -147,67 +147,67 @@ fit.boin_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
-tox_target.boin_selector <- function(selector, ...) {
-  return(selector$target)
+tox_target.boin_selector <- function(x, ...) {
+  return(x$target)
 }
 
 #' @export
-num_patients.boin_selector <- function(selector, ...) {
-  return(length(selector$df$dose))
+num_patients.boin_selector <- function(x, ...) {
+  return(length(x$df$dose))
 }
 
 #' @export
-cohort.boin_selector <- function(selector, ...) {
-  return(selector$df$cohort)
+cohort.boin_selector <- function(x, ...) {
+  return(x$df$cohort)
 }
 
 #' @export
-doses_given.boin_selector <- function(selector, ...) {
-  return(selector$df$dose)
+doses_given.boin_selector <- function(x, ...) {
+  return(x$df$dose)
 }
 
 #' @export
-tox.boin_selector <- function(selector, ...) {
-  return(selector$df$tox)
+tox.boin_selector <- function(x, ...) {
+  return(x$df$tox)
 }
 
 #' @export
-num_doses.boin_selector <- function(selector, ...) {
-  return(selector$num_doses)
+num_doses.boin_selector <- function(x, ...) {
+  return(x$num_doses)
 }
 
 #' @export
-recommended_dose.boin_selector <- function(selector, ...) {
-  return(as.integer(selector$recommended_dose))
+recommended_dose.boin_selector <- function(x, ...) {
+  return(as.integer(x$recommended_dose))
 }
 
 #' @export
-continue.boin_selector <- function(selector, ...) {
-  return(selector$continue)
+continue.boin_selector <- function(x, ...) {
+  return(x$continue)
 }
 
 #' @export
-n_at_dose.boin_selector <- function(selector, ...) {
-  return(selector$df_c$n)
+n_at_dose.boin_selector <- function(x, ...) {
+  return(x$df_c$n)
 }
 
 #' @export
-tox_at_dose.boin_selector <- function(selector, ...) {
-  return(selector$df_c$tox)
+tox_at_dose.boin_selector <- function(x, ...) {
+  return(x$df_c$tox)
 }
 
 #' @export
-mean_prob_tox.boin_selector <- function(selector, ...) {
+mean_prob_tox.boin_selector <- function(x, ...) {
   # The authors store prob(DLT) as an ordered variable with the probs as levels:
   # They also use '----' to show a dose has never been given.
-  mean_s <- as.character(selector$boin_fit$p_est$phat)
+  mean_s <- as.character(x$boin_fit$p_est$phat)
   mean_s[mean_s == '----'] <- NA
   return(as.numeric(mean_s))
 }
 
 #' @export
-median_prob_tox.boin_selector <- function(selector, ...) {
-  prob_tox_quantile(selector, p = 0.5, ...)
+median_prob_tox.boin_selector <- function(x, ...) {
+  prob_tox_quantile(x, p = 0.5, ...)
 }
 
 #' @importFrom tibble tibble
@@ -216,7 +216,7 @@ median_prob_tox.boin_selector <- function(selector, ...) {
 #' @importFrom tidyr unnest
 #' @export
 prob_tox_quantile.boin_selector <- function(
-  selector, p,
+  x, p,
   quantile_candidates = seq(0, 1, length.out = 101),
   ...) {
 
@@ -225,20 +225,20 @@ prob_tox_quantile.boin_selector <- function(
   # x <- tibble(
   #   q = quantile_candidates
   # ) %>% mutate(
-  #   dose = map(q, .f = ~ dose_indices(selector)),
-  #   prob = map(q, .f = ~ 1 - prob_tox_exceeds(selector, threshold = .x))
+  #   dose = map(q, .f = ~ dose_indices(x)),
+  #   prob = map(q, .f = ~ 1 - prob_tox_exceeds(x, threshold = .x))
   # ) %>% unnest(cols = c(dose, prob)) %>%
   #   group_by(dose) %>%
   #   slice(which.min(abs(prob - p))) %>%
   #   ungroup() %>%
   #   select(q) %>% .[[1]]
-  # names(x) <- dose_indices(selector)
+  # names(x) <- dose_indices(x)
 
-  x <- tibble(
+  df <- tibble(
     q = quantile_candidates
   ) %>% mutate(
-    dose = map(q, .f = ~ dose_indices(selector)),
-    prob = map(q, .f = ~ 1 - prob_tox_exceeds(selector, threshold = .x))
+    dose = map(q, .f = ~ dose_indices(x)),
+    prob = map(q, .f = ~ 1 - prob_tox_exceeds(x, threshold = .x))
   ) %>% unnest(cols = c(dose, prob)) %>%
     mutate(distance = abs(prob - p)) %>%
     arrange(dose, distance) %>%
@@ -246,38 +246,38 @@ prob_tox_quantile.boin_selector <- function(
     slice(1) %>%
     ungroup() %>%
     select(q) %>% .[[1]]
-  x[n_at_dose(selector) == 0] <- NA
-  names(x) <- dose_indices(selector)
-  x
+  df[n_at_dose(x) == 0] <- NA
+  names(df) <- dose_indices(x)
+  df
 }
 
 #' @importFrom stats pbeta
 #' @importFrom purrr map_dbl
 #' @export
-prob_tox_exceeds.boin_selector <- function(selector, threshold, ...) {
+prob_tox_exceeds.boin_selector <- function(x, threshold, ...) {
   # The authors use beta-binomial conjugate approach. They use a
   # Beta(0.05, 0.05) prior. I could not find an explanation why.
   # They also use isotonic regression to ensure Either way:
   prob_od <- pbeta(q = threshold,
-                   shape1 = 0.05 + tox_at_dose(selector),
-                   shape2 = 0.05 + n_at_dose(selector) - tox_at_dose(selector),
+                   shape1 = 0.05 + tox_at_dose(x),
+                   shape2 = 0.05 + n_at_dose(x) - tox_at_dose(x),
                    lower.tail = FALSE)
-  names(prob_od) <- 1:num_doses(selector)
-  given <- n_at_dose(selector) > 0
+  names(prob_od) <- 1:num_doses(x)
+  given <- n_at_dose(x) > 0
   prob_od2 <- boin_pava(prob_od[given])
   prob_od3 <- map_dbl(
-    1:num_doses(selector),
+    1:num_doses(x),
     ~ ifelse(.x %in% names(prob_od2), prob_od2[as.character(.x)], NA)
   )
   return(prob_od3)
 }
 
 #' @export
-supports_sampling.boin_selector <- function(selector, ...) {
+supports_sampling.boin_selector <- function(x, ...) {
   return(FALSE)
 }
 
 #' @export
-prob_tox_samples.boin_selector <- function(selector, tall = FALSE, ...) {
+prob_tox_samples.boin_selector <- function(x, tall = FALSE, ...) {
   stop('boin_selector does not support sampling.')
 }

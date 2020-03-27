@@ -109,8 +109,8 @@ fit.stop_at_n_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
-continue.stop_at_n_selector <- function(selector, ...) {
-  parent_continue <- selector$parent %>% continue()
-  this_continue <- selector %>% num_patients() < selector$n
+continue.stop_at_n_selector <- function(x, ...) {
+  parent_continue <- x$parent %>% continue()
+  this_continue <- x %>% num_patients() < x$n
   return(parent_continue & this_continue)
 }

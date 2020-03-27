@@ -108,44 +108,44 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
 # Selector interface
 
 #' @export
-recommended_dose.stop_when_too_toxic_selector <- function(selector, ...) {
-  prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
-  if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-    if(!is.na(prob_too_tox[selector$dose]) &
-       prob_too_tox[selector$dose] >= selector$confidence) {
+recommended_dose.stop_when_too_toxic_selector <- function(x, ...) {
+  prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
+  if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+    if(!is.na(prob_too_tox[x$dose]) &
+       prob_too_tox[x$dose] >= x$confidence) {
       return(NA)
     }
   }
 
   # By default:
-  return(selector$parent %>% recommended_dose())
+  return(x$parent %>% recommended_dose())
 }
 
 #' @export
-continue.stop_when_too_toxic_selector <- function(selector, ...) {
+continue.stop_when_too_toxic_selector <- function(x, ...) {
 
   # Stop now if parent wants:
-  if(!selector$parent %>% continue()) return(FALSE)
+  if(!x$parent %>% continue()) return(FALSE)
 
-  prob_too_tox <- selector %>% prob_tox_exceeds(selector$tox_threshold)
-  if(selector$dose == 'any') {
-    if(any(!is.na(prob_too_tox) & prob_too_tox >= selector$confidence)) {
+  prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
+  if(x$dose == 'any') {
+    if(any(!is.na(prob_too_tox) & prob_too_tox >= x$confidence)) {
       return(FALSE)
     }
-  } else if(selector$dose == 'recommended') {
-    rec_dose <- selector %>% recommended_dose()
+  } else if(x$dose == 'recommended') {
+    rec_dose <- x %>% recommended_dose()
     if(!is.na(prob_too_tox[rec_dose]) &
-       prob_too_tox[rec_dose] >= selector$confidence) {
+       prob_too_tox[rec_dose] >= x$confidence) {
       return(FALSE)
     }
   }
-  else if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-    if(!is.na(prob_too_tox[selector$dose]) &
-       prob_too_tox[selector$dose] >= selector$confidence) {
+  else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+    if(!is.na(prob_too_tox[x$dose]) &
+       prob_too_tox[x$dose] >= x$confidence) {
       return(FALSE)
     }
   }
 
   # By default:
-  return(selector$parent %>% continue())
+  return(x$parent %>% continue())
 }

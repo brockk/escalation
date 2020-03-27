@@ -4,10 +4,10 @@
 \alias{continue}
 \title{Should this dose-finding experiment continue?}
 \usage{
-continue(selector, ...)
+continue(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

@@ -103,76 +103,76 @@ fit.follow_path_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
-num_patients.follow_path_selector <- function(selector, ...) {
-  return(length(selector$df$dose))
+num_patients.follow_path_selector <- function(x, ...) {
+  return(length(x$df$dose))
 }
 
 #' @export
-cohort.follow_path_selector <- function(selector, ...) {
-  return(selector$df$cohort)
+cohort.follow_path_selector <- function(x, ...) {
+  return(x$df$cohort)
 }
 
 #' @export
-doses_given.follow_path_selector <- function(selector, ...) {
-  return(selector$df$dose)
+doses_given.follow_path_selector <- function(x, ...) {
+  return(x$df$dose)
 }
 
 #' @export
-tox.follow_path_selector <- function(selector, ...) {
-  return(selector$df$tox)
+tox.follow_path_selector <- function(x, ...) {
+  return(x$df$tox)
 }
 
 #' @export
-num_doses.follow_path_selector <- function(selector, ...) {
-  return(nrow(selector$df_c))
+num_doses.follow_path_selector <- function(x, ...) {
+  return(nrow(x$df_c))
 }
 
 #' @export
-recommended_dose.follow_path_selector <- function(selector, ...) {
-  return(selector$recommended_dose)
+recommended_dose.follow_path_selector <- function(x, ...) {
+  return(x$recommended_dose)
 }
 
 #' @export
-continue.follow_path_selector <- function(selector, ...) {
-  return(!is.na(selector$recommended_dose))
+continue.follow_path_selector <- function(x, ...) {
+  return(!is.na(x$recommended_dose))
 }
 
 #' @export
-n_at_dose.follow_path_selector <- function(selector, ...) {
-  return(selector$df_c$n)
+n_at_dose.follow_path_selector <- function(x, ...) {
+  return(x$df_c$n)
 }
 
 #' @export
-tox_at_dose.follow_path_selector <- function(selector, ...) {
-  return(selector$df_c$tox)
+tox_at_dose.follow_path_selector <- function(x, ...) {
+  return(x$df_c$tox)
 }
 
 #' @export
-mean_prob_tox.follow_path_selector <- function(selector, ...) {
-  return(rep(NA, num_doses(selector)))
+mean_prob_tox.follow_path_selector <- function(x, ...) {
+  return(rep(NA, num_doses(x)))
 }
 
 #' @export
-median_prob_tox.follow_path_selector <- function(selector, ...) {
-  return(rep(NA, num_doses(selector)))
+median_prob_tox.follow_path_selector <- function(x, ...) {
+  return(rep(NA, num_doses(x)))
 }
 
 #' @export
-prob_tox_quantile.follow_path_selector <- function(selector, p, ...) {
-  return(rep(NA, num_doses(selector)))
+prob_tox_quantile.follow_path_selector <- function(x, p, ...) {
+  return(rep(NA, num_doses(x)))
 }
 
 #' @export
-prob_tox_exceeds.follow_path_selector <- function(selector, threshold, ...) {
-  return(rep(NA, num_doses(selector)))
+prob_tox_exceeds.follow_path_selector <- function(x, threshold, ...) {
+  return(rep(NA, num_doses(x)))
 }
 
 #' @export
-supports_sampling.follow_path_selector <- function(selector, ...) {
+supports_sampling.follow_path_selector <- function(x, ...) {
   return(FALSE)
 }
 
 #' @export
-prob_tox_samples.follow_path_selector <- function(selector, tall = FALSE, ...) {
+prob_tox_samples.follow_path_selector <- function(x, tall = FALSE, ...) {
   stop('follow_path_selector does not support sampling.')
 }

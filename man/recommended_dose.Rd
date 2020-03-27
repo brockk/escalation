@@ -4,10 +4,10 @@
 \alias{recommended_dose}
 \title{Recommended dose for next patient or cohort.}
 \usage{
-recommended_dose(selector, ...)
+recommended_dose(x, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}.}
+\item{x}{Object of type \code{\link{selector}}.}
 
 \item{...}{Extra args are passed onwards.}
 }

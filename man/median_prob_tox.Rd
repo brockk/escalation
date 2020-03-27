@@ -4,10 +4,10 @@
 \alias{median_prob_tox}
 \title{Median toxicity rate at each dose.}
 \usage{
-median_prob_tox(selector, ...)
+median_prob_tox(x, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

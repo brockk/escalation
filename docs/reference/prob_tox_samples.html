@@ -81,7 +81,7 @@ sampling by calling supports_sampling." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9003</span>
       </span>
     </div>
 
@@ -140,13 +140,13 @@ function will raise an error. You can check whether this class supports
 sampling by calling <code><a href='supports_sampling.html'>supports_sampling</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>prob_tox_samples</span>(<span class='no'>selector</span>, <span class='kw'>tall</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>prob_tox_samples</span>(<span class='no'>x</span>, <span class='kw'>tall</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>selector</th>
+      <th>x</th>
       <td><p>Object of type <code><a href='selector.html'>selector</a></code></p></td>
     </tr>
     <tr>
@@ -174,31 +174,31 @@ vertically. In this mode, column names will include <code>dose</code> and
 <span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
 <span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'>prob_tox_samples</span>()</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 4,000 x 6</span><span>
-#&gt;    .draw    `1`    `2`   `3`   `4`   `5`
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     0.330  0.426  0.598 0.712 0.828
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     0.085</span><span style='text-decoration: underline;'>3</span><span> 0.151  0.320 0.471 0.657
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     0.510  0.596  0.732 0.814 0.892
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     0.114  0.188  0.366 0.515 0.691
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     0.053</span><span style='text-decoration: underline;'>1</span><span> 0.105  0.257 0.407 0.606
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     0.022</span><span style='text-decoration: underline;'>7</span><span> 0.054</span><span style='text-decoration: underline;'>5</span><span> 0.174 0.314 0.525
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     0.404  0.498  0.658 0.758 0.857
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     0.145  0.226  0.409 0.554 0.719
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     0.144  0.226  0.408 0.553 0.719
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    0.150  0.232  0.415 0.559 0.723
+#&gt;    .draw     `1`     `2`    `3`   `4`   `5`
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     0.002</span><span style='text-decoration: underline;'>07</span><span> 0.008</span><span style='text-decoration: underline;'>65</span><span> 0.057</span><span style='text-decoration: underline;'>3</span><span> 0.151 0.349
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     0.001</span><span style='text-decoration: underline;'>28</span><span> 0.005</span><span style='text-decoration: underline;'>98</span><span> 0.045</span><span style='text-decoration: underline;'>9</span><span> 0.130 0.321
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     0.264   0.359   0.540  0.665 0.797
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     0.108   0.180   0.356  0.506 0.684
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     0.223   0.315   0.499  0.632 0.774
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     0.225   0.318   0.501  0.634 0.775
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     0.216   0.307   0.492  0.625 0.770
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     0.048</span><span style='text-decoration: underline;'>7</span><span>  0.097</span><span style='text-decoration: underline;'>9</span><span>  0.247  0.397 0.597
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     0.142   0.224   0.406  0.551 0.717
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    0.349   0.445   0.615  0.725 0.836
 #&gt; </span><span style='color: #949494;'># … with 3,990 more rows</span><span></div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'>prob_tox_samples</span>(<span class='kw'>tall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 20,000 x 3</span><span>
-#&gt;    .draw dose    prob_tox
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     1     0.223     
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     1     0.000</span><span style='text-decoration: underline;'>008</span><span>90
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     1     0.198     
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     1     0.061</span><span style='text-decoration: underline;'>0</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     1     0.055</span><span style='text-decoration: underline;'>3</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     1     0.244     
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     1     0.012</span><span style='text-decoration: underline;'>0</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     1     0.025</span><span style='text-decoration: underline;'>5</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     1     0.384     
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    1     0.289     
+#&gt;    .draw dose  prob_tox
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     1      0.245  
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     1      0.087</span><span style='text-decoration: underline;'>8</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     1      0.025</span><span style='text-decoration: underline;'>6</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     1      0.264  
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     1      0.003</span><span style='text-decoration: underline;'>57</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     1      0.062</span><span style='text-decoration: underline;'>5</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     1      0.032</span><span style='text-decoration: underline;'>9</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     1      0.170  
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     1      0.016</span><span style='text-decoration: underline;'>4</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    1      0.041</span><span style='text-decoration: underline;'>6</span><span> 
 #&gt; </span><span style='color: #949494;'># … with 19,990 more rows</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

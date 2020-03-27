@@ -4,10 +4,10 @@
 \alias{empiric_tox_rate}
 \title{Observed toxicity rate at each dose.}
 \usage{
-empiric_tox_rate(selector, ...)
+empiric_tox_rate(x, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

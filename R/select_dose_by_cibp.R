@@ -75,24 +75,24 @@ fit.cibp_dose_selector_factory <- function(selector_factory, outcomes, ...) {
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @export
-recommended_dose.cibp_dose_selector <- function(selector, ...) {
-  parent_rec_d <- recommended_dose(selector$parent)
-  if(is.null(selector$target)) {
-    target <- tox_target(selector$parent)
+recommended_dose.cibp_dose_selector <- function(x, ...) {
+  parent_rec_d <- recommended_dose(x$parent)
+  if(is.null(x$target)) {
+    target <- tox_target(x$parent)
   } else {
-    target <- selector$target
+    target <- x$target
   }
   if(is.null(target)) {
     stop('Target toxicity probability is required when selecting dose by CIBP')
   }
-  a <- selector$a
+  a <- x$a
 
-  if(num_patients(selector) == 0) {
+  if(num_patients(x) == 0) {
     # No dose given, so just go with whatever parent proposes
     return(parent_rec_d)
   } else {
     .draw <- NULL
-    prob_tox <- selector$parent %>% prob_tox_samples() %>% select(-.draw)
+    prob_tox <- x$parent %>% prob_tox_samples() %>% select(-.draw)
     numerator <- (prob_tox - target)^2
     denominator <- (prob_tox^a) * (1 - prob_tox)^(2 - a)
     which.min(colMeans(numerator / denominator)) %>% unname()

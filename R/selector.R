@@ -147,26 +147,26 @@ selector <- function() {
 }
 
 #' @export
-tox_target.selector <- function(selector, ...) {
+tox_target.selector <- function(x, ...) {
   # By default:
   return(NULL)
 }
 
 #' @export
-num_tox.selector <- function(selector, ...) {
-  sum(tox(selector))
+num_tox.selector <- function(x, ...) {
+  sum(tox(x))
 }
 
 #' @export
 #' @importFrom tibble tibble
-model_frame.selector <- function(selector, ...) {
+model_frame.selector <- function(x, ...) {
 
-  if(num_patients(selector) > 0) {
+  if(num_patients(x) > 0) {
     tibble(
-      patient = seq(1, num_patients(selector)),
-      cohort = cohort(selector) %>% as.integer(),
-      dose = doses_given(selector) %>% as.integer(),
-      tox = tox(selector) %>% as.integer()
+      patient = seq(1, num_patients(x)),
+      cohort = cohort(x) %>% as.integer(),
+      dose = doses_given(x) %>% as.integer(),
+      tox = tox(x) %>% as.integer()
     )
   } else {
     tibble(
@@ -179,8 +179,8 @@ model_frame.selector <- function(selector, ...) {
 }
 
 #' @export
-dose_indices.selector <- function(selector, ...) {
-  n <- num_doses(selector)
+dose_indices.selector <- function(x, ...) {
+  n <- num_doses(x)
   if(n > 0) {
     return(1:n)
   } else {
@@ -189,40 +189,40 @@ dose_indices.selector <- function(selector, ...) {
 }
 
 #' @export
-prob_administer.selector <- function(selector, ...) {
-  n_doses <- num_doses(selector)
-  n_d <- n_at_dose(selector)
+prob_administer.selector <- function(x, ...) {
+  n_doses <- num_doses(x)
+  n_d <- n_at_dose(x)
   names(n_d) <- 1:n_doses
   n_d / sum(n_d)
 }
 
 #' @export
-empiric_tox_rate.selector <- function(selector, ...) {
-  return(selector %>% tox_at_dose() / selector %>% n_at_dose())
+empiric_tox_rate.selector <- function(x, ...) {
+  return(x %>% tox_at_dose() / x %>% n_at_dose())
 }
 
 #' @export
-summary.selector <- function(selector, ...) {
+summary.selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- MeanProbTox <- MedianProbTox <- NULL
   tibble(
-    Dose = dose_indices(selector),
-    N = n_at_dose(selector),
-    Tox = tox_at_dose(selector),
-    EmpiricToxRate = empiric_tox_rate(selector),
-    MeanProbTox = mean_prob_tox(selector),
-    MedianProbTox = median_prob_tox(selector)
+    Dose = dose_indices(object),
+    N = n_at_dose(object),
+    Tox = tox_at_dose(object),
+    EmpiricToxRate = empiric_tox_rate(object),
+    MeanProbTox = mean_prob_tox(object),
+    MedianProbTox = median_prob_tox(object)
   )
 }
 
 #' @importFrom stringr str_to_title
 #' @importFrom tibble tibble
 #' @export
-print.selector <- function(selector, ...) {
+print.selector <- function(x, ...) {
 
   # Patient-level data
-  if(num_patients(selector) > 0) {
+  if(num_patients(x) > 0) {
     cat('Patient-level data:\n')
-    df <- model_frame(selector)
+    df <- model_frame(x)
     colnames(df) <- str_to_title(colnames(df))
     print(df)
   } else {
@@ -231,9 +231,9 @@ print.selector <- function(selector, ...) {
   cat('\n')
 
   # Dose-level data
-  if(num_doses(selector) > 0) {
+  if(num_doses(x) > 0) {
     cat('Dose-level data:\n')
-    df <- summary(selector)
+    df <- summary(x)
     print(df, digits = 3)
   } else {
     cat('No doses are under investigation.\n')
@@ -241,7 +241,7 @@ print.selector <- function(selector, ...) {
   cat('\n')
 
   # Toxicity target
-  tt <- tox_target(selector)
+  tt <- tox_target(x)
   if(!is.null(tt)) {
     if(!is.na(tt)) {
       cat(paste0('The model targets a toxicity level of ', tt, '.'))
@@ -250,8 +250,8 @@ print.selector <- function(selector, ...) {
   }
 
   # Dose recommendation and continuance
-  recd <- recommended_dose(selector)
-  cont <- continue(selector)
+  recd <- recommended_dose(x)
+  cont <- continue(x)
   if(is.na(recd)) {
     if(cont) {
       cat(paste0('The model advocates continuing but recommends no dose.'))
@@ -272,4 +272,22 @@ print.selector <- function(selector, ...) {
   #            x$modal_mtd_candidate, '.'))
   # cat('\n')
   # cat(paste0('Model entropy: ', format(round(x$entropy, 2), nsmall = 2)))
+}
+
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.selector <- function(x, ...) {
+  tibble(
+    dose = dose_indices(x),
+    tox = tox_at_dose(x),
+    n = n_at_dose(x),
+    empiric_tox_rate = empiric_tox_rate(x),
+    mean_prob_tox = mean_prob_tox(x),
+    median_prob_tox = median_prob_tox(x),
+    recommended_dose = ifelse(
+      is.na(recommended_dose(x)),
+      rep(FALSE, num_doses(x)),
+      recommended_dose(x) == dose_indices(x)
+    )
+  )
 }

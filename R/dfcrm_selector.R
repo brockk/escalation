@@ -156,51 +156,51 @@ fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
 # Selector interface
 
 #' @export
-tox_target.dfcrm_selector <- function(selector, ...) {
-  return(selector$target)
+tox_target.dfcrm_selector <- function(x, ...) {
+  return(x$target)
 }
 
 #' @export
-num_patients.dfcrm_selector <- function(selector, ...) {
-  return(length(selector$dfcrm_fit$level))
+num_patients.dfcrm_selector <- function(x, ...) {
+  return(length(x$dfcrm_fit$level))
 }
 
 #' @export
-cohort.dfcrm_selector <- function(selector, ...) {
-  return(selector$cohort)
+cohort.dfcrm_selector <- function(x, ...) {
+  return(x$cohort)
 }
 
 #' @export
-doses_given.dfcrm_selector <- function(selector, ...) {
-  return(selector$dfcrm_fit$level)
+doses_given.dfcrm_selector <- function(x, ...) {
+  return(x$dfcrm_fit$level)
 }
 
 #' @export
-tox.dfcrm_selector <- function(selector, ...) {
-  return(selector$dfcrm_fit$tox)
+tox.dfcrm_selector <- function(x, ...) {
+  return(x$dfcrm_fit$tox)
 }
 
 #' @export
-num_doses.dfcrm_selector <- function(selector, ...) {
-  return(length(selector$skeleton))
+num_doses.dfcrm_selector <- function(x, ...) {
+  return(length(x$skeleton))
 }
 
 #' @export
-recommended_dose.dfcrm_selector <- function(selector, ...) {
-  if(!is.null(selector$parent)) {
-    parent_dose <- recommended_dose(selector$parent)
-    parent_cont <- continue(selector$parent)
+recommended_dose.dfcrm_selector <- function(x, ...) {
+  if(!is.null(x$parent)) {
+    parent_dose <- recommended_dose(x$parent)
+    parent_cont <- continue(x$parent)
     if(parent_cont & !is.na(parent_dose)) {
       return(parent_dose)
     }
   }
 
   # By default:
-  return(as.integer(selector$dfcrm_fit$mtd))
+  return(as.integer(x$dfcrm_fit$mtd))
 }
 
 #' @export
-continue.dfcrm_selector <- function(selector, ...) {
+continue.dfcrm_selector <- function(x, ...) {
   # dfcrm offers no methods for stopping but those are provided by other
   # classes in this package.
   # In the daisychain of selectors, this class is resumptive, meaning it will
@@ -212,32 +212,32 @@ continue.dfcrm_selector <- function(selector, ...) {
 
 #' @importFrom purrr map_int
 #' @export
-n_at_dose.dfcrm_selector <- function(selector, ...) {
-  dose_indices <- 1:(num_doses(selector))
-  map_int(dose_indices, ~ sum(doses_given(selector) == .x))
+n_at_dose.dfcrm_selector <- function(x, ...) {
+  dose_indices <- 1:(num_doses(x))
+  map_int(dose_indices, ~ sum(doses_given(x) == .x))
 }
 
 #' @importFrom purrr map_int
 #' @export
-tox_at_dose.dfcrm_selector <- function(selector, ...) {
-  dose_indices <- 1:(num_doses(selector))
-  tox_seen <- tox(selector)
-  map_int(dose_indices, ~ sum(tox_seen[doses_given(selector) == .x]))
+tox_at_dose.dfcrm_selector <- function(x, ...) {
+  dose_indices <- 1:(num_doses(x))
+  tox_seen <- tox(x)
+  map_int(dose_indices, ~ sum(tox_seen[doses_given(x) == .x]))
 }
 
 #' @export
-mean_prob_tox.dfcrm_selector <- function(selector, ...) {
-  return(selector$dfcrm_fit$ptox)
+mean_prob_tox.dfcrm_selector <- function(x, ...) {
+  return(x$dfcrm_fit$ptox)
 }
 
 #' @export
 #' @importFrom stats median
-median_prob_tox.dfcrm_selector <- function(selector, ...) {
-  return(prob_tox_quantile(selector, p = 0.5))
-  # if(num_patients(selector) <= 0) {
-  #   return(as.numeric(rep(NA, num_doses(selector))))
+median_prob_tox.dfcrm_selector <- function(x, ...) {
+  return(prob_tox_quantile(x, p = 0.5))
+  # if(num_patients(x) <= 0) {
+  #   return(as.numeric(rep(NA, num_doses(x))))
   # } else {
-  #   prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+  #   prob_tox_sample <- get_posterior_prob_tox_sample(x, iter)
   #   # Median(Prob(Tox) | data) is approximated by:
   #   apply(prob_tox_sample, 2, median)
   # }
@@ -246,23 +246,23 @@ median_prob_tox.dfcrm_selector <- function(selector, ...) {
 #' @export
 #' @importFrom gtools inv.logit
 #' @importFrom stats qnorm
-prob_tox_quantile.dfcrm_selector <- function(selector, p, ...) {
-  if(num_patients(selector) <= 0) {
-    return(as.numeric(rep(NA, num_doses(selector))))
+prob_tox_quantile.dfcrm_selector <- function(x, p, ...) {
+  if(num_patients(x) <= 0) {
+    return(as.numeric(rep(NA, num_doses(x))))
   } else {
-    beta_hat <- selector$dfcrm_fit$estimate
-    beta_var <- selector$dfcrm_fit$post.var
+    beta_hat <- x$dfcrm_fit$estimate
+    beta_var <- x$dfcrm_fit$post.var
     # High values for beta lead to low values of prob_tox, so flip the tails:
     beta_q <- qnorm(p = 1 - p, mean = beta_hat, sd = sqrt(beta_var))
-    if(selector$dfcrm_fit$model == 'empiric') {
-      return(selector$skeleton ^ exp(beta_q))
-    } else if(selector$dfcrm_fit$model == 'logistic') {
-      alpha <- selector$dfcrm_fit$intcpt
-      dose_scaled <- selector$dfcrm_fit$dosescaled
+    if(x$dfcrm_fit$model == 'empiric') {
+      return(x$skeleton ^ exp(beta_q))
+    } else if(x$dfcrm_fit$model == 'logistic') {
+      alpha <- x$dfcrm_fit$intcpt
+      dose_scaled <- x$dfcrm_fit$dosescaled
       inv.logit(alpha + exp(beta_hat) * dose_scaled)
     } else {
       stop(paste0("Don't know what to do with dfcrm model '",
-                  selector$dfcrm_fit$model, "'"))
+                  x$dfcrm_fit$model, "'"))
     }
   }
 }
@@ -270,47 +270,47 @@ prob_tox_quantile.dfcrm_selector <- function(selector, p, ...) {
 #' @export
 #' @importFrom gtools logit
 #' @importFrom stats pnorm
-prob_tox_exceeds.dfcrm_selector <- function(selector, threshold, ...) {
+prob_tox_exceeds.dfcrm_selector <- function(x, threshold, ...) {
 
-  if(num_patients(selector) <= 0) {
-    return(as.numeric(rep(NA, num_doses(selector))))
+  if(num_patients(x) <= 0) {
+    return(as.numeric(rep(NA, num_doses(x))))
   } else {
-    beta_hat <- selector$dfcrm_fit$estimate
-    beta_var <- selector$dfcrm_fit$post.var
-    if(selector$dfcrm_fit$model == 'empiric') {
-      return(pnorm(q = log(log(threshold) / log(selector$skeleton)),
+    beta_hat <- x$dfcrm_fit$estimate
+    beta_var <- x$dfcrm_fit$post.var
+    if(x$dfcrm_fit$model == 'empiric') {
+      return(pnorm(q = log(log(threshold) / log(x$skeleton)),
               mean = beta_hat, sd = sqrt(beta_var)))
-    } else if(selector$dfcrm_fit$model == 'logistic') {
-      alpha <- selector$dfcrm_fit$intcpt
-      dose_scaled <- selector$dfcrm_fit$dosescaled
+    } else if(x$dfcrm_fit$model == 'logistic') {
+      alpha <- x$dfcrm_fit$intcpt
+      dose_scaled <- x$dfcrm_fit$dosescaled
       pnorm(log((logit(threshold) - alpha) / dose_scaled), mean = beta_hat,
             sd = sqrt(beta_var))
 
     } else {
       stop(paste0("Don't know what to do with dfcrm model '",
-                  selector$dfcrm_fit$model, "'"))
+                  x$dfcrm_fit$model, "'"))
     }
   }
 
-  # if(num_patients(selector) <= 0) {
-  #   return(as.numeric(rep(NA, num_doses(selector))))
+  # if(num_patients(x) <= 0) {
+  #   return(as.numeric(rep(NA, num_doses(x))))
   # } else {
-  #   prob_tox_sample <- get_posterior_prob_tox_sample(selector, iter)
+  #   prob_tox_sample <- get_posterior_prob_tox_sample(x, iter)
   #   # Prob(Prob(Tox) > threshold | data) is approximated by:
   #   colMeans(prob_tox_sample > threshold)
   # }
 }
 
 #' @export
-supports_sampling.dfcrm_selector <- function(selector, ...) {
+supports_sampling.dfcrm_selector <- function(x, ...) {
   return(TRUE)
 }
 
 #' @export
 #' @importFrom tidyr gather
-prob_tox_samples.dfcrm_selector <- function(selector, tall = FALSE,
+prob_tox_samples.dfcrm_selector <- function(x, tall = FALSE,
                                           num_samples = 4000,...) {
-  df <- get_posterior_prob_tox_sample(selector, iter = num_samples)
+  df <- get_posterior_prob_tox_sample(x, iter = num_samples)
   if(tall) {
     dose <- prob_tox <- .draw <- NULL
     df %>%
@@ -323,9 +323,9 @@ prob_tox_samples.dfcrm_selector <- function(selector, tall = FALSE,
 #' @export
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate select everything
-summary.dfcrm_selector <- function(selector, ...) {
+summary.dfcrm_selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- Skeleton <- NULL
-  summary.selector(selector) %>%
-    mutate(Skeleton = selector$skeleton) %>%
+  summary.selector(object) %>%
+    mutate(Skeleton = object$skeleton) %>%
     select(Dose, N, Tox, EmpiricToxRate, Skeleton, everything())
 }

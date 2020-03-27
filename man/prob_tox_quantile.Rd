@@ -4,10 +4,10 @@
 \alias{prob_tox_quantile}
 \title{Quantile of the toxicity rate at each dose.}
 \usage{
-prob_tox_quantile(selector, p, ...)
+prob_tox_quantile(x, p, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{p}{quantile probability, decimal value between 0 and 1}
 

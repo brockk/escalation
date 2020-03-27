@@ -4,10 +4,10 @@
 \alias{n_at_dose}
 \title{Number of patients treated at each dose.}
 \usage{
-n_at_dose(selector, ...)
+n_at_dose(x, ...)
 }
 \arguments{
-\item{selector}{Object of class \code{\link{selector}}}
+\item{x}{Object of class \code{\link{selector}}}
 
 \item{...}{arguments passed to other methods}
 }

@@ -85,29 +85,29 @@ fit.stop_when_n_at_dose_selector_factory <- function(selector_factory,
 
 #' @importFrom magrittr %>%
 #' @export
-continue.stop_when_n_at_dose_selector <- function(selector, ...) {
+continue.stop_when_n_at_dose_selector <- function(x, ...) {
 
   # Stop now if parent wants:
-  if(!selector$parent %>% continue()) return(FALSE)
+  if(!x$parent %>% continue()) return(FALSE)
 
-  n_at_dose <- selector %>% n_at_dose()
-  if(selector$dose == 'any') {
-    if(any(n_at_dose >= selector$n)) {
+  n_at_dose <- x %>% n_at_dose()
+  if(x$dose == 'any') {
+    if(any(n_at_dose >= x$n)) {
       return(FALSE)
     }
   }
-  else if(selector$dose == 'recommended') {
-    rec_dose <- selector %>% recommended_dose()
-    if(n_at_dose[rec_dose] >= selector$n) {
+  else if(x$dose == 'recommended') {
+    rec_dose <- x %>% recommended_dose()
+    if(n_at_dose[rec_dose] >= x$n) {
       return(FALSE)
     }
   }
-  else if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-    if(n_at_dose[selector$dose] >= selector$n) {
+  else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+    if(n_at_dose[x$dose] >= x$n) {
       return(FALSE)
     }
   }
 
   # By default:
-  return(selector$parent %>% continue())
+  return(x$parent %>% continue())
 }

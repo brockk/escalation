@@ -4,10 +4,10 @@
 \alias{prob_tox_samples}
 \title{Get samples of the probability of toxicity.}
 \usage{
-prob_tox_samples(selector, tall = FALSE, ...)
+prob_tox_samples(x, tall = FALSE, ...)
 }
 \arguments{
-\item{selector}{Object of type \code{\link{selector}}}
+\item{x}{Object of type \code{\link{selector}}}
 
 \item{tall}{logical, if FALSE, a wide data-frame is returned with columns
 pertaining to the doses and column names the dose indices.

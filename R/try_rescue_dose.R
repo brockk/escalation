@@ -105,49 +105,49 @@ fit.try_rescue_dose_selector_factory <- function(selector_factory,
 
 #' @importFrom magrittr %>%
 #' @export
-recommended_dose.try_rescue_dose_selector <- function(selector, ...) {
+recommended_dose.try_rescue_dose_selector <- function(x, ...) {
 
   # This selector affects when a trial ends and which dose is selected but only
   # when the parent has selected no dose.
-  parent_dose <- selector$parent %>% recommended_dose()
+  parent_dose <- x$parent %>% recommended_dose()
   if(is.na(parent_dose)) {
-    n_at_dose <- selector %>% n_at_dose()
-    if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-      if(n_at_dose[selector$dose] >= selector$n) {
-        return(selector$parent %>% recommended_dose())
+    n_at_dose <- x %>% n_at_dose()
+    if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+      if(n_at_dose[x$dose] >= x$n) {
+        return(x$parent %>% recommended_dose())
       } else {
         # Recommend rescue dose
-        return(selector$dose)
+        return(x$dose)
       }
     }
 
     # By default:
-    return(selector$parent %>% recommended_dose())
+    return(x$parent %>% recommended_dose())
   } else {
-    return(selector$parent %>% recommended_dose())
+    return(x$parent %>% recommended_dose())
   }
 }
 
 #' @importFrom magrittr %>%
 #' @export
-continue.try_rescue_dose_selector <- function(selector, ...) {
+continue.try_rescue_dose_selector <- function(x, ...) {
 
   # This selector affects when a trial ends and which dose is selected but only
   # when the parent has selected no dose.
-  parent_dose <- selector$parent %>% recommended_dose()
+  parent_dose <- x$parent %>% recommended_dose()
   if(is.na(parent_dose)) {
-    n_at_dose <- selector %>% n_at_dose()
-    if(selector$dose >= 1 & selector$dose <= selector %>% num_doses()) {
-      if(n_at_dose[selector$dose] >= selector$n) {
-        return(selector$parent %>% continue())
+    n_at_dose <- x %>% n_at_dose()
+    if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+      if(n_at_dose[x$dose] >= x$n) {
+        return(x$parent %>% continue())
       } else {
         return(TRUE)
       }
     }
 
     # By default:
-    return(selector$parent %>% continue())
+    return(x$parent %>% continue())
   } else {
-    return(selector$parent %>% continue())
+    return(x$parent %>% continue())
   }
 }
