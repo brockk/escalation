@@ -83,7 +83,7 @@ interface as selector, and a little more." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9004</span>
       </span>
     </div>
 
@@ -144,8 +144,24 @@ about the operating characteristics of a trial design.</p>
 interface as <code><a href='selector.html'>selector</a></code>, and a little more.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simulations</span>()</pre>
+    <pre class="usage"><span class='fu'>simulations</span>(<span class='no'>fits</span>, <span class='no'>true_prob_tox</span>, <span class='no'>...</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>fits</th>
+      <td><p>Simulated model fits, arranged as list of lists.</p></td>
+    </tr>
+    <tr>
+      <th>true_prob_tox</th>
+      <td><p>vector of true toxicity probabilities</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Extra args</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -212,6 +228,7 @@ interface as <code><a href='selector.html'>selector</a></code>, and a little mor
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>

@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9004</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
     <p>Simulate clinical trials.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simulate_trials</span>(<span class='no'>selector_factory</span>, <span class='no'>num_sims</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>simulate_trials</span>(<span class='no'>selector_factory</span>, <span class='no'>num_sims</span>, <span class='no'>true_prob_tox</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,7 +143,11 @@
     </tr>
     <tr>
       <th>num_sims</th>
-      <td><p>Integer, number of trial iterations to simulate.</p></td>
+      <td><p>integer, number of trial iterations to simulate.</p></td>
+    </tr>
+    <tr>
+      <th>true_prob_tox</th>
+      <td><p>numeric vector of toxicity probabilities</p></td>
     </tr>
     <tr>
       <th>...</th>
