@@ -4,7 +4,14 @@
 \alias{simulations}
 \title{Simulated trials.}
 \usage{
-simulations()
+simulations(fits, true_prob_tox, ...)
+}
+\arguments{
+\item{fits}{Simulated model fits, arranged as list of lists.}
+
+\item{true_prob_tox}{vector of true toxicity probabilities}
+
+\item{...}{Extra args}
 }
 \description{
 This class encapsulates that many notional or virtual trials can be

@@ -25,6 +25,10 @@
 #'   \item \code{\link{trial_duration}}
 #' }
 #'
+#' @param fits Simulated model fits, arranged as list of lists.
+#' @param true_prob_tox vector of true toxicity probabilities
+#' @param ... Extra args
+#'
 #' @seealso \code{\link{selector}}
 #'
 #' @export
@@ -46,8 +50,11 @@
 #' sims %>% prob_administer()
 #' sims %>% prob_recommend()
 #' sims %>% trial_duration()
-simulations <- function() {
+simulations <- function(fits, true_prob_tox, ...) {
   # This function exists only to document the class "simulations".
+  l <- list(fits = fits, true_prob_tox = true_prob_tox)
+  class(l) <- 'simulations'
+  l
 }
 
 
@@ -55,7 +62,7 @@ simulations <- function() {
 #' @importFrom magrittr %>%
 #' @export
 num_patients.simulations <- function(x, ...) {
-  x %>%
+  x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
     map_int(num_patients)
@@ -65,7 +72,7 @@ num_patients.simulations <- function(x, ...) {
 #' @export
 num_doses.simulations <- function(x, ...) {
   # Have a word with this amount of nesting!
-  num_doses(head(x, 1)[[1]][[1]]$fit)
+  num_doses(head(x$fits, 1)[[1]][[1]]$fit)
 }
 
 #' @export
@@ -83,7 +90,7 @@ dose_indices.simulations <- function(x, ...) {
 #' @importFrom utils tail
 #' @export
 recommended_dose.simulations <- function(x, ...) {
-  x %>%
+  x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
     map_int(recommended_dose)
@@ -96,7 +103,7 @@ recommended_dose.simulations <- function(x, ...) {
 #' @export
 n_at_dose.simulations <- function(x, dose = NULL, ...) {
 
-  x %>%
+  x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
     map(n_at_dose) %>%
@@ -121,7 +128,7 @@ n_at_dose.simulations <- function(x, dose = NULL, ...) {
 #' @importFrom tibble as_tibble
 #' @export
 tox_at_dose.simulations <- function(x, ...) {
-  x %>%
+  x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
     map(tox_at_dose) %>%
@@ -138,7 +145,7 @@ num_tox.simulations <- function(x, ...) {
 #' @importFrom purrr map_int
 #' @export
 prob_recommend.simulations <- function(x, ...) {
-  if(length(x) > 0) {
+  if(length(x$fits) > 0) {
     n_doses <- num_doses(x)
     rec_d <- recommended_dose(x)
     df <- c(sum(is.na(rec_d)),
@@ -155,14 +162,14 @@ prob_recommend.simulations <- function(x, ...) {
 #' @importFrom purrr map_int
 #' @export
 prob_administer.simulations <- function(x, method = 0, ...) {
-  if(length(x) > 0) {
+  if(length(x$fits) > 0) {
     if(method == 0) {
       n_doses <- num_doses(x)
       total_n_at_dose <- n_at_dose(x) %>% colSums()
       names(total_n_at_dose) <- 1:n_doses
       total_n_at_dose / sum(total_n_at_dose)
     } else if(method == 1) {
-      x %>%
+      x$fits %>%
         map(~ tail(.x, 1)[[1]]) %>%
         map(prob_administer) %>%
         do.call(what = rbind)
@@ -179,7 +186,7 @@ prob_administer.simulations <- function(x, method = 0, ...) {
 #' @importFrom purrr map map_chr
 #' @export
 trial_duration.simulations <- function(x, method = 0, ...) {
-  x %>%
+  x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map_chr('time') %>%
     as.numeric()
@@ -201,17 +208,19 @@ trial_duration.simulations <- function(x, method = 0, ...) {
 #' @importFrom dplyr mutate select everything
 #' @export
 as_tibble.simulations <- function(x, ...) {
-  .iteration <- .depth <- time <- NULL
-  x %>%
-    imap_dfr(.f = function(x, i) {
-      map_dfr(x, function(y) {
+  .iteration <- .depth <- time <- true_prob_tox <- NULL
+  x$fits %>%
+    imap_dfr(.f = function(batch, i) {
+      map_dfr(batch, function(y) {
         as_tibble(y$fit) %>%
           mutate(
             .iteration = i,
             .depth = y$.depth,
-            time = y$time
+            time = y$time,
+            true_prob_tox = c(0, x$true_prob_tox)
           )
       })
     }) %>%
     select(.iteration, .depth, time, everything())
 }
+

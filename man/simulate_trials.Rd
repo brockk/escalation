@@ -4,12 +4,14 @@
 \alias{simulate_trials}
 \title{Simulate clinical trials.}
 \usage{
-simulate_trials(selector_factory, num_sims, ...)
+simulate_trials(selector_factory, num_sims, true_prob_tox, ...)
 }
 \arguments{
 \item{selector_factory}{Object of type \code{\link{selector_factory}}.}
 
-\item{num_sims}{Integer, number of trial iterations to simulate.}
+\item{num_sims}{integer, number of trial iterations to simulate.}
+
+\item{true_prob_tox}{numeric vector of toxicity probabilities}
 
 \item{...}{Extra args are passed onwards.}
 }

@@ -277,17 +277,18 @@ print.selector <- function(x, ...) {
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.selector <- function(x, ...) {
+
+  dose_labs <- c('NoDose', as.character(dose_indices(x)))
+  rec_d <- recommended_dose(x)
+  rec_bool <- c(is.na(rec_d), dose_indices(x) == rec_d)
+
   tibble(
-    dose = dose_indices(x),
-    tox = tox_at_dose(x),
-    n = n_at_dose(x),
-    empiric_tox_rate = empiric_tox_rate(x),
-    mean_prob_tox = mean_prob_tox(x),
-    median_prob_tox = median_prob_tox(x),
-    recommended_dose = ifelse(
-      is.na(recommended_dose(x)),
-      rep(FALSE, num_doses(x)),
-      recommended_dose(x) == dose_indices(x)
-    )
+    dose = ordered(dose_labs, levels = dose_labs),
+    tox = c(0, tox_at_dose(x)),
+    n = c(0, n_at_dose(x)),
+    empiric_tox_rate = c(0, empiric_tox_rate(x)),
+    mean_prob_tox = c(0, mean_prob_tox(x)),
+    median_prob_tox = c(0, median_prob_tox(x)),
+    recommended = rec_bool
   )
 }
