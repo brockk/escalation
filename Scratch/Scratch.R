@@ -370,6 +370,8 @@ true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 
 get_three_plus_three(num_doses = length(skeleton)) %>%
   simulate_trials(num_sims = 50, true_prob_tox = true_prob_tox) -> sims
+sims
+
 get_three_plus_three(num_doses = length(skeleton)) %>%
   simulate_trials(num_sims = 5, true_prob_tox = true_prob_tox,
            return_all_fits = TRUE) -> sims

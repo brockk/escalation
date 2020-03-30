@@ -13,15 +13,25 @@ simulations(fits, true_prob_tox, ...)
 
 \item{...}{Extra args}
 }
+\value{
+list with slots: \code{fits} containing model fits;
+and \code{true_prob_tox}, contianing the assumed true probability of
+toxicity.
+}
 \description{
 This class encapsulates that many notional or virtual trials can be
-simulated. Each recommends a dose or doses, keeps track of how many
+simulated. Each recommends a dose (or doses), keeps track of how many
 patients have been treated at what doses, what toxicity outcomes have been
-seen, and whether a trial advocates continuing. We run simulations to learn
-about the operating characteristics of a trial design.
+seen, and whether a trial advocates continuing, etc. We run simulations to
+learn about the operating characteristics of a trial design.
 
 Computationally, the \code{simulations} class supports much of the same
 interface as \code{\link{selector}}, and a little more.
+Thus, many of the same generic functions are supported - see Examples.
+However, compared to \code{\link{selector}}s, the returned objects reflect
+that there are many trials instead of one, e.g. \code{num_patients(sims)},
+returns as an integer vector the number of patients used in the simulated
+trials.
 }
 \details{
 The \code{simulations} object implements the following functions:
@@ -43,7 +53,7 @@ The \code{simulations} object implements the following functions:
 # Simulate performance of the 3+3 design:
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 sims <- get_three_plus_three(num_doses = 5) \%>\%
-  simulate_trials(num_sims = 50, true_prob_tox = true_prob_tox)
+  simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox)
 # The returned object has type 'simulations'. The supported interface is:
 sims \%>\% num_patients()
 sims \%>\% num_doses()
@@ -55,7 +65,17 @@ sims \%>\% recommended_dose()
 sims \%>\% prob_administer()
 sims \%>\% prob_recommend()
 sims \%>\% trial_duration()
+
+# Access the list of model fits for the ith simulated trial using:
+i <- 1
+sims$fits[[i]]
+# and the jth model fit for the ith simulated trial using:
+j <- 1
+sims$fits[[i]][[j]]
+# and so on.
 }
 \seealso{
 \code{\link{selector}}
+
+\code{\link{simulate_trials}}
 }
