@@ -23,52 +23,49 @@ by Kristian Brock. Documentation is hosted at
 `escalation` provides a grammar for dose-finding clinical trials.
 
 It starts by providing functions to use dose-escalation methodologies
-like CRM, BOIN, and 3+3. Largely, model-fitting code is imported from
-existing packages:
+like the continual reassessment method (CRM), the Bayesian optimal
+interval design (BOIN), and the perennial 3+3:
 
-  - `get_dfcrm()` uses `dfcrm`
-  - `get_boin()` uses `BOIN`
+  - `get_dfcrm()`
+  - `get_boin()`
   - `get_three_plus_three()`
 
-These models are fit to trial outcomes to produce dose selector objects
-that support a common interface. The two most important methods are
-`recommended_dose()` to get the current dose selection, and `continue()`
-to learn whether the model advocates continuing patient recruitment.
-
-With a little bit of plumbing, a dose-selection function could be
-imported from practically any dose-finding package in R and made to act
-the same way.
-
-`escalation` then adds optional embellishments to provide extra
-desirable behaviour:
+These functions fetch model fitting code. Largely, this is imported from
+existing R packages. These approaches can then be augmented with extra
+behaviours to specialise the dose selection process. For example, we can
+add behaviours to prevent skipping doses, or to stop when we reach a
+certain sample size. `escalation` supports the following behaviours:
 
   - `dont_skip_doses()`
   - `stop_at_n()`
   - `stop_when_n_at_dose()`
   - `stop_when_too_toxic()`
+  - `stop_when_ci_covered()`
   - `demand_n_at_dose()`
+  - `try_rescue_dose()`
+  - `follow_path()`
+  - `select_dose_by_cibp()`
 
 Each of these functions overrides the way doses are selected or when a
-design decides to stop. A powerful feature of `escalation` is that all
-of these objects supports exactly the same interface, so they can be
-daisy-chained together using `%>%` operator from the `magrittr` package
-to create dose-selectors that perform exactly how you want.
+design decides to stop the trial. The behaviours can be flexibly
+combined using the `%>%` operator from the tidyverse.
 
-Furthermore, having defined this flexible interface for creating
-dose-finding designs, it is simple to run simulations or calculate
-dose-pathways for future cohorts of patients.
+These models are then fit to trial outcomes to produce dose
+recommendations. No matter how the dose selection behaviours were
+combined, the resulting model fits supports a standard interface. The
+two most important methods are `recommended_dose()` to get the current
+dose selection, and `continue()` to learn whether the model advocates
+continuing patient recruitment.
 
-See [Usage](#usage)
+Having defined this nomenclature for combining dose selection behaviours
+and providing a standard interface for the resulting analyses, it is
+simple to run simulations or calculate dose-pathways for future cohorts
+of patients.
 
-# Installation
+`escalation` provides an object-oriented approach to dose-escalation
+clinical trials in R. See [Usage](#usage)
 
-``` r
-# Install the latest official version from CRAN with:
-install.packages("escalation")
-
-# Alternatively, install the latest code from GitHub:
-devtools::install_github("brockk/escalation")
-```
+# Usage
 
 ## Describing outcomes in dose-finding trials
 
@@ -109,7 +106,21 @@ outcomes <- '2NNT 2NNN'
 And so on. These strings are used in the `escalate` package to make it
 easy to fit models to observed outcomes. There are many examples below.
 
-## Usage
+## Dose selectors
+
+A core class in the `escalation` package is the `selector`. It
+encapsulates the notion that a general dose-escalation design is able to
+recommend doses, keep track of how many patients have been treated at
+what doses, what toxicity outcomes have been seen, and whether a trial
+should continue. This general interface is true of model-based methods
+like the CRM and rule-based methods like the 3+3. Irrespective the
+particular approach used, the interface is consistent.
+
+In this tutorial, we will demonstrate each of the types of `selector`
+implemented in the package and how they can be combined to tailor
+behaviour.
+
+To begin, let us load `escalation`
 
 ``` r
 library(escalation)
@@ -117,31 +128,60 @@ library(escalation)
 
     ## Loading required package: magrittr
 
-### CRM
+At the core of the dose selection process is an algorithm or a model
+that selects doses in responses to outcomes. The classes capable of
+performing this core role are:
 
-Let’s fit a continual reassessment method (CRM) (O’Quigley, Pepe, and
-Fisher 1990) model to some outcomes using the code implementation in the
-[`dfcrm`](https://CRAN.R-project.org/package=dfcrm) package by Cheung
-(2013).
+  - `get_dfcrm()`, using the model-fitting code from
+    [`dfcrm`](https://cran.r-project.org/package=dfcrm)
+  - `get_boin()` using the model-fitting code from
+    [`BOIN`](https://cran.r-project.org/package=BOIN)
+  - `get_three_plus_three()`
+  - and `follow_path()`
 
-The very least information we need to provide is a dose-toxicity
-skeleton, and our target toxicity level.
+These last two are implemented natively in `escalation`. We look at each
+now.
+
+### get\_dfcrm
+
+The continual reassessment method (O’Quigley, Pepe, and Fisher 1990) is
+implemented in the [`dfcrm`](https://CRAN.R-project.org/package=dfcrm)
+package by Cheung (2013). The very least information we need to provide
+is a dose-toxicity skeleton, and our target toxicity level. The skeleton
+represents our prior beliefs on the probabilities of toxicity at each of
+the doses under investigation. The model iteratively seeks a dose with
+toxicity probability close to the target.
+
+For illustration, let us say we have
 
 ``` r
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
+```
 
+We create a dose-selection model using:
+
+``` r
 model <- get_dfcrm(skeleton = skeleton, target = target)
 ```
 
-The `model` can then be fit to outcomes:
+and we can fit this to outcomes using code like:
 
 ``` r
 fit <- model %>% fit('2NNN')
 ```
 
-and the `fit` object will tell you the dose recommended by the CRM model
-to be administered next:
+The `fit` object will tell you the dose recommended by the CRM model to
+be administered next. Depending on your preference for classic R or
+tidyverse R, you might run:
+
+``` r
+recommended_dose(fit)
+```
+
+    ## [1] 4
+
+or
 
 ``` r
 fit %>% recommended_dose()
@@ -149,26 +189,13 @@ fit %>% recommended_dose()
 
     ## [1] 4
 
-The model advocates skipping straight to dose 4. Clinicians are unlikely
-to feel comfortable with this. We can respecify the model to expressly
-not skip doses in escalation:
+Either way, you get the same answer. The model advocates skipping
+straight to dose 4. Clinicians are unlikely to feel comfortable with
+this. We can respecify the model to expressly not skip doses in
+escalation. We will do that later on.
 
-``` r
-model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
-  dont_skip_doses(when_escalating = TRUE)
-
-fit <- model %>% fit('2NNN')
-fit %>% recommended_dose()
-```
-
-    ## [1] 3
-
-After the addition of `dont_skip_doses`, the two components are now
-working in concert to conduct the dose-finding experiment. The net
-effect here is that dose 3 is recommended for the next patient, rather
-than being skipped.
-
-We can ask whether the trial wants to keep going:
+For now, let us return to our model fit. We can ask whether the trial
+should keep going:
 
 ``` r
 fit %>% continue()
@@ -177,85 +204,29 @@ fit %>% continue()
     ## [1] TRUE
 
 Naturally it wants to continue because `dfcrm` does not implement any
-stopping rules. However, we can easily add some. Let us say that we want
-to stop once the model has evaluated 18 patients, or at least 9 at the
-dose being recommended, whichever occurs first. We specify this model by
-adding more behaviours:
+stopping rules. Again, we will add various stopping behaviours in
+sections below.
+
+The CRM-fitting function in `dfcrm` accepts many arguments to customise
+the model form and these are passed onwards by `get_dfcrm` function via
+the `...` parameter. For example, to use the one-parameter logit model
+in `dfcrm` (rather than the default empiric model) with the intercept
+term fixed to take the value 4, we can specify:
 
 ``` r
-model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
-  dont_skip_doses(when_escalating = TRUE) %>% 
-  stop_at_n(n = 18) %>% 
-  stop_when_n_at_dose(dose = 'recommended', n = 9)
-```
+fit <- get_dfcrm(skeleton = skeleton, target = target, 
+                 intcpt = 4, model = 'logistic') %>% 
+  fit('2NNN 3TNN')
 
-Let’s fit this model to some more patients to see how this trial plays
-out:
-
-``` r
-fit <- model %>% fit('2NNN 3TTN')
 fit %>% recommended_dose()
 ```
 
-    ## [1] 2
+    ## [1] 3
 
-``` r
-fit %>% continue()
-```
+`intcpt` and `logistic` are the parameter names chosen by the authors of
+`dfcrm`.
 
-    ## [1] TRUE
-
-The trial wants to de-escalate and continue. Let’s do that:
-
-``` r
-fit <- model %>% fit('2NNN 3TTN 2TNN')
-fit %>% recommended_dose()
-```
-
-    ## [1] 2
-
-``` r
-fit %>% continue()
-```
-
-    ## [1] TRUE
-
-Again, the design wants to continue at dose 2. Let’s do that:
-
-``` r
-fit <- model %>% fit('2NNN 3TTN 2TNN 2NNT')
-fit %>% recommended_dose()
-```
-
-    ## [1] 2
-
-``` r
-fit %>% continue()
-```
-
-    ## [1] FALSE
-
-Now the design wants to stop and recommend dose 2.
-
-``` r
-fit %>% n_at_dose()
-```
-
-    ## [1] 0 9 3 0 0
-
-This is because it has now seen 9 patients at dose 2 so that our
-stopping criteria have been met.
-
-``` r
-fit %>% mean_prob_tox()
-```
-
-    ## [1] 0.1845713 0.2728713 0.4575229 0.5964102 0.7496662
-
-We see that dose 2 is indeed the dose with posterior expected toxicity
-rate closest to the target of 25%.
-
-### BOIN
+### get\_boin
 
 `escalate` also implements the BOIN dose-finding design by Liu and Yuan
 (2015) via the [`BOIN`](https://CRAN.R-project.org/package=BOIN) package
@@ -263,7 +234,8 @@ rate closest to the target of 25%.
 
 In contrast to CRM, BOIN does not require a dose-toxicity skeleton. In
 its simplest case, it requires merely the number of doses under
-investigation and our target toxicity level:
+investigation and our target toxicity level. Continuing with our example
+above:
 
 ``` r
 target <- 0.25
@@ -275,10 +247,294 @@ As before, we can fit the model to some observed outcomes:
 
 ``` r
 fit <- model %>% fit('2NNN')
+```
+
+and ask the recommended dose:
+
+``` r
 fit %>% recommended_dose()
 ```
 
     ## [1] 3
+
+The BOIN dose selector natively implements stopping rules, as described
+by Liu & Yuan. For instance, if the bottom dose is too toxic, the design
+will advise the trial halts:
+
+``` r
+fit <- model %>% fit('2NTN 1TTT')
+fit %>% continue()
+```
+
+    ## [1] FALSE
+
+Notice in this scenario that the recommended dose is `NA`:
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] NA
+
+This clarifies that no dose should be recommended for further study. In
+this setting, this is because all doses are considered too toxic. This
+is distinct from scenarios where a design advocates stopping a trial and
+recommending a dose for further study. We will encounter situations like
+that below.
+
+Since `escalation` provides many flexible options for stopping, we have
+made it possible to suppress BOIN’s native stopping rule via
+`use_stopping_rule = TRUE`.
+
+Similar to the method described above, extra parameters are passed to
+the `get.boundary` function in the `BOIN` package to customise the
+escalation procedure. For instance, the boundaries that guide changes in
+dose are set to be 60% and 140% of the target toxicity rate, by default.
+To instead use 30% and 170%, we could run:
+
+``` r
+get_boin(num_doses = 5, target = target, 
+         p.saf = 0.3 * target, p.tox = 1.7 * target) %>% 
+  fit('1NNN 2NNT') %>% 
+  recommended_dose()
+```
+
+    ## [1] 2
+
+To observe the effect of the change, note that the default values
+suppress escalation in this scenario:
+
+``` r
+get_boin(num_doses = 5, target = target) %>% 
+  fit('1NNN 2NNT') %>% 
+  recommended_dose()
+```
+
+    ## [1] 1
+
+The parameter names `p.saf` and `p.tox` were chosen by the authors of
+the `BOIN` package.
+
+### get\_three\_plus\_three
+
+The 3+3 method is an old method for dose-escalation that uses fixed
+cohorts of three and pre-specified rules to govern dose-selection (Korn
+et al. 1994; Le Tourneau, Lee, and Siu 2009).
+
+To create a 3+3 design, we need no more information than the number of
+doses under investigation:
+
+``` r
+model <- get_three_plus_three(num_doses = 5)
+```
+
+As usual, we can fit the model to some outcomes and learn the
+recommended dose:
+
+``` r
+model %>% fit('2NTN') %>% recommended_dose()
+```
+
+    ## [1] 2
+
+Korn et al. (1994) described a variant of 3+3 that permits deescalation
+to ensure that six patients are treated at a dose before it is
+recommended. To use that option in our model, we could have run:
+
+``` r
+model <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE)
+```
+
+The model would then advocate deescalation if at least two toxicities
+are seen at a dose and the dose below has fewer than 6 treated patients:
+
+``` r
+model %>% fit('2NTT') %>% recommended_dose()
+```
+
+    ## [1] 1
+
+### follow\_path
+
+The final dose selector in this section is not really a model at all, so
+much as a pre-specified path to follow. Let us say that we would like to
+escalate through the doses in the absence of toxicity, treating two
+patients at each of the first two doses, and three at the other doses.
+We can specify such a path in `escalation` using:
+
+``` r
+model <- follow_path('1NN 2NN 3NNN 4NNN 5NNN')
+```
+
+When fit to data, the method just returns whatever comes next in the
+sequence:
+
+``` r
+model %>% fit('1NN 2N') %>% recommended_dose()
+```
+
+    ## [1] 2
+
+``` r
+model %>% fit('1NN 2NN') %>% recommended_dose()
+```
+
+    ## [1] 3
+
+When the outcomes diverge from the pre-specified path, however, this
+selector does not know what to do:
+
+``` r
+model %>% fit('1NN 2NT') %>% recommended_dose()
+```
+
+    ## [1] NA
+
+That rather seems to limit its value. The point of this class is that we
+sometimes want to specify what is occasionally referred to as *an
+initial escalation plan*. When trial outcomes diverge from the initial
+plan, another method takes over. This is a perfect opportunity to show
+how different selectors can be joined together. Let us say that we wish
+to follow the initial plan described above, but when the first toxicity
+event is seen, we want a CRM model to take over. We simply join the
+functions together using the pipe operator from `magrittr`:
+
+``` r
+model <- follow_path('1NN 2NN 3NNN 4NNN 5NNN') %>% 
+  get_dfcrm(skeleton = skeleton, target = target)
+```
+
+Now, when trial outcomes diverge from the path, the CRM model analyses
+all of the outcomes and recommends the next dose:
+
+``` r
+model %>% fit('1NN 2NT') %>% recommended_dose()
+```
+
+    ## [1] 2
+
+This concludes our look at the core dose-selecting classes. We now turn
+our attention to the ways in which these methods can be adapted using
+extra behaviours.
+
+### dont\_skip\_doses
+
+We saw in the CRM example above that the design undesirably wanted to
+skip straight to a high dose, without trying some of the lower doses. A
+simple and very common constraint to impose in dose-finding trials is to
+avoid skipping untested doses.
+
+Resuming our CRM example, we suppress the skipping of untested doses in
+escalation with:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  dont_skip_doses(when_escalating = TRUE)
+```
+
+We then fit the model as before:
+
+``` r
+fit <- model %>% fit('2NNN')
+fit %>% recommended_dose()
+```
+
+    ## [1] 3
+
+This time, however, the model advocates dose 3. Previously, it wanted to
+go straight to dose 4.
+
+We prevented skipping dose in escalation. We could have prevented
+skipping doses in deescalation with:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  dont_skip_doses(when_deescalating = TRUE)
+```
+
+or both with:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  dont_skip_doses(when_escalating = TRUE, when_deescalating = TRUE)
+```
+
+### stop\_at\_n
+
+Let us now investigate some methods that facilitate stopping. The
+simplest condition on which to stop is when the total sample size
+reaches some pre-specified level. For instance, we might want to treat a
+maximum of 15 patients and then stop. To do this, we call the
+`stop_at_n` function and append it onto the end of a core dose selector,
+like this:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  stop_at_n(n = 15)
+```
+
+When this design has seen fewer than 15 patients, it will select doses
+and advocate that the trial continues. For instance:
+
+``` r
+fit <- model %>% fit('1NNN 2TNN 2NNN 3NNN')
+fit %>% continue()
+```
+
+    ## [1] TRUE
+
+The design advocates continuing at dose:
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 3
+
+In contrast, once 15 patients are seen,
+
+``` r
+fit <- model %>% fit('1NNN 2TNN 2NNN 3NNN 3NTN')
+fit %>% continue()
+```
+
+    ## [1] FALSE
+
+the design advocates stopping. It is important to note that, even though
+the design has stopped, it still recommends that a dose be studied at
+the next trial phase:
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 3
+
+This is in contrast to the scenario where a trial is stopped because all
+doses are inappropriate. In this scenario, the dose recommendation would
+be `NA`. We will encounter this in examples below.
+
+### stop\_when\_n\_at\_dose
+
+Another common approach is to stop a dose-finding experiment when a
+given number of patients have been treated at a particular dose.
+
+Continuing with our CRM model, to stop when nine patients have been
+treated at the dose that is about to be recommended again, we use:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  stop_when_n_at_dose(n = 9, dose = 'recommended')
+```
+
+We can observe how this alters the dose-selection model. Here we see six
+patients treated at dose 2:
+
+``` r
+fit <- model %>% fit('1NNN 2TNN 2NTN')
+```
+
+The model recommends that dose 2 should be given to more patients:
 
 ``` r
 fit %>% continue()
@@ -286,33 +542,88 @@ fit %>% continue()
 
     ## [1] TRUE
 
-The BOIN dose selector natively implements stopping rules, as described
-by Suyu & Yuan. For instance, if the bottom dose is too toxic, the
-design will advise the trial halts:
-
 ``` r
-fit <- model %>% fit('2NTN 1TTT')
 fit %>% recommended_dose()
 ```
 
-    ## [1] NA
+    ## [1] 2
+
+If the next cohort results in dose 2 being recommended yet again,
+i.e. to bring the total number of patients at dose 2 to nine or more,
+the model stops:
 
 ``` r
+fit <- model %>% fit('1NNN 2TNN 2NTN 2NNN')
 fit %>% continue()
 ```
 
     ## [1] FALSE
 
-Nevertheless, as with the CRM examples above, our BOIN selector can be
-adorned with various rules to control sample size, etc:
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 2
+
+In this scenario, dose 2 is the final recommended dose and the trial
+stops gracefully at a pre-specified stopping rule.
+
+This behaviour can also be configured to stop when any dose has been
+given *n* times:
 
 ``` r
-model <- get_boin(num_doses = 5, target = target) %>% 
-  dont_skip_doses(when_escalating = TRUE) %>% 
-  stop_at_n(n = 18) %>% 
-  stop_when_n_at_dose(dose = 'recommended', n = 9)
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  stop_when_n_at_dose(n = 9, dose = 'any')
+```
 
-fit <- model %>% fit('2NNN 3TTN 2TNN 2NNT')
+or when a particular dose-level has been given *n* times:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  stop_when_n_at_dose(n = 9, dose = 3)
+```
+
+Naturally, you can combine this behaviour with other behaviours. The
+following model stops the trial when nine patients have been evaluated
+at the recommended dose or when 21 patients have been treated in total,
+whichever occurs first:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>% 
+  stop_when_n_at_dose(n = 9, dose = 'recommended') %>% 
+  stop_at_n(n = 21)
+```
+
+### stop\_when\_ci\_covered
+
+The two stopping mechanisms above scrutinise the number of patients
+treated. In many situations, this will be valuable. However, in other
+situations, we might want to stop when a threshold amount of statistical
+information is obtained. One way to achieve this is to stop when the
+confidence interval or credible interval for the probability of toxicity
+at a dose is covered by a specified range.
+
+For instance, we know that the BOIN design seeks a target toxicity
+level, and we have used a target of 25% in our examples. We might say
+that we are sure enough about the recommended dose when the associated
+90% credible interval (because BOIN is a Bayesian design) of the
+toxicity probability falls in the region 10% - 40%.
+
+``` r
+model <- get_boin(target = target, num_doses = 5) %>%
+  stop_when_tox_ci_covered(dose = 'recommended', lower = 0.10, upper = 0.4)
+```
+
+Say that we observe the following trial path:
+
+``` r
+fit <- model %>% 
+  fit('1NNN 2NTN 2TNN 2NNN 2NNT 2NTN 2NNN 2TNN')
+```
+
+The design recommends dose 2 and it also advocates stopping:
+
+``` r
 fit %>% recommended_dose()
 ```
 
@@ -324,24 +635,406 @@ fit %>% continue()
 
     ## [1] FALSE
 
-## Future Plans
+This is because the lower bound of the 90% interval for the probability
+of toxicity at dose 2 is at least 10%:
+
+``` r
+fit %>% prob_tox_quantile(p = 0.05)
+```
+
+    ##   1   2   3   4   5 
+    ## 0.0 0.1  NA  NA  NA
+
+and the upper bound is no more than 40%:
+
+``` r
+fit %>% prob_tox_quantile(p = 0.95)
+```
+
+    ##   1   2   3   4   5 
+    ## 0.1 0.4  NA  NA  NA
+
+It may be intersting to note that our CRM model would not stop in this
+scenario:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_tox_ci_covered(dose = 'recommended', lower = 0.10, upper = 0.4)
+
+fit <- model %>% 
+  fit('1NNN 2NTN 2TNN 2NNN 2NNT 2NTN 2NNN 2TNN')
+
+fit %>% continue()
+```
+
+    ## [1] TRUE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 2
+
+This is because the lower bound of the 90% CI falls slightly outside the
+sought range:
+
+``` r
+fit %>% prob_tox_quantile(p = 0.05)
+```
+
+    ## [1] 0.04876626 0.09809797 0.24712623 0.39695491 0.59744927
+
+As before, we can specify `dose = 'recommended'`, `dose = 'any'`, or a
+particular numerical dose-level with `dose = 3`, for example.
+
+It should be appreciated that this approach only works when the
+underlying model extends a way of calculating quantiles and uncertainty
+intervals. The 3+3 lacks a statistical foundation and does not offer
+quantiles:
+
+``` r
+get_three_plus_three(num_doses = 5) %>% 
+  fit('1NNN 2NTN') %>% 
+  prob_tox_quantile(p = 0.05)
+```
+
+    ## [1] NA NA NA NA NA
+
+### stop\_when\_too\_toxic
+
+The stopping rules considered so far stop a trial and recommend a dose
+once some critical threshold of information is obtained. We will
+naturaly want to stop if all doses are too toxic.
+
+We saw above that some model-based dose-finding approaches can calculate
+quantiles. We can take this idea further and advocate stopping when
+there is sufficient evidence that the toxicity probability at some dose
+exceeds a critical threshold. In such circumstances, no dose will be
+recommended because all doses of the treatment will be deemed to be
+excessively toxic.
+
+Let us set up a rule to stop and recommend no dose if the probability of
+toxicity at the lowest dose is too high:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.7)
+```
+
+The above examples stops when 70% of the probability mass or posterior
+distribution of the probability of toxicity at dose 1 exceeds 35%. With
+an isolated toxicity incidence at dose 1, the model advocates continuing
+at dose 1:
+
+``` r
+fit <- model %>% fit('1NTN')
+fit %>% continue()
+```
+
+    ## [1] TRUE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 1
+
+This is because the probability that the toxicity rate exceeds 35% is
+less than 70%:
+
+``` r
+fit %>% prob_tox_exceeds(0.35) %>% round(2)
+```
+
+    ## [1] 0.35 0.53 0.82 0.95 1.00
+
+However, with material additional toxicity at dose 1, the design now
+advocates stopping:
+
+``` r
+fit <- model %>% fit('1NTN 1TTT')
+fit %>% continue()
+```
+
+    ## [1] FALSE
+
+Furthermore, no dose is recommended:
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] NA
+
+This is because we are now at least 70% sure that the lowest dose is too
+toxic:
+
+``` r
+fit %>% prob_tox_exceeds(0.35) %>% round(2)
+```
+
+    ## [1] 0.87 0.95 1.00 1.00 1.00
+
+Once again, we can specify `dose = 'recommended'`, `dose = 'any'`, or a
+particular numerical dose-level with `dose = 3`, for example. We also
+require that the underlying model supports the calculation of quantiles.
+BOIN supports this fucntionality:
+
+``` r
+model <- get_boin(target = target, num_doses = 5) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.7)
+
+fit <- model %>% fit('1NTN 1TTT')
+fit %>% continue()
+```
+
+    ## [1] FALSE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] NA
+
+``` r
+fit %>% prob_tox_exceeds(0.35) %>% round(2)
+```
+
+    ## [1] 0.95   NA   NA   NA   NA
+
+but a non-statistical method like 3+3 does not.
+
+### demand\_n\_at\_dose
+
+We have looked at many behaviours that provide stopping. We can also
+look at some behaviours that delay stopping.
+
+We might want to guarantee that we treat at least *n* patients at a dose
+before we permit a dose-finding trial to stop. For instance, we might
+not feel comfortable recommending a dose for the next phase of study if
+it has only been evaluated in a small number of patients.
+
+It makes sense for this behaviour to be used with a design that would
+otherwise stop. Let us say that we would normally like to stop after 18
+patients have been treated. However, we will also demand that at least 6
+patients be treated at the recommended dose before stopping is allowed,
+irrespective the overall sample size. We specify:
+
+``` r
+model <- get_boin(target = target, num_doses = 5) %>% 
+  stop_at_n(n = 18) %>% 
+  demand_n_at_dose(n = 6, dose = 'recommended')
+```
+
+In the following situation:
+
+``` r
+fit <- model %>% fit('1NNN 2NNT 3NTN 3NNN 4TTN 3NTT')
+fit %>% continue()
+```
+
+    ## [1] TRUE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 2
+
+the design advocates continuing at dose 2 even though 18 patients have
+been evaluated. This is because the `demand_n_at_dose` function is
+overriding the stopping behaviour of `stop_at_n`. It is requesting that
+the trial continue at dose 2 instead of stopping with only three
+patients treated at the nominal recommended dose.
+
+It is important to recognise that the order of the functions matters. If
+we flip the order of the constraints in the example above, the outcome
+is different:
+
+``` r
+model <- get_boin(target = target, num_doses = 5) %>% 
+  demand_n_at_dose(n = 6, dose = 'recommended') %>% 
+  stop_at_n(n = 18)
+
+fit <- model %>% fit('1NNN 2NNT 3NTN 3NNN 4TTN 3NTT')
+fit %>% continue()
+```
+
+    ## [1] FALSE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 2
+
+Now the `stop_at_n` constraint overrides the action of
+`demand_n_at_dose` to halt the trial when *n=18*, even though only three
+patients have been evaluated at dose 2. It overrides because it comes
+later in the decision chain. Users should be aware that commands that
+come later take precedence.
+
+Once again, we can specify `dose = 'recommended'`, `dose = 'any'`, or a
+particular numerical dose-level with `dose = 3`, for example.
+
+In summary, the `demand_n_at_dose` function delays stopping in a
+scenario when a dose is being selected.
+
+### try\_rescue\_dose
+
+In contrast to `demand_n_at_dose`, the `try_rescue_dose` function delays
+stopping in a scenario where no dose is going to be selected. It
+overrides a decision to stop and recommend no dose when fewer than *n*
+patients have been evaluated at a given dose. Thus, it provides a
+facility to ensure that some “rescue” dose has been tried before
+stopping is allowed.
+
+This is another function where effective demonstration requires a design
+that would normally stop. Let us say that we will stop if we are 80%
+sure that the toxicity rate at the lowest dose exceeds 35%. But before
+we stop, we want to ensure that at least two patients have been
+evaluated at the lowest dose. We write:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8) %>%
+  try_rescue_dose(dose = 1, n = 2)
+```
+
+Then, even when this design sees some major toxicity at dose 2:
+
+``` r
+fit <- model %>% fit('2TTT')
+fit %>% continue()
+```
+
+    ## [1] TRUE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 1
+
+the design will not advocate stopping, even though the posterior
+confidence that the tox rate at dose 1 exceeds 35% is greater than 80%:
+
+``` r
+fit %>% prob_tox_exceeds(0.35)
+```
+
+    ## [1] 0.8673669 0.9307674 0.9857421 0.9971830 0.9998310
+
+Once two patients are seen at dose 1, stopping can be countenanced. If
+those two patients tolerate treatment at dose 1:
+
+``` r
+fit <- model %>% fit('2TTT 1NN')
+fit %>% continue()
+```
+
+    ## [1] TRUE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 1
+
+then stopping is not advocated because the posterior belief is now that
+dose 1 is not excessively toxic:
+
+``` r
+fit %>% prob_tox_exceeds(0.35)
+```
+
+    ## [1] 0.6683818 0.8195981 0.9668375 0.9951862 0.9998694
+
+However, if even one of those patients at dose 1 experiences toxicity:
+
+``` r
+fit <- model %>% fit('2TTT 1NT')
+fit %>% continue()
+```
+
+    ## [1] FALSE
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] NA
+
+Then the trial stops and no dose is recommended.
+
+The `try_rescue_dose` function allows researchers to rescue situations
+where otherwise sensible stopping criteria may prove too sensitive to
+chance events in very small sample sizes.
+
+### select\_dose\_by\_cibp
+
+This function implements the convex infinite bounds penalisation (CIBP)
+criterion of Mozgunov and Jaki (2020) that adjusts the way doses are
+selected in CRM trials. Their method is mindful of the uncertainty in
+the estimates of the probability of toxicity and uses an asymmetry
+parameter, 0 \< *a* \< 2, to penalise escalation to risky doses. The
+method alters the way doses are selected but not when the trial should
+stop. For *a \< 1*, the criterion penalises toxic doses more heavily,
+making escalation decisions more conservative.
+
+To add the behaviour to a dose-finding design, we run:
+
+``` r
+model <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  select_dose_by_cibp(a = 0.3)
+```
+
+The model is then fit to outcomes in the usual way:
+
+``` r
+model %>% 
+  fit('1NTN') %>% 
+  recommended_dose()
+```
+
+    ## [1] 1
+
+## Simulation and dose-paths
+
+We have described at length above the flexible methods that `escalation`
+provides to specify dose-escalation designs and tailor trial behaviour.
+Once designs are specified, we can investigate their operating
+characteristics by simulation using the `simulate_trials` function. We
+can also exhaustively calculate dose recommendations for future cohorts
+using the `get_dose_paths` function. Both of these topics will be the
+topics of full vignettes, coming soon.
+
+# Installation
+
+``` r
+# Install the latest official version from CRAN with:
+install.packages("escalation")
+
+# Alternatively, install the latest code from GitHub:
+devtools::install_github("brockk/escalation")
+```
+
+# Future Plans
 
 I plan to add model-fitting functions for:
 
   - CRM and EffTox via
     [trialr](https://cran.r-project.org/package=trialr)
-  - CRM via [crmPack](https://cran.r-project.org/package=crmPack)
-  - EWOC and mTPI once I discover how those designs are implemented in
-    R.
+  - CRM via [bcrm](https://cran.r-project.org/package=bcrm)
+  - EWOC via [ewoc](https://cran.r-project.org/package=ewoc)
+  - mTPI once I discover how that design is implemented in R.
 
-I want to add stopping functions for each of the approaches investigated
-by Zohar and Chevret (2001).
+I want to investigate adding some further stopping functions like those
+researched by Zohar and Chevret (2001).
 
-Finally, I want to add general functions to perform simulations and
-calculate all possible future dose paths. Given the standard interface
-implemented in `escalation`, each of these approaches will be opened up
-to every specifiable dose selector. That is the beauty of
-object-oriented programming.
+Finally, I will investigate adding time-to-event versions of the designs
+presented here, the so-called TITE designs. These will require a
+different approach to simulation because cohorts no longer apply.
 
 ## Getting help
 
@@ -379,12 +1072,39 @@ Method*. <https://CRAN.R-project.org/package=dfcrm>.
 
 </div>
 
+<div id="ref-korn1994">
+
+Korn, Edward L., Douglas Midthune, T. Timothy Chen, Lawrence V.
+Rubinstein, Michaele C. Christian, and Richard M. Simon. 1994. “A
+Comparison of Two Phase I Trial Designs.” *Statistics in Medicine* 13
+(18): 1799–1806. <https://doi.org/10.1002/sim.4780131802>.
+
+</div>
+
+<div id="ref-LeTourneau2009">
+
+Le Tourneau, Christophe, J. Jack Lee, and Lillian L. Siu. 2009. “Dose
+Escalation Methods in Phase I Cancer Clinical Trials.” *Journal of the
+National Cancer Institute* 101 (10): 708–20.
+<https://doi.org/10.1093/jnci/djp079>.
+
+</div>
+
 <div id="ref-liu_bayesian_2015">
 
 Liu, Suyu, and Ying Yuan. 2015. “Bayesian Optimal Interval Designs for
 Phase I Clinical Trials.” *Journal of the Royal Statistical Society:
 Series C (Applied Statistics)* 64 (3): 507–23.
 <https://doi.org/10.1111/rssc.12089>.
+
+</div>
+
+<div id="ref-mozgunov_improving_2020">
+
+Mozgunov, Pavel, and Thomas Jaki. 2020. “Improving Safety of the
+Continual Reassessment Method via a Modified Allocation Rule.”
+*Statistics in Medicine* 39 (7): 906–22.
+<https://doi.org/10.1002/sim.8450>.
 
 </div>
 

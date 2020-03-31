@@ -60,7 +60,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
     stop('outcomes should be a character string or a data-frame.')
   }
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
-  x <- select.mtd(target = target, npts = df_c$n, ntox = df_c$tox, ...)
+  x <- select.mtd(target = target, npts = df_c$n, ntox = df_c$tox)
 
   # Checks
   if(nrow(df) > 0) {
@@ -77,7 +77,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
     n_d <- df_c$n[last_dose]
     tox_d <- df_c$tox[last_dose]
     bound <- get.boundary(target = target, ncohort = 1,
-                          cohortsize = n_d + 1)
+                          cohortsize = n_d + 1, ...)
     this_bound <- bound$full_boundary_tab[, n_d]
     if(tox_d <= this_bound['Escalate if # of DLT <=']) {
       # Escalate, if possible

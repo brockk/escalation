@@ -106,39 +106,33 @@
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
 <p><code>escalation</code> provides a grammar for dose-finding clinical trials.</p>
-<p>It starts by providing functions to use dose-escalation methodologies like CRM, BOIN, and 3+3. Largely, model-fitting code is imported from existing packages:</p>
+<p>It starts by providing functions to use dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), and the perennial 3+3:</p>
 <ul>
-<li>
-<code><a href="reference/get_dfcrm.html">get_dfcrm()</a></code> uses <code>dfcrm</code>
-</li>
-<li>
-<code><a href="reference/get_boin.html">get_boin()</a></code> uses <code>BOIN</code>
-</li>
+<li><code><a href="reference/get_dfcrm.html">get_dfcrm()</a></code></li>
+<li><code><a href="reference/get_boin.html">get_boin()</a></code></li>
 <li><code><a href="reference/get_three_plus_three.html">get_three_plus_three()</a></code></li>
 </ul>
-<p>These models are fit to trial outcomes to produce dose selector objects that support a common interface. The two most important methods are <code><a href="reference/recommended_dose.html">recommended_dose()</a></code> to get the current dose selection, and <code><a href="reference/continue.html">continue()</a></code> to learn whether the model advocates continuing patient recruitment.</p>
-<p>With a little bit of plumbing, a dose-selection function could be imported from practically any dose-finding package in R and made to act the same way.</p>
-<p><code>escalation</code> then adds optional embellishments to provide extra desirable behaviour:</p>
+<p>These functions fetch model fitting code. Largely, this is imported from existing R packages. These approaches can then be augmented with extra behaviours to specialise the dose selection process. For example, we can add behaviours to prevent skipping doses, or to stop when we reach a certain sample size. <code>escalation</code> supports the following behaviours:</p>
 <ul>
 <li><code><a href="reference/dont_skip_doses.html">dont_skip_doses()</a></code></li>
 <li><code><a href="reference/stop_at_n.html">stop_at_n()</a></code></li>
 <li><code><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose()</a></code></li>
 <li><code><a href="reference/stop_when_too_toxic.html">stop_when_too_toxic()</a></code></li>
+<li><code>stop_when_ci_covered()</code></li>
 <li><code><a href="reference/demand_n_at_dose.html">demand_n_at_dose()</a></code></li>
+<li><code><a href="reference/try_rescue_dose.html">try_rescue_dose()</a></code></li>
+<li><code><a href="reference/follow_path.html">follow_path()</a></code></li>
+<li><code><a href="reference/select_dose_by_cibp.html">select_dose_by_cibp()</a></code></li>
 </ul>
-<p>Each of these functions overrides the way doses are selected or when a design decides to stop. A powerful feature of <code>escalation</code> is that all of these objects supports exactly the same interface, so they can be daisy-chained together using <code>%&gt;%</code> operator from the <code>magrittr</code> package to create dose-selectors that perform exactly how you want.</p>
-<p>Furthermore, having defined this flexible interface for creating dose-finding designs, it is simple to run simulations or calculate dose-pathways for future cohorts of patients.</p>
-<p>See <a href="#usage">Usage</a></p>
+<p>Each of these functions overrides the way doses are selected or when a design decides to stop the trial. The behaviours can be flexibly combined using the <code>%&gt;%</code> operator from the tidyverse.</p>
+<p>These models are then fit to trial outcomes to produce dose recommendations. No matter how the dose selection behaviours were combined, the resulting model fits supports a standard interface. The two most important methods are <code><a href="reference/recommended_dose.html">recommended_dose()</a></code> to get the current dose selection, and <code><a href="reference/continue.html">continue()</a></code> to learn whether the model advocates continuing patient recruitment.</p>
+<p>Having defined this nomenclature for combining dose selection behaviours and providing a standard interface for the resulting analyses, it is simple to run simulations or calculate dose-pathways for future cohorts of patients.</p>
+<p><code>escalation</code> provides an object-oriented approach to dose-escalation clinical trials in R. See <a href="#usage">Usage</a></p>
 </div>
 </div>
-<div id="installation" class="section level1">
+<div id="usage" class="section level1">
 <h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Install the latest official version from CRAN with:</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"escalation"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Alternatively, install the latest code from GitHub:</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"brockk/escalation"</span>)</a></code></pre></div>
+<a href="#usage" class="anchor"></a>Usage</h1>
 <div id="describing-outcomes-in-dose-finding-trials" class="section level2">
 <h2 class="hasAnchor">
 <a href="#describing-outcomes-in-dose-finding-trials" class="anchor"></a>Describing outcomes in dose-finding trials</h2>
@@ -162,121 +156,401 @@
 <code>B</code> to show that both occurred.</li>
 </ul>
 <p>These outcome letters are strewn behind integer dose-levels to show the outcomes of patients in cohorts. To show that a cohort a three patients was given dose 2, that the first two patients were without toxicity, but the third patient experienced toxicity, we would use the outcome string:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">outcomes &lt;-<span class="st"> '2NNT'</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">outcomes &lt;-<span class="st"> '2NNT'</span></a></code></pre></div>
 <p>If that cohort was followed by another cohort of three, all of which were without toxicity, the overall outcome string would be:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">outcomes &lt;-<span class="st"> '2NNT 2NNN'</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">outcomes &lt;-<span class="st"> '2NNT 2NNN'</span></a></code></pre></div>
 <p>And so on. These strings are used in the <code>escalate</code> package to make it easy to fit models to observed outcomes. There are many examples below.</p>
 </div>
-<div id="usage" class="section level2">
+<div id="dose-selectors" class="section level2">
 <h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(escalation)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">## Loading required package: magrittr</span></a></code></pre></div>
-<div id="crm" class="section level3">
+<a href="#dose-selectors" class="anchor"></a>Dose selectors</h2>
+<p>A core class in the <code>escalation</code> package is the <code>selector</code>. It encapsulates the notion that a general dose-escalation design is able to recommend doses, keep track of how many patients have been treated at what doses, what toxicity outcomes have been seen, and whether a trial should continue. This general interface is true of model-based methods like the CRM and rule-based methods like the 3+3. Irrespective the particular approach used, the interface is consistent.</p>
+<p>In this tutorial, we will demonstrate each of the types of <code>selector</code> implemented in the package and how they can be combined to tailor behaviour.</p>
+<p>To begin, let us load <code>escalation</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(escalation)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">## Loading required package: magrittr</span></a></code></pre></div>
+<p>At the core of the dose selection process is an algorithm or a model that selects doses in responses to outcomes. The classes capable of performing this core role are:</p>
+<ul>
+<li>
+<code><a href="reference/get_dfcrm.html">get_dfcrm()</a></code>, using the model-fitting code from <a href="https://cran.r-project.org/package=dfcrm"><code>dfcrm</code></a>
+</li>
+<li>
+<code><a href="reference/get_boin.html">get_boin()</a></code> using the model-fitting code from <a href="https://cran.r-project.org/package=BOIN"><code>BOIN</code></a>
+</li>
+<li><code><a href="reference/get_three_plus_three.html">get_three_plus_three()</a></code></li>
+<li>and <code><a href="reference/follow_path.html">follow_path()</a></code>
+</li>
+</ul>
+<p>These last two are implemented natively in <code>escalation</code>. We look at each now.</p>
+<div id="get_dfcrm" class="section level3">
 <h3 class="hasAnchor">
-<a href="#crm" class="anchor"></a>CRM</h3>
-<p>Let’s fit a continual reassessment method (CRM) (O’Quigley, Pepe, and Fisher 1990) model to some outcomes using the code implementation in the <a href="https://CRAN.R-project.org/package=dfcrm"><code>dfcrm</code></a> package by Cheung (2013).</p>
-<p>The very least information we need to provide is a dose-toxicity skeleton, and our target toxicity level.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">skeleton &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target)</a></code></pre></div>
-<p>The <code>model</code> can then be fit to outcomes:</p>
+<a href="#get_dfcrm" class="anchor"></a>get_dfcrm</h3>
+<p>The continual reassessment method (O’Quigley, Pepe, and Fisher 1990) is implemented in the <a href="https://CRAN.R-project.org/package=dfcrm"><code>dfcrm</code></a> package by Cheung (2013). The very least information we need to provide is a dose-toxicity skeleton, and our target toxicity level. The skeleton represents our prior beliefs on the probabilities of toxicity at each of the doses under investigation. The model iteratively seeks a dose with toxicity probability close to the target.</p>
+<p>For illustration, let us say we have</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">skeleton &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a></code></pre></div>
+<p>We create a dose-selection model using:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target)</a></code></pre></div>
+<p>and we can fit this to outcomes using code like:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN'</span>)</a></code></pre></div>
-<p>and the <code>fit</code> object will tell you the dose recommended by the CRM model to be administered next:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<p>The <code>fit</code> object will tell you the dose recommended by the CRM model to be administered next. Depending on your preference for classic R or tidyverse R, you might run:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>(fit)</a></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">## [1] 4</span></a></code></pre></div>
-<p>The model advocates skipping straight to dose 4. Clinicians are unlikely to feel comfortable with this. We can respecify the model to expressly not skip doses in escalation:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/dont_skip_doses.html">dont_skip_doses</a></span>(<span class="dt">when_escalating =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN'</span>)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
-<p>After the addition of <code>dont_skip_doses</code>, the two components are now working in concert to conduct the dose-finding experiment. The net effect here is that dose 3 is recommended for the next patient, rather than being skipped.</p>
-<p>We can ask whether the trial wants to keep going:</p>
+<p>or</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">## [1] 4</span></a></code></pre></div>
+<p>Either way, you get the same answer. The model advocates skipping straight to dose 4. Clinicians are unlikely to feel comfortable with this. We can respecify the model to expressly not skip doses in escalation. We will do that later on.</p>
+<p>For now, let us return to our model fit. We can ask whether the trial should keep going:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
-<p>Naturally it wants to continue because <code>dfcrm</code> does not implement any stopping rules. However, we can easily add some. Let us say that we want to stop once the model has evaluated 18 patients, or at least 9 at the dose being recommended, whichever occurs first. We specify this model by adding more behaviours:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/dont_skip_doses.html">dont_skip_doses</a></span>(<span class="dt">when_escalating =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/stop_at_n.html">stop_at_n</a></span>(<span class="dt">n =</span> <span class="dv">18</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="dt">dose =</span> <span class="st">'recommended'</span>, <span class="dt">n =</span> <span class="dv">9</span>)</a></code></pre></div>
-<p>Let’s fit this model to some more patients to see how this trial plays out:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN 3TTN'</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
-<p>The trial wants to de-escalate and continue. Let’s do that:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN 3TTN 2TNN'</span>)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
-<p>Again, the design wants to continue at dose 2. Let’s do that:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN 3TTN 2TNN 2NNT'</span>)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
-<p>Now the design wants to stop and recommend dose 2.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/n_at_dose.html">n_at_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co">## [1] 0 9 3 0 0</span></a></code></pre></div>
-<p>This is because it has now seen 9 patients at dose 2 so that our stopping criteria have been met.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/mean_prob_tox.html">mean_prob_tox</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co">## [1] 0.1845713 0.2728713 0.4575229 0.5964102 0.7496662</span></a></code></pre></div>
-<p>We see that dose 2 is indeed the dose with posterior expected toxicity rate closest to the target of 25%.</p>
+<p>Naturally it wants to continue because <code>dfcrm</code> does not implement any stopping rules. Again, we will add various stopping behaviours in sections below.</p>
+<p>The CRM-fitting function in <code>dfcrm</code> accepts many arguments to customise the model form and these are passed onwards by <code>get_dfcrm</code> function via the <code>...</code> parameter. For example, to use the one-parameter logit model in <code>dfcrm</code> (rather than the default empiric model) with the intercept term fixed to take the value 4, we can specify:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">                 <span class="dt">intcpt =</span> <span class="dv">4</span>, <span class="dt">model =</span> <span class="st">'logistic'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN 3TNN'</span>)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
+<p><code>intcpt</code> and <code>logistic</code> are the parameter names chosen by the authors of <code>dfcrm</code>.</p>
 </div>
-<div id="boin" class="section level3">
+<div id="get_boin" class="section level3">
 <h3 class="hasAnchor">
-<a href="#boin" class="anchor"></a>BOIN</h3>
+<a href="#get_boin" class="anchor"></a>get_boin</h3>
 <p><code>escalate</code> also implements the BOIN dose-finding design by Liu and Yuan</p>
 <p>(2015) via the <a href="https://CRAN.R-project.org/package=BOIN"><code>BOIN</code></a> package (Yuan and Liu 2018).</p>
-<p>In contrast to CRM, BOIN does not require a dose-toxicity skeleton. In its simplest case, it requires merely the number of doses under investigation and our target toxicity level:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>, <span class="dt">target =</span> target)</a></code></pre></div>
+<p>In contrast to CRM, BOIN does not require a dose-toxicity skeleton. In its simplest case, it requires merely the number of doses under investigation and our target toxicity level. Continuing with our example above:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>, <span class="dt">target =</span> target)</a></code></pre></div>
 <p>As before, we can fit the model to some observed outcomes:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN'</span>)</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
-<p>The BOIN dose selector natively implements stopping rules, as described by Suyu &amp; Yuan. For instance, if the bottom dose is too toxic, the design will advise the trial halts:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NTN 1TTT'</span>)</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb37"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co">## [1] NA</span></a></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
-<p>Nevertheless, as with the CRM examples above, our BOIN selector can be adorned with various rules to control sample size, etc:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/dont_skip_doses.html">dont_skip_doses</a></span>(<span class="dt">when_escalating =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/stop_at_n.html">stop_at_n</a></span>(<span class="dt">n =</span> <span class="dv">18</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="dt">dose =</span> <span class="st">'recommended'</span>, <span class="dt">n =</span> <span class="dv">9</span>)</a>
-<a class="sourceLine" id="cb40-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb40-6" data-line-number="6">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN 3TTN 2TNN 2NNT'</span>)</a>
-<a class="sourceLine" id="cb40-7" data-line-number="7">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN'</span>)</a></code></pre></div>
+<p>and ask the recommended dose:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
+<p>The BOIN dose selector natively implements stopping rules, as described by Liu &amp; Yuan. For instance, if the bottom dose is too toxic, the design will advise the trial halts:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NTN 1TTT'</span>)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<p>Notice in this scenario that the recommended dose is <code>NA</code>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">## [1] NA</span></a></code></pre></div>
+<p>This clarifies that no dose should be recommended for further study. In this setting, this is because all doses are considered too toxic. This is distinct from scenarios where a design advocates stopping a trial and recommending a dose for further study. We will encounter situations like that below.</p>
+<p>Since <code>escalation</code> provides many flexible options for stopping, we have made it possible to suppress BOIN’s native stopping rule via <code>use_stopping_rule = TRUE</code>.</p>
+<p>Similar to the method described above, extra parameters are passed to the <code>get.boundary</code> function in the <code>BOIN</code> package to customise the escalation procedure. For instance, the boundaries that guide changes in dose are set to be 60% and 140% of the target toxicity rate, by default. To instead use 30% and 170%, we could run:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>, <span class="dt">target =</span> target, </a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">         <span class="dt">p.saf =</span> <span class="fl">0.3</span> <span class="op">*</span><span class="st"> </span>target, <span class="dt">p.tox =</span> <span class="fl">1.7</span> <span class="op">*</span><span class="st"> </span>target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NNT'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>To observe the effect of the change, note that the default values suppress escalation in this scenario:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NNT'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co">## [1] 1</span></a></code></pre></div>
+<p>The parameter names <code>p.saf</code> and <code>p.tox</code> were chosen by the authors of the <code>BOIN</code> package.</p>
+</div>
+<div id="get_three_plus_three" class="section level3">
+<h3 class="hasAnchor">
+<a href="#get_three_plus_three" class="anchor"></a>get_three_plus_three</h3>
+<p>The 3+3 method is an old method for dose-escalation that uses fixed cohorts of three and pre-specified rules to govern dose-selection (Korn et al. 1994; Le Tourneau, Lee, and Siu 2009).</p>
+<p>To create a 3+3 design, we need no more information than the number of doses under investigation:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>)</a></code></pre></div>
+<p>As usual, we can fit the model to some outcomes and learn the recommended dose:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NTN'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>Korn et al. (1994) described a variant of 3+3 that permits deescalation to ensure that six patients are treated at a dose before it is recommended. To use that option in our model, we could have run:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>, <span class="dt">allow_deescalate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>The model would then advocate deescalation if at least two toxicities are seen at a dose and the dose below has fewer than 6 treated patients:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NTT'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co">## [1] 1</span></a></code></pre></div>
+</div>
+<div id="follow_path" class="section level3">
+<h3 class="hasAnchor">
+<a href="#follow_path" class="anchor"></a>follow_path</h3>
+<p>The final dose selector in this section is not really a model at all, so much as a pre-specified path to follow. Let us say that we would like to escalate through the doses in the absence of toxicity, treating two patients at each of the first two doses, and three at the other doses. We can specify such a path in <code>escalation</code> using:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/follow_path.html">follow_path</a></span>(<span class="st">'1NN 2NN 3NNN 4NNN 5NNN'</span>)</a></code></pre></div>
+<p>When fit to data, the method just returns whatever comes next in the sequence:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NN 2N'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NN 2NN'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
+<p>When the outcomes diverge from the pre-specified path, however, this selector does not know what to do:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NN 2NT'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co">## [1] NA</span></a></code></pre></div>
+<p>That rather seems to limit its value. The point of this class is that we sometimes want to specify what is occasionally referred to as <em>an initial escalation plan</em>. When trial outcomes diverge from the initial plan, another method takes over. This is a perfect opportunity to show how different selectors can be joined together. Let us say that we wish to follow the initial plan described above, but when the first toxicity event is seen, we want a CRM model to take over. We simply join the functions together using the pipe operator from <code>magrittr</code>:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/follow_path.html">follow_path</a></span>(<span class="st">'1NN 2NN 3NNN 4NNN 5NNN'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target)</a></code></pre></div>
+<p>Now, when trial outcomes diverge from the path, the CRM model analyses all of the outcomes and recommends the next dose:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NN 2NT'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>This concludes our look at the core dose-selecting classes. We now turn our attention to the ways in which these methods can be adapted using extra behaviours.</p>
+</div>
+<div id="dont_skip_doses" class="section level3">
+<h3 class="hasAnchor">
+<a href="#dont_skip_doses" class="anchor"></a>dont_skip_doses</h3>
+<p>We saw in the CRM example above that the design undesirably wanted to skip straight to a high dose, without trying some of the lower doses. A simple and very common constraint to impose in dose-finding trials is to avoid skipping untested doses.</p>
+<p>Resuming our CRM example, we suppress the skipping of untested doses in escalation with:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/dont_skip_doses.html">dont_skip_doses</a></span>(<span class="dt">when_escalating =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>We then fit the model as before:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2NNN'</span>)</a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
+<p>This time, however, the model advocates dose 3. Previously, it wanted to go straight to dose 4.</p>
+<p>We prevented skipping dose in escalation. We could have prevented skipping doses in deescalation with:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/dont_skip_doses.html">dont_skip_doses</a></span>(<span class="dt">when_deescalating =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>or both with:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/dont_skip_doses.html">dont_skip_doses</a></span>(<span class="dt">when_escalating =</span> <span class="ot">TRUE</span>, <span class="dt">when_deescalating =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
+<div id="stop_at_n" class="section level3">
+<h3 class="hasAnchor">
+<a href="#stop_at_n" class="anchor"></a>stop_at_n</h3>
+<p>Let us now investigate some methods that facilitate stopping. The simplest condition on which to stop is when the total sample size reaches some pre-specified level. For instance, we might want to treat a maximum of 15 patients and then stop. To do this, we call the <code>stop_at_n</code> function and append it onto the end of a core dose selector, like this:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_at_n.html">stop_at_n</a></span>(<span class="dt">n =</span> <span class="dv">15</span>)</a></code></pre></div>
+<p>When this design has seen fewer than 15 patients, it will select doses and advocate that the trial continues. For instance:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2TNN 2NNN 3NNN'</span>)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<p>The design advocates continuing at dose:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
+<p>In contrast, once 15 patients are seen,</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2TNN 2NNN 3NNN 3NTN'</span>)</a>
+<a class="sourceLine" id="cb54-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<p>the design advocates stopping. It is important to note that, even though the design has stopped, it still recommends that a dose be studied at the next trial phase:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co">## [1] 3</span></a></code></pre></div>
+<p>This is in contrast to the scenario where a trial is stopped because all doses are inappropriate. In this scenario, the dose recommendation would be <code>NA</code>. We will encounter this in examples below.</p>
+</div>
+<div id="stop_when_n_at_dose" class="section level3">
+<h3 class="hasAnchor">
+<a href="#stop_when_n_at_dose" class="anchor"></a>stop_when_n_at_dose</h3>
+<p>Another common approach is to stop a dose-finding experiment when a given number of patients have been treated at a particular dose.</p>
+<p>Continuing with our CRM model, to stop when nine patients have been treated at the dose that is about to be recommended again, we use:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="dt">n =</span> <span class="dv">9</span>, <span class="dt">dose =</span> <span class="st">'recommended'</span>)</a></code></pre></div>
+<p>We can observe how this alters the dose-selection model. Here we see six patients treated at dose 2:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2TNN 2NTN'</span>)</a></code></pre></div>
+<p>The model recommends that dose 2 should be given to more patients:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>If the next cohort results in dose 2 being recommended yet again, i.e. to bring the total number of patients at dose 2 to nine or more, the model stops:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2TNN 2NTN 2NNN'</span>)</a>
+<a class="sourceLine" id="cb64-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>In this scenario, dose 2 is the final recommended dose and the trial stops gracefully at a pre-specified stopping rule.</p>
+<p>This behaviour can also be configured to stop when any dose has been given <em>n</em> times:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="dt">n =</span> <span class="dv">9</span>, <span class="dt">dose =</span> <span class="st">'any'</span>)</a></code></pre></div>
+<p>or when a particular dose-level has been given <em>n</em> times:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb69-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="dt">n =</span> <span class="dv">9</span>, <span class="dt">dose =</span> <span class="dv">3</span>)</a></code></pre></div>
+<p>Naturally, you can combine this behaviour with other behaviours. The following model stops the trial when nine patients have been evaluated at the recommended dose or when 21 patients have been treated in total, whichever occurs first:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="dt">n =</span> <span class="dv">9</span>, <span class="dt">dose =</span> <span class="st">'recommended'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/stop_at_n.html">stop_at_n</a></span>(<span class="dt">n =</span> <span class="dv">21</span>)</a></code></pre></div>
+</div>
+<div id="stop_when_ci_covered" class="section level3">
+<h3 class="hasAnchor">
+<a href="#stop_when_ci_covered" class="anchor"></a>stop_when_ci_covered</h3>
+<p>The two stopping mechanisms above scrutinise the number of patients treated. In many situations, this will be valuable. However, in other situations, we might want to stop when a threshold amount of statistical information is obtained. One way to achieve this is to stop when the confidence interval or credible interval for the probability of toxicity at a dose is covered by a specified range.</p>
+<p>For instance, we know that the BOIN design seeks a target toxicity level, and we have used a target of 25% in our examples. We might say that we are sure enough about the recommended dose when the associated 90% credible interval (because BOIN is a Bayesian design) of the toxicity probability falls in the region 10% - 40%.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">target =</span> target, <span class="dt">num_doses =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb71-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_tox_ci_covered.html">stop_when_tox_ci_covered</a></span>(<span class="dt">dose =</span> <span class="st">'recommended'</span>, <span class="dt">lower =</span> <span class="fl">0.10</span>, <span class="dt">upper =</span> <span class="fl">0.4</span>)</a></code></pre></div>
+<p>Say that we observe the following trial path:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NTN 2TNN 2NNN 2NNT 2NTN 2NNN 2TNN'</span>)</a></code></pre></div>
+<p>The design recommends dose 2 and it also advocates stopping:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<p>This is because the lower bound of the 90% interval for the probability of toxicity at dose 2 is at least 10%:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span>(<span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1"><span class="co">##   1   2   3   4   5 </span></a>
+<a class="sourceLine" id="cb78-2" data-line-number="2"><span class="co">## 0.0 0.1  NA  NA  NA</span></a></code></pre></div>
+<p>and the upper bound is no more than 40%:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span>(<span class="dt">p =</span> <span class="fl">0.95</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="co">##   1   2   3   4   5 </span></a>
+<a class="sourceLine" id="cb80-2" data-line-number="2"><span class="co">## 0.1 0.4  NA  NA  NA</span></a></code></pre></div>
+<p>It may be intersting to note that our CRM model would not stop in this scenario:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb81-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_tox_ci_covered.html">stop_when_tox_ci_covered</a></span>(<span class="dt">dose =</span> <span class="st">'recommended'</span>, <span class="dt">lower =</span> <span class="fl">0.10</span>, <span class="dt">upper =</span> <span class="fl">0.4</span>)</a>
+<a class="sourceLine" id="cb81-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb81-4" data-line-number="4">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NTN 2TNN 2NNN 2NNT 2NTN 2NNN 2TNN'</span>)</a>
+<a class="sourceLine" id="cb81-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb81-7" data-line-number="7">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>This is because the lower bound of the 90% CI falls slightly outside the sought range:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span>(<span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="co">## [1] 0.04876626 0.09809797 0.24712623 0.39695491 0.59744927</span></a></code></pre></div>
+<p>As before, we can specify <code>dose = 'recommended'</code>, <code>dose = 'any'</code>, or a particular numerical dose-level with <code>dose = 3</code>, for example.</p>
+<p>It should be appreciated that this approach only works when the underlying model extends a way of calculating quantiles and uncertainty intervals. The 3+3 lacks a statistical foundation and does not offer quantiles:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" data-line-number="1"><span class="kw"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span>(<span class="dt">num_doses =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb87-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NTN'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb87-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span>(<span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" data-line-number="1"><span class="co">## [1] NA NA NA NA NA</span></a></code></pre></div>
+</div>
+<div id="stop_when_too_toxic" class="section level3">
+<h3 class="hasAnchor">
+<a href="#stop_when_too_toxic" class="anchor"></a>stop_when_too_toxic</h3>
+<p>The stopping rules considered so far stop a trial and recommend a dose once some critical threshold of information is obtained. We will naturaly want to stop if all doses are too toxic.</p>
+<p>We saw above that some model-based dose-finding approaches can calculate quantiles. We can take this idea further and advocate stopping when there is sufficient evidence that the toxicity probability at some dose exceeds a critical threshold. In such circumstances, no dose will be recommended because all doses of the treatment will be deemed to be excessively toxic.</p>
+<p>Let us set up a rule to stop and recommend no dose if the probability of toxicity at the lowest dose is too high:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb89-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="dt">dose =</span> <span class="dv">1</span>, <span class="dt">tox_threshold =</span> <span class="fl">0.35</span>, <span class="dt">confidence =</span> <span class="fl">0.7</span>)</a></code></pre></div>
+<p>The above examples stops when 70% of the probability mass or posterior distribution of the probability of toxicity at dose 1 exceeds 35%. With an isolated toxicity incidence at dose 1, the model advocates continuing at dose 1:</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NTN'</span>)</a>
+<a class="sourceLine" id="cb90-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1"><span class="co">## [1] 1</span></a></code></pre></div>
+<p>This is because the probability that the toxicity rate exceeds 35% is less than 70%:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span>(<span class="fl">0.35</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" data-line-number="1"><span class="co">## [1] 0.35 0.53 0.82 0.95 1.00</span></a></code></pre></div>
+<p>However, with material additional toxicity at dose 1, the design now advocates stopping:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NTN 1TTT'</span>)</a>
+<a class="sourceLine" id="cb96-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<p>Furthermore, no dose is recommended:</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" data-line-number="1"><span class="co">## [1] NA</span></a></code></pre></div>
+<p>This is because we are now at least 70% sure that the lowest dose is too toxic:</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span>(<span class="fl">0.35</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" data-line-number="1"><span class="co">## [1] 0.87 0.95 1.00 1.00 1.00</span></a></code></pre></div>
+<p>Once again, we can specify <code>dose = 'recommended'</code>, <code>dose = 'any'</code>, or a particular numerical dose-level with <code>dose = 3</code>, for example. We also require that the underlying model supports the calculation of quantiles. BOIN supports this fucntionality:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">target =</span> target, <span class="dt">num_doses =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb102-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="dt">dose =</span> <span class="dv">1</span>, <span class="dt">tox_threshold =</span> <span class="fl">0.35</span>, <span class="dt">confidence =</span> <span class="fl">0.7</span>)</a>
+<a class="sourceLine" id="cb102-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb102-4" data-line-number="4">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NTN 1TTT'</span>)</a>
+<a class="sourceLine" id="cb102-5" data-line-number="5">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" data-line-number="1"><span class="co">## [1] NA</span></a></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span>(<span class="fl">0.35</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" data-line-number="1"><span class="co">## [1] 0.95   NA   NA   NA   NA</span></a></code></pre></div>
+<p>but a non-statistical method like 3+3 does not.</p>
+</div>
+<div id="demand_n_at_dose" class="section level3">
+<h3 class="hasAnchor">
+<a href="#demand_n_at_dose" class="anchor"></a>demand_n_at_dose</h3>
+<p>We have looked at many behaviours that provide stopping. We can also look at some behaviours that delay stopping.</p>
+<p>We might want to guarantee that we treat at least <em>n</em> patients at a dose before we permit a dose-finding trial to stop. For instance, we might not feel comfortable recommending a dose for the next phase of study if it has only been evaluated in a small number of patients.</p>
+<p>It makes sense for this behaviour to be used with a design that would otherwise stop. Let us say that we would normally like to stop after 18 patients have been treated. However, we will also demand that at least 6 patients be treated at the recommended dose before stopping is allowed, irrespective the overall sample size. We specify:</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">target =</span> target, <span class="dt">num_doses =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb108-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_at_n.html">stop_at_n</a></span>(<span class="dt">n =</span> <span class="dv">18</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb108-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/demand_n_at_dose.html">demand_n_at_dose</a></span>(<span class="dt">n =</span> <span class="dv">6</span>, <span class="dt">dose =</span> <span class="st">'recommended'</span>)</a></code></pre></div>
+<p>In the following situation:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NNT 3NTN 3NNN 4TTN 3NTT'</span>)</a>
+<a class="sourceLine" id="cb109-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>the design advocates continuing at dose 2 even though 18 patients have been evaluated. This is because the <code>demand_n_at_dose</code> function is overriding the stopping behaviour of <code>stop_at_n</code>. It is requesting that the trial continue at dose 2 instead of stopping with only three patients treated at the nominal recommended dose.</p>
+<p>It is important to recognise that the order of the functions matters. If we flip the order of the constraints in the example above, the outcome is different:</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_boin.html">get_boin</a></span>(<span class="dt">target =</span> target, <span class="dt">num_doses =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb113-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/demand_n_at_dose.html">demand_n_at_dose</a></span>(<span class="dt">n =</span> <span class="dv">6</span>, <span class="dt">dose =</span> <span class="st">'recommended'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb113-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/stop_at_n.html">stop_at_n</a></span>(<span class="dt">n =</span> <span class="dv">18</span>)</a>
+<a class="sourceLine" id="cb113-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb113-5" data-line-number="5">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NNT 3NTN 3NNN 4TTN 3NTT'</span>)</a>
+<a class="sourceLine" id="cb113-6" data-line-number="6">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="co">## [1] 2</span></a></code></pre></div>
+<p>Now the <code>stop_at_n</code> constraint overrides the action of <code>demand_n_at_dose</code> to halt the trial when <em>n=18</em>, even though only three patients have been evaluated at dose 2. It overrides because it comes later in the decision chain. Users should be aware that commands that come later take precedence.</p>
+<p>Once again, we can specify <code>dose = 'recommended'</code>, <code>dose = 'any'</code>, or a particular numerical dose-level with <code>dose = 3</code>, for example.</p>
+<p>In summary, the <code>demand_n_at_dose</code> function delays stopping in a scenario when a dose is being selected.</p>
+</div>
+<div id="try_rescue_dose" class="section level3">
+<h3 class="hasAnchor">
+<a href="#try_rescue_dose" class="anchor"></a>try_rescue_dose</h3>
+<p>In contrast to <code>demand_n_at_dose</code>, the <code>try_rescue_dose</code> function delays stopping in a scenario where no dose is going to be selected. It overrides a decision to stop and recommend no dose when fewer than <em>n</em> patients have been evaluated at a given dose. Thus, it provides a facility to ensure that some “rescue” dose has been tried before stopping is allowed.</p>
+<p>This is another function where effective demonstration requires a design that would normally stop. Let us say that we will stop if we are 80% sure that the toxicity rate at the lowest dose exceeds 35%. But before we stop, we want to ensure that at least two patients have been evaluated at the lowest dose. We write:</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb117-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="dt">dose =</span> <span class="dv">1</span>, <span class="dt">tox_threshold =</span> <span class="fl">0.35</span>, <span class="dt">confidence =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb117-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/try_rescue_dose.html">try_rescue_dose</a></span>(<span class="dt">dose =</span> <span class="dv">1</span>, <span class="dt">n =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p>Then, even when this design sees some major toxicity at dose 2:</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2TTT'</span>)</a>
+<a class="sourceLine" id="cb118-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1"><span class="co">## [1] 1</span></a></code></pre></div>
+<p>the design will not advocate stopping, even though the posterior confidence that the tox rate at dose 1 exceeds 35% is greater than 80%:</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span>(<span class="fl">0.35</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="co">## [1] 0.8673669 0.9307674 0.9857421 0.9971830 0.9998310</span></a></code></pre></div>
+<p>Once two patients are seen at dose 1, stopping can be countenanced. If those two patients tolerate treatment at dose 1:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2TTT 1NN'</span>)</a>
+<a class="sourceLine" id="cb124-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" data-line-number="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1"><span class="co">## [1] 1</span></a></code></pre></div>
+<p>then stopping is not advocated because the posterior belief is now that dose 1 is not excessively toxic:</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span>(<span class="fl">0.35</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" data-line-number="1"><span class="co">## [1] 0.6683818 0.8195981 0.9668375 0.9951862 0.9998694</span></a></code></pre></div>
+<p>However, if even one of those patients at dose 1 experiences toxicity:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" data-line-number="1">fit &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'2TTT 1NT'</span>)</a>
+<a class="sourceLine" id="cb130-2" data-line-number="2">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/continue.html">continue</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" data-line-number="1"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" data-line-number="1">fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" data-line-number="1"><span class="co">## [1] NA</span></a></code></pre></div>
+<p>Then the trial stops and no dose is recommended.</p>
+<p>The <code>try_rescue_dose</code> function allows researchers to rescue situations where otherwise sensible stopping criteria may prove too sensitive to chance events in very small sample sizes.</p>
+</div>
+<div id="select_dose_by_cibp" class="section level3">
+<h3 class="hasAnchor">
+<a href="#select_dose_by_cibp" class="anchor"></a>select_dose_by_cibp</h3>
+<p>This function implements the convex infinite bounds penalisation (CIBP) criterion of Mozgunov and Jaki (2020) that adjusts the way doses are selected in CRM trials. Their method is mindful of the uncertainty in the estimates of the probability of toxicity and uses an asymmetry parameter, 0 &lt; <em>a</em> &lt; 2, to penalise escalation to risky doses. The method alters the way doses are selected but not when the trial should stop. For <em>a &lt; 1</em>, the criterion penalises toxic doses more heavily, making escalation decisions more conservative.</p>
+<p>To add the behaviour to a dose-finding design, we run:</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb134-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/select_dose_by_cibp.html">select_dose_by_cibp</a></span>(<span class="dt">a =</span> <span class="fl">0.3</span>)</a></code></pre></div>
+<p>The model is then fit to outcomes in the usual way:</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb135-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/fit.html">fit</a></span>(<span class="st">'1NTN'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb135-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/recommended_dose.html">recommended_dose</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" data-line-number="1"><span class="co">## [1] 1</span></a></code></pre></div>
 </div>
 </div>
-<div id="future-plans" class="section level2">
+<div id="simulation-and-dose-paths" class="section level2">
 <h2 class="hasAnchor">
-<a href="#future-plans" class="anchor"></a>Future Plans</h2>
+<a href="#simulation-and-dose-paths" class="anchor"></a>Simulation and dose-paths</h2>
+<p>We have described at length above the flexible methods that <code>escalation</code> provides to specify dose-escalation designs and tailor trial behaviour. Once designs are specified, we can investigate their operating characteristics by simulation using the <code>simulate_trials</code> function. We can also exhaustively calculate dose recommendations for future cohorts using the <code>get_dose_paths</code> function. Both of these topics will be the topics of full vignettes, coming soon.</p>
+</div>
+</div>
+<div id="installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" data-line-number="1"><span class="co"># Install the latest official version from CRAN with:</span></a>
+<a class="sourceLine" id="cb137-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"escalation"</span>)</a>
+<a class="sourceLine" id="cb137-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb137-4" data-line-number="4"><span class="co"># Alternatively, install the latest code from GitHub:</span></a>
+<a class="sourceLine" id="cb137-5" data-line-number="5">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"brockk/escalation"</span>)</a></code></pre></div>
+</div>
+<div id="future-plans" class="section level1">
+<h1 class="hasAnchor">
+<a href="#future-plans" class="anchor"></a>Future Plans</h1>
 <p>I plan to add model-fitting functions for:</p>
 <ul>
 <li>CRM and EffTox via <a href="https://cran.r-project.org/package=trialr">trialr</a>
 </li>
-<li>CRM via <a href="https://cran.r-project.org/package=crmPack">crmPack</a>
+<li>CRM via <a href="https://cran.r-project.org/package=bcrm">bcrm</a>
 </li>
-<li>EWOC and mTPI once I discover how those designs are implemented in
-R.</li>
+<li>EWOC via <a href="https://cran.r-project.org/package=ewoc">ewoc</a>
+</li>
+<li>mTPI once I discover how that design is implemented in R.</li>
 </ul>
-<p>I want to add stopping functions for each of the approaches investigated by Zohar and Chevret (2001).</p>
-<p>Finally, I want to add general functions to perform simulations and calculate all possible future dose paths. Given the standard interface implemented in <code>escalation</code>, each of these approaches will be opened up to every specifiable dose selector. That is the beauty of object-oriented programming.</p>
-</div>
+<p>I want to investigate adding some further stopping functions like those researched by Zohar and Chevret (2001).</p>
+<p>Finally, I will investigate adding time-to-event versions of the designs presented here, the so-called TITE designs. These will require a different approach to simulation because cohorts no longer apply.</p>
 <div id="getting-help" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-help" class="anchor"></a>Getting help</h2>
@@ -314,11 +588,41 @@ Method*. <https:>.
 </https:>
 </div>
 
+<div id="ref-korn1994">
+
+Korn, Edward L., Douglas Midthune, T. Timothy Chen, Lawrence V.
+Rubinstein, Michaele C. Christian, and Richard M. Simon. 1994. “A
+Comparison of Two Phase I Trial Designs.” *Statistics in Medicine* 13
+(18): 1799–1806. <https:>.
+
+</https:>
+</div>
+
+<div id="ref-LeTourneau2009">
+
+Le Tourneau, Christophe, J. Jack Lee, and Lillian L. Siu. 2009. “Dose
+Escalation Methods in Phase I Cancer Clinical Trials.” *Journal of the
+National Cancer Institute* 101 (10): 708–20.
+<https:>.
+
+</https:>
+</div>
+
 <div id="ref-liu_bayesian_2015">
 
 Liu, Suyu, and Ying Yuan. 2015. “Bayesian Optimal Interval Designs for
 Phase I Clinical Trials.” *Journal of the Royal Statistical Society:
 Series C (Applied Statistics)* 64 (3): 507–23.
+<https:>.
+
+</https:>
+</div>
+
+<div id="ref-mozgunov_improving_2020">
+
+Mozgunov, Pavel, and Thomas Jaki. 2020. “Improving Safety of the
+Continual Reassessment Method via a Modified Allocation Rule.”
+*Statistics in Medicine* 39 (7): 906–22.
 <https:>.
 
 </https:>
