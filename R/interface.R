@@ -317,6 +317,27 @@ n_at_dose <- function(x, ...) {
   UseMethod('n_at_dose')
 }
 
+#' Number of patients treated at the recommended dose.
+#'
+#' Get the number of patients evaluated at the recommended dose.
+#'
+#' @param x Object of class \code{\link{selector}}
+#' @param ... arguments passed to other methods
+#'
+#' @return an integer
+#' @export
+#'
+#' @examples
+#' # CRM example
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_dfcrm(skeleton = skeleton, target = target) %>% fit(outcomes)
+#' fit %>% n_at_recommended_dose()
+n_at_recommended_dose <- function(x, ...) {
+  UseMethod('n_at_recommended_dose')
+}
+
 #' Percentage of patients treated at each dose.
 #'
 #' Get the percentage of patients evaluated at each dose under investigation.

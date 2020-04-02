@@ -20,7 +20,7 @@
 #' the existing patients allows the patient sampling function to be adaptive.
 #' The function should return a data-frame with a row for each new patient and a
 #' column for time_delta, the time between the arrival of this patient and the
-#' previous., as in \code{\link{cohorts_of_n}}. See Examples.
+#' previous, as in \code{\link{cohorts_of_n}}. See Examples.
 #'
 #' This method can simulate the culmination of trials that are partly completed.
 #' We just have to specify the outcomes already observed via the
@@ -36,7 +36,7 @@
 #' method. You may need to append stopping behaviour to your selector via
 #' something like \code{\link{stop_at_n}} or \code{\link{stop_when_n_at_dose}},
 #' etc. To safeguard against simulating runaway trials that never end, the
-#' function will halt a simulated trial after 30 invoatins of the dose-selection
+#' function will halt a simulated trial after 30 invocations of the dose-selection
 #' decision. To breach this limit, specify \code{i_like_big_trials = TRUE} in
 #' the function call. However, when you forego the safety net, the onus is on
 #' you to write selectors that will eventually stop the trial! See Examples.
@@ -82,6 +82,7 @@
 #' sims %>% num_doses()
 #' sims %>% dose_indices()
 #' sims %>% n_at_dose()
+#' sims %>% n_at_recommended_dose()
 #' sims %>% tox_at_dose()
 #' sims %>% num_tox()
 #' sims %>% recommended_dose()

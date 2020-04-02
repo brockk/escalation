@@ -69,6 +69,7 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
 
   expect_equal(recommended_dose(x), 5)
   expect_true(is.integer(recommended_dose(x)))
+  expect_equal(length(recommended_dose(x)), 1)
 
   expect_equal(continue(x), TRUE)
   expect_true(is.logical(continue(x)))
@@ -76,6 +77,10 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
+
+  expect_equal(n_at_recommended_dose(x), 0)
+  expect_true(is.integer(n_at_recommended_dose(x)))
+  expect_equal(length(n_at_recommended_dose(x)), 1)
 
   expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
   expect_true(is.numeric(prob_administer(x)))
@@ -144,6 +149,7 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
 
   expect_equal(recommended_dose(x), 1)
   expect_true(is.integer(recommended_dose(x)))
+  expect_equal(length(recommended_dose(x)), 1)
 
   expect_equal(continue(x), TRUE)
   expect_true(is.logical(continue(x)))
@@ -151,6 +157,10 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(0,0,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
+
+  expect_equal(n_at_recommended_dose(x), 0)
+  expect_true(is.integer(n_at_recommended_dose(x)))
+  expect_equal(length(n_at_recommended_dose(x)), 1)
 
   expect_true(is.numeric(prob_administer(x)))
   expect_equal(length(prob_administer(x)), num_doses(x))
@@ -225,6 +235,7 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
 
   expect_equal(recommended_dose(x), 2)
   expect_true(is.integer(recommended_dose(x)))
+  expect_equal(length(recommended_dose(x)), 1)
 
   expect_equal(continue(x), TRUE)
   expect_true(is.logical(continue(x)))
@@ -232,6 +243,10 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
+
+  expect_equal(n_at_recommended_dose(x), 3)
+  expect_true(is.integer(n_at_recommended_dose(x)))
+  expect_equal(length(n_at_recommended_dose(x)), 1)
 
   expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
   expect_true(is.numeric(prob_administer(x)))

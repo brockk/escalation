@@ -41,6 +41,7 @@ prob_tox_quantile(x, p = 0.95)
 #  and standard generics
 print(x)
 summary(x)
+as_tibble(x)
 
 # Using tibble
 outcomes <- tibble::tibble(

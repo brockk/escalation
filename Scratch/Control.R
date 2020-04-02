@@ -21,6 +21,8 @@
 # usethis::use_testthat()
 # usethis::use_vignette(name = 'DoseSelectorInterface',
 #                       title = 'Working with dose selectors')
+# usethis::use_vignette(name = 'Simulation',
+#                       title = 'Simulating dose-escalation trials')
 # usethis::use_logo('logo.png')
 # usethis::use_pkgdown()
 # usethis::use_coverage()

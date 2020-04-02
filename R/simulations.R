@@ -137,7 +137,11 @@ n_at_dose.simulations <- function(x, dose = NULL, ...) {
   } else {
     stop(paste0("Don't know what to do with dose = '", dose, "'"))
   }
+}
 
+#' @export
+n_at_recommended_dose.simulations <- function(x, ...) {
+  return(n_at_dose(x, dose = 'recommended'))
 }
 
 #' @importFrom purrr map

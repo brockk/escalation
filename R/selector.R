@@ -51,6 +51,7 @@
 #'   \item \code{\link{recommended_dose}}
 #'   \item \code{\link{continue}}
 #'   \item \code{\link{n_at_dose}}
+#'   \item \code{\link{n_at_recommended_dose}}
 #'   \item \code{\link{dose_indices}}
 #'   \item \code{\link{prob_administer}}
 #'   \item \code{\link{tox_at_dose}}
@@ -135,6 +136,7 @@
 #' fit %>% recommended_dose()
 #' fit %>% continue()
 #' fit %>% n_at_dose()
+#' fit %>% n_at_recommended_dose()
 #' fit %>% prob_administer()
 #' fit %>% tox_at_dose()
 #' fit %>% empiric_tox_rate()
@@ -185,6 +187,17 @@ dose_indices.selector <- function(x, ...) {
     return(1:n)
   } else {
     return(integer(length = 0))
+  }
+}
+
+#' @export
+n_at_recommended_dose.selector <- function(x, ...) {
+  rec_d <- recommended_dose(x)
+  if(is.na(rec_d)) {
+    return(NA)
+  }
+  else {
+    return(n_at_dose(x)[rec_d])
   }
 }
 
@@ -280,7 +293,11 @@ as_tibble.selector <- function(x, ...) {
 
   dose_labs <- c('NoDose', as.character(dose_indices(x)))
   rec_d <- recommended_dose(x)
-  rec_bool <- c(is.na(rec_d), dose_indices(x) == rec_d)
+  if(is.na(rec_d)) {
+    rec_bool <- c(TRUE, rep(FALSE, num_doses(x)))
+  } else {
+    rec_bool <- c(FALSE, dose_indices(x) == rec_d)
+  }
 
   tibble(
     dose = ordered(dose_labs, levels = dose_labs),

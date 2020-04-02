@@ -7,6 +7,18 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.org/brockk/escalation.svg?branch=master)](https://travis-ci.org/brockk/escalation)
+[![Codecov test coverage](https://codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg)](https://codecov.io/gh/brockk/escalation?branch=master)
+[![cran
+version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
+![](https://cranlogs.r-pkg.org/badges/escalation)
+![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
+<!-- badges: end -->
+
+The `escalation` package by Kristian Brock.
+Documentation is hosted at https://brockk.github.io/escalation/
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -14,8 +26,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+## Introduction
+
 To provide dose selection decisions, the `escalation` package daisy-chains together objects that support a common interface, each deriving from type `selector`.
-We illustrate here that interface using a BOIN selector but the same functions will work on every type of dose selector in `escalation`.
+This vignette demonstrates the entire interface supported by `selector` objects.
+For the purpose of illustratration, we use a BOIN selector but the same functions will work on every type of dose selector in `escalation`.
 
 ```{r setup}
 library(escalation)
@@ -86,9 +102,14 @@ continue(fit)
 ```
 We infer from this that no stopping condition has yet been triggered.
 
-The total number of patients treated at each dose:
+The number of patients treated at each dose:
 ```{r}
 n_at_dose(fit)
+```
+
+The number of patients treated at the recommended dose:
+```{r}
+n_at_recommended_dose(fit)
 ```
 
 The proportion of patients treated at each dose:
@@ -141,3 +162,22 @@ supports_sampling(fit)
 
 The BOIN model does not support sampling.
 If it did, we could run `prob_tox_samples(fit)`.
+
+We can also call some standard generic functions:
+
+```{r}
+print(fit)
+```
+
+```{r}
+summary(fit)
+```
+
+and cast it to a tidyverse `tibble`:
+
+```{r}
+library(tibble)
+
+as_tibble(fit)
+```
+
