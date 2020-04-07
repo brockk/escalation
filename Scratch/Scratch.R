@@ -338,7 +338,7 @@ selector_factory <- get_boin(num_doses = length(skeleton), target = target) %>%
 # Get paths
 paths1 <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
 as_tibble(paths1) %>% print(n = 100)
-library(dplyr)
+
 spread_paths(as_tibble(paths1)) %>%
   select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
          'outcomes2', 'next_dose2', 'outcomes3', 'next_dose3') %>%
@@ -360,7 +360,72 @@ as_tibble(paths3) %>% print(n = 100)
 spread_paths(as_tibble(paths3)) %>%
   select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
          'outcomes2', 'next_dose2', 'outcomes3', 'next_dose3') %>%
-# TODO - error
+  print(n = 100)
+
+paths <- paths1
+class(paths) # dose_paths
+length(paths) # num_paths
+class(paths[[1]]) # dose_finding_path_node
+
+paths
+print(paths, node = 10)
+print(paths, node = 90)
+print(paths, node = -1)
+print(paths, node = NA)
+print(paths, node = NULL)
+
+
+
+# Visualise
+df <- as_tibble(paths)
+spread_paths(df) # wide
+spread_paths(df %>% select(-fit, -parent_fit, -dose_index)) # briefer
+library(DiagrammeR)
+library(dplyr)
+
+library(RColorBrewer)
+display.brewer.all()
+dose_indices(paths)
+
+graph_paths <- function(paths, palette = 'Spectral') {
+  stop_label <- 'Stop'
+  df <- as_tibble(paths)
+  df_colour <- tibble(
+    dose = c(stop_label, as.character(dose_indices(x))),
+    fillcolor = RColorBrewer::brewer.pal(num_doses(x) + 1, palette)
+  )
+  df %>%
+    transmute(id = .node,
+              type = NA,
+              next_dose,
+              label = case_when(
+                is.na(next_dose) ~ 'Stop',
+                TRUE ~ next_dose %>% as.character())
+    ) %>%
+    left_join(df_colour, by = c('label' = 'dose')) -> ndf
+
+  df %>%
+    filter(!is.na(.parent)) %>%
+    select(from = .parent, to = .node, label = outcomes) %>%
+    mutate(rel = "leading_to") -> edf
+
+  graph <- create_graph(nodes_df = ndf, edges_df = edf)
+  render_graph(graph)
+}
+graph_paths(paths)
+graph_paths(paths, pal = 'Blues')
+graph_paths(paths, pal = 'Paired')
+graph_paths(paths, pal = 'RdPu')
+graph_paths(paths, pal = 'PuRd')
+graph_paths(paths, pal = 'PRGn')
+
+# We could append this graph with transition probabilities.
+
+
+
+
+
+
 
 # Simulation ----
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
