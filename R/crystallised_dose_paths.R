@@ -40,7 +40,7 @@ crystallised_dose_paths <- function(dose_paths, true_prob_tox,
 #' @export
 num_patients.crystallised_dose_paths <- function(x, ...) {
 
-  var <- scaled_var <- . <- NULL
+  var <- prob_outcomes <- scaled_var <- . <- NULL
 
   x$terminal_nodes %>%
     mutate(
@@ -74,7 +74,7 @@ dose_indices.crystallised_dose_paths <- function(x, ...) {
 n_at_dose.crystallised_dose_paths <- function(x, dose = NULL, ...) {
 
   if(is.null(dose)) {
-    d <- var <- scaled_var <- . <- NULL
+    d <- var <- prob_outcomes <- scaled_var <- . <- NULL
 
     var_vec <- x$terminal_nodes %>%
       mutate(
