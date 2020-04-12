@@ -67,6 +67,23 @@ dose_indices.crystallised_dose_paths <- function(x, ...) {
     integer(length = 0)
 }
 
+#' @importFrom dplyr mutate summarise
+#' @importFrom purrr map_int
+#' @importFrom magrittr %>%
+#' @export
+continue.crystallised_dose_paths <- function(x, ...) {
+
+  var <- prob_outcomes <- scaled_var <- . <- NULL
+
+  x$terminal_nodes %>%
+    mutate(
+      var = map_int(fit, continue),
+      scaled_var = prob_outcomes * var
+    ) %>%
+    summarise(sum(scaled_var)) %>%
+    .[[1]]
+}
+
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom purrr map
 #' @importFrom magrittr %>%
@@ -102,6 +119,62 @@ n_at_dose.crystallised_dose_paths <- function(x, dose = NULL, ...) {
 
     var_vec
   }
+}
+
+#' @export
+n_at_recommended_dose.crystallised_dose_paths <- function(x, ...) {
+  return(n_at_dose(x, dose = 'recommended'))
+}
+
+#' @importFrom dplyr mutate group_by summarise
+#' @importFrom purrr map
+#' @importFrom magrittr %>%
+#' @export
+tox_at_dose.crystallised_dose_paths <- function(x, ...) {
+
+  # if(is.null(dose)) {
+  d <- var <- prob_outcomes <- scaled_var <- . <- NULL
+
+  var_vec <- x$terminal_nodes %>%
+    mutate(
+      d = map(fit, dose_indices),
+      var = map(fit, tox_at_dose)
+    ) %>%
+    unnest(c(prob_outcomes, d, var)) %>%
+    mutate(scaled_var = prob_outcomes * var) %>%
+    group_by(d) %>%
+    summarise(sum(scaled_var)) %>% .[[2]]
+
+  names(var_vec) <- dose_indices(x)
+  var_vec
+  # } else {
+  #
+  #   var <- scaled_var <- . <- NULL
+  #
+  #   var_vec <- x$terminal_nodes %>%
+  #     mutate(
+  #       var = map(fit, n_at_dose, dose = dose)
+  #     ) %>%
+  #     unnest(c(prob_outcomes, var)) %>%
+  #     mutate(scaled_var = prob_outcomes * var) %>%
+  #     summarise(sum(scaled_var)) %>% .[[1]]
+  #
+  #   var_vec
+  # }
+
+  # x$fits %>%
+  #   map(~ tail(.x, 1)[[1]]) %>%
+  #   map('fit') %>%
+  #   map(tox_at_dose) %>%
+  #   do.call(what = rbind) -> df
+  # colnames(df) <- dose_indices(x)
+  # df %>% as_tibble()
+
+}
+
+#' @export
+num_tox.crystallised_dose_paths <- function(x, ...) {
+  sum(tox_at_dose(x, ...))
 }
 
 #' @importFrom dplyr mutate filter summarise
