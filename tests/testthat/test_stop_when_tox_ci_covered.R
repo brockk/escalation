@@ -113,6 +113,18 @@ test_that('stop_when_tox_ci_covered_selector supports correct interface.', {
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
 
+  expect_equal(n_at_dose(x, dose = 0), 0)
+  expect_true(is.integer(n_at_dose(x, dose = 0)))
+  expect_equal(length(n_at_dose(x, dose = 0)), 1)
+
+  expect_equal(n_at_dose(x, dose = 1), 3)
+  expect_true(is.integer(n_at_dose(x, dose = 1)))
+  expect_equal(length(n_at_dose(x, dose = 1)), 1)
+
+  expect_equal(n_at_dose(x, dose = 'recommended'), 0)
+  expect_true(is.integer(n_at_dose(x, dose = 'recommended')))
+  expect_equal(length(n_at_dose(x, dose = 'recommended')), 1)
+
   expect_equal(n_at_recommended_dose(x), 0)
   expect_true(is.integer(n_at_recommended_dose(x)))
   expect_equal(length(n_at_recommended_dose(x)), 1)
@@ -192,6 +204,18 @@ test_that('stop_when_tox_ci_covered_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(0,0,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
+
+  expect_equal(n_at_dose(x, dose = 0), 0)
+  expect_true(is.integer(n_at_dose(x, dose = 0)))
+  expect_equal(length(n_at_dose(x, dose = 0)), 1)
+
+  expect_equal(n_at_dose(x, dose = 1), 0)
+  expect_true(is.integer(n_at_dose(x, dose = 1)))
+  expect_equal(length(n_at_dose(x, dose = 1)), 1)
+
+  expect_equal(n_at_dose(x, dose = 'recommended'), 0)
+  expect_true(is.integer(n_at_dose(x, dose = 'recommended')))
+  expect_equal(length(n_at_dose(x, dose = 'recommended')), 1)
 
   expect_equal(n_at_recommended_dose(x), 0)
   expect_true(is.integer(n_at_recommended_dose(x)))
@@ -278,6 +302,18 @@ test_that('stop_when_tox_ci_covered_selector supports correct interface.', {
   expect_equal(n_at_dose(x), c(3,3,0,0,0))
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
+
+  expect_equal(n_at_dose(x, dose = 0), 0)
+  expect_true(is.integer(n_at_dose(x, dose = 0)))
+  expect_equal(length(n_at_dose(x, dose = 0)), 1)
+
+  expect_equal(n_at_dose(x, dose = 1), 3)
+  expect_true(is.integer(n_at_dose(x, dose = 1)))
+  expect_equal(length(n_at_dose(x, dose = 1)), 1)
+
+  expect_equal(n_at_dose(x, dose = 'recommended'), 3)
+  expect_true(is.integer(n_at_dose(x, dose = 'recommended')))
+  expect_equal(length(n_at_dose(x, dose = 'recommended')), 1)
 
   expect_equal(n_at_recommended_dose(x), 3)
   expect_true(is.integer(n_at_recommended_dose(x)))

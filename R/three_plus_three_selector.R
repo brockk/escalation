@@ -141,11 +141,6 @@ continue.three_plus_three_selector <- function(x, ...) {
 }
 
 #' @export
-n_at_dose.three_plus_three_selector <- function(x, ...) {
-  return(x$df_c$n)
-}
-
-#' @export
 tox_at_dose.three_plus_three_selector <- function(x, ...) {
   return(x$df_c$tox)
 }

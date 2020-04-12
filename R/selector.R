@@ -190,6 +190,19 @@ dose_indices.selector <- function(x, ...) {
   }
 }
 
+#' @importFrom purrr map_int
+#' @export
+n_at_dose.selector <- function(x, dose = NULL, ...) {
+  if(is.null(dose)) {
+    dose_indices <- 1:(num_doses(x))
+    map_int(dose_indices, ~ sum(doses_given(x) == .x))
+  } else if(dose == 'recommended') {
+    n_at_recommended_dose(x)
+  } else {
+    sum(doses_given(x) == dose)
+  }
+}
+
 #' @export
 n_at_recommended_dose.selector <- function(x, ...) {
   rec_d <- recommended_dose(x)

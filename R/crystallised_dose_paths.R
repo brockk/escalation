@@ -34,6 +34,76 @@ crystallised_dose_paths <- function(dose_paths, true_prob_tox,
   l
 }
 
+#' @importFrom dplyr mutate summarise
+#' @importFrom purrr map_int
+#' @importFrom magrittr %>%
+#' @export
+num_patients.crystallised_dose_paths <- function(x, ...) {
+
+  var <- scaled_var <- . <- NULL
+
+  x$terminal_nodes %>%
+    mutate(
+      var = map_int(fit, num_patients),
+      scaled_var = prob_outcomes * var
+      ) %>%
+    summarise(sum(scaled_var)) %>%
+    .[[1]]
+}
+
+#' @export
+num_doses.crystallised_dose_paths <- function(x, ...) {
+  if(length(x$dose_paths) > 0)
+    return(num_doses(x$dose_paths[[1]]$fit))
+  else
+    return(0)
+}
+
+#' @export
+dose_indices.crystallised_dose_paths <- function(x, ...) {
+  if(length(x$dose_paths) > 0)
+    dose_indices(x$dose_paths[[1]]$fit)
+  else
+    integer(length = 0)
+}
+
+#' @importFrom dplyr mutate group_by summarise
+#' @importFrom purrr map
+#' @importFrom magrittr %>%
+#' @export
+n_at_dose.crystallised_dose_paths <- function(x, dose = NULL, ...) {
+
+  if(is.null(dose)) {
+    d <- var <- scaled_var <- . <- NULL
+
+    var_vec <- x$terminal_nodes %>%
+      mutate(
+        d = map(fit, dose_indices),
+        var = map(fit, n_at_dose)
+      ) %>%
+      unnest(c(prob_outcomes, d, var)) %>%
+      mutate(scaled_var = prob_outcomes * var) %>%
+      group_by(d) %>%
+      summarise(sum(scaled_var)) %>% .[[2]]
+
+    names(var_vec) <- dose_indices(x)
+    var_vec
+  } else {
+
+    var <- scaled_var <- . <- NULL
+
+    var_vec <- x$terminal_nodes %>%
+      mutate(
+        var = map(fit, n_at_dose, dose = dose)
+      ) %>%
+      unnest(c(prob_outcomes, var)) %>%
+      mutate(scaled_var = prob_outcomes * var) %>%
+      summarise(sum(scaled_var)) %>% .[[1]]
+
+    var_vec
+  }
+}
+
 #' @importFrom dplyr mutate filter summarise
 #' @importFrom purrr map_int
 #' @export

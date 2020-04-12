@@ -138,11 +138,6 @@ continue.follow_path_selector <- function(x, ...) {
 }
 
 #' @export
-n_at_dose.follow_path_selector <- function(x, ...) {
-  return(x$df_c$n)
-}
-
-#' @export
 tox_at_dose.follow_path_selector <- function(x, ...) {
   return(x$df_c$tox)
 }

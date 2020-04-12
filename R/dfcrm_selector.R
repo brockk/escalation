@@ -212,13 +212,6 @@ continue.dfcrm_selector <- function(x, ...) {
 
 #' @importFrom purrr map_int
 #' @export
-n_at_dose.dfcrm_selector <- function(x, ...) {
-  dose_indices <- 1:(num_doses(x))
-  map_int(dose_indices, ~ sum(doses_given(x) == .x))
-}
-
-#' @importFrom purrr map_int
-#' @export
 tox_at_dose.dfcrm_selector <- function(x, ...) {
   dose_indices <- 1:(num_doses(x))
   tox_seen <- tox(x)

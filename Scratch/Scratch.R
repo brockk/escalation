@@ -1,6 +1,10 @@
 
 library(escalation)
 
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+
+
 # Parsing ----
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
 phase1_outcomes_to_cohorts(outcomes)
@@ -9,8 +13,6 @@ parse_phase1_outcomes(outcomes, as_list = FALSE)
 
 
 # dfcrm ----
-skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-target <- 0.25
 
 ## Classic R
 crm_fitter <- get_dfcrm(skeleton = skeleton, target = target)
@@ -30,6 +32,10 @@ num_doses(x)
 recommended_dose(x)
 continue(x)
 n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
 tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
@@ -42,137 +48,6 @@ prob_tox_quantile(x, p = 0.95)
 print(x)
 summary(x)
 as_tibble(x)
-
-# Using tibble
-outcomes <- tibble::tibble(
-  cohort = c(1,1, 2,2, 3,3),
-  dose = c(1,1, 2,2, 3,3),
-  tox = c(0,0, 0,0, 1,1)
-)
-x <- fit(crm_fitter, outcomes)
-# Selector interface
-class(x)
-num_patients(x)
-cohort(x)
-doses_given(x)
-tox(x)
-model_frame(x)
-num_doses(x)
-recommended_dose(x)
-continue(x)
-n_at_dose(x)
-tox_at_dose(x)
-empiric_tox_rate(x)
-mean_prob_tox(x)
-median_prob_tox(x)
-prob_tox_exceeds(x, 0.5)
-
-## logit model
-crm_fitter <- get_dfcrm(skeleton = skeleton, target = target, intcpt = 4,
-                        model = 'logistic')
-x <- crm_fitter %>% fit(outcomes)
-class(x)
-num_patients(x)
-cohort(x)
-doses_given(x)
-tox(x)
-model_frame(x)
-num_doses(x)
-recommended_dose(x)
-continue(x)
-n_at_dose(x)
-tox_at_dose(x)
-empiric_tox_rate(x)
-mean_prob_tox(x)
-median_prob_tox(x)
-prob_tox_exceeds(x, 0.5)
-prob_tox_quantile(x, p = 0.05)
-prob_tox_quantile(x, p = 0.5)
-prob_tox_quantile(x, p = 0.95)
-#  and standard generics
-print(x)
-summary(x)
-
-## tidyverse R
-show_examples <- function(crm_fit) {
-  cat('class:', crm_fit %>% class(), '\n')
-  cat('num_patients:', crm_fit %>% num_patients(), '\n')
-  cat('cohort:', crm_fit %>% cohort(), '\n')
-  cat('doses_given:', crm_fit %>% doses_given(), '\n')
-  cat('tox:', crm_fit %>% tox(), '\n')
-  # print('model_frame:', crm_fit %>% model_frame(), '\n')
-  cat('num_doses:', crm_fit %>% num_doses(), '\n')
-  cat('recommended_dose:', crm_fit %>% recommended_dose(), '\n')
-  cat('continue:', crm_fit %>% continue(), '\n')
-  cat('n_at_dose:', crm_fit %>% n_at_dose(), '\n')
-  cat('tox_at_dose:', crm_fit %>% tox_at_dose(), '\n')
-  cat('empiric_tox_rate:', crm_fit %>% empiric_tox_rate(), '\n')
-  cat('mean_prob_tox:', crm_fit %>% mean_prob_tox(), '\n')
-  cat('median_prob_tox:', crm_fit %>% median_prob_tox(), '\n')
-  cat('prob_tox_exceeds_0.5:', crm_fit %>% prob_tox_exceeds(0.5), '\n')
-}
-
-library(magrittr)
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  fit(outcomes = '') %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 6, dose = 2) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 9, dose = 2) %>%
-  stop_at_n(n = 15) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 9, dose = 2) %>%
-  stop_at_n(n = 21) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 9, dose = 'any') %>%
-  stop_at_n(n = 21) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 12, dose = 'any') %>%
-  stop_at_n(n = 21) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 9, dose = 2) %>%
-  stop_at_n(n = 21) %>%
-  stop_when_too_toxic(dose = 1, tox_threshold = 0.5, confidence = 0.7) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_n_at_dose(n = 9, dose = 2) %>%
-  stop_at_n(n = 21) %>%
-  stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_too_toxic(dose = 5, tox_threshold = 0.5, confidence = 0.7) %>%
-  stop_at_n(n = 21) %>%
-  stop_when_n_at_dose(n = 9, dose = 2) %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_too_toxic(tox_threshold = 0.5, confidence = 0.9, dose = 'any') %>%
-  stop_at_n(n = 21) %>%
-  stop_when_n_at_dose(n = 12, dose = 'any') %>%
-  fit(outcomes) %>%
-  show_examples()
-crm_fit <- get_dfcrm(skeleton = skeleton, target = target) %>%
-  stop_when_too_toxic(tox_threshold = 0.5, confidence = 0.75, dose = 'any') %>%
-  stop_at_n(n = 21) %>%
-  stop_when_n_at_dose(n = 12, dose = 'any') %>%
-  fit(outcomes) %>%
-  show_examples()
 
 
 # BOIN ----
@@ -193,6 +68,10 @@ num_doses(x)
 recommended_dose(x)
 continue(x)
 n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
 tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
@@ -280,40 +159,16 @@ num_doses(x)
 recommended_dose(x)
 continue(x)
 n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
 tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
 prob_tox_exceeds(x, 0.5)
 tox_target(x)
-
-
-# Using tibble
-outcomes <- data.frame(
-  cohort = c(1,1,1, 2,2,2),
-  dose = c(1,1,1, 2,2,2),
-  tox = c(0,0, 0,0, 1,1)
-)
-three_plus_three(outcomes = outcomes, num_doses = num_doses)
-x <- fit(three_plus_three_fitter, outcomes)
-# Selector interface
-class(x)
-num_patients(x)
-cohort(x)
-doses_given(x)
-tox(x)
-model_frame(x)
-num_doses(x)
-recommended_dose(x)
-continue(x)
-n_at_dose(x)
-tox_at_dose(x)
-empiric_tox_rate(x)
-mean_prob_tox(x)
-median_prob_tox(x)
-prob_tox_exceeds(x, 0.5)
-
-
 
 
 # Dose paths ----
@@ -422,9 +277,10 @@ graph_paths(paths, pal = 'PRGn')
 # We could append this graph with transition probabilities.
 
 
-# Crytallise
-cohort_sizes <- c(3, 3, 3)
-paths <- get_three_plus_three(num_doses = 5) %>%
+# Crytallised dose-paths ----
+cohort_sizes <- c(3, 3, 5)
+paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_at_n(n = 12) %>%
   get_dose_paths(cohort_sizes = cohort_sizes)
 
 class(paths)
@@ -433,6 +289,10 @@ num_doses(paths)
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 x <- calculate_probabilities(paths, true_prob_tox)
 
+num_patients(x)
+num_doses(x)
+dose_indices(x)
+n_at_dose(x)
 prob_recommend(x)
 prob_administer(x)
 
