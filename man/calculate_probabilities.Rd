@@ -18,7 +18,15 @@ the terminal nodes in this set of paths will sum to 1. This allows users to
 calculate operating characteristics.
 }
 \examples{
-1 == 1 # TODO
+# Calculate dose paths for the first three cohorts in a 3+3 trial of 5 doses:
+paths <- get_three_plus_three(num_doses = 5) \%>\%
+  get_dose_paths(cohort_sizes = c(3, 3, 3))
+
+# Set the true probabilities of toxicity
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+# And calculate exact operating performance
+x <- paths \%>\% calculate_probabilities(true_prob_tox)
+prob_recommend(x)
 }
 \seealso{
 \code{\link{dose_paths}}

@@ -1,8 +1,8 @@
 Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
-Version: 0.1.1.9007
-Date: 2020-04-07
+Version: 0.1.1.9008
+Date: 2020-04-12
 Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com", 
          role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3921-0166"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>

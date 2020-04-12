@@ -23,5 +23,15 @@ of true dose-event probabilities, in this package those paths are said to be
 crysallised. Once crystallised, operating charactersitics can be calculated.
 }
 \examples{
-1 == 1  # TODO
+# Calculate dose paths for the first three cohorts in a 3+3 trial of 5 doses:
+paths <- get_three_plus_three(num_doses = 5) \%>\%
+  get_dose_paths(cohort_sizes = c(3, 3, 3))
+
+# Set the true probabilities of toxicity
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+# Crytallise the paths with the probabilities of toxicity
+x <- paths \%>\% calculate_probabilities(true_prob_tox)
+# And then examine, for example, the probabilities of recommending each dose
+# at the terminal nodes of these paths:
+prob_recommend(x)
 }

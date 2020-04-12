@@ -422,9 +422,19 @@ graph_paths(paths, pal = 'PRGn')
 # We could append this graph with transition probabilities.
 
 
+# Crytallise
+cohort_sizes <- c(3, 3, 3)
+paths <- get_three_plus_three(num_doses = 5) %>%
+  get_dose_paths(cohort_sizes = cohort_sizes)
 
+class(paths)
+num_doses(paths)
 
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+x <- calculate_probabilities(paths, true_prob_tox)
 
+prob_recommend(x)
+prob_administer(x)
 
 
 # Simulation ----
