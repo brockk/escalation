@@ -242,13 +242,32 @@ library(RColorBrewer)
 display.brewer.all()
 dose_indices(paths)
 
-graph_paths <- function(paths, palette = 'Spectral') {
+graph_paths <- function(paths,
+                        viridis_palette = 'viridis',
+                        RColorBrewer_palette = NULL
+                        ) {
+
   stop_label <- 'Stop'
   df <- as_tibble(paths)
-  df_colour <- tibble(
-    dose = c(stop_label, as.character(dose_indices(x))),
-    fillcolor = RColorBrewer::brewer.pal(num_doses(x) + 1, palette)
-  )
+
+  num_colours <- num_doses(x) + 1
+
+  if(is.null(RColorBrewer_palette)) {
+    df_colour <- tibble(
+      dose = c(stop_label, as.character(dose_indices(x))),
+      fillcolor = viridis::viridis(num_colours, option = viridis_palette)
+    )
+  } else {
+    df_colour <- tibble(
+      dose = c(stop_label, as.character(dose_indices(x))),
+      fillcolor = RColorBrewer::brewer.pal(num_colours, RColorBrewer_palette)
+    )
+  }
+
+  col_offset <- as.integer(num_colours / 2)
+  i <- 1 + mod((seq_along(df_colour$fillcolor) + col_offset - 1), num_colours)
+  df_colour$fontcolor <- df_colour$fillcolor[i]
+
   df %>%
     transmute(id = .node,
               type = NA,
@@ -264,15 +283,26 @@ graph_paths <- function(paths, palette = 'Spectral') {
     select(from = .parent, to = .node, label = outcomes) %>%
     mutate(rel = "leading_to") -> edf
 
-  graph <- create_graph(nodes_df = ndf, edges_df = edf)
-  render_graph(graph)
+  graph <- DiagrammeR::create_graph(nodes_df = ndf, edges_df = edf)
+  DiagrammeR::render_graph(graph)
 }
+
 graph_paths(paths)
-graph_paths(paths, pal = 'Blues')
-graph_paths(paths, pal = 'Paired')
-graph_paths(paths, pal = 'RdPu')
-graph_paths(paths, pal = 'PuRd')
-graph_paths(paths, pal = 'PRGn')
+
+graph_paths(paths, viridis_palette = 'viridis')
+graph_paths(paths, viridis_palette = 'magma')
+graph_paths(paths, viridis_palette = 'plasma')
+graph_paths(paths, viridis_palette = 'inferno')
+graph_paths(paths, viridis_palette = 'cividis')
+# Or
+graph_paths(paths, RColorBrewer_palette = 'YlOrRd')
+graph_paths(paths, RColorBrewer_palette = 'Blues')
+graph_paths(paths, RColorBrewer_palette = 'Paired')
+graph_paths(paths, RColorBrewer_palette = 'RdPu')
+graph_paths(paths, RColorBrewer_palette = 'Set2')
+graph_paths(paths, RColorBrewer_palette = 'Spectral')
+
+
 
 # We could append this graph with transition probabilities.
 
@@ -288,6 +318,7 @@ num_doses(paths)
 
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 x <- calculate_probabilities(paths, true_prob_tox)
+x
 
 num_patients(x)
 num_doses(x)

@@ -115,7 +115,7 @@ n_at_dose.crystallised_dose_paths <- function(x, dose = NULL, ...) {
       ) %>%
       unnest(c(prob_outcomes, var)) %>%
       mutate(scaled_var = prob_outcomes * var) %>%
-      summarise(sum(scaled_var)) %>% .[[1]]
+      summarise(sum(scaled_var, na.rm = TRUE)) %>% .[[1]]
 
     var_vec
   }
@@ -226,4 +226,35 @@ prob_administer.crystallised_dose_paths <- function(x, ...) {
   prob_admin <- grouped_df %>% .[[2]]
   names(prob_admin) <- grouped_df %>% .[[1]]
   prob_admin
+}
+
+#' @export
+print.crystallised_dose_paths <- function(x, ...) {
+
+  cat('Number of nodes:',  length(x$dose_paths), '\n')
+  cat('Number of terminal nodes:', nrow(x$terminal_nodes), '\n')
+  cat('\n')
+
+  cat('Number of doses:', num_doses(x), '\n')
+  cat('\n')
+
+  cat('Probability of recommendation:\n')
+  print(prob_recommend(x), digits = 3)
+  cat('\n')
+
+  cat('Probability of continuance:\n')
+  print(continue(x), digits = 3)
+  cat('\n')
+
+  cat('Probability of administration:\n')
+  print(prob_administer(x), digits = 3)
+  cat('\n')
+
+  cat('Expected sample size:\n')
+  print(num_patients(x))
+  cat('\n')
+
+  cat('Expected total toxicities:\n')
+  print(num_tox(x))
+  cat('\n')
 }

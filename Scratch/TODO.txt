@@ -1,9 +1,11 @@
 
-* dose_paths
-    * tests
-    * print methods
-* Table of selectors in rows and cols for "affects dose selection" and "affects stopping"
-* Make an exhaustive bulleted list of ways of getting a selector_factory in selector_factory.Rd
+
+Code
+* Vignette of dose_paths and crystallised_dose_paths
 * Add a finally_select_boin_dose function fitter that uses BOIN::select.mtd
 * Also, a finally selector for Mozgunov + Jaki CIPD method.
+
+Docs
+* Table of selectors in rows and cols for "affects dose selection" and "affects stopping"
+* Make an exhaustive bulleted list of ways of getting a selector_factory in selector_factory.Rd
 
