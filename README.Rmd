@@ -729,7 +729,8 @@ model %>%
 We have described at length above the flexible methods that `escalation` provides to specify dose-escalation designs and tailor trial behaviour.
 Once designs are specified, we can investigate their operating characteristics by simulation using the `simulate_trials` function.
 We can also exhaustively calculate dose recommendations for future cohorts using the `get_dose_paths` function.
-Both of these topics will be the topics of full vignettes, coming soon.
+Both of these topics are the topics of full vignettes.
+Please check them out.
 
 
 

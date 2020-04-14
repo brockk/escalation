@@ -1,7 +1,6 @@
 
 
 Code
-* Vignette of dose_paths and crystallised_dose_paths
 * Add a finally_select_boin_dose function fitter that uses BOIN::select.mtd
 * Also, a finally selector for Mozgunov + Jaki CIPD method.
 

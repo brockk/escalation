@@ -239,7 +239,12 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('\n')
 
   cat('Probability of recommendation:\n')
-  print(prob_recommend(x), digits = 3)
+  print(
+    noquote(
+      format(prob_recommend(x), digits = 3, nsmall = 3, scientific = FALSE)
+    ),
+    digits = 3
+  )
   cat('\n')
 
   cat('Probability of continuance:\n')
@@ -247,7 +252,12 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('\n')
 
   cat('Probability of administration:\n')
-  print(prob_administer(x), digits = 3)
+  print(
+    noquote(
+      format(prob_administer(x), digits = 3, nsmall = 3, scientific = FALSE)
+    ),
+    digits = 3
+  )
   cat('\n')
 
   cat('Expected sample size:\n')

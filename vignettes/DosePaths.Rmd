@@ -1,0 +1,384 @@
+---
+title: "Working with dose-paths"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Working with dose-paths}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.org/brockk/escalation.svg?branch=master)](https://travis-ci.org/brockk/escalation)
+[![Codecov test coverage](https://codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg)](https://codecov.io/gh/brockk/escalation?branch=master)
+[![cran
+version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
+![](https://cranlogs.r-pkg.org/badges/escalation)
+![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
+<!-- badges: end -->
+
+The `escalation` package by Kristian Brock.
+Documentation is hosted at https://brockk.github.io/escalation/
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+Dose-finding clinical trials investigate experimental agents, seeking doses that are tolerable and active.
+They commonly use some dose-selection model to analyse binary outcomes at increasing doses in cohorts of patients.
+It is possible to analyse the behaviour of a dose-finding design by exhaustively calculating every possible set of outcomes and invoking the dose selection model on each.
+We will refer to these hypothetical sequences of doses in response to outcomes as _dose-paths_.
+
+An example will make this clear.
+The 3+3 design is widely understood.
+One of its benefits is its simplicity.
+Let us investigate the first two cohorts of three patients in the 3+3 variant that permits de-escalation.
+We calculate dose-paths in `escalation` using the `get_dose_paths` function:
+
+```{r setup}
+library(escalation)
+```
+
+```{r}
+paths <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE) %>% 
+  get_dose_paths(cohort_sizes = c(3, 3))
+```
+
+`get_dose_paths` takes a dose-selection methodology and enumerates every possible path according to the cohort sizes that you specify.
+The returned `paths` object contains lot of information but the most pertinent perhaps is the sequence of dose-recommendations in response to hypothetical outcomes:
+
+```{r}
+paths
+```
+
+We see above that the trial starts at dose 1.
+If three non-toxicities (N) are seen, the algorithm advocates escalation to dose 2.
+In constrast if two or more toxicities (T) are seen in the first cohort, no dose is selected (the dose is `NA`) and the trial stops.
+Subsequent cohorts are represented by greater levels of indentation.
+
+This information is better represented by a graph.
+If you are using RStudio, the graph will appear in the _Viewer_ pane.
+(In this vignette, we suppress non-RStudio demonstration of the graphs to avoid problems on CRAN computers.)
+
+```{r, fig.width=7, fig.height=7}
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths)
+}
+```
+
+The blue node towards the centre bearing the number `1` represents the start of the trial.
+The edges of the graph (the lines connecting the nodes) represent the outcomes in cohorts of patients.
+As before, we see that if three `N` events are seen, the trial escalates to dose 2.
+Three patients are assumed to be treated at that dose and from there, further escalation to dose 3 will be advised if no toxicity is seen.
+In contrast, dose 2 will be retained for a further cohort of three if a single toxicity is seen, and de-escalation to dose 1 will occur if two or more toxicities are seen.
+This is exactly the behaviour we expect from the 3+3 design.
+
+Dose-paths were introduced in the phase I setting that we consider here by @Yap2017.
+Their phase I/II analogue was introduced by @Brock2017a for dose-finding trials that consider efficacy and toxicity outcomes.
+
+
+# Other Models
+
+## CRM
+The above example uses the 3+3 design but other methods are available.
+In fact, early phase statisticians would much prefer that you use a model-based method [@wheelerHowDesignDosefinding2019].
+The `escalation` package is intentionally written so that all dose selectors look the same, regardless the implementation-level details.
+In computing terminology, dose selectors in `escalation` support a common interface.
+This makes it trivial to calculate dose-paths for all dose-selectors - we just use the `get_dose_paths` function again.
+
+Let us investigate a continual reassessment method (CRM) design now, as described by @OQuigley1990 and implemented by the dfcrm package [@dfcrm].
+We must specify a dose-toxicity skeleton, and a target toxicity level:
+
+```{r}
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+```
+
+We can then specify a CRM model and calculate dose-paths as before:
+
+```{r}
+paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  get_dose_paths(cohort_sizes = c(3, 3))
+```
+
+When we graph the paths this time (and adopt a different colour palette for fun):
+
+```{r, fig.width=7, fig.height=7}
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, viridis_palette = 'magma')
+}
+```
+
+we see that the `Stop` node is absent - all paths recommend a dose, even those seeing substaantial toxicity.
+Stopping behaviours must be specified for the CRM method.
+Fortunately, `escalation` makes this simple.
+
+An intuitive method for stopping in the Bayesian setting is to test the posterior distribution for the probability of toxicity.
+In our example, we will stop if there is at least a 90% probability that the toxicity rate at the lowest dose is 35% or greater:
+
+```{r}
+paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.9) %>% 
+  get_dose_paths(cohort_sizes = c(3, 3))
+```
+
+When we visualise the paths from the updated model:
+
+```{r, fig.width=7, fig.height=7}
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, viridis_palette = 'inferno')
+}
+```
+
+we see that some paths once again recommend stopping.
+The paths that recommend a dose are otherwise unchanged.
+
+## BOIN
+Another dose-escalation model implemented in `escalation` is the Bayesian optimal interval (BOIN) method by @liu_bayesian_2015, implemented in the `BOIN` package [@BOIN].
+
+To spice things up, we will visualise how this model behaves over four cohorts of two patients:
+
+```{r, fig.width=7, fig.height=7}
+paths <- get_boin(num_doses = 4, target = target) %>% 
+  get_dose_paths(cohort_sizes = rep(2, 4))
+
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, RColorBrewer_palette = 'YlOrRd')
+}
+```
+
+The first thing to note about the graph above is that it is much more complex than the previous graphs.
+The number of nodes in dose-paths increases faster than linearly as more cohorts are considered.
+Consideration of this must be given when visualising dose-paths.
+
+Secondly, the visual method makes it simple to discern messages about future model behaviour.
+For instance, we can easily see that dose 4, the darkest red node, is only reached in the first four cohorts if the first cohort sees no toxicity.
+
+In contrast to CRM, BOIN does have a stopping rule for excess toxicity built in.
+We see that `TT` in the first cohort is not enough to advocate stopping but that any further toxicity in the second cohort will be sufficient to warrant stopping.
+
+
+# Further options
+
+## Non-uniform cohorts
+
+There is no reason that the cohort sizes should be uniform.
+Specify whatever `cohort_sizes` you like:
+
+```{r, fig.width=7, fig.height=7}
+paths <- get_boin(num_doses = 4, target = target) %>% 
+  get_dose_paths(cohort_sizes = c(3, 1, 2))
+
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, RColorBrewer_palette = 'Blues')
+}
+```
+
+You can even evaluate the dose advice after each patient using cohort sizes of 1:
+
+```{r, fig.width=7, fig.height=7}
+paths <- get_boin(num_doses = 4, target = target) %>% 
+  get_dose_paths(cohort_sizes = rep(1, 4))
+
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, RColorBrewer_palette = 'RdPu')
+}
+```
+
+## Partially completed trials
+
+It is possible to calculate dose-paths from trials that are partially completed.
+For instance, let us continue with our BOIN model and assume that we have seen outcomes `1NNN 2TNT` so far in our trial.
+Thus, we are reasonably sure that dose 1 is safe but wary that dose 2 might be too toxic.
+However, these beliefs are tempered by the tiny sample size.
+From this starting point, how might the next two cohorts of three proceed?
+We just specify the previous outcomes using the `previous_outcomes` parameter:
+
+```{r, fig.width=7, fig.height=7}
+paths <- get_boin(num_doses = 4, target = target) %>% 
+  get_dose_paths(cohort_sizes = rep(3, 2), previous_outcomes = '1NNN 2TNT')
+
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, viridis_palette = 'viridis')
+}
+```
+
+Notice how this is different to the advice we get at the start of the trial (i.e. when omitting the `previous_outcomes`):
+
+```{r, fig.width=7, fig.height=7}
+paths <- get_boin(num_doses = 4, target = target) %>% 
+  get_dose_paths(cohort_sizes = rep(3, 2))
+
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, viridis_palette = 'viridis')
+}
+```
+
+This is a feature of model-based methods like CRM and BOIN - they use all information at all doses when making dose decisions.
+They are not memoryless like the 3+3.
+
+## Next dose
+The dose at which dose-paths commence is inferred from the model.
+It can be specified manually, however:
+
+```{r, fig.width=7, fig.height=7}
+paths <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE) %>% 
+  get_dose_paths(cohort_sizes = c(3, 3), next_dose = 3)
+
+if(Sys.getenv("RSTUDIO") == "1") {
+  graph_paths(paths, viridis_palette = 'plasma')
+}
+```
+
+A 3+3 trial with de-escalation enabled will de-escalate through the doses when toxicity is seen, as expected.
+
+# Crystallised dose-paths
+
+Calculating dose-paths is useful for visually examining the conditions under which a dose-finding design would escalate or de-escalate or stop.
+However, that is only part of the story.
+When we marry dose-paths with assumed true event probabilities, we can calculate exact operating characteristics of a design.
+We refer to this as _crystallising_ dose paths because the likelihood of each path has been calculated precisely according to an assumed truth.
+
+For instance, we can calculate dose-paths for the first four cohorts of three patients using the CRM with stopping design that we specified previously:
+
+```{r}
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+
+paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.9) %>% 
+  get_dose_paths(cohort_sizes = rep(3, 4))
+```
+
+We can then crystallise the paths using toxicity probabilities that exactly match the beliefs in our skeleton:
+
+```{r}
+true_prob_tox <- skeleton
+
+x <- paths %>% calculate_probabilities(true_prob_tox = true_prob_tox)
+x
+```
+
+We see that in this scenario, the probability of a path stopping and advocating no dose within the first four cohorts is very close to zero.
+In contrast, when the toxicity probabilities are much greater than anticipated:
+```{r}
+true_prob_tox <- c(0.45, 0.6, 0.68, 0.75, 0.81)
+
+x <- paths %>% calculate_probabilities(true_prob_tox = true_prob_tox)
+x
+```
+
+the probability of selecting no dose within these first four cohorts is over 30%.
+The information labelled `Probability of continuance:` shows the aggregate probability of paths that are continuing to advocate experimentation at doses, i.e. those paths that do not advocate stopping. 
+
+We see above that the probability of continuance is 1 minus the probability of selecting no dose.
+However, this need not necessarily be the case because paths can advocate stopping _and recommend a dose_.
+They might do so once it is felt that a suitable dose has been identified.
+To make this point, let us imagine that we add a rule to our above design that allows stopping once there are 9 patients allocated to the recommended dose.
+We can think of this as stopping for consensus.
+Respecifying our model and recalculating dose-paths, we have:
+
+```{r}
+paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.9) %>% 
+  stop_when_n_at_dose(dose = 'recommended', n = 9) %>% 
+  get_dose_paths(cohort_sizes = rep(3, 4))
+
+x <- paths %>% calculate_probabilities(true_prob_tox = true_prob_tox)
+x
+```
+
+We see that this has reduced our probability of stopping for excess toxicity and inflated our chances of recommending dose 1.
+Notably, the probability of continuance is now roughly 14%, suggesting that most paths have advocated stopping by now, either for toxicity or concensus.
+
+If we do not like that performance, we can make the consensus stopping rule more demanding by requesting 12 at the recommended dose to advocate stopping:
+
+```{r}
+paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.9) %>% 
+  stop_when_n_at_dose(dose = 'recommended', n = 12) %>% 
+  get_dose_paths(cohort_sizes = rep(3, 4))
+
+x <- paths %>% calculate_probabilities(true_prob_tox = true_prob_tox)
+x
+```
+
+As usual, deriving an acceptable design is an iterative process.
+The tools in `escalation` make it easier to arrive at a design that performs how you want.
+
+Combining dose-paths with true event probabilities allows probabilistic inference on dose-finding designs.
+This is a novel extension to the use advocated by @Yap2017 and @Brock2017a.
+The use of exact operating characteristics has been implemented for the 3+3 design in the `bcrm` package [@bcrm].
+We generalise the method here.
+
+
+## Dose-paths vs simulation
+We saw above that probabilistic inference was possible with dose-paths.
+Researchers have typically used simulation to achieve this task.
+`escalation` supports simulation as well through the `simulate_trials` function.
+However, this does raise the question, when should you use each method, and what are their relative merits?
+
+The answer to the first question comes down to the expected number of model fits required.
+Fitting dose-finding models takes computer time.
+In dose-paths, the model is fit once at each node.
+We have seen examples above of how the number and size of cohorts affects the number of nodes in dose-paths.
+In fact, `escalation` provides a function to calculate the number of nodes.
+
+In a phase 1 dose-finding trial, each patient experiences exactly one of two outcomes: `T` or `N`.
+Let us calculate how many nodes there are in a graph of dose-paths using five cohorts of three patients.
+We run:
+
+```{r}
+num_dose_path_nodes(num_patient_outcomes = 2, cohort_sizes = rep(3, 5))
+```
+
+The `num_patient_outcomes = 2` parameter reflects that patients may experience `T` or `N`.
+The returned vector of integers is the number of nodes at each depth.
+There is one starting node.
+That node is connected to four children via outcomes `NNN`, `NNT`, `NTT`, and `TTT`.
+The number of nodes at greater depths proceeds multiplicatively thereafter.
+The total number of nodes is:
+
+```{r}
+num_dose_path_nodes(num_patient_outcomes = 2, cohort_sizes = rep(3, 5)) %>% 
+  sum
+```
+
+Thus it requires exactly 1,365 model fits to calculate the exact operating characteristics in this $n = 5 \times 3 = 15$ patient scenario.
+To compare this to simulations, consider that each simulated trial iteration will fit the model up to five times, once at the end of each cohort.
+The total number of model fits in a simulation study is bounded by this number multiplied by the number of simulated iterations.
+Generally simulation studies use thousands of replicates, so it is easy to see that exact inference via crystallised dose-paths will be much less computaionally burdensome, and therefore faster here.
+
+In contrast, now consider a trial of eight cohorts of three.
+The total number of model fits to enumerate the complete graph of dose-paths is 
+
+```{r}
+num_dose_path_nodes(num_patient_outcomes = 2, cohort_sizes = rep(3, 8)) %>% 
+  sum
+```
+
+Ten thousand simulated iterations of 8 cohorts each would only require up to 80,000 model fits.
+Thus, a reasonably accurate simulation study would be expected to be faster here.
+
+However, speed is not the only concern: there is also precision to consider.
+Simulations have the disadvantage of suffering from Monte Carlo error, that is the uncertainty about the estimated statistics arising from the use of a finite number of simulated iterations.
+In contrast, exact inference via dose-paths has the great advantage of being exact.
+That is, there is no uncertainty in the calculated probabilities.
+(Note: there is still uncertainty about which path will be taken because that is determined by random patient outcomes).
+Thus, there are scenarios when dose-paths may still be preferable to simulations, even when they are expected to take longer.
+
+It is likely that in practice, simulation is used when dose-paths would be a better option.
+If true, that would likely be linked to provision of software that performs the two methods.
+`escalation` plugs that gap.
+
+
+
+# References
