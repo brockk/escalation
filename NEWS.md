@@ -1,3 +1,11 @@
+
+# escalation 0.1.2
+
+* Methods for simulation and calculating dose-paths added.
+* A bit more on the general selector interface.
+* Everything new has tests, and more tests on old stuff.
+
+
 # escalation 0.1.1
 
 * Initial release.
