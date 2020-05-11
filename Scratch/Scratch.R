@@ -306,8 +306,10 @@ graph_paths(paths, RColorBrewer_palette = 'Spectral')
 
 # We could append this graph with transition probabilities.
 
-
 # Crytallised dose-paths ----
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+
 cohort_sizes <- c(3, 3, 5)
 paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 12) %>%
@@ -320,6 +322,7 @@ true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 x <- calculate_probabilities(paths, true_prob_tox)
 x
 
+summary(x)
 num_patients(x)
 num_doses(x)
 dose_indices(x)
@@ -368,18 +371,16 @@ get_boin(num_doses = length(skeleton), target = target) %>%
       function(current_data) cohorts_of_n(n = 2, mean_time_delta = 1),
     next_dose = 2) -> sims
 
-class(sims) # simulations
 length(sims) # Num sims
 class(sims[[1]]) # list
 length(sims[[1]]) # Num decisions
 class(sims[[1]][[1]]) # list
-names(sims[[1]][[1]]) # "cohort" "time"   "fit"
-class(sims[[1]][[1]]$fit) # selector
 
 
 # Interface
 class(sims)
 length(sims)
+summary(sims)
 summary(num_patients(sims))
 num_doses(sims)
 dose_indices(sims)
@@ -392,14 +393,14 @@ prob_recommend(sims)
 prob_administer(sims)
 trial_duration(sims)
 summary(trial_duration(sims))
-as_tibble(sims) %>% print(n = 30)
+tibble::as_tibble(sims) %>% print(n = 30)
 
 library(ggplot2)
-as_tibble(sims) %>%
+tibble::as_tibble(sims) %>%
   ggplot(aes(x = dose, y = mean_prob_tox)) +
   geom_line(aes(group = .iteration))
 
-as_tibble(sims) %>%
+tibble::as_tibble(sims) %>%
   ggplot(aes(x = dose, y = mean_prob_tox)) +
   geom_line(aes(group = .iteration)) +
   facet_wrap(~ .iteration)

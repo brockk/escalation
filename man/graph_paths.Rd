@@ -26,8 +26,9 @@ packages on CRAN for more details.
 \examples{
 paths <- get_three_plus_three(num_doses = 5) \%>\%
   get_dose_paths(cohort_sizes = c(3, 3, 3))
-
+\dontrun{
 graph_paths(paths)
 graph_paths(paths, viridis_palette = 'plasma')
 graph_paths(paths, RColorBrewer_palette = 'YlOrRd')
+}
 }

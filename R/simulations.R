@@ -223,6 +223,12 @@ print.simulations <- function(x, ...) {
   cat('Number of doses:', num_doses(x), '\n')
   cat('\n')
 
+  ptox <- x$true_prob_tox
+  names(ptox) <- dose_indices(x)
+  cat('True probability of toxicity:\n')
+  print(ptox, digits = 3)
+  cat('\n')
+
   cat('Probability of recommendation:\n')
   print(prob_recommend(x), digits = 3)
   cat('\n')
@@ -244,10 +250,20 @@ print.simulations <- function(x, ...) {
   cat('\n')
 }
 
-# #' @export
-# summary.simulations <- function(object, ...) {
-#
-# }
+#' @export
+summary.simulations <- function(object, ...) {
+
+  dose_labs <- c('NoDose', as.character(dose_indices(object)))
+
+  tibble(
+    dose = ordered(dose_labs, levels = dose_labs),
+    tox = c(0, colMeans(tox_at_dose(object))),
+    n = c(0, colMeans(n_at_dose(object))),
+    true_prob_tox = c(0, object$true_prob_tox),
+    prob_recommend = unname(prob_recommend(object)),
+    prob_administer = c(0, prob_administer(object))
+  )
+}
 
 #' @importFrom tibble as_tibble
 #' @importFrom magrittr %>%

@@ -229,14 +229,15 @@ empiric_tox_rate.selector <- function(x, ...) {
 
 #' @export
 summary.selector <- function(object, ...) {
-  Dose <- N <- Tox <- EmpiricToxRate <- MeanProbTox <- MedianProbTox <- NULL
+  {dose <- n <- tox <- empiric_tox_rate <- mean_prob_tox <-
+    median_prob_tox <- NULL}
   tibble(
-    Dose = dose_indices(object),
-    N = n_at_dose(object),
-    Tox = tox_at_dose(object),
-    EmpiricToxRate = empiric_tox_rate(object),
-    MeanProbTox = mean_prob_tox(object),
-    MedianProbTox = median_prob_tox(object)
+    dose = dose_indices(object),
+    tox = tox_at_dose(object),
+    n = n_at_dose(object),
+    empiric_tox_rate = empiric_tox_rate(object),
+    mean_prob_tox = mean_prob_tox(object),
+    median_prob_tox = median_prob_tox(object)
   )
 }
 

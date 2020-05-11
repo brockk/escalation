@@ -23,14 +23,14 @@ test_that('get_dose_paths does what it should', {
   # Trace some nodes
   node1 <- df %>% filter(.depth == 1, outcomes == 'NNN')
   expect_equal(
-    node1 %>% select(next_dose) %>% .[[1]],
+    node1 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN') %>% recommended_dose()
   )
   node1_id <- node1 %>% select(.node) %>% .[[1]]
 
   node2 <- df %>% filter(.depth == 2, .parent == node1_id, outcomes == 'NNT')
   expect_equal(
-    node2 %>% select(next_dose) %>% .[[1]],
+    node2 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN 4NNT') %>% recommended_dose()
   )
   node2_id <- node2 %>% select(.node) %>% .[[1]]
@@ -87,21 +87,21 @@ test_that('get_dose_paths does what it should', {
   # Trace some nodes
   node1 <- df %>% filter(.depth == 1, outcomes == 'NNN')
   expect_equal(
-    node1 %>% select(next_dose) %>% .[[1]],
+    node1 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN') %>% recommended_dose()
   )
   node1_id <- node1 %>% select(.node) %>% .[[1]]
 
   node2 <- df %>% filter(.depth == 2, .parent == node1_id, outcomes == 'NNT')
   expect_equal(
-    node2 %>% select(next_dose) %>% .[[1]],
+    node2 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN 2NNT') %>% recommended_dose()
   )
   node2_id <- node2 %>% select(.node) %>% .[[1]]
 
   node3 <- df %>% filter(.depth == 3, .parent == node2_id, outcomes == 'TTT')
   expect_equal(
-    node3 %>% select(next_dose) %>% .[[1]],
+    node3 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN 2NNT 2TTT') %>% recommended_dose()
   )
   node3_id <- node3 %>% select(.node) %>% .[[1]]
@@ -159,21 +159,21 @@ test_that('get_dose_paths does what it should', {
   # Trace some nodes
   node1 <- df %>% filter(.depth == 1, outcomes == 'TTT')
   expect_equal(
-    node1 %>% select(next_dose) %>% .[[1]],
+    node1 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN 6TTT') %>% recommended_dose()
   )
   node1_id <- node1 %>% select(.node) %>% .[[1]]
 
   node2 <- df %>% filter(.depth == 2, .parent == node1_id, outcomes == 'NNTT')
   expect_equal(
-    node2 %>% select(next_dose) %>% .[[1]],
+    node2 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN 6TTT 5NNTT') %>% recommended_dose()
   )
   node2_id <- node2 %>% select(.node) %>% .[[1]]
 
   node3 <- df %>% filter(.depth == 3, .parent == node2_id, outcomes == 'TT')
   expect_equal(
-    node3 %>% select(next_dose) %>% .[[1]],
+    node3 %>% pull(next_dose) %>% unname(),
     selector_factory %>% fit('1NNN 6TTT 5NNTT 4TT') %>% recommended_dose()
   )
   node3_id <- node3 %>% select(.node) %>% .[[1]]

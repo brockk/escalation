@@ -147,29 +147,6 @@ tox_at_dose.crystallised_dose_paths <- function(x, ...) {
 
   names(var_vec) <- dose_indices(x)
   var_vec
-  # } else {
-  #
-  #   var <- scaled_var <- . <- NULL
-  #
-  #   var_vec <- x$terminal_nodes %>%
-  #     mutate(
-  #       var = map(fit, n_at_dose, dose = dose)
-  #     ) %>%
-  #     unnest(c(prob_outcomes, var)) %>%
-  #     mutate(scaled_var = prob_outcomes * var) %>%
-  #     summarise(sum(scaled_var)) %>% .[[1]]
-  #
-  #   var_vec
-  # }
-
-  # x$fits %>%
-  #   map(~ tail(.x, 1)[[1]]) %>%
-  #   map('fit') %>%
-  #   map(tox_at_dose) %>%
-  #   do.call(what = rbind) -> df
-  # colnames(df) <- dose_indices(x)
-  # df %>% as_tibble()
-
 }
 
 #' @export
@@ -238,6 +215,12 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('Number of doses:', num_doses(x), '\n')
   cat('\n')
 
+  ptox <- x$true_prob_tox
+  names(ptox) <- dose_indices(x)
+  cat('True probability of toxicity:\n')
+  print(ptox, digits = 3)
+  cat('\n')
+
   cat('Probability of recommendation:\n')
   print(
     noquote(
@@ -267,4 +250,19 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('Expected total toxicities:\n')
   print(num_tox(x))
   cat('\n')
+}
+
+#' @export
+summary.crystallised_dose_paths <- function(object, ...) {
+
+  dose_labs <- c('NoDose', as.character(dose_indices(object)))
+
+  tibble(
+    dose = ordered(dose_labs, levels = dose_labs),
+    tox = c(0, tox_at_dose(object)),
+    n = c(0, n_at_dose(object)),
+    true_prob_tox = c(0, object$true_prob_tox),
+    prob_recommend = unname(prob_recommend(object)),
+    prob_administer = c(0, prob_administer(object))
+  )
 }
