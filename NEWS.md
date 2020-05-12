@@ -1,4 +1,11 @@
 
+# escalation 0.1.3
+
+* Mainly small changes to comply with dplyr v1.0.
+* simulations and crystallised_dose_paths given summary method
+* NOTE squash
+
+
 # escalation 0.1.2
 
 * Methods for simulation and calculating dose-paths added.

@@ -1,4 +1,50 @@
 
+# Version 0.1.3
+
+* This is an updated version of a current CRAN package, provided in response to
+notification that dplyr will soon change.
+
+## Test environments
+* local OS X install, R 3.6.2, using --as-cran
+* Travis-CI, Ubuntu 16.04.6 LTS, R 3.6.2, using --as-cran
+* WinBuilder R-devel
+
+
+### local OS X check results
+
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
+
+
+### Travis-CI check results
+
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
+
+
+###  WinBuilder R-devel
+
+0 errors ✓ | 0 warnings ✓ | 1 note
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Kristian Brock <kristian.brock@gmail.com>'
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/DosePaths.html
+          README.md
+    Status: 403
+    Message: Forbidden
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.2307/2531628
+    From: DESCRIPTION
+    Status: Forbidden
+    Message: 403
+* checking package namespace information ... OK
+
+Author response: This URL and associated DOI are fine.
+
+
+
 # Version 0.1.2
 
 * This is an updated version of a current CRAN package.
