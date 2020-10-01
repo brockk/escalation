@@ -132,6 +132,9 @@ test_that('dfcrm_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
 
@@ -221,6 +224,9 @@ test_that('dfcrm_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
@@ -319,6 +325,9 @@ test_that('dfcrm_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))

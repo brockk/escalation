@@ -14,7 +14,6 @@ parse_phase1_outcomes(outcomes, as_list = FALSE)
 
 # dfcrm ----
 
-## Classic R
 crm_fitter <- get_dfcrm(skeleton = skeleton, target = target)
 # Factory interface
 outcomes <- '1NNN 2NNN 3NNT'
@@ -40,14 +39,65 @@ tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
+dose_admissible(x)
+prob_tox_exceeds(x, target)
+prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.5)
+prob_tox_quantile(x, p = 0.95)
+# and standard generics
+print(x)
+summary(x)
+as_tibble(x)
+
+
+# trialr ----
+
+# Empiric
+crm_fitter <- get_trialr_crm(skeleton = skeleton, target = target,
+                             model = 'empiric', beta_sd = 1.34)
+# 1-param logistic
+crm_fitter <- get_trialr_crm(skeleton = skeleton, target = target,
+                             model = 'logistic', a0 = 3,
+                             beta_mean = 0, beta_sd = 1.34)
+# 2-param logistic
+crm_fitter <- get_trialr_crm(skeleton = skeleton, target = target,
+                             model = 'logistic2',
+                             alpha_mean = 0, alpha_sd = 2,
+                             beta_mean = 0, beta_sd = 1.34)
+
+# Factory interface
+outcomes <- '1NNN 2NNN 3NNT'
+x <- fit(crm_fitter, outcomes)
+x
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+dose_admissible(x)
 prob_tox_exceeds(x, 0.5)
 prob_tox_quantile(x, p = 0.05)
 prob_tox_quantile(x, p = 0.5)
 prob_tox_quantile(x, p = 0.95)
-#  and standard generics
+# and standard generics
 print(x)
 summary(x)
 as_tibble(x)
+
 
 
 # BOIN ----
@@ -56,6 +106,7 @@ target <- 0.3
 
 boin_fitter <- get_boin(num_doses = num_doses, target = target)
 x <- fit(boin_fitter, '1NNN')
+x <- fit(boin_fitter, '1NNN 2TTNT 3NNT')
 x
 
 class(x)
@@ -76,34 +127,10 @@ tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
+dose_admissible(x)
 prob_tox_exceeds(x, target)
 x$boin_fit$p_overdose
 
-# Using tibble
-outcomes <- data.frame(
-  cohort = c(1,1, 2,2, 3,3),
-  dose = c(1,1, 2,2, 3,3),
-  tox = c(0,0, 0,0, 1,1)
-)
-x <- fit(boin_fitter, outcomes)
-# Selector interface
-class(x)
-num_patients(x)
-cohort(x)
-doses_given(x)
-tox(x)
-model_frame(x)
-num_doses(x)
-recommended_dose(x)
-continue(x)
-n_at_dose(x)
-tox_at_dose(x)
-empiric_tox_rate(x)
-mean_prob_tox(x)
-median_prob_tox(x)
-prob_tox_exceeds(x, target)
-x$boin_fit$p_overdose
-prob_tox_exceeds(x, target + 0.1)
 
 # Figure 10 of Yan, Pan, Zhang, Liu & Yuan
 num_doses <- 5
@@ -144,6 +171,35 @@ n_at_dose(x)
 tox_at_dose(x)
 
 
+# TPI example ----
+tpi_fitter <- get_tpi(num_doses = 5, target = 0.3, k1 = 1, k2 = 1.5,
+                      exclusion_certainty = 0.7)
+x <- fit(tpi_fitter, '1NNN')
+x <- fit(tpi_fitter, '1NNN 2TTNT')
+# x <- fit(tpi_fitter, '1NNN 2TTNT 3NNT')
+x
+
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+dose_admissible(x)
+prob_tox_exceeds(x, target)
+
 # 3+3 ----
 three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
 x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
@@ -167,17 +223,18 @@ tox_at_dose(x)
 empiric_tox_rate(x)
 mean_prob_tox(x)
 median_prob_tox(x)
+dose_admissible(x)
 prob_tox_exceeds(x, 0.5)
 tox_target(x)
 
 
 # Dose paths ----
+cohort_sizes <- c(3, 3, 3)
 
 # Use 3+3
 selector_factory <- get_three_plus_three(num_doses = 5)
-cohort_sizes <- c(3, 3, 3)
 
-# Use CRM
+# Use dfcrm
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 selector_factory <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -185,6 +242,16 @@ selector_factory <- get_dfcrm(skeleton = skeleton, target = target) %>%
 selector_factory <- get_dfcrm(skeleton = skeleton, target = target) %>%
   dont_skip_doses() %>%
   stop_when_n_at_dose(dose = 'recommended', n = 9)
+
+# Use trialr CRM
+# 2-param logistic
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+selector_factory <- get_trialr_crm(skeleton = skeleton, target = target,
+                                   model = 'logistic2',
+                                   alpha_mean = 0, alpha_sd = 2,
+                                   beta_mean = 0, beta_sd = 1.34)
+
 
 # Use BOIN
 selector_factory <- get_boin(num_doses = length(skeleton), target = target) %>%
@@ -242,50 +309,50 @@ library(RColorBrewer)
 display.brewer.all()
 dose_indices(paths)
 
-graph_paths <- function(paths,
-                        viridis_palette = 'viridis',
-                        RColorBrewer_palette = NULL
-                        ) {
-
-  stop_label <- 'Stop'
-  df <- as_tibble(paths)
-
-  num_colours <- num_doses(x) + 1
-
-  if(is.null(RColorBrewer_palette)) {
-    df_colour <- tibble(
-      dose = c(stop_label, as.character(dose_indices(x))),
-      fillcolor = viridis::viridis(num_colours, option = viridis_palette)
-    )
-  } else {
-    df_colour <- tibble(
-      dose = c(stop_label, as.character(dose_indices(x))),
-      fillcolor = RColorBrewer::brewer.pal(num_colours, RColorBrewer_palette)
-    )
-  }
-
-  col_offset <- as.integer(num_colours / 2)
-  i <- 1 + mod((seq_along(df_colour$fillcolor) + col_offset - 1), num_colours)
-  df_colour$fontcolor <- df_colour$fillcolor[i]
-
-  df %>%
-    transmute(id = .node,
-              type = NA,
-              next_dose,
-              label = case_when(
-                is.na(next_dose) ~ 'Stop',
-                TRUE ~ next_dose %>% as.character())
-    ) %>%
-    left_join(df_colour, by = c('label' = 'dose')) -> ndf
-
-  df %>%
-    filter(!is.na(.parent)) %>%
-    select(from = .parent, to = .node, label = outcomes) %>%
-    mutate(rel = "leading_to") -> edf
-
-  graph <- DiagrammeR::create_graph(nodes_df = ndf, edges_df = edf)
-  DiagrammeR::render_graph(graph)
-}
+# graph_paths <- function(paths,
+#                         viridis_palette = 'viridis',
+#                         RColorBrewer_palette = NULL
+#                         ) {
+#
+#   stop_label <- 'Stop'
+#   df <- as_tibble(paths)
+#
+#   num_colours <- num_doses(x) + 1
+#
+#   if(is.null(RColorBrewer_palette)) {
+#     df_colour <- tibble(
+#       dose = c(stop_label, as.character(dose_indices(x))),
+#       fillcolor = viridis::viridis(num_colours, option = viridis_palette)
+#     )
+#   } else {
+#     df_colour <- tibble(
+#       dose = c(stop_label, as.character(dose_indices(x))),
+#       fillcolor = RColorBrewer::brewer.pal(num_colours, RColorBrewer_palette)
+#     )
+#   }
+#
+#   col_offset <- as.integer(num_colours / 2)
+#   i <- 1 + mod((seq_along(df_colour$fillcolor) + col_offset - 1), num_colours)
+#   df_colour$fontcolor <- df_colour$fillcolor[i]
+#
+#   df %>%
+#     transmute(id = .node,
+#               type = NA,
+#               next_dose,
+#               label = case_when(
+#                 is.na(next_dose) ~ 'Stop',
+#                 TRUE ~ next_dose %>% as.character())
+#     ) %>%
+#     left_join(df_colour, by = c('label' = 'dose')) -> ndf
+#
+#   df %>%
+#     filter(!is.na(.parent)) %>%
+#     select(from = .parent, to = .node, label = outcomes) %>%
+#     mutate(rel = "leading_to") -> edf
+#
+#   graph <- DiagrammeR::create_graph(nodes_df = ndf, edges_df = edf)
+#   DiagrammeR::render_graph(graph)
+# }
 
 graph_paths(paths)
 
@@ -346,6 +413,7 @@ target <- 0.25
 # Sc 1
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 
+# Use 3+3
 get_three_plus_three(num_doses = length(skeleton)) %>%
   simulate_trials(num_sims = 50, true_prob_tox = true_prob_tox) -> sims
 sims
@@ -354,6 +422,7 @@ get_three_plus_three(num_doses = length(skeleton)) %>%
   simulate_trials(num_sims = 5, true_prob_tox = true_prob_tox,
            return_all_fits = TRUE) -> sims
 
+# Use dfcrm
 get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 12) %>%
   simulate_trials(
@@ -363,6 +432,22 @@ get_dfcrm(skeleton = skeleton, target = target) %>%
       function(current_data) cohorts_of_n(n = 2, mean_time_delta = 1),
     next_dose = 2) -> sims
 
+# Use trialr CRM
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+get_trialr_crm(skeleton = skeleton, target = target,
+               model = 'logistic2',
+               alpha_mean = 0, alpha_sd = 2,
+               beta_mean = 0, beta_sd = 1.34) %>%
+  stop_at_n(n = 12) %>%
+  simulate_trials(
+    num_sims = 50,
+    true_prob_tox = true_prob_tox,
+    sample_patient_arrivals =
+      function(current_data) cohorts_of_n(n = 2, mean_time_delta = 1),
+    next_dose = 2) -> sims
+
+# Use BOIN
 get_boin(num_doses = length(skeleton), target = target) %>%
   stop_at_n(n = 12) %>% simulate_trials(
     num_sims = 50,
@@ -473,6 +558,7 @@ bcrm_3p3
 ? empiric_tox_rate
 ? mean_prob_tox
 ? median_prob_tox
+? dose_admissible
 ? prob_tox_quantile
 ? prob_tox_exceeds
 

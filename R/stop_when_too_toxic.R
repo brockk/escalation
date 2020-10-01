@@ -149,3 +149,9 @@ continue.stop_when_too_toxic_selector <- function(x, ...) {
   # By default:
   return(x$parent %>% continue())
 }
+
+#' @export
+dose_admissible.stop_when_too_toxic_selector <- function(x, ...) {
+  prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
+  return(prob_too_tox < x$confidence)
+}

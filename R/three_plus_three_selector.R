@@ -158,6 +158,14 @@ median_prob_tox.three_plus_three_selector <- function(x, ...) {
 }
 
 #' @export
+dose_admissible.three_plus_three_selector <- function(x, ...) {
+  # Reject doses with at least 2 tox, and all higher doses
+  reject <- x$df_c$tox >= 2
+  cum_reject <- cumsum(reject) >= 1
+  return(!cum_reject)
+}
+
+#' @export
 prob_tox_quantile.three_plus_three_selector <- function(x, p, ...) {
   # message('Note that 3+3 does not estimate prob_tox_quantile.')
   as.numeric(rep(NA, num_doses(x)))

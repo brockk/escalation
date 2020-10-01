@@ -14,12 +14,15 @@ test_that('stop_when_too_toxic_selector does what it should', {
   prob_too_toxic <- prob_tox_exceeds(fit, target + 0.1)
   expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
   expect_equal(continue(fit), prob_too_toxic[1] < 0.8)
+  expect_equal(dose_admissible(fit), prob_too_toxic < 0.8)
+
 
   # But the extra tox event should tip the scale
   set.seed(123)
   fit <- model1 %>% fit('2NTN 1TTT')
   prob_too_toxic <- prob_tox_exceeds(fit, target + 0.1)
   expect_equal(continue(fit), prob_too_toxic[1] < 0.8)
+  expect_equal(dose_admissible(fit), prob_too_toxic < 0.8)
 })
 
 test_that('stop_when_too_toxic_selector supports correct interface.', {
@@ -111,6 +114,9 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
 
@@ -201,6 +207,9 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
@@ -300,6 +309,9 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))

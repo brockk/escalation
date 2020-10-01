@@ -1,10 +1,23 @@
 
 
 Code
-* Add a finally_select_boin_dose function fitter that uses BOIN::select.mtd
-* Also, a finally selector for Mozgunov + Jaki CIPD method.
+
+* Should mean_prob_tox(x) for boin_selector & tpi_selector (and elsewhere) add
+names?
+* Should mean_prob_tox(x) for boin_selector & tpi_selector provide a value for
+untested doses? E.g. median_prob_tox(x) for those classes does not.
+* Implement the finally_select_tpi_dose() selector, as described by Ji et al
+on p.239 of their 2007 paper.
+* Also add a finally_select_boin_dose selector that uses BOIN::select.mtd
+* Also, add a finally selector for Mozgunov + Jaki CIPD method.
+
+
+
 
 Docs
-* Table of selectors in rows and cols for "affects dose selection" and "affects stopping"
-* Make an exhaustive bulleted list of ways of getting a selector_factory in selector_factory.Rd
+
+* Table of selectors in rows and cols for "affects dose selection" and
+"affects stopping"
+* Make an exhaustive bulleted list of ways of getting a selector_factory in
+selector_factory.Rd
 

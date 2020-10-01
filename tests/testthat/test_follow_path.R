@@ -103,6 +103,9 @@ test_that('follow_path_selector supports correct interface.', {
   expect_true(is.numeric(empiric_tox_rate(x)))
   expect_equal(length(empiric_tox_rate(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.logical(supports_sampling(x)))
 
   expect_error(prob_tox_samples(x))
@@ -180,6 +183,9 @@ test_that('follow_path_selector supports correct interface.', {
 
   expect_true(is.numeric(empiric_tox_rate(x)))
   expect_equal(length(empiric_tox_rate(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.logical(supports_sampling(x)))
 
@@ -265,6 +271,9 @@ test_that('follow_path_selector supports correct interface.', {
   expect_true(is.numeric(empiric_tox_rate(x)))
   expect_equal(length(empiric_tox_rate(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.logical(supports_sampling(x)))
 
   expect_error(prob_tox_samples(x))
@@ -332,6 +341,9 @@ test_that('follow_path_selector supports correct interface.', {
 
   expect_true(is.numeric(empiric_tox_rate(x)))
   expect_equal(length(empiric_tox_rate(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.logical(supports_sampling(x)))
 

@@ -119,6 +119,10 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
     num_doses = as.integer(num_doses),
     target = target,
     boin_fit = x,
+    use_stopping_rule = use_stopping_rule,
+    # ..+2 to stave off error in BOIN if cohortsize == 1:
+    bound = get.boundary(target = target, ncohort = 1,
+                         cohortsize = nrow(df) + 2, ...),
     df = df,
     df_c = df_c,
     recommended_dose = recommended_dose,
@@ -128,6 +132,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
   class(l) = c('boin_selector', 'tox_selector', 'selector')
   l
 }
+
 
 # Factory interface
 
@@ -205,66 +210,46 @@ median_prob_tox.boin_selector <- function(x, ...) {
   prob_tox_quantile(x, p = 0.5, ...)
 }
 
-#' @importFrom tibble tibble
-#' @importFrom purrr map
-#' @importFrom dplyr mutate group_by slice ungroup select arrange
-#' @importFrom tidyr unnest
 #' @export
-prob_tox_quantile.boin_selector <- function(
-  x, p,
-  quantile_candidates = seq(0, 1, length.out = 101),
-  ...) {
-
-  dose <- prob <- . <- distance <- NULL
-
-  # x <- tibble(
-  #   q = quantile_candidates
-  # ) %>% mutate(
-  #   dose = map(q, .f = ~ dose_indices(x)),
-  #   prob = map(q, .f = ~ 1 - prob_tox_exceeds(x, threshold = .x))
-  # ) %>% unnest(cols = c(dose, prob)) %>%
-  #   group_by(dose) %>%
-  #   slice(which.min(abs(prob - p))) %>%
-  #   ungroup() %>%
-  #   select(q) %>% .[[1]]
-  # names(x) <- dose_indices(x)
-
-  df <- tibble(
-    q = quantile_candidates
-  ) %>% mutate(
-    dose = map(q, .f = ~ dose_indices(x)),
-    prob = map(q, .f = ~ 1 - prob_tox_exceeds(x, threshold = .x))
-  ) %>% unnest(cols = c(dose, prob)) %>%
-    mutate(distance = abs(prob - p)) %>%
-    arrange(dose, distance) %>%
-    group_by(dose) %>%
-    slice(1) %>%
-    ungroup() %>%
-    select(q) %>% .[[1]]
-  df[n_at_dose(x) == 0] <- NA
-  names(df) <- dose_indices(x)
-  df
+dose_admissible.boin_selector <- function(x, ...) {
+  if(x$use_stopping_rule) {
+    n_d <- n_at_dose(x)
+    t_d <- tox_at_dose(x)
+    reject <- logical(length = num_doses(x))
+    for(i in seq_along(reject)) {
+      if(n_d[i] > 0) {
+        this_bound <- x$bound$full_boundary_tab[, n_d[i]]
+        boundary_t <- this_bound['Eliminate if # of DLT >=']
+        if(is.na(boundary_t))
+          reject[i] <- FALSE # Implicitly
+        else
+          reject[i] <- t_d[i] >= boundary_t # Explicitly
+      } else {
+        reject[i] <- FALSE # Implicitly
+      }
+    }
+    # However, monotonic tox suggests doses higher than an inadmissible dose
+    # are also inadmissible:
+    cum_reject <- cumsum(reject) >= 1
+    return(!cum_reject)
+  } else {
+    return(rep(TRUE, num_doses(x)))
+  }
 }
 
-#' @importFrom stats pbeta
-#' @importFrom purrr map_dbl
+#' @export
+prob_tox_quantile.boin_selector <- function(x, p,
+  quantile_candidates = seq(0, 1, length.out = 101), ...) {
+
+  reverse_engineer_prob_tox_quantile(x, p, quantile_candidates, ...)
+}
+
 #' @export
 prob_tox_exceeds.boin_selector <- function(x, threshold, ...) {
   # The authors use beta-binomial conjugate approach. They use a
-  # Beta(0.05, 0.05) prior. I could not find an explanation why.
-  # They also use isotonic regression to ensure Either way:
-  prob_od <- pbeta(q = threshold,
-                   shape1 = 0.05 + tox_at_dose(x),
-                   shape2 = 0.05 + n_at_dose(x) - tox_at_dose(x),
-                   lower.tail = FALSE)
-  names(prob_od) <- 1:num_doses(x)
-  given <- n_at_dose(x) > 0
-  prob_od2 <- boin_pava(prob_od[given])
-  prob_od3 <- map_dbl(
-    1:num_doses(x),
-    ~ ifelse(.x %in% names(prob_od2), prob_od2[as.character(.x)], NA)
-  )
-  return(prob_od3)
+  # Beta(0.05, 0.05) prior but I could not find a justification for that.
+  # They also use isotonic regression to ensure increasing estimates:
+  pava_bb_prob_tox_exceeds(x, threshold, alpha = 0.05, beta = 0.05)
 }
 
 #' @export

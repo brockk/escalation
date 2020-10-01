@@ -134,6 +134,9 @@ test_that('boin_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
 
@@ -223,6 +226,9 @@ test_that('boin_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
@@ -319,6 +325,9 @@ test_that('boin_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
 
@@ -350,21 +359,33 @@ test_that('BOIN advises stopping when indicated', {
   x <- fit(boin_fitter, '1N')
   expect_equal(recommended_dose(x), 2)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should de-escalate
   x <- fit(boin_fitter, '1N 2TN')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should not yet stop
   x <- fit(boin_fitter, '1N 2TN 1TT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Now design should stop
   x <- fit(boin_fitter, '1N 2TN 1TTT')
   expect_true(is.na(recommended_dose(x)))
   expect_false(continue(x))
+  expect_equal(dose_admissible(x), rep(FALSE, num_doses(x)))
+
+  # If those 3 in 4 DLTs occurred at a higher dose, trial should continue but
+  # toxic dose and those doses above should be inadmissible
+  x <- fit(boin_fitter, '1N 4TTTT')
+  expect_equal(recommended_dose(x), 3)
+  expect_true(continue(x))
+  expect_equal(dose_admissible(x), c(TRUE, TRUE, TRUE, FALSE, FALSE))
+
 })
 
 
@@ -385,21 +406,32 @@ test_that('BOIN stopping rule can be turned off.', {
   x <- fit(boin_fitter, '1N')
   expect_equal(recommended_dose(x), 2)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should de-escalate
   x <- fit(boin_fitter, '1N 2TN')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should not stop here
   x <- fit(boin_fitter, '1N 2TN 1TT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should not stop here either
   x <- fit(boin_fitter, '1N 2TN 1TTT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
+
+  # If those 3 in 4 DLTs occurred at a higher dose, the trial should still
+  # continue and all doses should be admissible
+  x <- fit(boin_fitter, '1N 4TTTT')
+  expect_equal(recommended_dose(x), 3)
+  expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Compare to tests above, this shows that the stopping rule has been disabled.
 })

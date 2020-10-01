@@ -32,18 +32,19 @@ model_frame_to_counts <- function(model_frame, num_doses) {
 
 # Copied from BOIN package (https://cran.r-project.org/package=BOIN) to
 # perform isotonic regression in order to work with their method.
-boin_pava <- function(x, wt = rep(1, length(x))) {
+pava <- function(x, wt = rep(1, length(x))) {
   n <- length(x)
   if (n <= 1)
     return(x)
   if (any(is.na(x)) || any(is.na(wt))) {
-    stop("Missing values in 'x' or 'wt' not allowed")
+    stop("Missing values in 'x' or 'wt' is not allowed")
   }
-  lvlsets <- (1:n)
+  lvlsets <- 1:n
   repeat {
-    viol <- (as.vector(diff(x)) < 0)
-    if (!(any(viol)))
-      break
+    viol <- as.vector(diff(x)) < 0
+    if(!(any(viol)))
+      return(x)
+
     i <- min((1:(n - 1))[viol])
     lvl1 <- lvlsets[i]
     lvl2 <- lvlsets[i + 1]
@@ -52,6 +53,66 @@ boin_pava <- function(x, wt = rep(1, length(x))) {
     lvlsets[ilvl] <- lvl1
   }
   x
+}
+
+
+#' @importFrom stats pbeta
+#' @importFrom purrr map_dbl
+pava_bb_prob_tox_exceeds <- function(x, threshold, alpha, beta, ...) {
+
+  # PAVA-smoothed estimates of the probability that toxicity exceeds threshold
+  # using a beta-binomial inference model.
+
+  prob_od <- pbeta(q = threshold,
+                   shape1 = alpha + tox_at_dose(x),
+                   shape2 = beta + n_at_dose(x) - tox_at_dose(x),
+                   lower.tail = FALSE)
+  names(prob_od) <- dose_indices(x)
+
+  # Apply isotonic regression to just those doses given
+  given <- n_at_dose(x) > 0
+  prob_od2 <- pava(prob_od[given])
+
+  # Mask as NA those dose not given:
+  prob_od3 <- map_dbl(
+    1:num_doses(x),
+    ~ ifelse(.x %in% names(prob_od2), prob_od2[as.character(.x)], NA)
+  )
+
+  return(prob_od3)
+}
+
+#' @importFrom tibble tibble
+#' @importFrom purrr map
+#' @importFrom dplyr mutate group_by slice ungroup select arrange
+#' @importFrom tidyr unnest
+reverse_engineer_prob_tox_quantile <- function(
+  x, p, quantile_candidates = seq(0, 1, length.out = 101), ...) {
+
+  # In dose_selectors, prob_tox_quantile and prob_tox_exceeds should generally
+  # be in agreement, similar to how the q() and p() distribution functions in R
+  # are in agreement.
+  # Sometimes ensuring this whilst calculating quantiles is difficult,
+  # suggesting the problem could be seen as an inverse problem.
+  # I.e. choose the quantile from the list of candidates at a given granularity
+  # that closest matches given the probabilities yielded by prob_tox_exceeds.
+
+  dose <- prob <- . <- distance <- NULL
+  df <- tibble(
+    q = quantile_candidates
+  ) %>% mutate(
+    dose = map(q, .f = ~ dose_indices(x)),
+    prob = map(q, .f = ~ 1 - prob_tox_exceeds(x, threshold = .x))
+  ) %>% unnest(cols = c(dose, prob)) %>%
+    mutate(distance = abs(prob - p)) %>%
+    arrange(dose, distance) %>%
+    group_by(dose) %>%
+    slice(1) %>%
+    ungroup() %>%
+    select(q) %>% .[[1]]
+  df[n_at_dose(x) == 0] <- NA
+  names(df) <- dose_indices(x)
+  df
 }
 
 #' @importFrom gtools inv.logit

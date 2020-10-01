@@ -50,6 +50,8 @@ dose_paths_function <- function(selector_factory) {
   UseMethod('dose_paths_function')
 }
 
+
+
 # selector interface ----
 
 #' Target toxicity rate
@@ -449,6 +451,47 @@ mean_prob_tox <- function(x, ...) {
 #' fit %>% median_prob_tox()
 median_prob_tox <- function(x, ...) {
   UseMethod('median_prob_tox')
+}
+
+#' Is each dose admissible?
+#'
+#' Get a vector of logical values reflecting whether each dose is admissible.
+#' Admissibility is defined in different ways for different models, and may not
+#' be defined at all in some models. For instance, in the TPI method, doses are
+#' inadmissible when the posterior probability is high that the toxicity rate
+#' exceeds the target value. In contrast, admissibility is not defined in the
+#' general CRM model (but it can be added with auxiliary classes). In this
+#' latter case, doses are implicitly considered to be admissible, by default.
+#'
+#' @param x Object of class \code{\link{selector}}
+#' @param ... arguments passed to other methods
+#'
+#' @return a logical vector
+#' @export
+#'
+#' @examples
+#' outcomes <- '1NNN 2TTT'
+#'
+#' # TPI example. This method defines admissibility.
+#' fit1 <- get_tpi(num_doses = 5, target = 0.3, k1 = 1, k2 = 1.5,
+#'                 exclusion_certainty = 0.95) %>%
+#'   fit(outcomes)
+#' fit1 %>% dose_admissible()
+#'
+#' # Ordinary CRM example with no admissibility function.
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' fit2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+#'   fit(outcomes)
+#' fit2 %>% dose_admissible()
+#'
+#' # Same CRM example with added admissibility function
+#' fit3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+#'   stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.8) %>%
+#'   fit(outcomes)
+#' fit3 %>% dose_admissible()
+dose_admissible <- function(x, ...) {
+  UseMethod('dose_admissible')
 }
 
 #' Quantile of the toxicity rate at each dose.

@@ -15,22 +15,25 @@ test_that('try_rescue_dose_selector does what it should.', {
   fit1 <- model1 %>% fit('2NNN')
   expect_equal(recommended_dose(fit1), fit1$parent$parent$dfcrm_fit$mtd)
   expect_true(continue(fit1))
-
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
 
   # For toxic outcomes, the design 1 will use dose 1 before stopping is allowed
   fit1 <- model1 %>% fit('2TTT')
   expect_equal(recommended_dose(fit1), 1)
   expect_true(continue(fit1))
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   # After dose 1 is given the requisite number of times, dose recommendation
   # and stopping revert to being determined by the underlying dose selector:
   fit1 <- model1 %>% fit('2TTT 1T')
   expect_equal(recommended_dose(fit1), 1)
   expect_true(continue(fit1))
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit1 <- model1 %>% fit('2TTT 1TT')
   expect_equal(recommended_dose(fit1), NA)
   expect_false(continue(fit1))
+  expect_equal(dose_admissible(fit1), c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 })
 
@@ -125,6 +128,9 @@ test_that('try_rescue_dose_selector supports correct interface.', {
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
 
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
+
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
 
@@ -214,6 +220,9 @@ test_that('try_rescue_dose_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))
@@ -312,6 +321,9 @@ test_that('try_rescue_dose_selector supports correct interface.', {
 
   expect_true(is.numeric(median_prob_tox(x)))
   expect_equal(length(median_prob_tox(x)), num_doses(x))
+
+  expect_true(is.logical(dose_admissible(x)))
+  expect_equal(length(dose_admissible(x)), num_doses(x))
 
   expect_true(is.numeric(prob_tox_quantile(x, p = 0.9)))
   expect_equal(length(prob_tox_quantile(x, p = 0.9)), num_doses(x))

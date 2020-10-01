@@ -111,7 +111,7 @@ recommended_dose.try_rescue_dose_selector <- function(x, ...) {
   # when the parent has selected no dose.
   parent_dose <- x$parent %>% recommended_dose()
   if(is.na(parent_dose)) {
-    n_at_dose <- x %>% n_at_dose()
+    n_at_dose <- n_at_dose(x)
     if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
       if(n_at_dose[x$dose] >= x$n) {
         return(x$parent %>% recommended_dose())
@@ -136,7 +136,7 @@ continue.try_rescue_dose_selector <- function(x, ...) {
   # when the parent has selected no dose.
   parent_dose <- x$parent %>% recommended_dose()
   if(is.na(parent_dose)) {
-    n_at_dose <- x %>% n_at_dose()
+    n_at_dose <- n_at_dose(x)
     if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
       if(n_at_dose[x$dose] >= x$n) {
         return(x$parent %>% continue())
@@ -150,4 +150,18 @@ continue.try_rescue_dose_selector <- function(x, ...) {
   } else {
     return(x$parent %>% continue())
   }
+}
+
+#' @export
+dose_admissible.try_rescue_dose_selector <- function(x, ...) {
+  admiss <- dose_admissible(x$parent, ...)
+  if(x$dose >= 1 & x$dose <= num_doses(x)) {
+    n_at_dose <- n_at_dose(x)
+    if(n_at_dose[x$dose] < x$n) {
+      # Enforce admissibility at rescue dose because it has not yet been
+      # sufficiently tested:
+      admiss[x$dose] <- TRUE
+    }
+  }
+  return(admiss)
 }

@@ -48,18 +48,21 @@
 #'   \item \code{\link{num_tox}}
 #'   \item \code{\link{model_frame}}
 #'   \item \code{\link{num_doses}}
+#'   \item \code{\link{dose_indices}}
 #'   \item \code{\link{recommended_dose}}
 #'   \item \code{\link{continue}}
 #'   \item \code{\link{n_at_dose}}
 #'   \item \code{\link{n_at_recommended_dose}}
-#'   \item \code{\link{dose_indices}}
 #'   \item \code{\link{prob_administer}}
 #'   \item \code{\link{tox_at_dose}}
 #'   \item \code{\link{empiric_tox_rate}}
 #'   \item \code{\link{mean_prob_tox}}
 #'   \item \code{\link{median_prob_tox}}
+#'   \item \code{\link{dose_admissible}}
 #'   \item \code{\link{prob_tox_quantile}}
 #'   \item \code{\link{prob_tox_exceeds}}
+#'   \item \code{\link{supports_sampling}}
+#'   \item \code{\link{prob_tox_samples}}
 #' }
 #'
 #' @seealso \code{\link{selector_factory}}
@@ -142,8 +145,11 @@
 #' fit %>% empiric_tox_rate()
 #' fit %>% mean_prob_tox()
 #' fit %>% median_prob_tox()
+#' fit %>% dose_admissible()
 #' fit %>% prob_tox_quantile(0.9)
 #' fit %>% prob_tox_exceeds(0.5)
+#' fit %>% supports_sampling()
+#' fit %>% prob_tox_samples()
 selector <- function() {
   # This function exists only to document the abstract class "selector".
 }
@@ -225,6 +231,11 @@ prob_administer.selector <- function(x, ...) {
 #' @export
 empiric_tox_rate.selector <- function(x, ...) {
   return(x %>% tox_at_dose() / x %>% n_at_dose())
+}
+
+#' @export
+dose_admissible.selector <- function(x, ...) {
+  return(rep(TRUE, num_doses(x)))
 }
 
 #' @export
