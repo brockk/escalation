@@ -1,14 +1,15 @@
 
-test_that('tpi_selector matches published example.', {
+test_that('mtpi_selector matches published example.', {
 
-  # Reproduce decisions conveyed in Table 1 in Ji et al. (2007)
-  # at https://doi.org/10.1177/1740774507079442
+  # Reproduce decisions conveyed in Figure 2 in Ji et al. (2010)
+  # at https://doi.org/10.1177/1740774510382799
 
   num_doses <- 5
   target <- 0.3
 
-  model <- get_tpi(num_doses = num_doses, target = target,
-                   k1 = 1, k2 = 1.5, exclusion_certainty = 0.95)
+  model <- get_mtpi(num_doses = num_doses, target = target,
+                    epsilon1 = 0.05, epsilon2 = 0.05,
+                    exclusion_certainty = 0.95)
 
 
 
@@ -42,7 +43,7 @@ test_that('tpi_selector matches published example.', {
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNT')
-  expect_equal(recommended_dose(fit), 1)
+  expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
@@ -98,9 +99,9 @@ test_that('tpi_selector matches published example.', {
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NTT 1TTT')
-  expect_equal(recommended_dose(fit), 1)
-  expect_true(continue(fit))
-  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
@@ -188,6 +189,162 @@ test_that('tpi_selector matches published example.', {
   expect_false(continue(fit))
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
+  # Thirty patients treated
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
+  fit <- model %>% fit('1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
+  expect_true(is.na(recommended_dose(fit)))
+  expect_false(continue(fit))
+  expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
+
 
 
   # Tests at dose 2
@@ -220,7 +377,7 @@ test_that('tpi_selector matches published example.', {
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNT')
-  expect_equal(recommended_dose(fit), 2)
+  expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
@@ -230,7 +387,7 @@ test_that('tpi_selector matches published example.', {
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2TTT')
-  expect_equal(recommended_dose(fit), 1)
+  expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
@@ -278,7 +435,7 @@ test_that('tpi_selector matches published example.', {
   fit <- model %>% fit('2NNN 2NTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
-  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
@@ -366,6 +523,162 @@ test_that('tpi_selector matches published example.', {
   expect_true(continue(fit))
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
+  # Thirty patients treated
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 3)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 2)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
+  expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+
 
 
   # Tests at top dose (i.e. escalation impossible)
@@ -408,7 +721,7 @@ test_that('tpi_selector matches published example.', {
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5TTT')
-  expect_equal(recommended_dose(fit), 4)
+  expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
@@ -456,7 +769,7 @@ test_that('tpi_selector matches published example.', {
   fit <- model %>% fit('5NNN 5NTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
-  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
@@ -544,16 +857,172 @@ test_that('tpi_selector matches published example.', {
   expect_true(continue(fit))
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
+  # Thirty patients treated
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 5)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+  fit <- model %>% fit('5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
+  expect_equal(recommended_dose(fit), 4)
+  expect_true(continue(fit))
+  expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
 })
 
-test_that('tpi_selector supports correct interface.', {
+test_that('mtpi_selector supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_tpi(num_doses = num_doses, target = target,
-                          k1 = 1, k2 = 1.5, exclusion_certainty = 0.9)
+  model_fitter <- get_mtpi(num_doses = num_doses, target = target,
+                           epsilon1 = 0.05, epsilon2 = 0.05,
+                           exclusion_certainty = 0.9)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -840,10 +1309,11 @@ test_that('tpi_selector supports correct interface.', {
 
 })
 
-test_that('tpi_selector respects suspended doses', {
+test_that('mtpi_selector respects suspended doses', {
 
-  model <- get_tpi(num_doses = 5, target = 0.3, k1 = 1, k2 = 1.5,
-                        exclusion_certainty = 0.7)
+  model <- get_mtpi(num_doses = 5, target = 0.3,
+                    epsilon1 = 0.05, epsilon2 = 0.05,
+                    exclusion_certainty = 0.7)
 
 
   fit <- model %>% fit('2N')

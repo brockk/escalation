@@ -200,6 +200,35 @@ median_prob_tox(x)
 dose_admissible(x)
 prob_tox_exceeds(x, target)
 
+
+# mTPI example ----
+model <- get_mtpi(num_doses = 5, target = 0.3, epsilon1 = 0.05, epsilon2 = 0.05,
+                      exclusion_certainty = 0.95)
+x <- fit(model, '1NNN')
+x <- fit(model, '1NNN 2TTNT')
+x
+
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+dose_admissible(x)
+prob_tox_exceeds(x, target)
+
 # 3+3 ----
 three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
 x <- three_plus_three_fitter %>% fit('1NNN 2NTT')
@@ -565,6 +594,8 @@ bcrm_3p3
 # selector_factorys
 ? get_dfcrm
 ? get_boin
+? get_tpi
+? get_mtpi
 ? get_three_plus_three
 ? dont_skip_doses
 ? stop_when_n_at_dose

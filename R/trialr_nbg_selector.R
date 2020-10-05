@@ -9,7 +9,7 @@
 #' @details
 #' The model form implemented in trialr is:
 #'
-#' \eqn{F(x_{i}, \alpha, \beta) = 1 / (1 + \exp{-(\alpha + \exp{(\beta)} log(x_i / d_star))}) }
+#' \eqn{F(x_{i}, \alpha, \beta) = 1 / (1 + \exp{-(\alpha + \exp{(\beta)} log(x_i / d_*))}) }
 #'
 #' with normal priors on alpha and beta.
 #'

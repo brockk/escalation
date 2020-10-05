@@ -1,25 +1,29 @@
 Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
-Version: 0.1.3.9002
+Version: 0.1.3.9003
 Date: 2020-10-05
 Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com", 
          role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3921-0166"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
-Description: Methods for working with dose-finding clinical trials. We start by 
-    providing a common interface to various dose-finding methodologies like the
+Description: Methods for working with dose-finding clinical trials. We provide 
+    implementations of many dose-finging clinical trial designs, including the 
     continual reassessment method (CRM) by O'Quigley et al. (1990) 
-    <doi:10.2307/2531628>, the Bayesian optimal interval design (BOIN) by Liu & 
-    Yuan (2015) <doi:10.1111/rssc.12089>, and the 3+3 described by Korn et al. 
-    (1994) <doi:10.1002/sim.4780131802>. We then add optional embellishments to 
-    provide extra desirable behaviour, like avoiding skipping doses, stopping 
-    after n patients have been treated at the recommended dose, or demanding 
-    that n patients are treated before stopping is allowed. By daisy-chaining 
-    together these embellishments using the pipe operator from 'magrittr', it is
-    simple to tailor the behaviour of dose-finding designs so that they do what 
-    you want. Furthermore, using this flexible interface for creating 
-    dose-finding designs, it is simple to run simulations or calculate 
-    dose-pathways for future cohorts of patients.
+    <doi:10.2307/2531628>, the toxicity probability interval (TPI) by Ji et al.
+    (2007) <doi:10.1177/1740774507079442>, the modified TPI (mTPI) design by Ji
+    et al. (2010) <doi:10.1177/1740774510382799>, the Bayesian optimal interval 
+    design (BOIN) by Liu & Yuan (2015) <doi:10.1111/rssc.12089>, and the 3+3 
+    described by Korn et al. (1994) <doi:10.1002/sim.4780131802>. All designs
+    are implemented with a common interface. We also offer optional additional 
+    classes to tailor the behaviour of all designs, including avoiding skipping 
+    doses, stopping after n patients have been treated at the recommended dose,  
+    stopping when a toxicity condition is met, or demanding that n patients are 
+    treated before stopping is allowed. By daisy-chaining together these classes
+    using the pipe operator from 'magrittr', it is simple to tailor the 
+    behaviour of a dose-finding design so it behaves how the trialist wants.
+    Having provided a flexible interface for specifying designs, we then provide
+    functions to run simulations and calculate dose-pathways for future cohorts 
+    of patients.
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
