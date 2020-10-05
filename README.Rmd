@@ -26,12 +26,17 @@ Documentation is hosted at https://brockk.github.io/escalation/
 It starts by providing functions to use dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), and the perennial 3+3:
 
 * `get_dfcrm()`
+* `get_trial_crm()`
+* `get_tpi()`
+* `get_mtpi()`
 * `get_boin()`
 * `get_three_plus_three()`
 
-These functions fetch model fitting code.
-Largely, this is imported from existing R packages.
-These approaches can then be augmented with extra behaviours to specialise the dose selection process.
+These functions fetch model fitting objects.
+Where possible, technical implementations are imported from existing R packages like `dfcrm`, `trialr`, and `BOIN`.
+Where no external implementations is available however, methods are implemented natively in `escalation`.
+
+These dose-finding approaches can then be augmented with extra behaviours to specialise the dose selection process.
 For example, we can add behaviours to prevent skipping doses, or to stop when we reach a certain sample size.
 `escalation` supports the following behaviours:
 
@@ -113,11 +118,14 @@ At the core of the dose selection process is an algorithm or a model that select
 The classes capable of performing this core role are:
 
 * `get_dfcrm()`, using the model-fitting code from [`dfcrm`](https://cran.r-project.org/package=dfcrm)
+* `get_trialr_crm()` using the model-fitting code from [`trialr`](https://cran.r-project.org/package=trialr)
 * `get_boin()` using the model-fitting code from [`BOIN`](https://cran.r-project.org/package=BOIN)
+* `get_tpi()`
+* `get_mtpi()`
 * `get_three_plus_three()`
 * and `follow_path()`
 
-These last two are implemented natively in `escalation`.
+The last four are implemented natively in `escalation`.
 We look at each now.
 
 ### get_dfcrm
@@ -252,7 +260,30 @@ get_boin(num_doses = 5, target = target) %>%
 ```
 
 The parameter names `p.saf` and `p.tox` were chosen by the authors of the `BOIN` package.
- 
+
+### TPI
+The TPI method was introduced by @Ji2007.
+The model requires a few parameters:
+
+```{r}
+model <- get_tpi(num_doses = 5, target = 0.25, k1 = 1, k2 = 1.5, 
+                 exclusion_certainty = 0.95)
+```
+
+The model can be fit to outcomes in the usual way:
+```{r}
+fit <- model %>% fit('1NNT') 
+```
+
+and the returned model fit obeys the same interface as the other classes described here.
+For instance, the dose recommended for the next cohort is:
+
+```{r}
+fit %>% recommended_dose()
+```
+
+See the TPI vignette for more information.
+
 
 ### get_three_plus_three
 The 3+3 method is an old method for dose-escalation that uses fixed cohorts of three and pre-specified rules to govern dose-selection [@korn1994; @LeTourneau2009].
@@ -748,10 +779,9 @@ devtools::install_github("brockk/escalation")
 
 I plan to add model-fitting functions for:
 
-* CRM and EffTox via [trialr](https://cran.r-project.org/package=trialr)
+* EffTox via [trialr](https://cran.r-project.org/package=trialr)
 * CRM via [bcrm](https://cran.r-project.org/package=bcrm)
 * EWOC via [ewoc](https://cran.r-project.org/package=ewoc) 
-* mTPI once I discover how that design is implemented in R.
 
 I want to investigate adding some further stopping functions like those researched by @zohar_continual_2001.
 
@@ -761,12 +791,15 @@ These will require a different approach to simulation because cohorts no longer 
 
 ## Getting help
 
-This package is in its infancy.
-If you want help using it, please contact me.
-
+This package is still in active development.
+There are thousands of unit tests run each time the package code is updated.
+However, that certainly does not mean that the code is bug free.
+You should always be on the defensive.
+This software is offered with no guarantee at all.
 If you have found a bug, please drop me a line and also log it here:
 
 https://github.com/brockk/escalation/issues
 
+If you want help using the package, feel free to contact me by email.
 
 ## References

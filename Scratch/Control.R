@@ -25,6 +25,7 @@
 #                       title = 'Simulating dose-escalation trials')
 # usethis::use_vignette(name = 'DosePaths',
 #                       title = 'Working with dose-paths')
+# usethis::use_vignette(name = 'TPI', title = 'TPI Design')
 # usethis::use_logo('logo.png')
 # usethis::use_pkgdown()
 # usethis::use_coverage()

@@ -55,7 +55,7 @@ interval \deqn{p_{T} - K_{2} \sigma_{i} < p_{i} < p_{T} + K_{1} \sigma_{i}}
 In this model, \eqn{K_{1}} and \eqn{K_{2}} are specified constants and
 \eqn{\sigma_{i}} is the standard deviation of \eqn{p_{i}} arising from a
 Bayesian beta-binomial conjugate model
-\deqn{p_{i} | data \sim Beta(\alpha + x_{1}, \beta + n_{i} - x_{i}),}
+\deqn{p_{i} | data \sim Beta(\alpha + x_{i}, \beta + n_{i} - x_{i}),}
 where \eqn{x_{i}} is the number of toxicities observed and \eqn{n_{i}} is the
 number of patients treated at dose \eqn{i}, and \eqn{\alpha} and \eqn{\beta}
 are hyperparameters for the beta prior on \eqn{p_{i}}.

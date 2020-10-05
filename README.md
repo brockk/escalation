@@ -27,11 +27,18 @@ like the continual reassessment method (CRM), the Bayesian optimal
 interval design (BOIN), and the perennial 3+3:
 
   - `get_dfcrm()`
+  - `get_trial_crm()`
+  - `get_tpi()`
+  - `get_mtpi()`
   - `get_boin()`
   - `get_three_plus_three()`
 
-These functions fetch model fitting code. Largely, this is imported from
-existing R packages. These approaches can then be augmented with extra
+These functions fetch model fitting objects. Where possible, technical
+implementations are imported from existing R packages like `dfcrm`,
+`trialr`, and `BOIN`. Where no external implementations is available
+however, methods are implemented natively in `escalation`.
+
+These dose-finding approaches can then be augmented with extra
 behaviours to specialise the dose selection process. For example, we can
 add behaviours to prevent skipping doses, or to stop when we reach a
 certain sample size. `escalation` supports the following behaviours:
@@ -134,12 +141,16 @@ performing this core role are:
 
   - `get_dfcrm()`, using the model-fitting code from
     [`dfcrm`](https://cran.r-project.org/package=dfcrm)
+  - `get_trialr_crm()` using the model-fitting code from
+    [`trialr`](https://cran.r-project.org/package=trialr)
   - `get_boin()` using the model-fitting code from
     [`BOIN`](https://cran.r-project.org/package=BOIN)
+  - `get_tpi()`
+  - `get_mtpi()`
   - `get_three_plus_three()`
   - and `follow_path()`
 
-These last two are implemented natively in `escalation`. We look at each
+The last four are implemented natively in `escalation`. We look at each
 now.
 
 ### get\_dfcrm
@@ -314,6 +325,34 @@ get_boin(num_doses = 5, target = target) %>%
 
 The parameter names `p.saf` and `p.tox` were chosen by the authors of
 the `BOIN` package.
+
+### TPI
+
+The TPI method was introduced by Ji, Li, and Bekele (2007). The model
+requires a few parameters:
+
+``` r
+model <- get_tpi(num_doses = 5, target = 0.25, k1 = 1, k2 = 1.5, 
+                 exclusion_certainty = 0.95)
+```
+
+The model can be fit to outcomes in the usual way:
+
+``` r
+fit <- model %>% fit('1NNT') 
+```
+
+and the returned model fit obeys the same interface as the other classes
+described here. For instance, the dose recommended for the next cohort
+is:
+
+``` r
+fit %>% recommended_dose()
+```
+
+    ## [1] 1
+
+See the TPI vignette for more information.
 
 ### get\_three\_plus\_three
 
@@ -1023,11 +1062,9 @@ devtools::install_github("brockk/escalation")
 
 I plan to add model-fitting functions for:
 
-  - CRM and EffTox via
-    [trialr](https://cran.r-project.org/package=trialr)
+  - EffTox via [trialr](https://cran.r-project.org/package=trialr)
   - CRM via [bcrm](https://cran.r-project.org/package=bcrm)
   - EWOC via [ewoc](https://cran.r-project.org/package=ewoc)
-  - mTPI once I discover how that design is implemented in R.
 
 I want to investigate adding some further stopping functions like those
 researched by Zohar and Chevret (2001).
@@ -1038,12 +1075,15 @@ different approach to simulation because cohorts no longer apply.
 
 ## Getting help
 
-This package is in its infancy. If you want help using it, please
-contact me.
-
-If you have found a bug, please drop me a line and also log it here:
+This package is still in active development. There are thousands of unit
+tests run each time the package code is updated. However, that certainly
+does not mean that the code is bug free. You should always be on the
+defensive. This software is offered with no guarantee at all. If you
+have found a bug, please drop me a line and also log it here:
 
 <https://github.com/brockk/escalation/issues>
+
+If you want help using the package, feel free to contact me by email.
 
 ## References
 
@@ -1069,6 +1109,15 @@ Methodology* 17 (1): 112. <https://doi.org/10.1186/s12874-017-0381-x>.
 
 Cheung, Ken. 2013. *Dfcrm: Dose-Finding by the Continual Reassessment
 Method*. <https://CRAN.R-project.org/package=dfcrm>.
+
+</div>
+
+<div id="ref-Ji2007">
+
+Ji, Yuan, Yisheng Li, and B. Nebiyou Bekele. 2007. “Dose-finding in
+phase I clinical trials based on toxicity probability intervals.”
+*Clinical Trials* 4 (3): 235–44.
+<https://doi.org/10.1177/1740774507079442>.
 
 </div>
 

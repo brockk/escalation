@@ -1,0 +1,201 @@
+---
+title: "Toxicity Probability Interval Design"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{TPI Design}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The `escalation` package by Kristian Brock.
+Documentation is hosted at https://brockk.github.io/escalation/
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+The toxicity probability interval (TPI) design was introduced by @Ji2007.
+It is one of a series of dose-finding trial designs that works by partitioning the probability of toxicity into a set of intervals.
+These designs make dose-selection decisions that are determined by the interval in which the probability of toxicity for the current dose is believed to reside.
+
+# Summary of the TPI Design
+Core to this design is a beta-binomial Bayesian conjugate model.
+For hyperparameters $\alpha$ and $\beta$, let the probability of toxicity at dose $i$ be $p_i$, with prior distribution
+
+$$p_i \sim Beta(\alpha, \beta).$$
+
+If $n_i$ patients have been treated at dose $i$, yielding $x_i$ toxicity events, the posterior distribution is 
+
+$$ p_i | data \sim Beta(\alpha + x_{i}, \beta + n_{i} - x_{i}).$$
+
+Using this distribution, let the standard deviation of $p_i$ be denoted by $\sigma_i$.
+The design seeks a dose with probability of toxicity close to some pre-specified target level, $p_T$.
+The entire range of possible values for $p_i$ can be broken up into the following intervals: 
+
+* The underdosing interval (UI), defined as $(0, p_{T} - K_{2} \sigma_{i})$;
+* The equivalence interval (EI), defined as $(p_{T} - K_{2} \sigma_{i}, p_{T} + K_{1} \sigma_{i})$;
+* The overdosing interval (OI), defined as $(p_{T} + K_{1} \sigma_{i}, 1)$;
+
+for pre-specified model constants, $K_1, K_2$.
+These intervals are  mutally-exclusive and mutually-exhaustive, meaning that every possible probability belongs to precisely one of them.
+In other words, these intervals form a partition of the probability space, $(0, 1)$.
+
+Using the posterior distribution, we can calculate the three probabilities
+
+$$p_{UI} = Pr(p_i \in \text{UI}), \enspace p_{EI} = Pr(p_i \in \text{EI}), \enspace p_{OI} = Pr(p_i \in \text{OI}).$$
+
+By definition, $p_{UI} + p_{EI} + p_{OI} = 1$.
+The logical action in the dose-finding trial depends on which of these three probabilities is the greatest. 
+If $p_{UI} > p_{EI}, p_{OI}$, then the current dose is likely an underdose, so our desire should be to escalate dose to $i+1$.
+In contrast, if $p_{OI} > p_{UI}, p_{EI}$, then the current dose is likely an overdose and we will want to de-escalate dose to $i-1$ for the next patient.
+If $p_{EI} > p_{UI}, p_{OI}$, then the current dose is deemed sufficiently close to $p_T$ and we will want to stay at dose-level $i$.
+
+Further to these rules regarding dose-selection, the following rule is used to avoid recommending dangerous doses.
+A dose is deemed inadmissible for being excessively toxic if
+
+$$ Pr(p_{i} > p_{T} | data) > \xi,$$
+
+for a certainty threshold, $\xi$.
+If a dose is excluded by this rule, it should not be recommended by model.
+Irrespective the probabilities $p_{UI}, p_{EI}, p_{OI}$, the design will recommend to stay at dose $i$ rather than escalate to a dose previously identified as being inadmissible.
+Furthermore, the design will advocate stopping if the lowest dose is inferred to be inadmissible.
+
+In their paper, the authors demonstrate acceptable operating performance using $\alpha = \beta = 0.005$, $K_{1} = 1$, $K_{2} = 1.5$ and $\xi = 0.95$.
+See @Ji2007 and @Ji2017 for full details.
+
+
+# Implementation in `escalation`
+
+To demonstrate the method, let us fit the design to a cohort of three patients treated at the first of five doses, one of whom experienced toxicity.
+For illustration, use the parameters chosen in @Ji2007:
+
+```{r, message=FALSE}
+library(escalation)
+
+model <- get_tpi(num_doses = 5, target = 0.25, alpha = 0.005, beta = 0.005, 
+                 k1 = 1, k2 = 1.5, exclusion_certainty = 0.95)
+
+fit <- model %>% fit('1NNT') 
+```
+
+The dose recommended for the next cohort is
+
+```{r}
+fit %>% recommended_dose()
+```
+
+Unsurprisingly, the design does not advocate escalation.
+Importantly, the modest toxicity seen so far is not enough to render dose 1 inadmissible:
+
+```{r}
+fit %>% dose_admissible()
+```
+
+Let us imagine that we treat another two cohorts at dose 1, and see no toxicity:
+
+```{r}
+fit <- model %>% fit('1NNT 1NNN 1NNN') 
+```
+
+Now, the design is happy to escalate:
+
+```{r}
+fit
+```
+
+Let us imagine, however, that dose 2 is surprisingly toxic, yielding three toxicities:
+
+```{r}
+fit <- model %>% fit('1NNT 1NNN 1NNN 2TTT') 
+```
+
+Despite the low sample size, the statistical model believes that dose 2 is excessively toxic:
+
+```{r}
+fit %>% prob_tox_exceeds(threshold = 0.25)
+```
+
+and thus inadmissible:
+
+```{r}
+fit %>% dose_admissible()
+```
+
+Note that since dose 2 is believed to be inadmissible, the assumption of monotonically increasing toxicity means that the doses higher than dose 2 are excessively toxic too.
+
+
+## Dose paths
+
+In Table 1 of their publication, @Ji2007 list some model recommendations conditional on hypothesised numbers of toxicities in cohorts of varying size.
+We can use the `get_dose_paths` function, for instance, to calculate exhaustive model recommendations after a single cohort of three is evaluated at dose 2:
+
+```{r, message=FALSE}
+cohort_sizes <- c(3)
+paths <- model %>% get_dose_paths(cohort_sizes = c(3), next_dose = 2)
+
+library(dplyr)
+as_tibble(paths) %>% select(outcomes, next_dose) %>% print(n = 100)
+```
+
+This table confirms the advice following a cohort of three to de-escalate if 2 or 3 toxicities are seen, to escalate if no toxicity is seen, otherwise to remain.
+Note that the recommendations would actually have been the same if `next_dose = 3` or `next_dose = 4`.
+In this five-dose setting, they would naturally have been slightly different if `next_dose = 1` or `next_dose = 5` because we cannot de-escalate below dose 1 or escalate above dose 5.
+
+We can easily visualise those paths with:
+```{r}
+graph_paths(paths)
+```
+
+For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+
+
+## Simulation
+
+@Ji2007 present simulations in their Table 2, comparing the performance of their TPI method to other designs.
+We can use the `simulate_trials` function to reproduce the operating characteristics.
+
+Their example concerns a clinical trial of eight doses.
+We must respecify the `model` object to reflect this.
+They also elect to limit the trial to a sample size of $n=30$:
+
+```{r}
+model <- get_tpi(num_doses = 8, target = 0.25, k1 = 1, k2 = 1.5,
+                      exclusion_certainty = 0.95) %>%
+  stop_at_n(n = 30)
+```
+
+For the sake of speed, we will run just fifty iterations:
+
+```{r}
+num_sims <- 50
+```
+
+In really life, however, we would naturally run many thousands of iterations.
+Their scenario 1 assumes true probability of toxicity:
+
+```{r}
+sc1 <- c(0.05, 0.25, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95)
+```
+
+at which the simulated behaviour is:
+```{r}
+set.seed(123)
+sims <- model %>%
+  simulate_trials(num_sims = num_sims, true_prob_tox = sc1, next_dose = 1)
+
+sims
+```
+
+This reproduces their finding that dose 2 is overwhelmingly likely to be recommended, and that the sample size is virtually guaranteed to be 30, i.e. early stopping is unlikely.
+
+For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+
+
+# References
