@@ -1,5 +1,5 @@
 
-test_that('TPI recommendations match published example.', {
+test_that('tpi_selector matches published example.', {
 
   # Reproduce decisions conveyed in Table 1 in Ji et al. (2007)
   # at https://doi.org/10.1177/1740774507079442
@@ -837,5 +837,38 @@ test_that('tpi_selector supports correct interface.', {
 
   expect_error(prob_tox_samples(x))
   expect_error(prob_tox_samples(x, tall = TRUE))
+
+})
+
+test_that('tpi_selector respects suspended doses', {
+
+  model <- get_tpi(num_doses = 5, target = 0.3, k1 = 1, k2 = 1.5,
+                        exclusion_certainty = 0.7)
+
+
+  fit <- model %>% fit('2N')
+  expect_equal(fit %>% recommended_dose(), 3)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), rep(TRUE, num_doses(fit)))
+
+  fit <- model %>% fit('3TTT')
+  expect_equal(fit %>% recommended_dose(), 2)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('3TTT 2N')
+  expect_equal(fit %>% recommended_dose(), 2)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('3TTT 2N 1N')
+  expect_equal(fit %>% recommended_dose(), 2)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
+
+  fit <- model %>% fit('3TTT 2N 1N 2NNNNNNNNNNNNNNNNNNN')
+  expect_equal(fit %>% recommended_dose(), 2)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
 })

@@ -119,7 +119,13 @@ tpi_selector <- function(outcomes, num_doses, target,
         post_beta2 <- beta + n_d2 - tox_d2
         prob_unsafe2 <- pbeta(target, post_alpha2, post_beta2,
                               lower.tail = FALSE)
-        prob_ei <- prob_ei * as.integer(prob_unsafe2 >= exclusion_certainty)
+        if(prob_unsafe2 >= exclusion_certainty) {
+          # We cannot escalate to an unsafe dose, so move the escalate weight to
+          # the stay weight and set the escalate weight to zero.
+          prob_ei <- prob_ei + prob_ui
+          prob_ui <- 0
+        }
+        # prob_ui <- prob_ui * as.integer(prob_unsafe2 < exclusion_certainty)
       }
     }
 
