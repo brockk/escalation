@@ -26,6 +26,16 @@ test_that('dont_skip_selector does what it should.', {
   expect_equal(recommended_dose(fit0), recommended_dose(fit2))
   expect_equal(continue(fit0), continue(fit2))
 
+  ## Handle a parent that wants to stop
+  model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.9) %>%
+    dont_skip_doses(when_escalating = TRUE, when_deescalating = TRUE)
+  fit3 <- model3 %>% fit('1TTT')
+  expect_true(is.na(recommended_dose(fit3)))
+  expect_false(continue(fit3))
+
+
+
 
   # De-escalation CRM example
 
@@ -47,6 +57,14 @@ test_that('dont_skip_selector does what it should.', {
   fit5 <- model2 %>% fit('1NNN 2N 3TTT')
   expect_equal(recommended_dose(fit3), recommended_dose(fit5))
   expect_equal(continue(fit3), continue(fit5))
+
+  ## Handle a parent that wants to stop
+  model6 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.9) %>%
+    dont_skip_doses(when_escalating = TRUE, when_deescalating = TRUE)
+  fit6 <- model6 %>% fit('1TTT 2N 3TTT')
+  expect_true(is.na(recommended_dose(fit6)))
+  expect_false(continue(fit6))
 })
 
 

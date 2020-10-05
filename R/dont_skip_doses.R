@@ -88,8 +88,8 @@ fit.dont_skip_selector_factory <- function(selector_factory, outcomes, ...) {
 #' @export
 recommended_dose.dont_skip_selector <- function(x, ...) {
   parent_rec_d <- recommended_dose(x$parent)
-  if(num_patients(x) == 0) {
-    # No dose given, so just go with whatever parent proposes
+  if(num_patients(x) == 0 | is.na(parent_rec_d)) {
+    # No dose given, or parent selectc no dose, then just go with that
     return(parent_rec_d)
   } else {
     last_d <- tail(doses_given(x), 1)
