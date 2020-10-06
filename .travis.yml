@@ -3,6 +3,7 @@
 language: R
 sudo: true
 cache: packages
+r_github_packages: brockk/trialr@dev
 
 addons:
   apt:
