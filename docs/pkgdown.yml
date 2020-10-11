@@ -1,8 +1,14 @@
 pandoc: 2.3.1
-pkgdown: 1.4.1
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  DosePaths: DosePaths.html
-  DoseSelectorInterface: DoseSelectorInterface.html
-  Simulation: Simulation.html
+  A100-DoseSelectors: A100-DoseSelectors.html
+  A205-CRM: A205-CRM.html
+  A207-NBG: A207-NBG.html
+  A210-TPI: A210-TPI.html
+  A220-mTPI: A220-mTPI.html
+  A230-BOIN: A230-BOIN.html
+  A600-DosePaths: A600-DosePaths.html
+  A700-Simulation: A700-Simulation.html
+last_built: 2020-10-09T15:01Z
 

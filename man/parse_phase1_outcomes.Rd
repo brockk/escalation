@@ -15,10 +15,8 @@ FALSE to return a \code{data.frame}}
 }
 \value{
 If \code{as_list == TRUE}, a list with elements \code{tox},
-\code{doses} and \code{num_patients}. These elements are congruent with those
-of the same name in \code{crm_params}, for example.
-If \code{as_list == FALSE}, a data.frame with columns \code{tox} and
-\code{doses}.
+\code{doses} and \code{num_patients}. If \code{as_list == FALSE}, a
+data.frame with columns \code{tox} and \code{doses}.
 }
 \description{
 Parse a string of phase I dose-finding outcomes to a binary
@@ -41,9 +39,9 @@ dose-level 1 and neither experienced toxicity. See examples.
 \examples{
 x = parse_phase1_outcomes('1NNN 2NTN 3TTT')
 # Three cohorts of three patients. The first cohort was treated at dose 1 and
-# non had toxicity. The seond cohort was treated at dose 2 and one of the
+# none had toxicity. The second cohort was treated at dose 2 and one of the
 # three had toxicity. Finally, cohort three was treated at dose 3 and all
-# patients had toxicity. See:
+# patients had toxicity.
 x$num_patients  # 9
 x$doses         # c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 x$tox           # c(0, 0, 0, 0, 1, 0, 1, 1, 1)

@@ -1,0 +1,163 @@
+---
+title: "Neuenschwander, Branson & Gsponer"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Neuenschwander, Branson & Gsponer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7, fig.height = 5
+)
+
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Summary of the design
+@Neuenschwander2008 (NBG) introduced a derivative of the CRM for dose-escalation clinical trials using the model:
+
+$$ \text{logit} p_i = \alpha + \exp{(\beta)} \log{(x_i / d^*)}, $$
+
+where $p_i$ is the probability of toxicity at the $i$th dose, $x_i$, and $d^*$ is a reference dose.
+Here $\alpha$ and $\beta$ are model parameters on which the authors place a bivariate normal prior. 
+This model is very similar to the two-parameter logistic CRM, implemented with `stan_crm(model = 'logistic2')`.
+However, a notable difference is that the dose, $x_i$, enters the model as a covariate.
+This dispenses with the toxicity skeleton that is used in the CRM.
+
+
+# Implementation in `escalation`
+
+The heavy lifting required to fit the model is performed by `trialr` and `rstan`.
+`escalation` merely composes the model fit in such a way that it can be used with the myriad dose-selection option provided in this package.
+
+For illustration, let us reproduce the analysis in @Neuenschwander2008 that the authors used to demonstrate the flexibility of a two-parameter approach.
+In a trial of 15 doses, the investigators saw outcomes:
+
+```{r}
+library(escalation)
+
+dose <- c(1, 2.5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250)
+outcomes <- '1NNN 2NNNN 3NNNN 4NNNN 7TT'
+```
+
+Creating a dose-escalation model with NBG's parameters:
+```{r}
+model <- get_trialr_nbg(real_doses = dose, d_star = 250, target = 0.3,
+                        alpha_mean = 2.15, alpha_sd = 0.84,
+                        beta_mean = 0.52, beta_sd = 0.8,
+                        seed = 2020)
+```
+
+and fitting the model to the observed outcomes:
+```{r}
+fit <- model %>% fit(outcomes)
+fit
+```
+
+we see that dose 7 is selected for the next cohort using the metric of selecting the dose with posterior expected probability of toxicity closest to the target.
+In the above output, `mean_prob_tox` broadly matches the values plotted in the lower right panel of Figure 1 in @Neuenschwander2008.
+
+## Future work
+There are a few minor shortcomings of the NBG implementation in `escalation` & `trialr`.
+Firstly, NBG propose a bivariate normal prior distribution on $\alpha$ and $\beta$.
+However, the implementation in `trialr` currently uses independent normal priors.
+Hopefully, this will be addressed in a future release of `trialr`.
+
+Furthermore, NBG propose a method for selecting dose that accounts for the probability of recommending an overdose.
+That logic is currently not implemented in `escalation`.
+However, a proposal that addresses the same issue was presented by @mozgunov_improving_2020, is implemented in `escalation`, and can be applied to the NBG method:
+
+```{r}
+model2 <- model %>% select_dose_by_cibp(a = 0.3)
+```
+
+Fitting the new model to the same outcomes:
+```{r}
+fit2 <- model2 %>% fit(outcomes)
+```
+
+Rather than sticking at dose 7, the design now prefers to de-escalate to dose 6:
+```{r}
+fit2 %>% recommended_dose()
+```
+
+Mozgunov & Jaki's method was published in relation to the CRM design, but it can be applied in `escalation` to any model providing posterior samples via the `prob_tox_samples` method, including Neuenschwander _et al._'s method illustrated here.
+
+
+## Dose paths
+We can use the `get_dose_paths` function in `escalation` to calculate exhaustive model recommendations in response to every possible set of outcomes in future cohorts.
+
+For instance, at the start of a trial using the NBG model detailed above, we can examine all possible paths a trial might take in the first two cohorts of three patients, starting at dose 2:
+
+```{r, message=FALSE}
+paths1 <- model %>% get_dose_paths(cohort_sizes = c(3, 3), next_dose = 2)
+graph_paths(paths1)
+```
+
+We can then compare these to the similar advice from the model that adds Mozgunov & Jaki's criterion:
+
+```{r, message=FALSE}
+paths2 <- model2 %>% get_dose_paths(cohort_sizes = c(3, 3), next_dose = 2)
+graph_paths(paths2)
+```
+
+We can see in several situations that the second model is more conservative in escalation, achieving the goal of the authors.
+Perhaps unexpectedly, however, the second design escalations to dose 11 after initial outcomes `2NNN`, slightly more aggessively than the default model which identifies dose 10.
+
+Dose-paths can also be run for in-progress trials where some outcomes have been established.
+For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+
+## Simulation
+
+We can use the `simulate_trials` function to calculate operating characteristics for a design.
+Let us take the example above, append it with behaviour to stop when the lowest dose is too toxic, when 9 patients have already been evaluated at the candidate dose, or when a sample size of $n=24$ is reached:
+
+```{r}
+dose <- c(1, 2.5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250)
+model <- get_trialr_nbg(real_doses = dose, d_star = 250, target = 0.3,
+                        alpha_mean = 2.15, alpha_sd = 0.84,
+                        beta_mean = 0.52, beta_sd = 0.8,
+                        seed = 2020) %>% 
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.3, confidence = 0.8) %>% 
+  stop_when_n_at_dose(dose = 'recommended', n = 9) %>% 
+  stop_at_n(n = 24)
+```
+
+For the sake of speed, we will run just ten iterations:
+
+```{r}
+num_sims <- 10
+```
+
+In really life, however, we would naturally run many thousands of iterations.
+
+Then let us investigate under the following true probabilities of toxicity:
+
+```{r}
+sc1 <- c(0.01, 0.03, 0.10, 0.17, 0.25, 0.35, 0.45, 0.53, 0.60, 0.65, 0.69, 
+         0.72, 0.75, 0.79, 0.80)
+```
+
+The simulated behaviour is:
+```{r}
+set.seed(123)
+sims <- model %>%
+  simulate_trials(num_sims = num_sims, true_prob_tox = sc1, next_dose = 1)
+
+sims
+```
+
+We see that the chances of stopping for excess toxicity and recommending no dose are low.
+Doses 4-7 are the favourites to be identified.
+
+For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+
+
+# References

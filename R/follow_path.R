@@ -30,7 +30,16 @@
 #' fit2 <- model1 %>% fit('1NNN 2NT')
 #' fit2 %>% recommended_dose()
 #' fit2 %>% continue()
-#' # Uh oh. Toxicity has now been seen. This class recommends no dose now.
+#' # Uh oh. Toxicity has now been seen, the outcomes diverge from the sought
+#' # path, hence this class recommends no dose now.
+#' # At this point, we can hand over dose selection decisions to another class
+#' # by chaining them together, like:
+#' model2 <- follow_path(path = '1NNN 2NNN 3NNN 4NNN') %>%
+#'   get_dfcrm(skeleton = c(0.05, 0.1, 0.25, 0.4, 0.6), target = 0.25)
+#' fit3 <- model2 %>% fit('1NNN 2NT')
+#' # Now the CRM model is using all of the outcomes to calculate the next dose:
+#' fit3 %>% recommended_dose()
+#' fit3 %>% continue()
 #' @references
 #' Cheung. Dose Finding by the Continual Reassessment Method. 2011.
 #' Chapman and Hall/CRC. ISBN 9781420091519

@@ -160,7 +160,6 @@ mtpi_selector <- function(outcomes, num_doses, target,
           # We cannot escalate to an unsafe dose, so set upm_ui to zero to
           # prevent escalation.
           upm_ui <- 0
-          # TODO does this lead to oscillation??
         }
       }
     }

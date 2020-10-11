@@ -2,9 +2,12 @@
 % Please edit documentation in R/interface.R
 \name{prob_tox_samples}
 \alias{prob_tox_samples}
+\alias{prob_eff_samples}
 \title{Get samples of the probability of toxicity.}
 \usage{
 prob_tox_samples(x, tall = FALSE, ...)
+
+prob_eff_samples(x, tall = FALSE, ...)
 }
 \arguments{
 \item{x}{Object of type \code{\link{selector}}}
@@ -13,15 +16,23 @@ prob_tox_samples(x, tall = FALSE, ...)
 pertaining to the doses and column names the dose indices.
 If TRUE, a tall data-frame is returned with data for all doses stacked
 vertically. In this mode, column names will include \code{dose} and
-\code{prob_tox}.}
+\code{prob_eff}.}
 
 \item{...}{arguments passed to other methods}
 }
 \value{
 data-frame like object
+
+data-frame like object
 }
 \description{
 Get samples of the probability of toxicity. For instance, a Bayesian approach
+that supports sampling would be expected to return posterior samples of the
+probability of toxicity. If this class does not support sampling, this
+function will raise an error. You can check whether this class supports
+sampling by calling \code{\link{supports_sampling}}.
+
+Get samples of the probability of efficacy For instance, a Bayesian approach
 that supports sampling would be expected to return posterior samples of the
 probability of toxicity. If this class does not support sampling, this
 function will raise an error. You can check whether this class supports
@@ -35,4 +46,20 @@ outcomes <- '1NNN 2NTN'
 fit <- get_dfcrm(skeleton = skeleton, target = target) \%>\% fit(outcomes)
 fit \%>\% prob_tox_samples()
 fit \%>\% prob_tox_samples(tall = TRUE)
+efftox_priors <- trialr::efftox_priors
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1)
+real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
+model <- get_trialr_efftox(real_doses = real_doses,
+                           efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                           p_e = 0.1, p_t = 0.1,
+                           eff0 = 0.5, tox1 = 0.65,
+                           eff_star = 0.7, tox_star = 0.25,
+                           priors = p, iter = 1000, chains = 1, seed = 2020)
+x <- model \%>\% fit('1N 2E 3B')
+prob_tox_samples(x, tall = TRUE)
 }

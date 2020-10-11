@@ -1,0 +1,50 @@
+---
+title: "Bayesian Optimal Interval Design"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Bayesian Optimal Interval Design}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+The Bayesian Optimal Interval (BOIN) design was introduced by @liu_bayesian_2015.
+It is one of a series of dose-finding trial designs that works by partitioning the probability of toxicity into a set of intervals.
+These designs make dose-selection decisions that are determined by the interval in which the probability of toxicity for the current dose is believed to reside.
+
+
+# Summary of the BOIN Design
+TODO
+
+
+# Implementation in `escalation`
+TODO
+
+```{r, message=FALSE}
+library(escalation)
+```
+
+
+## Dose paths
+TODO
+
+For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+
+
+## Simulation
+TODO
+
+For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+
+
+# References

@@ -64,6 +64,21 @@
 #'   \item \code{\link{supports_sampling}}
 #'   \item \code{\link{prob_tox_samples}}
 #' }
+#' Some selectors also add:
+#' \itemize{
+#'   \item \code{\link{tox_limit}}
+#'   \item \code{\link{eff_limit}}
+#'   \item \code{\link{eff}}
+#'   \item \code{\link{num_eff}}
+#'   \item \code{\link{eff_at_dose}}
+#'   \item \code{\link{empiric_eff_rate}}
+#'   \item \code{\link{mean_prob_eff}}
+#'   \item \code{\link{median_prob_eff}}
+#'   \item \code{\link{prob_eff_quantile}}
+#'   \item \code{\link{prob_eff_exceeds}}
+#'   \item \code{\link{prob_eff_samples}}
+#' }
+#'
 #'
 #' @seealso \code{\link{selector_factory}}
 #'

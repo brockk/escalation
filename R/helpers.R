@@ -5,6 +5,7 @@ spruce_outcomes_df <- function(df) {
   df$tox <- as.integer(df$tox)
   if('cohort' %in% colnames(df)) df$cohort <- as.integer(df$cohort)
   if('patient' %in% colnames(df)) df$patient <- as.integer(df$patient)
+  if('eff' %in% colnames(df)) df$eff <- as.integer(df$eff)
   df
 }
 

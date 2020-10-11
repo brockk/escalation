@@ -1,15 +1,22 @@
 
 library(escalation)
 
-skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-target <- 0.25
+# skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+# target <- 0.25
 
 
 # Parsing ----
+outcomes <- '1NNN 2NEN 3BNT 3NNN 3TNT 2BEE'
+phase1_2_outcomes_to_cohorts(outcomes)
+parse_phase1_2_outcomes(outcomes)
+parse_phase1_2_outcomes(outcomes, as_list = FALSE)
+
+
 outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
 phase1_outcomes_to_cohorts(outcomes)
 parse_phase1_outcomes(outcomes)
 parse_phase1_outcomes(outcomes, as_list = FALSE)
+
 
 
 # dfcrm ----
@@ -50,7 +57,7 @@ summary(x)
 as_tibble(x)
 
 
-# trialr ----
+# trialr crm ----
 
 # Empiric
 crm_fitter <- get_trialr_crm(skeleton = skeleton, target = target,
@@ -99,6 +106,63 @@ summary(x)
 as_tibble(x)
 
 
+# TPI example ----
+tpi_fitter <- get_tpi(num_doses = 5, target = 0.3, k1 = 1, k2 = 1.5,
+                      exclusion_certainty = 0.7)
+x <- fit(tpi_fitter, '1NNN')
+x <- fit(tpi_fitter, '1NNN 2TTNT')
+# x <- fit(tpi_fitter, '1NNN 2TTNT 3NNT')
+x
+
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+dose_admissible(x)
+prob_tox_exceeds(x, target)
+
+
+# mTPI example ----
+model <- get_mtpi(num_doses = 5, target = 0.3, epsilon1 = 0.05, epsilon2 = 0.05,
+                  exclusion_certainty = 0.95)
+x <- fit(model, '1NNN')
+x <- fit(model, '1NNN 2TTNT')
+x
+
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+dose_admissible(x)
+prob_tox_exceeds(x, target)
 
 # BOIN ----
 num_doses <- 5
@@ -171,63 +235,6 @@ n_at_dose(x)
 tox_at_dose(x)
 
 
-# TPI example ----
-tpi_fitter <- get_tpi(num_doses = 5, target = 0.3, k1 = 1, k2 = 1.5,
-                      exclusion_certainty = 0.7)
-x <- fit(tpi_fitter, '1NNN')
-x <- fit(tpi_fitter, '1NNN 2TTNT')
-# x <- fit(tpi_fitter, '1NNN 2TTNT 3NNT')
-x
-
-class(x)
-num_patients(x)
-cohort(x)
-doses_given(x)
-tox(x)
-model_frame(x)
-num_doses(x)
-recommended_dose(x)
-continue(x)
-n_at_dose(x)
-n_at_dose(x, dose = 0)
-n_at_dose(x, dose = 1)
-n_at_dose(x, dose = 'recommended')
-n_at_recommended_dose(x)
-tox_at_dose(x)
-empiric_tox_rate(x)
-mean_prob_tox(x)
-median_prob_tox(x)
-dose_admissible(x)
-prob_tox_exceeds(x, target)
-
-
-# mTPI example ----
-model <- get_mtpi(num_doses = 5, target = 0.3, epsilon1 = 0.05, epsilon2 = 0.05,
-                      exclusion_certainty = 0.95)
-x <- fit(model, '1NNN')
-x <- fit(model, '1NNN 2TTNT')
-x
-
-class(x)
-num_patients(x)
-cohort(x)
-doses_given(x)
-tox(x)
-model_frame(x)
-num_doses(x)
-recommended_dose(x)
-continue(x)
-n_at_dose(x)
-n_at_dose(x, dose = 0)
-n_at_dose(x, dose = 1)
-n_at_dose(x, dose = 'recommended')
-n_at_recommended_dose(x)
-tox_at_dose(x)
-empiric_tox_rate(x)
-mean_prob_tox(x)
-median_prob_tox(x)
-dose_admissible(x)
-prob_tox_exceeds(x, target)
 
 # 3+3 ----
 three_plus_three_fitter <- get_three_plus_three(num_doses = 5)
@@ -256,6 +263,60 @@ dose_admissible(x)
 prob_tox_exceeds(x, 0.5)
 tox_target(x)
 
+
+# trialr EffTox ----
+efftox_priors <- trialr::efftox_priors
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1)
+real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
+
+model <- get_trialr_efftox(real_doses = real_doses,
+                           efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                           p_e = 0.1, p_t = 0.1,
+                           eff0 = 0.5, tox1 = 0.65,
+                           eff_star = 0.7, tox_star = 0.25,
+                           priors = p, seed = 2020)
+x <- model %>% fit('1N 2E 3B')
+
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+eff(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+eff_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+empiric_eff_rate(x)
+mean_prob_eff(x)
+median_prob_eff(x)
+dose_admissible(x)
+prob_tox_exceeds(x, 0.5)
+prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.5)
+prob_eff_exceeds(x, 0.5)
+prob_eff_quantile(x, p = 0.05)
+prob_eff_quantile(x, p = 0.5)
+# and standard generics
+print(x)
+summary(x)
+tibble::as_tibble(x)
 
 # Dose paths ----
 cohort_sizes <- c(3, 3, 3)
@@ -286,14 +347,32 @@ selector_factory <- get_trialr_crm(skeleton = skeleton, target = target,
 selector_factory <- get_boin(num_doses = length(skeleton), target = target) %>%
   stop_at_n(n = 12)
 
+# Use EffTox
+efftox_priors <- trialr::efftox_priors
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1)
+real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
+selector_factory <- get_trialr_efftox(real_doses = real_doses,
+                                      efficacy_hurdle = 0.5,
+                                      toxicity_hurdle = 0.3,
+                                      p_e = 0.1, p_t = 0.1,
+                                      eff0 = 0.5, tox1 = 0.65,
+                                      eff_star = 0.7, tox_star = 0.25,
+                                      priors = p, seed = 2020)
+
 # Get paths
+cohort_sizes <- c(2, 2)
 paths1 <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
 as_tibble(paths1) %>% print(n = 100)
 
 spread_paths(as_tibble(paths1)) %>%
   select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
-         'outcomes2', 'next_dose2', 'outcomes3', 'next_dose3') %>%
-  print(n=100)
+         'outcomes2', 'next_dose2') %>%
+  print(n=1000)
 # With true_prob_tox, these paths have exact probabilities
 
 # In-progress trials:
@@ -325,66 +404,8 @@ print(paths, node = -1)
 print(paths, node = NA)
 print(paths, node = NULL)
 
-
-
 # Visualise
-df <- as_tibble(paths)
-spread_paths(df) # wide
-spread_paths(df %>% select(-fit, -parent_fit, -dose_index)) # briefer
-library(DiagrammeR)
-library(dplyr)
-
-library(RColorBrewer)
-display.brewer.all()
-dose_indices(paths)
-
-# graph_paths <- function(paths,
-#                         viridis_palette = 'viridis',
-#                         RColorBrewer_palette = NULL
-#                         ) {
-#
-#   stop_label <- 'Stop'
-#   df <- as_tibble(paths)
-#
-#   num_colours <- num_doses(x) + 1
-#
-#   if(is.null(RColorBrewer_palette)) {
-#     df_colour <- tibble(
-#       dose = c(stop_label, as.character(dose_indices(x))),
-#       fillcolor = viridis::viridis(num_colours, option = viridis_palette)
-#     )
-#   } else {
-#     df_colour <- tibble(
-#       dose = c(stop_label, as.character(dose_indices(x))),
-#       fillcolor = RColorBrewer::brewer.pal(num_colours, RColorBrewer_palette)
-#     )
-#   }
-#
-#   col_offset <- as.integer(num_colours / 2)
-#   i <- 1 + mod((seq_along(df_colour$fillcolor) + col_offset - 1), num_colours)
-#   df_colour$fontcolor <- df_colour$fillcolor[i]
-#
-#   df %>%
-#     transmute(id = .node,
-#               type = NA,
-#               next_dose,
-#               label = case_when(
-#                 is.na(next_dose) ~ 'Stop',
-#                 TRUE ~ next_dose %>% as.character())
-#     ) %>%
-#     left_join(df_colour, by = c('label' = 'dose')) -> ndf
-#
-#   df %>%
-#     filter(!is.na(.parent)) %>%
-#     select(from = .parent, to = .node, label = outcomes) %>%
-#     mutate(rel = "leading_to") -> edf
-#
-#   graph <- DiagrammeR::create_graph(nodes_df = ndf, edges_df = edf)
-#   DiagrammeR::render_graph(graph)
-# }
-
 graph_paths(paths)
-
 graph_paths(paths, viridis_palette = 'viridis')
 graph_paths(paths, viridis_palette = 'magma')
 graph_paths(paths, viridis_palette = 'plasma')
@@ -397,9 +418,6 @@ graph_paths(paths, RColorBrewer_palette = 'Paired')
 graph_paths(paths, RColorBrewer_palette = 'RdPu')
 graph_paths(paths, RColorBrewer_palette = 'Set2')
 graph_paths(paths, RColorBrewer_palette = 'Spectral')
-
-
-
 # We could append this graph with transition probabilities.
 
 # Crytallised dose-paths ----
@@ -478,20 +496,46 @@ get_trialr_crm(skeleton = skeleton, target = target,
 
 # Use BOIN
 get_boin(num_doses = length(skeleton), target = target) %>%
-  stop_at_n(n = 12) %>% simulate_trials(
+  stop_at_n(n = 12) %>%
+  simulate_trials(
     num_sims = 50,
     true_prob_tox = true_prob_tox,
     sample_patient_arrivals =
       function(current_data) cohorts_of_n(n = 2, mean_time_delta = 1),
     next_dose = 2) -> sims
 
-length(sims) # Num sims
+# Use EffTox
+efftox_priors <- trialr::efftox_priors
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1)
+real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
+model <- get_trialr_efftox(real_doses = real_doses,
+                           efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                           p_e = 0.1, p_t = 0.1,
+                           eff0 = 0.5, tox1 = 0.65,
+                           eff_star = 0.7, tox_star = 0.25,
+                           priors = p, seed = 2020) %>%
+  stop_at_n(n = 6)
+
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+true_prob_eff <- c(0.27, 0.35, 0.41, 0.44, 0.45)
+
+sims <- model %>%
+  simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
+                  true_prob_eff = true_prob_eff)
+
+# length(sims) # Num sims
 class(sims[[1]]) # list
 length(sims[[1]]) # Num decisions
 class(sims[[1]][[1]]) # list
 
 
 # Interface
+sims
 class(sims)
 length(sims)
 summary(sims)

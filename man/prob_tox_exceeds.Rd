@@ -2,22 +2,30 @@
 % Please edit documentation in R/interface.R
 \name{prob_tox_exceeds}
 \alias{prob_tox_exceeds}
+\alias{prob_eff_exceeds}
 \title{Probability that the toxicity rate exceeds some threshold.}
 \usage{
 prob_tox_exceeds(x, threshold, ...)
+
+prob_eff_exceeds(x, threshold, ...)
 }
 \arguments{
 \item{x}{Object of type \code{\link{selector}}}
 
-\item{threshold}{Probability that toxicity rate exceeds what?}
+\item{threshold}{Probability that efficacy rate exceeds what?}
 
 \item{...}{arguments passed to other methods}
 }
 \value{
 numerical vector of probabilities
+
+numerical vector of probabilities
 }
 \description{
 Get the probability that the toxicity rate at each dose exceeds some
+threshold.
+
+Get the probability that the efficacy rate at each dose exceeds some
 threshold.
 }
 \examples{
@@ -28,4 +36,20 @@ outcomes <- '1NNN 2NTN'
 fit <- get_dfcrm(skeleton = skeleton, target = target) \%>\% fit(outcomes)
 # What is probability that tox rate at each dose exceeds target by >= 10\%?
 fit \%>\% prob_tox_exceeds(threshold = target + 0.1)
+efftox_priors <- trialr::efftox_priors
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1)
+real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
+model <- get_trialr_efftox(real_doses = real_doses,
+                           efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                           p_e = 0.1, p_t = 0.1,
+                           eff0 = 0.5, tox1 = 0.65,
+                           eff_star = 0.7, tox_star = 0.25,
+                           priors = p, iter = 1000, chains = 1, seed = 2020)
+x <- model \%>\% fit('1N 2E 3B')
+prob_tox_exceeds(x, threshold = 0.45)
 }

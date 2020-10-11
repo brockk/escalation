@@ -1,8 +1,8 @@
 ---
-title: "Working with dose selectors"
+title: "Using escalation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Working with dose selectors}
+  %\VignetteIndexEntry{Using escalation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

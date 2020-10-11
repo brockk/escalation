@@ -1,21 +1,3 @@
-get_mtpi <- function(num_doses, target, ...) {
-
-  x <- list(
-    num_doses = num_doses,
-    target = target,
-    # model = model,
-
-    # k1 = k1,
-    # k2 = k2,
-
-    extra_args = list(...)
-  )
-
-  class(x) <- c('mtpi_selector_factory',
-                'tox_selector_factory',
-                'selector_factory')
-  return(x)
-}
 
 get_mtpi2 <- function(num_doses, target, ...) {
 
@@ -53,5 +35,5 @@ get_mtpi2 <- function(num_doses, target, ...) {
 #   # Escalate if possible
 #   recommended_dose <- min(num_doses, last_dose + 1)
 # } else {
-#   # TODO
+# # ?
 # }

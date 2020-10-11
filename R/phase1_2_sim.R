@@ -1,0 +1,93 @@
+
+#' @importFrom stats rbinom
+#' @importFrom magrittr %>%
+#' @importFrom utils tail
+phase1_2_sim <- function(
+  selector_factory,
+  true_prob_tox,
+  true_prob_eff,
+  sample_patient_arrivals = function(df) cohorts_of_n(n=3, mean_time_delta=1),
+  previous_outcomes = '',
+  next_dose = NULL,
+  i_like_big_trials = FALSE, # Safety net if stop_trial_func is mis-specified...
+  return_all_fits = FALSE
+) {
+  if(is.character(previous_outcomes)) {
+    base_df <- parse_phase1_outcomes(previous_outcomes, as_list = FALSE)
+  } else if(is.data.frame(previous_outcomes)) {
+    base_df <- spruce_outcomes_df(previous_outcomes)
+  } else{
+    base_df <- parse_phase1_outcomes('', as_list = FALSE)
+  }
+  dose <- base_df$dose
+  tox <- base_df$tox
+  eff <- base_df$eff
+  cohort <- base_df$cohort
+  next_cohort <- ifelse(length(cohort) > 0, max(cohort) + 1, 1)
+  if('time' %in% colnames(base_df)) {
+    time <- previous_outcomes$time
+  } else {
+    time <- rep(0, length(dose))
+  }
+
+  i <- 1 # loop counter
+  max_i <- 30
+  time_now <- 0
+  fit <- selector_factory %>% fit(base_df)
+  if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
+  fits <- list()
+  fits[[1]] <- list(.depth = i, time = time_now, fit = fit)
+  while(fit %>% continue() & !is.na(next_dose) &
+        (i_like_big_trials | i < max_i)) {
+
+    current_data = data.frame(
+      cohort = cohort,
+      patient = seq_along(dose),
+      dose = dose,
+      tox = tox,
+      eff = eff,
+      time = time
+    )
+    new_pts <- sample_patient_arrivals(current_data)
+    arrival_time_deltas <- cumsum(new_pts$time_delta)
+    n_new_pts <- nrow(new_pts)
+    new_dose <- rep(next_dose, n_new_pts)
+    new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
+    new_eff <- rbinom(n = n_new_pts, size = 1, prob = true_prob_eff[next_dose])
+    new_cohort <- rep(next_cohort, n_new_pts)
+
+    dose <- c(dose, new_dose)
+    tox <- c(tox, new_tox)
+    eff <- c(eff, new_eff)
+    cohort <- c(cohort, new_cohort)
+    time <- c(time, time_now + arrival_time_deltas)
+    new_data = data.frame(
+      cohort = cohort,
+      patient = 1:length(dose),
+      dose = dose,
+      tox = tox,
+      eff = eff,
+      time = time
+    )
+
+    time_now <- time_now + max(arrival_time_deltas)
+    i <- i + 1
+    fit <- selector_factory %>% fit(new_data)
+    next_cohort <- next_cohort + 1
+    fits[[i]] <- list(.depth = i, time = time_now, fit = fit)
+    next_dose <- fit %>% recommended_dose()
+  }
+
+  # Warn about i_like_big_trials if sim stopped because of too big i.
+  if(!i_like_big_trials & i >= max_i) {
+    warning(paste(
+      "Simulation stopped because max depth reached.",
+      "Set 'i_like_big_trials = TRUE' to avoid this constraint. "))
+  }
+
+  if(return_all_fits) {
+    return(fits)
+  } else {
+    return(tail(fits, 1))
+  }
+}

@@ -19,7 +19,7 @@ phase1_dose_paths <- function(
   max_depth <- length(cohort_sizes)
   num_paths = 1 + sum(sapply(1:max_depth,
                              function(i) prod((cohort_sizes + 1)[1:i])))
-  if(num_paths >= 100 & num_paths < 500) {
+  if(num_paths >= 100) {
     message(paste0('You have requested ', num_paths,
                    ' model evaluations. Be patient.'))
   }
@@ -35,7 +35,9 @@ phase1_dose_paths <- function(
   # Calculate feasible outcome combinations by cohort
   outcomes <- c('T', 'N')
   cohort_paths <- lapply(
-    cohort_sizes, function(x) combinations(n = 2, r = x, v = outcomes,
+    cohort_sizes, function(x) combinations(n = length(outcomes),
+                                           r = x,
+                                           v = outcomes,
                                            repeats.allowed=TRUE))
   # Flatten cohort outcomes
   cohort_paths <- lapply(cohort_paths, function(x) apply(x, 1, paste0,

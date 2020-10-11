@@ -1,0 +1,398 @@
+---
+title: "Continual Reassessment Method"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Continual Reassessment Method}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The `escalation` package by Kristian Brock.
+Documentation is hosted at https://brockk.github.io/escalation/
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7, fig.height = 5
+)
+
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+The continual reassessment method (CRM) was introduced by @OQuigley1990.
+It has proved to be a truly seminal dose-finding design, spurring many revisions, variants and imitations.
+
+# Summary of the CRM Design
+Pinning a finger on what is _the_ CRM design is complicated because there have been so many versions over the years.
+
+At its simplest, the CRM is a dose-escalation design that seeks a dose with probability of toxicity closest to some pre-specified target toxicity rate, $p_T$, in an homogeneous patient group.
+The hallmark that unifies the CRM variants is the assumption that the probability of toxicity, $p_i$, at the $i$th dose, $x_i$, can be modelled using a smooth mathematical function:
+
+$$ p_i = F(x_i, \theta), $$
+
+where $\theta$ is a general vector of parameters.
+Priors are specified on $\theta$, and the dose with posterior estimate of $p_i$ closest to $p_T$ is iteratively recommended to the next patient(s).
+
+Different variants of the CRM use different forms for $F$.
+We consider those briefly now.
+
+### Hyperbolic tangent model
+@OQuigley1990 first introduced the method using
+
+$$ p_i = \left( \frac{\tanh{(x_i)} + 1}{2} \right)^\beta, $$
+
+with an exponential prior was placed on $\beta$.
+
+
+### Empiric model (aka power model)
+
+$$ p_i = x_i^{\exp(\beta)}, $$
+
+for dose $x_i \in (0, 1)$;
+
+### One-parameter logistic model
+
+$$ \text{logit} p_i = a_0 + \exp{(\beta)} x_i, $$
+
+where $a_0$ is a pre-specified constant, and $x_i \in \mathbb{R}$.
+
+### Two-parameter logistic model
+
+$$ \text{logit} p_i = \alpha + \exp{(\beta)} x_i, $$
+for $x_i \in \mathbb{R}$.
+
+Other model considerations include:
+
+### Priors
+In each of these models, different distributions may be used for the parameter priors.
+
+### Toxicity skeletons and standardised doses
+The $x_i$ dose variables in the models above do not reflect the raw dose quantities given to patients.
+For example, if the dose is 10mg, we do not use `x=10`.
+Instead, a _skeleton_ containing estimates of the probabilities of toxicity at the doses is identified.
+This skeleton could reflect the investigators' prior expectations of toxicities at all of the doses; or it could reflect their expectations for some of the doses with the others interpolated in some plausible way.
+The $x_i$ are then calculated so that the model-estimated probabilities of toxicity with the parameters taking their prior mean values match the skeleton.
+This will be much clearer with an example.
+
+In a five dose setting, let the skeleton be $\pi = (0.05, 0.1, 0.2, 0.4, 0.7)$.
+That is, the investigators believe before the trial commences that the probbaility of toxicity at the second dose is 10%, and so on.
+Let us assume that we are using a one-parameter logistic model with $a_0 = 3$ and $\beta ~ \sim N(0, 1)$.
+Then we require that 
+
+$$ \text{logit} \pi_i = 3 + e^0 x_i = 3 + x_i, $$
+
+i.e.
+
+$$ x_i = \text{logit} \pi_i - 3. $$
+
+This yields the vector of standardised doses $x = (-5.94, -5.20, -4.39, -3.41, -2.15)$.
+Equivalent transformations can be derived for the other model forms.
+The $x_i$ are then used as covariates in the model-fitting.
+CRM users specify their skeleton, $\pi$, and their parameter priors.
+From these, the software calculates the $x_i$.
+The actual doses given to patients in SI units do not actually feature in the model.
+
+
+# Implementation in `escalation`
+
+`escalation` simply aims to give a common interface to dose-selection models to facilitate a grammar for specifying dose-finding trial designs.
+Where possible, it delegates the mathematical model-fitting to existing R packages.
+There are several R packages that implement CRM models.
+The two used in `escalation` are the `dfcrm` package [@Cheung2011; @dfcrm]; and the `trialr` package [@Brock2019; @trialr].
+They have different strengths and weaknesses, so are suitable to different scenarios.
+We discuss those now.
+
+### dfcrm 
+[`dfcrm`](https://cran.r-project.org/package=dfcrm) offers:
+
+* the **empiric** model with normal prior on $\beta$;
+* the **one-parameter logistic** model with normal prior on $\beta$.
+
+`dfcrm` models are fit in `escalation` using the `get_dfcrm` function.
+Examples are given below.
+
+### trialr
+[`trialr`](https://cran.r-project.org/package=trialr) offers:
+
+* the **empiric** model with normal prior on $\beta$;
+* the **one-parameter logistic** model with normal prior on $\beta$;
+* the **one-parameter logistic** model with gamma prior on $\beta$;
+* the **two-parameter logistic** model with normal priors on $\alpha$ and $\beta$.
+
+`trialr` models are fit in `escalation` using the `get_trialr_crm` function.
+
+Let us commence by replicating an example from p.21 of @Cheung2011.
+They choose the following parameters:
+
+```{r}
+skeleton <- c(0.05, 0.12, 0.25, 0.40, 0.55)
+target <- 0.25
+a0 <- 3
+beta_sd <- sqrt(1.34)
+```
+
+Let us define a model fitter using the `dfcrm` package:
+
+```{r, message=FALSE}
+library(escalation)
+model1 <- get_dfcrm(skeleton = skeleton, target = target, model = 'logistic', 
+                    intcpt = a0, scale = beta_sd)
+```
+
+and a fitter using the `trialr` package:
+```{r}
+model2 <- get_trialr_crm(skeleton = skeleton, target = target, model = 'logistic', 
+                         a0 = a0, beta_mean = 0, beta_sd = beta_sd)
+```
+
+Names for the function parameters `skeleton`, `target`, and `model` are standardised by `escalation` because they are fundamental.
+Further parameters (i.e. those in the second lines of each of the above examples) are passed onwards to the model-fitting functions in `dfcrm` and `trialr`.
+You can see that some of these parameter names vary between the approaches.
+E.g., what `dfcrm` calls the `intcpt`, `trialr` calls `a0`.
+Refer to the documentation of the `crm` function in `dfcrm` and `stan_crm` in `trialr` for further information.
+
+We then fit those models to the notional outcomes described in the source text:
+```{r}
+outcomes <- '3N 5N 5T 3N 4N'
+
+fit1 <- model1 %>% fit(outcomes)
+fit2 <- model2 %>% fit(outcomes)
+```
+
+
+The dose recommended by each of the models for the next patient is:
+
+```{r}
+fit1 %>% recommended_dose()
+fit2 %>% recommended_dose()
+```
+
+Thankfully, the models agree.
+They advocate staying at dose 4, wary of the toxicity already seen at dose 5.
+
+If we take a summary of each model fit:
+```{r}
+fit1 %>% summary()
+```
+
+```{r}
+fit2 %>% summary()
+```
+
+We can see that they closely agree on model estimates of the probability of toxicity at each dose.
+Note that the median perfectly matches the mean in the `dfcrm` fit because it assumes a normal posterior distribution on $\beta$.
+In contrast, the `trialr` class uses `Stan` to fit the model using Hamiltonian Monte Carlo sampling.
+The posterior distributions for the probabilities of toxicity are evidently non-normal and positively-skewed because the median estimates are less than the mean estimates.
+
+Let us imagine instead that we want to fit the empiric model.
+That simply requires we change the `model` variable and adjust the prior parameters:
+
+```{r}
+model3 <- get_dfcrm(skeleton = skeleton, target = target, model = 'empiric', 
+                    scale = beta_sd)
+
+model4 <- get_trialr_crm(skeleton = skeleton, target = target, model = 'empiric', 
+                         beta_sd = beta_sd)
+```
+
+Fitting each to the same set of outcomes yields:
+
+```{r}
+fit3 <- model3 %>% fit(outcomes)
+fit4 <- model4 %>% fit(outcomes) 
+```
+
+```{r}
+fit3 %>% summary()
+```
+
+```{r}
+fit4 %>% summary()
+```
+
+In this example, the model estimates are broadly consistent across methodology and model type.
+However, this is not the general case.
+To illustrate this point, let us examine a two parameter logistic model fit using `trialr` (note: this model is not implemented in `dfcrm`):
+
+
+```{r}
+model5 <- get_trialr_crm(skeleton = skeleton, target = target, model = 'logistic2', 
+                         alpha_mean = 0, alpha_sd = 2, beta_mean = 0, beta_sd = 1)
+fit5 <- model5 %>% fit(outcomes)
+fit5 %>% summary()
+```
+
+Now the estimate of toxicity at the highest dose is high relative to the other models.
+The extra free parameter in the two-parameter model offers more flexibility.
+There has been a debate in the literature about one-parameter vs two-parameter models (and possibly more).
+It is generally accepted that a single parameter model is too simplistic to accurately estimate $p_i$ over the entire dose range.
+However, it will be sufficient to identify the dose closest to $p_T$, and if that is the primary objective of the trial, the simplicity of a one-parameter model may be entirely justified.
+The interested reader is directed to @OQuigley1990 and @Neuenschwander2008.
+
+Note that the CRM does not natively implement stopping rules, so these classes on their own will always advocate trial continuance:
+
+```{r}
+fit1 %>% continue()
+fit5 %>% continue()
+```
+
+and identify each dose as admissible:
+
+```{r}
+fit1 %>% dose_admissible()
+```
+
+This behaviour can be altered by appending classes to advocate stopping for consensus:
+
+```{r}
+model6 <- get_trialr_crm(skeleton = skeleton, target = 0.3, model = 'empiric', 
+                         beta_sd = 1) %>% 
+  stop_when_n_at_dose(dose = 'recommended', n = 6)
+
+fit6 <- model6 %>% fit('2NNN 3TTT 2NTN')
+
+fit6 %>% continue()
+fit6 %>% recommended_dose()
+```
+
+Or for stopping under excess toxicity:
+
+```{r}
+model7 <- get_trialr_crm(skeleton = skeleton, target = 0.3, model = 'empiric', 
+                         beta_sd = 1) %>% 
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.3, confidence = 0.8)
+
+fit7 <- model7 %>% fit('1NTT 1TTN')
+
+fit7 %>% continue()
+fit7 %>% recommended_dose()
+fit7 %>% dose_admissible()
+```
+
+Or both:
+
+```{r}
+model8 <- get_trialr_crm(skeleton = skeleton, target = 0.3, model = 'empiric', 
+                         beta_sd = 1) %>% 
+  stop_when_n_at_dose(dose = 'recommended', n = 6) %>% 
+  stop_when_too_toxic(dose = 1, tox_threshold = 0.3, confidence = 0.8)
+
+```
+
+For more information, check the package README and the other vignettes.
+
+### dfcrm vs trialr
+So which method should you use?
+The answer depends on how you plan to use the models.
+
+The `trialr` classes produce posterior samples:
+
+```{r}
+fit7 %>% 
+  prob_tox_samples(tall = TRUE) %>% 
+  head()
+```
+
+and these facilitate flexible visualisation:
+
+```{r, message=FALSE}
+library(ggplot2)
+library(dplyr)
+
+fit7 %>% 
+  prob_tox_samples(tall = TRUE) %>% 
+  mutate(.draw = .draw %>% as.integer()) %>% 
+  filter(.draw <= 200) %>% 
+  ggplot(aes(dose, prob_tox)) + 
+  geom_line(aes(group = .draw), alpha = 0.2)
+```
+
+However, MCMC sampling is an expensive computational procedure compared to the numerical integration used in `dfcrm`.
+If you envisage fitting lots of models, perhaps in simulations or dose-paths (see below) and favour a model offered by `dfcrm`, we recommend using `get_dfcrm`.
+However, if you favour a model only offered by `trialr`, or if you are willing for calculation to be slow in order to get posterior samples, then use `trialr`.
+
+
+## Dose paths
+
+We can use the `get_dose_paths` function in `escalation` to calculate exhaustive model recommendations in response to every possible set of outcomes in future cohorts.
+For instance, at the start of a trial using an empiric CRM, we can examine all possible paths a trial might take in the first two cohorts of three patients, starting at dose 2:
+
+```{r, message=FALSE}
+skeleton <- c(0.05, 0.12, 0.25, 0.40, 0.55)
+target <- 0.25
+beta_sd <- 1
+
+model <- get_dfcrm(skeleton = skeleton, target = target, model = 'empiric', 
+                   scale = beta_sd)
+paths <- model %>% get_dose_paths(cohort_sizes = c(3, 3), next_dose = 2)
+graph_paths(paths)
+```
+
+We see that the design would willingly skip dose 3 if no tox is seen in the first cohort.
+This might warrant suppressing dose-dkipping by appending a `dont_skip_doses(when_escalating = TRUE)` selector.
+
+Dose-paths can also be run for in-progress trials where some outcomes have been established.
+For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+
+
+## Simulation
+
+We can use the `simulate_trials` function to calculate operating characteristics for a design.
+Let us use the example above and tell the design to stop when the lowest dose is too toxic, when 9 patients have already been evaluated at the candidate dose, or when a sample size of $n=24$ is reached:
+
+```{r}
+model <- get_dfcrm(skeleton = skeleton, target = target, model = 'empiric', 
+                   scale = beta_sd) %>% 
+  stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.8) %>% 
+  stop_when_n_at_dose(dose = 'recommended', n = 9) %>% 
+  stop_at_n(n = 24)
+```
+
+For the sake of speed, we will run just fifty iterations:
+
+```{r}
+num_sims <- 50
+```
+
+In really life, however, we would naturally run many thousands of iterations.
+Let us investigate under the following true probabilities of toxicity:
+
+```{r}
+sc1 <- c(0.25, 0.5, 0.6, 0.7, 0.8)
+```
+
+The simulated behaviour is:
+```{r}
+set.seed(123)
+sims <- model %>%
+  simulate_trials(num_sims = num_sims, true_prob_tox = sc1, next_dose = 1)
+
+sims
+```
+
+We see that the chances of stopping for excess toxicity and recommending no dose is about 1-in-4.
+Dose 1 is the clear favourite to be identified.
+Interestingly, the `stop_when_n_at_dose` class reduces the expected sample size to 12-13 patints.
+Without it:
+
+```{r}
+get_dfcrm(skeleton = skeleton, target = target, model = 'empiric', 
+          scale = beta_sd) %>% 
+  stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.8) %>% 
+  stop_at_n(n = 24) %>% 
+  simulate_trials(num_sims = num_sims, true_prob_tox = sc1, next_dose = 1)
+
+```
+
+expected sample size is much higher and the chances of erroneously stopping early are also higher.
+These phenomena would justify a wider simulation study in a real situation.
+
+For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+
+
+# References

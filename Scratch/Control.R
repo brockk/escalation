@@ -19,14 +19,7 @@
 # usethis::use_news_md()
 # usethis::use_travis()
 # usethis::use_testthat()
-# usethis::use_vignette(name = 'DoseSelectorInterface',
-#                       title = 'Working with dose selectors')
-# usethis::use_vignette(name = 'Simulation',
-#                       title = 'Simulating dose-escalation trials')
-# usethis::use_vignette(name = 'DosePaths',
-#                       title = 'Working with dose-paths')
-# usethis::use_vignette(name = 'TPI', title = 'TPI Design')
-# usethis::use_vignette(name = 'mTPI', title = 'mTPI Design')
+# usethis::use_vignette(name = 'NPG', title = 'NeuenschwanderBransonGsponer')
 # usethis::use_logo('logo.png')
 # usethis::use_pkgdown()
 # usethis::use_coverage()
