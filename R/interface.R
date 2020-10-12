@@ -257,21 +257,10 @@ num_tox <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' efftox_priors <- trialr::efftox_priors
-#' p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
-#'                    beta_mean = 1.5482, beta_sd = 3.5018,
-#'                    gamma_mean = 0.7367, gamma_sd = 2.5423,
-#'                    zeta_mean = 3.4181, zeta_sd = 2.4406,
-#'                    eta_mean = 0, eta_sd = 0.2,
-#'                    psi_mean = 0, psi_sd = 1)
-#' real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
-#' model <- get_trialr_efftox(real_doses = real_doses,
-#'                            efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
-#'                            p_e = 0.1, p_t = 0.1,
-#'                            eff0 = 0.5, tox1 = 0.65,
-#'                            eff_star = 0.7, tox_star = 0.25,
-#'                            priors = p, iter = 1000, chains = 1, seed = 2020)
-#' x <- model %>% fit('1N 2E 3B')
+#' prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+#' model <- get_random_selector(prob_select = prob_select,
+#'                              supports_efficacy = TRUE)
+#' x <- model %>% fit('1NTN 2EN 5BB')
 #' eff(x)
 eff <- function(x, ...) {
   UseMethod('eff')
@@ -289,21 +278,10 @@ eff <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' efftox_priors <- trialr::efftox_priors
-#' p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
-#'                    beta_mean = 1.5482, beta_sd = 3.5018,
-#'                    gamma_mean = 0.7367, gamma_sd = 2.5423,
-#'                    zeta_mean = 3.4181, zeta_sd = 2.4406,
-#'                    eta_mean = 0, eta_sd = 0.2,
-#'                    psi_mean = 0, psi_sd = 1)
-#' real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
-#' model <- get_trialr_efftox(real_doses = real_doses,
-#'                            efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
-#'                            p_e = 0.1, p_t = 0.1,
-#'                            eff0 = 0.5, tox1 = 0.65,
-#'                            eff_star = 0.7, tox_star = 0.25,
-#'                            priors = p, iter = 1000, chains = 1, seed = 2020)
-#' x <- model %>% fit('1N 2E 3B')
+#' prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+#' model <- get_random_selector(prob_select = prob_select,
+#'                              supports_efficacy = TRUE)
+#' x <- model %>% fit('1NTN 2EN 5BB')
 #' num_eff(x)
 num_eff <- function(x, ...) {
   UseMethod('num_eff')
@@ -323,10 +301,18 @@ num_eff <- function(x, ...) {
 #' @export
 #'
 #' @examples
+#' # In a toxicity-only setting:
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' target <- 0.25
 #' model <- get_dfcrm(skeleton = skeleton, target = target)
 #' fit <- model %>% fit('1NNN 2NTN')
+#' fit %>% model_frame()
+#'
+#' # In an efficacy-toxicity setting
+#' prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+#' model <- get_random_selector(prob_select = prob_select,
+#'                              supports_efficacy = TRUE)
+#' x <- model %>% fit('1NTN 2EN 5BB', supports_efficacy = TRUE)
 #' fit %>% model_frame()
 model_frame <- function(x, ...) {
   UseMethod('model_frame')
@@ -593,21 +579,10 @@ median_prob_tox <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' efftox_priors <- trialr::efftox_priors
-#' p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
-#'                    beta_mean = 1.5482, beta_sd = 3.5018,
-#'                    gamma_mean = 0.7367, gamma_sd = 2.5423,
-#'                    zeta_mean = 3.4181, zeta_sd = 2.4406,
-#'                    eta_mean = 0, eta_sd = 0.2,
-#'                    psi_mean = 0, psi_sd = 1)
-#' real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
-#' model <- get_trialr_efftox(real_doses = real_doses,
-#'                            efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
-#'                            p_e = 0.1, p_t = 0.1,
-#'                            eff0 = 0.5, tox1 = 0.65,
-#'                            eff_star = 0.7, tox_star = 0.25,
-#'                            priors = p, iter = 1000, chains = 1, seed = 2020)
-#' x <- model %>% fit('1N 2E 3B')
+#' prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+#' model <- get_random_selector(prob_select = prob_select,
+#'                              supports_efficacy = TRUE)
+#' x <- model %>% fit('1NTN 2EN 5BB')
 #' eff_at_dose(x)
 eff_at_dose <- function(x, ...) {
   UseMethod('eff_at_dose')
@@ -626,21 +601,10 @@ eff_at_dose <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' efftox_priors <- trialr::efftox_priors
-#' p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
-#'                    beta_mean = 1.5482, beta_sd = 3.5018,
-#'                    gamma_mean = 0.7367, gamma_sd = 2.5423,
-#'                    zeta_mean = 3.4181, zeta_sd = 2.4406,
-#'                    eta_mean = 0, eta_sd = 0.2,
-#'                    psi_mean = 0, psi_sd = 1)
-#' real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
-#' model <- get_trialr_efftox(real_doses = real_doses,
-#'                            efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
-#'                            p_e = 0.1, p_t = 0.1,
-#'                            eff0 = 0.5, tox1 = 0.65,
-#'                            eff_star = 0.7, tox_star = 0.25,
-#'                            priors = p, iter = 1000, chains = 1, seed = 2020)
-#' x <- model %>% fit('1N 2E 3B')
+#' prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+#' model <- get_random_selector(prob_select = prob_select,
+#'                              supports_efficacy = TRUE)
+#' x <- model %>% fit('1NTN 2EN 5BB')
 #' empiric_tox_rate(x)
 empiric_eff_rate <- function(x, ...) {
   UseMethod('empiric_eff_rate')
@@ -982,6 +946,61 @@ prob_tox_samples <- function(x, tall = FALSE, ...) {
 prob_eff_samples <- function(x, tall = FALSE, ...) {
   UseMethod('prob_eff_samples')
 }
+
+
+
+
+# dose_paths interface ----
+
+#' Calculate dose-path probabilities
+#'
+#' @description
+#' Crystallise a set of \code{\link{dose_paths}} with probabilities to calculate
+#' how likely each path is. Once probabilised in this way, the probabilities of
+#' the terminal nodes in this set of paths will sum to 1. This allows users to
+#' calculate operating characteristics.
+#'
+#' @param dose_paths Object of type \code{\link{dose_paths}}
+#' @param true_prob_tox Numeric vector, true probability of toxicity.
+#' @param true_prob_eff vector of true efficacy probabilities, optionally NULL
+#' if efficacy not analysed.
+#' @param ... Extra parameters
+#'
+#' @seealso \code{\link{dose_paths}}
+#'
+#' @importFrom tibble tibble as_tibble
+#' @importFrom dplyr mutate filter left_join case_when
+#' @importFrom stringr str_count
+#' @importFrom purrr map2 map_dfr
+#' @importFrom stats dbinom
+#' @export
+#'
+#' @examples
+#' # Phase 1 example.
+#' # Calculate dose paths for the first three cohorts in a 3+3 trial of 5 doses:
+#' paths <- get_three_plus_three(num_doses = 5) %>%
+#'   get_dose_paths(cohort_sizes = c(3, 3, 3))
+#'
+#' # Set the true probabilities of toxicity
+#' true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+#' # And calculate exact operating performance
+#' x <- paths %>% calculate_probabilities(true_prob_tox)
+#' prob_recommend(x)
+#'
+#' # Phase 1/2 example.
+#' prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+#' selector_factory <- get_random_selector(prob_select = prob_select,
+#'                                         supports_efficacy = TRUE)
+#' paths <- selector_factory %>% get_dose_paths(cohort_sizes = c(2, 2))
+#' true_prob_eff <- c(0.27, 0.35, 0.41, 0.44, 0.45)
+#' x <- paths %>% calculate_probabilities(true_prob_tox = true_prob_tox,
+#'                                        true_prob_eff = true_prob_eff)
+#' prob_recommend(x)
+calculate_probabilities <- function(dose_paths, true_prob_tox,
+                                    true_prob_eff = NULL, ...) {
+  UseMethod('calculate_probabilities')
+}
+
 
 # simulations interface ----
 

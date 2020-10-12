@@ -264,6 +264,50 @@ prob_tox_exceeds(x, 0.5)
 tox_target(x)
 
 
+
+# Random selector ----
+prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+model <- get_random_selector(prob_select = prob_select)
+x <- model %>% fit('1NTN 2NN 5TT')
+x <- model %>% fit('1NTN 2EN 5BB')
+
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+eff(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+tox_at_dose(x)
+eff_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+empiric_eff_rate(x)
+mean_prob_eff(x)
+median_prob_eff(x)
+dose_admissible(x)
+prob_tox_exceeds(x, 0.5)
+prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.5)
+prob_eff_exceeds(x, 0.5)
+prob_eff_quantile(x, p = 0.05)
+prob_eff_quantile(x, p = 0.5)
+supports_sampling(x)
+# and standard generics
+print(x)
+summary(x)
+tibble::as_tibble(x)
+
 # trialr EffTox ----
 efftox_priors <- trialr::efftox_priors
 p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
@@ -313,6 +357,10 @@ prob_tox_quantile(x, p = 0.5)
 prob_eff_exceeds(x, 0.5)
 prob_eff_quantile(x, p = 0.05)
 prob_eff_quantile(x, p = 0.5)
+supports_sampling(x)
+prob_tox_samples(x)
+prob_eff_samples(x)
+
 # and standard generics
 print(x)
 summary(x)
@@ -423,15 +471,12 @@ graph_paths(paths, RColorBrewer_palette = 'Spectral')
 # Using CRM
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
-
 cohort_sizes <- c(3, 3, 5)
 paths <- get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 12) %>%
   get_dose_paths(cohort_sizes = cohort_sizes)
-
 class(paths)
 num_doses(paths)
-
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 x <- calculate_probabilities(paths, true_prob_tox)
 x
@@ -453,27 +498,30 @@ selector_factory <- get_trialr_efftox(real_doses = real_doses,
                                       eff_star = 0.7, tox_star = 0.25,
                                       priors = p, seed = 2020)
 
-# Get paths
-cohort_sizes <- 2
+cohort_sizes <- c(1, 2)
 paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
-as_tibble(paths) %>% print(n = 100)
-
-class(paths)
-num_doses(paths)
-
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 true_prob_eff <- c(0.27, 0.35, 0.41, 0.44, 0.45)
 x <- calculate_probabilities(paths, true_prob_tox, true_prob_eff)
 x
 
-x$supports_efficacy
-x$dose_paths %>% tibble::as_tibble()
-x$terminal_nodes %>%
-  print(n = 100)
-library(dplyr)
-x$terminal_nodes %>%
-  summarise(sum(prob_outcomes))
+# Using random selector
+prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+selector_factory <- get_random_selector(prob_select = prob_select)
+cohort_sizes <- c(1, 2)
+paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+x <- calculate_probabilities(paths, true_prob_tox)
 
+selector_factory <- get_random_selector(prob_select = prob_select,
+                                        supports_efficacy = TRUE)
+paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
+true_prob_eff <- c(0.27, 0.35, 0.41, 0.44, 0.45)
+x <- calculate_probabilities(paths, true_prob_tox, true_prob_eff)
+x
+
+
+x$supports_efficacy
 print(x)
 summary(x)
 num_patients(x)
@@ -492,7 +540,9 @@ eff_at_dose(x)
 sum(eff_at_dose(x))
 num_eff(x)
 prob_recommend(x)
+sum(prob_recommend(x))
 prob_administer(x)
+sum(prob_administer(x))
 
 
 # Simulation ----

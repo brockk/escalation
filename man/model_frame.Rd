@@ -20,9 +20,17 @@ patient id, cohort id, dose administered, and toxicity outcome. In some
 scenarios, further columns are provided.
 }
 \examples{
+# In a toxicity-only setting:
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 model <- get_dfcrm(skeleton = skeleton, target = target)
 fit <- model \%>\% fit('1NNN 2NTN')
+fit \%>\% model_frame()
+
+# In an efficacy-toxicity setting
+prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+model <- get_random_selector(prob_select = prob_select,
+                             supports_efficacy = TRUE)
+x <- model \%>\% fit('1NTN 2EN 5BB', supports_efficacy = TRUE)
 fit \%>\% model_frame()
 }

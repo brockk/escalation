@@ -5,11 +5,13 @@ tox_target.eff_tox_selector <- function(x, ...) {
   return(NULL)
 }
 
+#' @export
 tox_limit.eff_tox_selector <- function(x, ...) {
   # By default:
   return(NULL)
 }
 
+#' @export
 eff_limit.eff_tox_selector <- function(x, ...) {
   # By default:
   return(NULL)

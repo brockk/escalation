@@ -1,5 +1,5 @@
 
-test_that('calculate_probabilities does what it should', {
+test_that('phase I calculate_probabilities does what it should', {
 
   library(dplyr)
 
@@ -64,6 +64,91 @@ test_that('calculate_probabilities does what it should', {
 
   df <- as_tibble(cdp$terminal_nodes)
   expect_is(df, 'tbl_df')
+
+  # Outcome probabilities in terminal nodes should sum to 1:
+  expect_lt(abs(sum(df$prob_outcomes)) - 1, 0.01)
+
+})
+
+test_that('phase I/II calculate_probabilities does what it should', {
+
+  library(dplyr)
+
+  prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
+  selector_factory <- get_random_selector(prob_select = prob_select,
+                                          supports_efficacy = TRUE)
+
+  true_prob_tox <- c(0.05, 0.15, 0.4, 0.6, 0.9)
+  true_prob_eff <- c(0.25, 0.35, 0.5, 0.7, 0.75)
+
+
+  # Scenario 1 - Random selector in two cohorts of three ----
+  cohort_sizes <- c(2, 2)
+  paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
+
+  expect_error(
+    cdp <- calculate_probabilities(dose_paths = paths,
+                                   true_prob_tox = true_prob_tox)
+  )
+  cdp <- calculate_probabilities(dose_paths = paths,
+                                 true_prob_tox = true_prob_tox,
+                                 true_prob_eff = true_prob_eff)
+
+  expect_is(cdp, 'crystallised_dose_paths')
+
+  df <- as_tibble(cdp$terminal_nodes)
+  expect_is(df, 'tbl_df')
+  expect_equal(nrow(df), 10^2)
+  # Outcome probabilities in terminal nodes should sum to 1:
+  expect_lt(abs(sum(df$prob_outcomes)) - 1, 0.01)
+
+
+
+
+  # Scenario 2 - Three cohorts of two ----
+  cohort_sizes <- c(2, 2, 2)
+
+  paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
+
+  expect_error(
+    cdp <- calculate_probabilities(dose_paths = paths,
+                                   true_prob_tox = true_prob_tox)
+  )
+  cdp <- calculate_probabilities(dose_paths = paths,
+                                 true_prob_tox = true_prob_tox,
+                                 true_prob_eff = true_prob_eff)
+
+  expect_is(cdp, 'crystallised_dose_paths')
+
+  df <- as_tibble(cdp$terminal_nodes)
+  expect_is(df, 'tbl_df')
+  expect_equal(nrow(df), 10^3)
+
+  # Outcome probabilities in terminal nodes should sum to 1:
+  expect_lt(abs(sum(df$prob_outcomes)) - 1, 0.01)
+
+
+
+  # Scenario 3 - Odd-sized cohorts ----
+  cohort_sizes <- c(1, 2, 3)
+
+  paths <- selector_factory %>%
+    get_dose_paths(cohort_sizes = cohort_sizes,
+                   previous_outcomes = '1NBE', next_dose = 3)
+
+  expect_error(
+    cdp <- calculate_probabilities(dose_paths = paths,
+                                   true_prob_tox = true_prob_tox)
+  )
+  cdp <- calculate_probabilities(dose_paths = paths,
+                                 true_prob_tox = true_prob_tox,
+                                 true_prob_eff = true_prob_eff)
+
+  expect_is(cdp, 'crystallised_dose_paths')
+
+  df <- as_tibble(cdp$terminal_nodes)
+  expect_is(df, 'tbl_df')
+  expect_equal(nrow(df), 4 * 10 * 20)
 
   # Outcome probabilities in terminal nodes should sum to 1:
   expect_lt(abs(sum(df$prob_outcomes)) - 1, 0.01)

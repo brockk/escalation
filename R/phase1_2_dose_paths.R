@@ -114,6 +114,6 @@ phase1_2_dose_paths <- function(
     }
   }
 
-  class(cache) <- c("dose_paths")
+  class(cache) <- c('phase1_2_dose_paths', 'dose_paths')
   cache
 }

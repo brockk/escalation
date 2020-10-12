@@ -287,16 +287,19 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('\n')
 
   cat('Expected sample size:\n')
-  print(num_patients(x))
+  cat(num_patients(x))
+  cat('\n')
   cat('\n')
 
   cat('Expected total toxicities:\n')
-  print(num_tox(x))
+  cat(num_tox(x))
+  cat('\n')
   cat('\n')
 
   if(x$supports_efficacy) {
     cat('Expected total efficacies:\n')
-    print(num_eff(x))
+    cat(num_eff(x))
+    cat('\n')
     cat('\n')
   }
 }
