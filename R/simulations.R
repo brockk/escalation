@@ -32,6 +32,8 @@
 #'
 #' @param fits Simulated model fits, arranged as list of lists.
 #' @param true_prob_tox vector of true toxicity probabilities
+#' @param true_prob_eff vector of true efficacy probabilities, optionally NULL
+#' if efficacy not analysed.
 #' @param ... Extra args
 #'
 #' @return list with slots: \code{fits} containing model fits;
@@ -68,13 +70,22 @@
 #' j <- 1
 #' sims$fits[[i]][[j]]
 #' # and so on.
-simulations <- function(fits, true_prob_tox, ...) {
+simulations <- function(fits, true_prob_tox, true_prob_eff = NULL, ...) {
   # This function exists only to document the class "simulations".
-  l <- list(fits = fits, true_prob_tox = true_prob_tox)
+  l <- list(fits = fits,
+            true_prob_tox = true_prob_tox,
+            supports_efficacy = !is.null(true_prob_eff),
+            true_prob_eff = true_prob_eff)
+  extra_args = list(...)
+  l <- append(l, extra_args)
   class(l) <- 'simulations'
   l
 }
 
+#' @export
+length.simulations <- function(x) {
+  length(x$fits)
+}
 
 #' @importFrom purrr map map_int
 #' @importFrom magrittr %>%
@@ -164,6 +175,31 @@ num_tox.simulations <- function(x, ...) {
   rowSums(tox_at_dose(x, ...))
 }
 
+#' @importFrom purrr map
+#' @importFrom magrittr %>%
+#' @importFrom utils tail
+#' @importFrom tibble as_tibble
+#' @export
+eff_at_dose.simulations <- function(x, ...) {
+  if(x$supports_efficacy) {
+    x$fits %>%
+      map(~ tail(.x, 1)[[1]]) %>%
+      map('fit') %>%
+      map(eff_at_dose) %>%
+      do.call(what = rbind) -> df
+    colnames(df) <- dose_indices(x)
+    df %>% as_tibble()
+  } else {
+    matrix(nrow = length(x$fits), ncol = num_doses(x))
+  }
+}
+
+#' @export
+num_eff.simulations <- function(x, ...) {
+  rowSums(eff_at_dose(x, ...))
+}
+
+
 #' @importFrom purrr map_int
 #' @export
 prob_recommend.simulations <- function(x, ...) {
@@ -229,6 +265,14 @@ print.simulations <- function(x, ...) {
   print(ptox, digits = 3)
   cat('\n')
 
+  if(x$supports_efficacy) {
+    peff <- x$true_prob_eff
+    names(peff) <- dose_indices(x)
+    cat('True probability of efficacy:\n')
+    print(peff, digits = 3)
+    cat('\n')
+  }
+
   cat('Probability of recommendation:\n')
   print(prob_recommend(x), digits = 3)
   cat('\n')
@@ -245,6 +289,12 @@ print.simulations <- function(x, ...) {
   print(summary(num_tox(x)))
   cat('\n')
 
+  if(x$supports_efficacy) {
+    cat('Total efficacies:\n')
+    print(summary(num_eff(x)))
+    cat('\n')
+  }
+
   cat('Trial duration:\n')
   print(summary(trial_duration(x)))
   cat('\n')
@@ -255,14 +305,27 @@ summary.simulations <- function(object, ...) {
 
   dose_labs <- c('NoDose', as.character(dose_indices(object)))
 
-  tibble(
-    dose = ordered(dose_labs, levels = dose_labs),
-    tox = c(0, colMeans(tox_at_dose(object))),
-    n = c(0, colMeans(n_at_dose(object))),
-    true_prob_tox = c(0, object$true_prob_tox),
-    prob_recommend = unname(prob_recommend(object)),
-    prob_administer = c(0, prob_administer(object))
-  )
+  if(object$supports_efficacy) {
+    tibble(
+      dose = ordered(dose_labs, levels = dose_labs),
+      tox = c(0, colMeans(tox_at_dose(object))),
+      eff = c(0, colMeans(eff_at_dose(object))),
+      n = c(0, colMeans(n_at_dose(object))),
+      true_prob_tox = c(0, object$true_prob_tox),
+      true_prob_eff = c(0, object$true_prob_eff),
+      prob_recommend = unname(prob_recommend(object)),
+      prob_administer = c(0, prob_administer(object))
+    )
+  } else {
+    tibble(
+      dose = ordered(dose_labs, levels = dose_labs),
+      tox = c(0, colMeans(tox_at_dose(object))),
+      n = c(0, colMeans(n_at_dose(object))),
+      true_prob_tox = c(0, object$true_prob_tox),
+      prob_recommend = unname(prob_recommend(object)),
+      prob_administer = c(0, prob_administer(object))
+    )
+  }
 }
 
 #' @importFrom tibble as_tibble
@@ -271,19 +334,38 @@ summary.simulations <- function(object, ...) {
 #' @importFrom dplyr mutate select everything
 #' @export
 as_tibble.simulations <- function(x, ...) {
-  .iteration <- .depth <- time <- true_prob_tox <- NULL
-  x$fits %>%
-    imap_dfr(.f = function(batch, i) {
-      map_dfr(batch, function(y) {
-        as_tibble(y$fit) %>%
-          mutate(
-            .iteration = i,
-            .depth = y$.depth,
-            time = y$time,
-            true_prob_tox = c(0, x$true_prob_tox)
-          )
-      })
-    }) %>%
-    select(.iteration, .depth, time, everything())
+
+  .iteration <- .depth <- time <- true_prob_tox <- true_prob_tox <- NULL
+
+  if(x$supports_efficacy) {
+    x$fits %>%
+      imap_dfr(.f = function(batch, i) {
+        map_dfr(batch, function(y) {
+          as_tibble(y$fit) %>%
+            mutate(
+              .iteration = i,
+              .depth = y$.depth,
+              time = y$time,
+              true_prob_tox = c(0, x$true_prob_tox),
+              true_prob_eff = c(0, x$true_prob_eff)
+            )
+        })
+      }) %>%
+      select(.iteration, .depth, time, everything())
+  } else {
+    x$fits %>%
+      imap_dfr(.f = function(batch, i) {
+        map_dfr(batch, function(y) {
+          as_tibble(y$fit) %>%
+            mutate(
+              .iteration = i,
+              .depth = y$.depth,
+              time = y$time,
+              true_prob_tox = c(0, x$true_prob_tox)
+            )
+        })
+      }) %>%
+      select(.iteration, .depth, time, everything())
+  }
 }
 

@@ -7,7 +7,9 @@
 #' crysallised. Once crystallised, operating charactersitics can be calculated.
 #'
 #' @param dose_paths Object of type \code{\link{dose_paths}}
-#' @param true_prob_tox vector of probabilities
+#' @param true_prob_tox vector of toxicity probabilities at doses 1..n
+#' @param true_prob_eff vector of efficacy probabilities at doses 1..n,
+#' optionally NULL if efficacy not evaluated.
 #' @param terminal_nodes tibble of terminal nodes on the dose-paths
 #'
 #' @return An object of type crystallised_dose_paths
@@ -26,9 +28,11 @@
 #' # at the terminal nodes of these paths:
 #' prob_recommend(x)
 crystallised_dose_paths <- function(dose_paths, true_prob_tox,
-                                    terminal_nodes) {
+                                    true_prob_eff = NULL, terminal_nodes) {
   l <- list(dose_paths = dose_paths,
             true_prob_tox = true_prob_tox,
+            supports_efficacy = !is.null(true_prob_eff),
+            true_prob_eff = true_prob_eff,
             terminal_nodes = terminal_nodes)
   class(l) <- 'crystallised_dose_paths'
   l
@@ -154,6 +158,37 @@ num_tox.crystallised_dose_paths <- function(x, ...) {
   sum(tox_at_dose(x, ...))
 }
 
+#' @importFrom dplyr mutate group_by summarise
+#' @importFrom purrr map
+#' @importFrom magrittr %>%
+#' @export
+eff_at_dose.crystallised_dose_paths <- function(x, ...) {
+
+  if(x$supports_efficacy) {
+    d <- var <- prob_outcomes <- scaled_var <- . <- NULL
+
+    var_vec <- x$terminal_nodes %>%
+      mutate(
+        d = map(fit, dose_indices),
+        var = map(fit, eff_at_dose)
+      ) %>%
+      unnest(c(prob_outcomes, d, var)) %>%
+      mutate(scaled_var = prob_outcomes * var) %>%
+      group_by(d) %>%
+      summarise(sum(scaled_var)) %>% .[[2]]
+
+    names(var_vec) <- dose_indices(x)
+    var_vec
+  } else {
+    return(rep(NA, num_doses(x)))
+  }
+}
+
+#' @export
+num_eff.crystallised_dose_paths <- function(x, ...) {
+  sum(eff_at_dose(x, ...))
+}
+
 #' @importFrom dplyr mutate filter summarise
 #' @importFrom purrr map_int
 #' @export
@@ -221,6 +256,14 @@ print.crystallised_dose_paths <- function(x, ...) {
   print(ptox, digits = 3)
   cat('\n')
 
+  if(x$supports_efficacy) {
+    peff <- x$true_prob_eff
+    names(peff) <- dose_indices(x)
+    cat('True probability of efficacy:\n')
+    print(peff, digits = 3)
+    cat('\n')
+  }
+
   cat('Probability of recommendation:\n')
   print(
     noquote(
@@ -250,6 +293,12 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('Expected total toxicities:\n')
   print(num_tox(x))
   cat('\n')
+
+  if(x$supports_efficacy) {
+    cat('Expected total efficacies:\n')
+    print(num_eff(x))
+    cat('\n')
+  }
 }
 
 #' @export
@@ -257,12 +306,24 @@ summary.crystallised_dose_paths <- function(object, ...) {
 
   dose_labs <- c('NoDose', as.character(dose_indices(object)))
 
-  tibble(
-    dose = ordered(dose_labs, levels = dose_labs),
-    tox = c(0, tox_at_dose(object)),
-    n = c(0, n_at_dose(object)),
-    true_prob_tox = c(0, object$true_prob_tox),
-    prob_recommend = unname(prob_recommend(object)),
-    prob_administer = c(0, prob_administer(object))
-  )
+  if(object$supports_efficacy) {
+    tibble(
+      dose = ordered(dose_labs, levels = dose_labs),
+      tox = c(0, tox_at_dose(object)),
+      n = c(0, n_at_dose(object)),
+      true_prob_tox = c(0, object$true_prob_tox),
+      true_prob_eff = c(0, object$true_prob_eff),
+      prob_recommend = unname(prob_recommend(object)),
+      prob_administer = c(0, prob_administer(object))
+    )
+  } else {
+    tibble(
+      dose = ordered(dose_labs, levels = dose_labs),
+      tox = c(0, tox_at_dose(object)),
+      n = c(0, n_at_dose(object)),
+      true_prob_tox = c(0, object$true_prob_tox),
+      prob_recommend = unname(prob_recommend(object)),
+      prob_administer = c(0, prob_administer(object))
+    )
+  }
 }

@@ -9,6 +9,8 @@
 #'
 #' @param dose_paths Object of type \code{\link{dose_paths}}
 #' @param true_prob_tox Numeric vector, true probability of toxicity.
+#' @param true_prob_eff vector of true efficacy probabilities, optionally NULL
+#' if efficacy not analysed.
 #'
 #' @seealso \code{\link{dose_paths}}
 #'
@@ -29,30 +31,66 @@
 #' # And calculate exact operating performance
 #' x <- paths %>% calculate_probabilities(true_prob_tox)
 #' prob_recommend(x)
-calculate_probabilities <- function(dose_paths, true_prob_tox) {
+calculate_probabilities <- function(dose_paths, true_prob_tox,
+                                    true_prob_eff = NULL) {
 
   .node <- .parent <- prob_outcomes <- fit <- parent_fit <- NULL
   dose <- next_dose <- prob_tox <- outcomes <- NULL
 
-  dose_df <- tibble(
-    dose = dose_indices(dose_paths),
-    prob_tox = true_prob_tox
-  )
-
-  paths_df <- as_tibble(dose_paths)
-  paths_df <- paths_df %>%
-    left_join(paths_df %>% select(.node, dose = next_dose),
-              by = c('.parent' = '.node')) %>%
-    left_join(dose_df, by = 'dose') %>%
-    mutate(
-      n = nchar(outcomes),
-      n_tox = str_count(outcomes, 'T'),
-      prob_outcomes = case_when(
-        outcomes == '' ~ 1,
-        TRUE ~ dbinom(x = n_tox, size = n, prob = prob_tox)
-      )
-    ) %>%
-    select(.node, .parent, prob_outcomes, fit, parent_fit)
+  if(is.null(true_prob_eff)) {
+    # Classic phase I trial, path probability determined by prob_tox only
+    dose_df <- tibble(
+      dose = dose_indices(dose_paths),
+      prob_tox = true_prob_tox
+    )
+    paths_df <- as_tibble(dose_paths)
+    paths_df <- paths_df %>%
+      left_join(paths_df %>% select(.node, dose = next_dose),
+                by = c('.parent' = '.node')) %>%
+      left_join(dose_df, by = 'dose') %>%
+      mutate(
+        n = nchar(outcomes),
+        n_tox = str_count(outcomes, 'T'),
+        prob_outcomes = case_when(
+          outcomes == '' ~ 1,
+          TRUE ~ dbinom(x = n_tox, size = n, prob = prob_tox)
+        )
+      ) %>%
+      select(.node, .parent, prob_outcomes, fit, parent_fit)
+  } else {
+    # Phase I/II trial, path probability determined by joint prob_tox & prob_eff
+    dose_df <- tibble(
+      dose = dose_indices(dose_paths),
+      prob_tox = true_prob_tox,
+      prob_eff = true_prob_eff
+    )
+    paths_df <- as_tibble(dose_paths)
+    paths_df <- paths_df %>%
+      left_join(paths_df %>% select(.node, dose = next_dose),
+                by = c('.parent' = '.node')) %>%
+      left_join(dose_df, by = 'dose') %>%
+      mutate(
+        n = nchar(outcomes),
+        n_b = str_count(outcomes, 'B'),
+        n_e = str_count(outcomes, 'E'),
+        n_n = str_count(outcomes, 'N'),
+        n_t = str_count(outcomes, 'T'),
+        p_b = prob_tox * prob_eff,
+        p_e = (1 - prob_tox) * prob_eff,
+        p_n = (1 - prob_tox) * (1 - prob_eff),
+        p_t = prob_tox * (1 - prob_eff),
+        prob_outcomes = case_when(
+          outcomes == '' ~ 1,
+          # Multinomial PMF, logged for numerical stability:
+          TRUE ~ exp(log(factorial(n)) +
+                       n_b * log(p_b) + n_e * log(p_e) +
+                       n_n * log(p_n) + n_t * log(p_t) -
+                       log(factorial(n_b)) - log(factorial(n_e)) -
+                       log(factorial(n_n)) - log(factorial(n_t)))
+        )
+      ) %>%
+      select(.node, .parent, prob_outcomes, fit, parent_fit)
+  }
 
   .recurse <- function(node_id, prob = 1) {
     children <- paths_df %>% filter(.parent == node_id)
@@ -72,5 +110,6 @@ calculate_probabilities <- function(dose_paths, true_prob_tox) {
 
   crystallised_dose_paths(dose_paths = dose_paths,
                           true_prob_tox = true_prob_tox,
+                          true_prob_eff = true_prob_eff,
                           terminal_nodes = terminal_nodes)
 }

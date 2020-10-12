@@ -4,12 +4,15 @@
 \alias{calculate_probabilities}
 \title{Calculate dose-path probabilities}
 \usage{
-calculate_probabilities(dose_paths, true_prob_tox)
+calculate_probabilities(dose_paths, true_prob_tox, true_prob_eff = NULL)
 }
 \arguments{
 \item{dose_paths}{Object of type \code{\link{dose_paths}}}
 
 \item{true_prob_tox}{Numeric vector, true probability of toxicity.}
+
+\item{true_prob_eff}{vector of true efficacy probabilities, optionally NULL
+if efficacy not analysed.}
 }
 \description{
 Crystallise a set of \code{\link{dose_paths}} with probabilities to calculate

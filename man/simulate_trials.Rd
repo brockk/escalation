@@ -4,7 +4,13 @@
 \alias{simulate_trials}
 \title{Simulate clinical trials.}
 \usage{
-simulate_trials(selector_factory, num_sims, true_prob_tox, ...)
+simulate_trials(
+  selector_factory,
+  num_sims,
+  true_prob_tox,
+  true_prob_eff = NULL,
+  ...
+)
 }
 \arguments{
 \item{selector_factory}{Object of type \code{\link{selector_factory}}.}
@@ -13,6 +19,9 @@ simulate_trials(selector_factory, num_sims, true_prob_tox, ...)
 
 \item{true_prob_tox}{numeric vector of true but unknown toxicity
 probabilities}
+
+\item{true_prob_eff}{numeric vector of true but unknown efficacy
+probabilities. NULL if efficacy not analysed.}
 
 \item{...}{Extra args are passed onwards.}
 }

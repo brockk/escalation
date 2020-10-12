@@ -4,12 +4,15 @@
 \alias{simulations}
 \title{Simulated trials.}
 \usage{
-simulations(fits, true_prob_tox, ...)
+simulations(fits, true_prob_tox, true_prob_eff = NULL, ...)
 }
 \arguments{
 \item{fits}{Simulated model fits, arranged as list of lists.}
 
 \item{true_prob_tox}{vector of true toxicity probabilities}
+
+\item{true_prob_eff}{vector of true efficacy probabilities, optionally NULL
+if efficacy not analysed.}
 
 \item{...}{Extra args}
 }

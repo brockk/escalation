@@ -4,12 +4,20 @@
 \alias{crystallised_dose_paths}
 \title{Dose-paths with probabilities attached.}
 \usage{
-crystallised_dose_paths(dose_paths, true_prob_tox, terminal_nodes)
+crystallised_dose_paths(
+  dose_paths,
+  true_prob_tox,
+  true_prob_eff = NULL,
+  terminal_nodes
+)
 }
 \arguments{
 \item{dose_paths}{Object of type \code{\link{dose_paths}}}
 
-\item{true_prob_tox}{vector of probabilities}
+\item{true_prob_tox}{vector of toxicity probabilities at doses 1..n}
+
+\item{true_prob_eff}{vector of efficacy probabilities at doses 1..n,
+optionally NULL if efficacy not evaluated.}
 
 \item{terminal_nodes}{tibble of terminal nodes on the dose-paths}
 }

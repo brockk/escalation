@@ -373,7 +373,6 @@ spread_paths(as_tibble(paths1)) %>%
   select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
          'outcomes2', 'next_dose2') %>%
   print(n=1000)
-# With true_prob_tox, these paths have exact probabilities
 
 # In-progress trials:
 paths2 <- selector_factory %>%
@@ -421,6 +420,7 @@ graph_paths(paths, RColorBrewer_palette = 'Spectral')
 # We could append this graph with transition probabilities.
 
 # Crytallised dose-paths ----
+# Using CRM
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 target <- 0.25
 
@@ -436,6 +436,45 @@ true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 x <- calculate_probabilities(paths, true_prob_tox)
 x
 
+# Using EffTox
+efftox_priors <- trialr::efftox_priors
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1)
+real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0)
+selector_factory <- get_trialr_efftox(real_doses = real_doses,
+                                      efficacy_hurdle = 0.5,
+                                      toxicity_hurdle = 0.3,
+                                      p_e = 0.1, p_t = 0.1,
+                                      eff0 = 0.5, tox1 = 0.65,
+                                      eff_star = 0.7, tox_star = 0.25,
+                                      priors = p, seed = 2020)
+
+# Get paths
+cohort_sizes <- 2
+paths <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
+as_tibble(paths) %>% print(n = 100)
+
+class(paths)
+num_doses(paths)
+
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+true_prob_eff <- c(0.27, 0.35, 0.41, 0.44, 0.45)
+x <- calculate_probabilities(paths, true_prob_tox, true_prob_eff)
+x
+
+x$supports_efficacy
+x$dose_paths %>% tibble::as_tibble()
+x$terminal_nodes %>%
+  print(n = 100)
+library(dplyr)
+x$terminal_nodes %>%
+  summarise(sum(prob_outcomes))
+
+print(x)
 summary(x)
 num_patients(x)
 num_doses(x)
@@ -449,13 +488,14 @@ n_at_recommended_dose(x)
 tox_at_dose(x)
 sum(tox_at_dose(x))
 num_tox(x)
+eff_at_dose(x)
+sum(eff_at_dose(x))
+num_eff(x)
 prob_recommend(x)
 prob_administer(x)
 
 
 # Simulation ----
-skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-target <- 0.25
 
 # Sc 1
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
@@ -470,6 +510,9 @@ get_three_plus_three(num_doses = length(skeleton)) %>%
            return_all_fits = TRUE) -> sims
 
 # Use dfcrm
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+
 get_dfcrm(skeleton = skeleton, target = target) %>%
   stop_at_n(n = 12) %>%
   simulate_trials(
@@ -528,23 +571,19 @@ sims <- model %>%
   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
                   true_prob_eff = true_prob_eff)
 
-# length(sims) # Num sims
-class(sims[[1]]) # list
-length(sims[[1]]) # Num decisions
-class(sims[[1]][[1]]) # list
-
-
 # Interface
 sims
-class(sims)
 length(sims)
+class(sims)
 summary(sims)
 summary(num_patients(sims))
 num_doses(sims)
 dose_indices(sims)
 n_at_dose(sims) %>% colMeans()
 num_tox(sims) %>% mean
+num_eff(sims) %>% mean
 tox_at_dose(sims) %>% colMeans()
+eff_at_dose(sims) %>% colMeans()
 object.size(sims) %>% format(units = 'MB')
 recommended_dose(sims)
 prob_recommend(sims)

@@ -52,6 +52,8 @@
 #' @param num_sims integer, number of trial iterations to simulate.
 #' @param true_prob_tox numeric vector of true but unknown toxicity
 #' probabilities
+#' @param true_prob_eff numeric vector of true but unknown efficacy
+#' probabilities. NULL if efficacy not analysed.
 #' @param ... Extra args are passed onwards.
 #'
 #' @seealso \code{\link{simulations}}
@@ -138,11 +140,22 @@
 #'                   return_all_fits = TRUE)
 #' # Verify that there are now many analyses per trial with:
 #' sapply(sims$fits, length)
-simulate_trials <- function(selector_factory, num_sims, true_prob_tox, ...) {
+simulate_trials <- function(selector_factory, num_sims, true_prob_tox,
+                            true_prob_eff = NULL, ...) {
   sim_func <- simulation_function(selector_factory)
-  l <- lapply(
-    1:num_sims,
-    function(x) sim_func(selector_factory, true_prob_tox, ...)
-  )
-  simulations(fits = l, true_prob_tox = true_prob_tox)
+  if(is.null(true_prob_eff)) {
+    l <- lapply(
+      1:num_sims,
+      function(x) sim_func(selector_factory, true_prob_tox, ...)
+    )
+  } else {
+    l <- lapply(
+      1:num_sims,
+      function(x) sim_func(selector_factory, true_prob_tox,
+                           true_prob_eff = true_prob_eff, ...)
+    )
+  }
+
+  simulations(fits = l, true_prob_tox = true_prob_tox,
+              true_prob_eff = true_prob_eff, ...)
 }
