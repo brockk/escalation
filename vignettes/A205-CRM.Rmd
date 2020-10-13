@@ -337,7 +337,7 @@ We see that the design would willingly skip dose 3 if no tox is seen in the firs
 This might warrant suppressing dose-dkipping by appending a `dont_skip_doses(when_escalating = TRUE)` selector.
 
 Dose-paths can also be run for in-progress trials where some outcomes have been established.
-For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+For more information on working with dose-paths, refer to the dose-paths vignette.
 
 
 ## Simulation
@@ -359,7 +359,7 @@ For the sake of speed, we will run just fifty iterations:
 num_sims <- 50
 ```
 
-In really life, however, we would naturally run many thousands of iterations.
+In real life, however, we would naturally run many thousands of iterations.
 Let us investigate under the following true probabilities of toxicity:
 
 ```{r}
@@ -392,7 +392,7 @@ get_dfcrm(skeleton = skeleton, target = target, model = 'empiric',
 expected sample size is much higher and the chances of erroneously stopping early are also higher.
 These phenomena would justify a wider simulation study in a real situation.
 
-For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+For more information on running dose-finding simulations, refer to the simulation vignette.
 
 
 # References

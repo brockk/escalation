@@ -112,7 +112,7 @@ We can see in several situations that the second model is more conservative in e
 Perhaps unexpectedly, however, the second design escalations to dose 11 after initial outcomes `2NNN`, slightly more aggessively than the default model which identifies dose 10.
 
 Dose-paths can also be run for in-progress trials where some outcomes have been established.
-For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+For more information on working with dose-paths, refer to the dose-paths vignette.
 
 ## Simulation
 
@@ -136,7 +136,7 @@ For the sake of speed, we will run just ten iterations:
 num_sims <- 10
 ```
 
-In really life, however, we would naturally run many thousands of iterations.
+In real life, however, we would naturally run many thousands of iterations.
 
 Then let us investigate under the following true probabilities of toxicity:
 
@@ -157,7 +157,7 @@ sims
 We see that the chances of stopping for excess toxicity and recommending no dose are low.
 Doses 4-7 are the favourites to be identified.
 
-For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+For more information on running dose-finding simulations, refer to the simulation vignette.
 
 
 # References

@@ -1,4 +1,7 @@
+
 test_that('BOIN recommendations match published example.', {
+
+  # p.25 of Han, Pan, Zhang, Liu & Yuan (2019)
 
   num_doses <- 5
   target <- 0.3

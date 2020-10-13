@@ -16,7 +16,8 @@ Documentation is hosted at https://brockk.github.io/escalation/
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7, fig.height = 5
 )
 
 options(rmarkdown.html_vignette.check_title = FALSE)
@@ -149,7 +150,6 @@ In Figure 2 of their publication, @Ji2010 list some model recommendations condit
 We can use the `get_dose_paths` function, for instance, to calculate exhaustive model recommendations after a single cohort of three is evaluated at dose 2:
 
 ```{r, message=FALSE}
-cohort_sizes <- c(3)
 paths <- model %>% get_dose_paths(cohort_sizes = c(3), next_dose = 2)
 
 library(dplyr)
@@ -167,7 +167,7 @@ paths <- model %>% get_dose_paths(cohort_sizes = cohort_sizes, next_dose = 2)
 graph_paths(paths)
 ```
 
-For more information on working with dose-paths, refer to the [dose-paths vignette](https://brockk.github.io/escalation/articles/DosePaths.html).
+For more information on working with dose-paths, refer to the dose-paths vignette.
 
 
 ## Simulation
@@ -192,7 +192,7 @@ For the sake of speed, we will run just fifty iterations:
 num_sims <- 50
 ```
 
-In really life, however, we would naturally run many thousands of iterations.
+In real life, however, we would naturally run many thousands of iterations.
 Their scenario 1 assumes true probability of toxicity:
 
 ```{r}
@@ -210,7 +210,7 @@ sims
 
 This reproduces their finding that dose 2 is overwhelmingly likely to be recommended, and that the sample size is virtually guaranteed to be 30, i.e. early stopping is unlikely.
 
-For more information on running dose-finding simulations, refer to the [simulation vignette](https://brockk.github.io/escalation/articles/Simulation.html).
+For more information on running dose-finding simulations, refer to the simulation vignette.
 
 # References
 
