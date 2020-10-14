@@ -11,6 +11,7 @@
 #' @param a Number between 0 and 2, the asymmetry parameter. See References.
 #' @param target We seek a dose with this probability of toxicity. If not
 #' provided, the value will be sought from the parent dose-selector.
+#'
 #' @return an object of type \code{\link{selector_factory}} that can fit a
 #' dose-finding model to outcomes.
 #'

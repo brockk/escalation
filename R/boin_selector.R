@@ -7,7 +7,7 @@
 #' Yan et al. (2019). FALSE to suppress the authors' stopping rule, with the
 #' assumption being that you will test the necessity to stop early in some other
 #' way.
-#' @param ... Extra args are passed to \code{\link[BOIN]{select.mtd}}.
+#' @param ... Extra args are passed to \code{\link[BOIN]{get.boundary}}.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
 #' BOIN model to outcomes.

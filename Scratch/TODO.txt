@@ -8,12 +8,10 @@ names?
 untested doses? E.g. median_prob_tox(x) for those classes does not.
 * Implement the finally_select_tpi_dose() selector, as described by Ji et al
 on p.239 of their 2007 paper.
-* Also add a finally_select_boin_dose selector that uses BOIN::select.mtd. This
-should be just simply involve selecting dose closest to target in PAVA(prob_tox)
 * Also, add a finally selector for Mozgunov + Jaki CIPD method.
-* ? simulate_trials needs , sample_patient_arrivals, previous_outcomes, and
-next_dose = 1?
-* Implement get_prob_tox curve using algorithm on p.11 of Liu & Yuan (2015) for
+* ? simulate_trials needs sample_patient_arrivals, previous_outcomes, and
+next_dose = 1 in documentation?
+* Implement get_prob_tox_curve using algorithm on p.11 of Liu & Yuan (2015) for
 sampling simulation scenario curves.
 
 
