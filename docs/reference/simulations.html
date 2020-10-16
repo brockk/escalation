@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,8 +43,8 @@
 
 
 
-
 <meta property="og:title" content="Simulated trials. — simulations" />
+
 <meta property="og:description" content="This class encapsulates that many notional or virtual trials can be
 simulated. Each recommends a dose (or doses), keeps track of how many
 patients have been treated at what doses, what toxicity outcomes have been
@@ -59,7 +57,9 @@ However, compared to selectors, the returned objects reflect
 that there are many trials instead of one, e.g. num_patients(sims),
 returns as an integer vector the number of patients used in the simulated
 trials." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -91,7 +91,7 @@ trials." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -143,6 +143,7 @@ trials." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -164,6 +165,7 @@ trials." />
     </div>
 
     <div class="ref-description">
+    
     <p>This class encapsulates that many notional or virtual trials can be
 simulated. Each recommends a dose (or doses), keeps track of how many
 patients have been treated at what doses, what toxicity outcomes have been
@@ -176,10 +178,11 @@ However, compared to <code><a href='selector.html'>selector</a></code>s, the ret
 that there are many trials instead of one, e.g. <code><a href='num_patients.html'>num_patients(sims)</a></code>,
 returns as an integer vector the number of patients used in the simulated
 trials.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>simulations</span><span class='op'>(</span><span class='va'>fits</span>, <span class='va'>true_prob_tox</span>, <span class='va'>...</span><span class='op'>)</span></pre>
-
+    <pre class="usage"><span class='fu'>simulations</span>(<span class='no'>fits</span>, <span class='no'>true_prob_tox</span>, <span class='kw'>true_prob_eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -192,16 +195,22 @@ trials.</p>
       <td><p>vector of true toxicity probabilities</p></td>
     </tr>
     <tr>
+      <th>true_prob_eff</th>
+      <td><p>vector of true efficacy probabilities, optionally NULL
+if efficacy not analysed.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Extra args</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>list with slots: <code>fits</code> containing model fits;
 and <code>true_prob_tox</code>, contianing the assumed true probability of
 toxicity.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>simulations</code> object implements the following functions:</p><ul>
@@ -217,64 +226,55 @@ toxicity.</p>
 <li><p><code><a href='trial_duration.html'>trial_duration</a></code></p></li>
 </ul>
 
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='selector.html'>selector</a></code></p>
 <p><code><a href='simulate_trials.html'>simulate_trials</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Simulate performance of the 3+3 design:</span>
-<span class='va'>true_prob_tox</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span><span class='op'>)</span>
-<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='simulate_trials.html'>simulate_trials</a></span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span><span class='op'>)</span>
+<span class='no'>true_prob_tox</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span>)
+<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='simulate_trials.html'>simulate_trials</a></span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>)
 <span class='co'># The returned object has type 'simulations'. The supported interface is:</span>
-<span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_patients.html'>num_patients</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  9 18  3  9  6  3 12 12  9  9</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_doses.html'>num_doses</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='dose_indices.html'>dose_indices</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1 2 3 4 5</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='n_at_dose.html'>n_at_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 5</span><span>
+<span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_patients.html'>num_patients</a></span>()</div><div class='output co'>#&gt;  [1]  9 12 18 15  6  9 12  9 18  9</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_doses.html'>num_doses</a></span>()</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='dose_indices.html'>dose_indices</a></span>()</div><div class='output co'>#&gt; [1] 1 2 3 4 5</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='n_at_dose.html'>n_at_dose</a></span>()</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 5</span><span>
 #&gt;      `1`   `2`   `3`   `4`   `5`
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     3     6     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     6     6     6     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     3     0     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     3     3     3     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     3     3     6     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     6     6     6     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     6     3     6     0     0
 #&gt; </span><span style='color: #BCBCBC;'> 5</span><span>     3     3     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     3     0     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     3     3     6     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     3     6     3     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     3     3     3     0     0
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     3     6     0     0     0</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tox_at_dose.html'>tox_at_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 10 x 5</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     3     3     3     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     3     3     3     3     0
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     3     3     3     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     3     3     6     6     0
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     3     6     0     0     0</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tox_at_dose.html'>tox_at_dose</a></span>()</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 10 x 5</span><span>
 #&gt;      `1`   `2`   `3`   `4`   `5`
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     0     3     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     1     1     3     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     2     0     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     0     0     3     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     0     2     0     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     0     0     4     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     1     1     3     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     1     0     2     0     0
 #&gt; </span><span style='color: #BCBCBC;'> 5</span><span>     0     2     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     2     0     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     0     0     2     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     0     1     2     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     0     0     2     0     0
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     0     2     0     0     0</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_tox.html'>num_tox</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 3 5 2 3 2 2 2 3 2 2</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  1  2 NA  2  1 NA  2  2  2  1</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_administer.html'>prob_administer</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         1         2         3         4         5 
-#&gt; 0.3666667 0.4000000 0.2333333 0.0000000 0.0000000 </div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; NoDose      1      2      3      4      5 
-#&gt;    0.2    0.3    0.5    0.0    0.0    0.0 </div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='trial_duration.html'>trial_duration</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 10.6 13.5  4.9 11.6  6.6  3.0 13.0 11.8  7.7 14.0</div><div class='input'>
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     0     0     3     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     0     0     0     2     0
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     0     0     2     0     0
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     0     0     1     3     0
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     0     3     0     0     0</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_tox.html'>num_tox</a></span>()</div><div class='output co'>#&gt;  [1] 2 4 5 3 2 3 2 2 4 3</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt;  [1] 1 2 2 2 1 2 3 2 3 1</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_administer.html'>prob_administer</a></span>()</div><div class='output co'>#&gt;          1          2          3          4          5 
+#&gt; 0.30769231 0.33333333 0.28205128 0.07692308 0.00000000 </div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span>()</div><div class='output co'>#&gt; NoDose      1      2      3      4      5 
+#&gt;    0.0    0.3    0.5    0.2    0.0    0.0 </div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='trial_duration.html'>trial_duration</a></span>()</div><div class='output co'>#&gt;  [1] 14.6  8.6 16.3 18.0  5.5  5.6 11.7  7.5 21.3  9.4</div><div class='input'>
 <span class='co'># Access the list of model fits for the ith simulated trial using:</span>
-<span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
-<span class='va'>sims</span><span class='op'>$</span><span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; [[1]]
+<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
+<span class='no'>sims</span>$<span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]]</div><div class='output co'>#&gt; [[1]]
 #&gt; [[1]]$.depth
 #&gt; [1] 4
 #&gt; 
 #&gt; [[1]]$time
-#&gt; [1] 10.6
+#&gt; [1] 14.6
 #&gt; 
 #&gt; [[1]]$fit
 #&gt; Patient-level data:
@@ -285,32 +285,33 @@ toxicity.</p>
 #&gt; </span><span style='color: #BCBCBC;'>2</span><span>       2      1     1     0
 #&gt; </span><span style='color: #BCBCBC;'>3</span><span>       3      1     1     0
 #&gt; </span><span style='color: #BCBCBC;'>4</span><span>       4      2     2     0
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span>       5      2     2     0
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span>       6      2     2     1
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span>       7      3     2     1
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span>       5      2     2     1
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span>       6      2     2     0
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span>       7      3     2     0
 #&gt; </span><span style='color: #BCBCBC;'>8</span><span>       8      3     2     0
 #&gt; </span><span style='color: #BCBCBC;'>9</span><span>       9      3     2     1
 #&gt; 
 #&gt; Dose-level data:
-#&gt; </span><span style='color: #949494;'># A tibble: 5 x 6</span><span>
-#&gt;    dose   tox     n empiric_tox_rate mean_prob_tox median_prob_tox
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span>     1     0     3              0              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span>     2     3     6              0.5            </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span>     3     0     0            </span><span style='color: #BB0000;'>NaN</span><span>              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span>     4     0     0            </span><span style='color: #BB0000;'>NaN</span><span>              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span>     5     0     0            </span><span style='color: #BB0000;'>NaN</span><span>              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 6 x 8</span><span>
+#&gt;   dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox admissible
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;ord&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NoDo…     0     0            0                 0               0 TRUE      
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 1         0     3            0                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> TRUE      
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 2         2     6            0.333            </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 3         0     0          </span><span style='color: #BB0000;'>NaN</span><span>                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 4         0     0          </span><span style='color: #BB0000;'>NaN</span><span>                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> 5         0     0          </span><span style='color: #BB0000;'>NaN</span><span>                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #949494;'># … with 1 more variable: recommended </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>
 #&gt; 
 #&gt; The model advocates stopping and recommending dose 1.
 #&gt; 
 #&gt; </div><div class='input'><span class='co'># and the jth model fit for the ith simulated trial using:</span>
-<span class='va'>j</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
-<span class='va'>sims</span><span class='op'>$</span><span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[[</span><span class='va'>j</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; $.depth
+<span class='no'>j</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
+<span class='no'>sims</span>$<span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]]<span class='kw'>[[</span><span class='no'>j</span>]]</div><div class='output co'>#&gt; $.depth
 #&gt; [1] 4
 #&gt; 
 #&gt; $time
-#&gt; [1] 10.6
+#&gt; [1] 14.6
 #&gt; 
 #&gt; $fit
 #&gt; Patient-level data:
@@ -321,24 +322,26 @@ toxicity.</p>
 #&gt; </span><span style='color: #BCBCBC;'>2</span><span>       2      1     1     0
 #&gt; </span><span style='color: #BCBCBC;'>3</span><span>       3      1     1     0
 #&gt; </span><span style='color: #BCBCBC;'>4</span><span>       4      2     2     0
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span>       5      2     2     0
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span>       6      2     2     1
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span>       7      3     2     1
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span>       5      2     2     1
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span>       6      2     2     0
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span>       7      3     2     0
 #&gt; </span><span style='color: #BCBCBC;'>8</span><span>       8      3     2     0
 #&gt; </span><span style='color: #BCBCBC;'>9</span><span>       9      3     2     1
 #&gt; 
 #&gt; Dose-level data:
-#&gt; </span><span style='color: #949494;'># A tibble: 5 x 6</span><span>
-#&gt;    dose   tox     n empiric_tox_rate mean_prob_tox median_prob_tox
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span>     1     0     3              0              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span>     2     3     6              0.5            </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span>     3     0     0            </span><span style='color: #BB0000;'>NaN</span><span>              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span>     4     0     0            </span><span style='color: #BB0000;'>NaN</span><span>              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span>     5     0     0            </span><span style='color: #BB0000;'>NaN</span><span>              </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 6 x 8</span><span>
+#&gt;   dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox admissible
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;ord&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NoDo…     0     0            0                 0               0 TRUE      
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 1         0     3            0                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> TRUE      
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 2         2     6            0.333            </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 3         0     0          </span><span style='color: #BB0000;'>NaN</span><span>                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 4         0     0          </span><span style='color: #BB0000;'>NaN</span><span>                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> 5         0     0          </span><span style='color: #BB0000;'>NaN</span><span>                </span><span style='color: #BB0000;'>NA</span><span>              </span><span style='color: #BB0000;'>NA</span><span> FALSE     
+#&gt; </span><span style='color: #949494;'># … with 1 more variable: recommended </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>
 #&gt; 
 #&gt; The model advocates stopping and recommending dose 1.
-#&gt; </div><div class='input'><span class='co'># and so on.</span>
+#&gt; </div><div class='input'># and so on.
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -355,7 +358,7 @@ toxicity.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

@@ -210,30 +210,14 @@ continue.dfcrm_selector <- function(x, ...) {
   return(TRUE)
 }
 
-#' @importFrom purrr map_int
-#' @export
-tox_at_dose.dfcrm_selector <- function(x, ...) {
-  dose_indices <- 1:(num_doses(x))
-  tox_seen <- tox(x)
-  map_int(dose_indices, ~ sum(tox_seen[doses_given(x) == .x]))
-}
-
 #' @export
 mean_prob_tox.dfcrm_selector <- function(x, ...) {
   return(x$dfcrm_fit$ptox)
 }
 
 #' @export
-#' @importFrom stats median
 median_prob_tox.dfcrm_selector <- function(x, ...) {
   return(prob_tox_quantile(x, p = 0.5))
-  # if(num_patients(x) <= 0) {
-  #   return(as.numeric(rep(NA, num_doses(x))))
-  # } else {
-  #   prob_tox_sample <- get_posterior_prob_tox_sample(x, iter)
-  #   # Median(Prob(Tox) | data) is approximated by:
-  #   apply(prob_tox_sample, 2, median)
-  # }
 }
 
 #' @export
@@ -284,14 +268,6 @@ prob_tox_exceeds.dfcrm_selector <- function(x, threshold, ...) {
                   x$dfcrm_fit$model, "'"))
     }
   }
-
-  # if(num_patients(x) <= 0) {
-  #   return(as.numeric(rep(NA, num_doses(x))))
-  # } else {
-  #   prob_tox_sample <- get_posterior_prob_tox_sample(x, iter)
-  #   # Prob(Prob(Tox) > threshold | data) is approximated by:
-  #   colMeans(prob_tox_sample > threshold)
-  # }
 }
 
 #' @export
@@ -302,7 +278,7 @@ supports_sampling.dfcrm_selector <- function(x, ...) {
 #' @export
 #' @importFrom tidyr gather
 prob_tox_samples.dfcrm_selector <- function(x, tall = FALSE,
-                                          num_samples = 4000,...) {
+                                            num_samples = 4000,...) {
   df <- get_posterior_prob_tox_sample(x, iter = num_samples)
   if(tall) {
     dose <- prob_tox <- .draw <- NULL
@@ -319,6 +295,6 @@ prob_tox_samples.dfcrm_selector <- function(x, tall = FALSE,
 summary.dfcrm_selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- Skeleton <- NULL
   summary.selector(object) %>%
-    mutate(Skeleton = object$skeleton) %>%
+    mutate(Skeleton = c(NA, object$skeleton)) %>%
     select(Dose, N, Tox, EmpiricToxRate, Skeleton, everything())
 }

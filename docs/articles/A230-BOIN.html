@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -100,7 +100,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="A230-BOIN_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="A230-BOIN_files/viz-1.8.2/viz.js"></script><link href="A230-BOIN_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="A230-BOIN_files/grViz-binding-1.0.5/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Bayesian Optimal Interval Design</h1>
@@ -113,14 +114,114 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">escalation</span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: magrittr</span></pre></div>
+<div id="introduction" class="section level1">
+<h1 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h1>
+<p>The Bayesian Optimal Interval (BOIN) design was introduced by <span class="citation">Liu and Yuan (2015)</span>. It is one of a series of dose-finding trial designs that works by partitioning the probability of toxicity into a set of intervals. These designs make dose-selection decisions that are determined by the interval in which the probability of toxicity for the current dose is believed to reside.</p>
+</div>
+<div id="summary-of-the-boin-design" class="section level1">
+<h1 class="hasAnchor">
+<a href="#summary-of-the-boin-design" class="anchor"></a>Summary of the BOIN Design</h1>
+<p>BOIN seeks a dose with probability of toxicity close to some pre-specified target level, <span class="math inline">\(p_T\)</span>. Let the probability of toxicity at dose <span class="math inline">\(i\)</span> be <span class="math inline">\(p_i\)</span>. The entire range of possible values for <span class="math inline">\(p_i\)</span> can be broken up into the following intervals:</p>
+<ul>
+<li>The underdosing interval (UI), defined as <span class="math inline">\((0, \lambda_{1i})\)</span>;</li>
+<li>The equivalence interval (EI), defined as <span class="math inline">\((\lambda_{1i}, \lambda_{2i})\)</span>;</li>
+<li>The overdosing interval (OI), defined as <span class="math inline">\((\lambda_{2i}, 1)\)</span>;</li>
+</ul>
+<p>Let <span class="math inline">\(\pi_{UI,i}, \pi_{EI,i}\)</span> and <span class="math inline">\(\pi_{OI,i}\)</span> be the a-priori probabilities that the rate of toxicity associated with dose <span class="math inline">\(i\)</span> belongs to the intervals UI, EI and OI. By definition, <span class="math inline">\(\pi_{UI,i} + \pi_{EI,i} + \pi_{OI,i} = 1\)</span>. The authors advocate <span class="math inline">\(\pi_{UI,i} = \pi_{EI,i} = \pi_{OI,i} = \frac{1}{3}\)</span>.</p>
+<p>Let <span class="math inline">\(n_i\)</span> be the number of patients that have been treated at dose <span class="math inline">\(i\)</span>, yielding <span class="math inline">\(x_i\)</span> toxicity events. The so-called <em>local</em> BOIN variant (i.e. that advocated by <span class="citation">Liu and Yuan (2015)</span>) defines:</p>
+<p><span class="math display">\[ \lambda_{1i} = \frac{\log{\left( \frac{1 - \phi_1}{1 - p_T} \right)} + \frac{1}{n_i} \log{\left( \frac{\pi_{UI,i}}{\pi_{EI,i}} \right)} }{ \log{\left( \frac{p_T (1 - \phi_1)}{\phi_1 (1 - p_T)} \right)} }\]</span></p>
+<p><span class="math display">\[ \lambda_{2i} = \frac{\log{\left( \frac{1 - p_T}{1 - \phi_2} \right)} + \frac{1}{n_i} \log{\left( \frac{\pi_{EI,i}}{\pi_{OI,i}} \right)} }{ \log{\left( \frac{ \phi_2(1 - p_T)}{p_T (1 - \phi_2)} \right)} }\]</span></p>
+<p>where <span class="math inline">\(\phi_1\)</span> and <span class="math inline">\(\phi_2\)</span> are model parameters. The authors advocate <span class="math inline">\(\phi_1 \in \left[ 0.5pT, 0.7pT \right]\)</span> and <span class="math inline">\(\phi_2 \in \left[ 1.3pT, 1.5pT \right]\)</span>. As defaults, they recommend <span class="math inline">\(\phi_1 = 0.6p_T\)</span> and <span class="math inline">\(\phi_2 = 1.4p_T\)</span>.</p>
+<p>Having observed toxicity rate <span class="math inline">\(\hat{p}_i = x_i / n_i\)</span> at the current dose <span class="math inline">\(i\)</span>, the logical action depends on the interval in which <span class="math inline">\(\hat{p}_i\)</span> resides. If <span class="math inline">\(\hat{p}_i &lt; \lambda_{1i}\)</span>, then the current dose is likely an underdose, so our desire should be to escalate dose to <span class="math inline">\(i+1\)</span>. In contrast, if <span class="math inline">\(\hat{p}_i &gt; \lambda_{2i}\)</span>, then the current dose is likely an overdose and we will want to de-escalate dose to <span class="math inline">\(i-1\)</span> for the next patient. If <span class="math inline">\(\lambda_{1i} &lt; \hat{p}_i &lt; \lambda_{2i}\)</span>, then the current dose is deemed sufficiently close to <span class="math inline">\(p_T\)</span> and we will want to stay at dose-level <span class="math inline">\(i\)</span>.</p>
+<p>The authors advocate a stopping rule to protect against repeated administration of a dose that is evidently excessively toxic. The proposed rule is similar to that used in TPI and mTPI. Using a <span class="math inline">\(Beta(1, 1)\)</span> prior, dose <span class="math inline">\(i\)</span> is deemed inadmissible for being excessively toxic if</p>
+<p><span class="math display">\[ Pr(p_{i} &gt; p_{T} | x_i, n_i) &gt; \xi,\]</span></p>
+<p>for a certainty threshold, <span class="math inline">\(\xi\)</span>, with <span class="math inline">\(\xi = 0.95\)</span> being suggested. If a dose is excluded by this rule, it should not be recommended by the model. Irrespective the values of <span class="math inline">\(\lambda_{1i}\)</span> and <span class="math inline">\(\lambda_{1i}\)</span>, the design will recommend to stay at dose <span class="math inline">\(i\)</span> rather than escalate to a dose previously identified as being inadmissible. Furthermore, the design will advocate stopping if the lowest dose is inferred to be inadmissible.</p>
+<p>See <span class="citation">Liu and Yuan (2015)</span> and <span class="citation">Yuan and Liu (2018)</span> for full details.</p>
+</div>
+<div id="implementation-in-escalation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#implementation-in-escalation" class="anchor"></a>Implementation in <code>escalation</code>
+</h1>
+<p>To demonstrate the method, let us reproduce the dose selection sequence in a trial of five doses targeting <span class="math inline">\(p_T = 0.3\)</span>, described in <span class="citation">Yuan and Liu (2018)</span>.</p>
+<p>Opting to take the defaults, <span class="math inline">\(\phi_1 = 0.6 p_T = 0.18\)</span> and <span class="math inline">\(\phi_2 = 1.4 p_T = 0.42\)</span>, we create an object to fit the model using:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">escalation</span>)
+
+<span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span>(<span class="kw">num_doses</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="fl">0.3</span>)</pre></body></html></div>
+<p>This is short-hand for</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span>(<span class="kw">num_doses</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="fl">0.3</span>, <span class="kw">p.saf</span> <span class="kw">=</span> <span class="fl">0.18</span>, <span class="kw">p.tox</span> <span class="kw">=</span> <span class="fl">0.42</span>)</pre></body></html></div>
+<p>The text in the paper describes that outcomes ‘1NNN’ were observed in the first cohort:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="st">'1NNN'</span>)</pre></body></html></div>
+<p>leading to advice to escalate:</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
+<span class="co">#&gt; [1] 2</span></pre></body></html></div>
+<p>The next cohort also saw three non-toxicity events, leading to advice:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NNN'</span>)
+<span class="no">fit</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
+<span class="co">#&gt; [1] 3</span></pre></body></html></div>
+<p>In the third cohort, two patients had toxicity, leading to advice:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="st">'1NNN 2NNN 3NTT'</span>)
+<span class="no">fit</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
+<span class="co">#&gt; [1] 2</span></pre></body></html></div>
+<p>The relatively low sample size at dose 3 means that the dose has not yet been rendered inadmissible:</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span>()
+<span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE</span></pre></body></html></div>
+<div id="dose-paths" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dose-paths" class="anchor"></a>Dose paths</h2>
+<p>We can reproduce some of the advice above using dose-paths to exhaustively calculate all possible future model advice. For example, after observing <code>1NNN</code> in the first cohort, we can reproduce the advice to escalate further after seeing <code>2NNN</code> and then de-escalate after seeing <code>3NTT</code> using:</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">cohort_sizes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">3</span>)
+<span class="no">paths</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span>(<span class="kw">cohort_sizes</span> <span class="kw">=</span> <span class="no">cohort_sizes</span>,
+                                  <span class="kw">previous_outcomes</span> <span class="kw">=</span> <span class="st">'1NNN'</span>, <span class="kw">next_dose</span> <span class="kw">=</span> <span class="fl">2</span>)
+<span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span>(<span class="no">paths</span>)</pre></body></html></div>
+<div id="htmlwidget-acb004b94cbd2bb3af7f" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-acb004b94cbd2bb3af7f">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"3\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"10\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"13\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"14\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Thus, we can trace the path <code>1NNN 2NNN 3NNT</code>, along with every other possible path in two cohorts of three after having observed <code>1NNN</code>.</p>
+<p>For more information on working with dose-paths, refer to the dose-paths vignette.</p>
+</div>
+<div id="simulation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#simulation" class="anchor"></a>Simulation</h2>
+<p><span class="citation">Liu and Yuan (2015)</span> present in their Table 4 some simulated operating characteristics. We can use the <code>simulate_trials</code> function to reproduce the findings.</p>
+<p>Their example concerns a clinical trial of six doses that targets 25% toxicity. We specify the <code>model</code> object to reflect this. They also elect to limit the trial to a sample size of <span class="math inline">\(n=36\)</span>:</p>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span>(<span class="kw">num_doses</span> <span class="kw">=</span> <span class="fl">6</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="fl">0.25</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fl">36</span>)</pre></body></html></div>
+<p>Their scenario 1 investigates the true probability vector:</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">true_prob_tox</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.25</span>, <span class="fl">0.35</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>)</pre></body></html></div>
+<p>For the sake of speed, we will run just fifty iterations:</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">num_sims</span> <span class="kw">&lt;-</span> <span class="fl">50</span></pre></body></html></div>
+<p>In real life, however, we would naturally run many thousands of iterations.</p>
+<p>Running the simulation:</p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">sims</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span>(<span class="kw">num_sims</span> <span class="kw">=</span> <span class="no">num_sims</span>, <span class="kw">true_prob_tox</span> <span class="kw">=</span> <span class="no">true_prob_tox</span>)</pre></body></html></div>
+<p>we see that from this small sample size, the probability that each dose is recommended is similar to that reported:</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span>(<span class="no">sims</span>)
+<span class="co">#&gt; NoDose      1      2      3      4      5      6 </span>
+<span class="co">#&gt;   0.10   0.60   0.24   0.06   0.00   0.00   0.00</span></pre></body></html></div>
+<p>and so is the expected number of patients treated at each dose level:</p>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span>(<span class="fu"><a href="../reference/n_at_dose.html">n_at_dose</a></span>(<span class="no">sims</span>))
+<span class="co">#&gt;     1     2     3     4     5     6 </span>
+<span class="co">#&gt; 23.04  8.28  2.10  0.06  0.00  0.00</span></pre></body></html></div>
+<p>For more information on running dose-finding simulations, refer to the simulation vignette.</p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<div id="refs" class="references">
+<div id="ref-liu_bayesian_2015">
+<p>Liu, Suyu, and Ying Yuan. 2015. “Bayesian Optimal Interval Designs for Phase I Clinical Trials.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 64 (3): 507–23. <a href="https://doi.org/10.1111/rssc.12089">https://doi.org/10.1111/rssc.12089</a>.</p>
+</div>
+<div id="ref-BOIN">
+<p>Yuan, Ying, and Suyu Liu. 2018. <em>BOIN: Bayesian Optimal Interval (Boin) Design for Single-Agent and Drug- Combination Phase I Clinical Trials</em>. <a href="https://CRAN.R-project.org/package=BOIN">https://CRAN.R-project.org/package=BOIN</a>.</p>
+</div>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
@@ -131,7 +232,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

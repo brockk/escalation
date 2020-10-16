@@ -335,6 +335,6 @@ prob_tox_samples.trialr_nbg_selector <- function(x, tall = FALSE,...) {
 summary.trialr_nbg_selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- RealDose <- NULL
   summary.selector(object) %>%
-    mutate(RealDose = object$real_doses) %>%
+    mutate(RealDose = c(NA, object$real_doses)) %>%
     select(Dose, N, Tox, EmpiricToxRate, RealDose, everything())
 }

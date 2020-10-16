@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,11 +43,13 @@
 
 
 
-
 <meta property="og:title" content="Get an object to fit the mTPI dose-finding model. — get_mtpi" />
+
 <meta property="og:description" content="The modified toxicity probability interval (mTPI)is a dose-escalation design
 by Ji et al. As the name suggests, it is an adaptation of the TPI design." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -81,7 +81,7 @@ by Ji et al. As the name suggests, it is an adaptation of the TPI design." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -133,6 +133,7 @@ by Ji et al. As the name suggests, it is an adaptation of the TPI design." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -154,21 +155,23 @@ by Ji et al. As the name suggests, it is an adaptation of the TPI design." />
     </div>
 
     <div class="ref-description">
+    
     <p>The modified toxicity probability interval (mTPI)is a dose-escalation design
 by Ji et al. As the name suggests, it is an adaptation of the TPI design.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>get_mtpi</span><span class='op'>(</span>
-  <span class='va'>num_doses</span>,
-  <span class='va'>target</span>,
-  <span class='va'>epsilon1</span>,
-  <span class='va'>epsilon2</span>,
-  <span class='va'>exclusion_certainty</span>,
-  alpha <span class='op'>=</span> <span class='fl'>1</span>,
-  beta <span class='op'>=</span> <span class='fl'>1</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
-
+    <pre class="usage"><span class='fu'>get_mtpi</span>(
+  <span class='no'>num_doses</span>,
+  <span class='no'>target</span>,
+  <span class='no'>epsilon1</span>,
+  <span class='no'>epsilon2</span>,
+  <span class='no'>exclusion_certainty</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='no'>...</span>
+)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -212,11 +215,12 @@ probability of toxicity.</p></td>
       <td><p>Extra args are passed onwards.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit the
 TPI model to outcomes.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
@@ -249,6 +253,7 @@ In their paper, the authors demonstrate acceptable operating performance
 using \(\alpha = \beta = 1\), \(K_{1} = 1\), \(K_{2} = 1.5\) and
 \(\xi = 0.95\).
 See the publications for full details.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Ji, Y., Liu, P., Li, Y., &amp; Bekele, B. N. (2010).
@@ -257,15 +262,15 @@ See the publications for full details.</p>
 <p>Ji, Y., &amp; Yang, S. (2017).
 On the Interval-Based Dose-Finding Designs, 1–26.
 Retrieved from http://arxiv.org/abs/1706.03277</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
-<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'>get_mtpi</span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span>, target <span class='op'>=</span> <span class='va'>target</span>, epsilon1 <span class='op'>=</span> <span class='fl'>0.05</span>,
-  epsilon2 <span class='op'>=</span> <span class='fl'>0.05</span>, exclusion_certainty <span class='op'>=</span> <span class='fl'>0.95</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
+<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_mtpi</span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>epsilon1</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>epsilon2</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>exclusion_certainty</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)
 
-<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
-<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
+<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -282,7 +287,7 @@ Retrieved from http://arxiv.org/abs/1706.03277</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

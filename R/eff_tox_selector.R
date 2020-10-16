@@ -59,22 +59,9 @@ empiric_eff_rate.eff_tox_selector <- function(x, ...) {
 }
 
 #' @export
+#' @importFrom tibble as_tibble
 summary.eff_tox_selector <- function(object, ...) {
-  {dose <- n <- tox <- eff <- empiric_tox_rate <- mean_prob_tox <-
-    median_prob_tox <- empiric_eff_rate <- mean_prob_eff <-
-    median_prob_eff <- NULL}
-  tibble(
-    dose = dose_indices(object),
-    tox = tox_at_dose(object),
-    eff = eff_at_dose(object),
-    n = n_at_dose(object),
-    empiric_tox_rate = empiric_tox_rate(object),
-    mean_prob_tox = mean_prob_tox(object),
-    median_prob_tox = median_prob_tox(object),
-    empiric_eff_rate = empiric_eff_rate(object),
-    mean_prob_eff = mean_prob_eff(object),
-    median_prob_eff = median_prob_eff(object)
-  )
+  as_tibble(object, ...)
 }
 
 #' @importFrom stringr str_to_title
@@ -145,8 +132,8 @@ print.eff_tox_selector <- function(x, ...) {
   # cat(paste0('Model entropy: ', format(round(x$entropy, 2), nsmall = 2)))
 }
 
-#' @importFrom tibble as_tibble
 #' @export
+#' @importFrom tibble as_tibble
 as_tibble.eff_tox_selector <- function(x, ...) {
 
   dose_labs <- c('NoDose', as.character(dose_indices(x)))
@@ -157,7 +144,7 @@ as_tibble.eff_tox_selector <- function(x, ...) {
     rec_bool <- c(FALSE, dose_indices(x) == rec_d)
   }
 
-  tibble(
+  tb <- tibble(
     dose = ordered(dose_labs, levels = dose_labs),
     tox = c(0, tox_at_dose(x)),
     eff = c(0, eff_at_dose(x)),
@@ -168,6 +155,11 @@ as_tibble.eff_tox_selector <- function(x, ...) {
     empiric_eff_rate = c(0, empiric_eff_rate(x)),
     mean_prob_eff = c(0, mean_prob_eff(x)),
     median_prob_eff = c(0, median_prob_eff(x)),
-    recommended = rec_bool
+    admissible = c(TRUE, dose_admissible(x)),
+    recommended = rec_bool,
   )
+  if(is_randomising(x)) {
+    tb$prob_rand = c(0, prob_administer(x))
+  }
+  tb
 }

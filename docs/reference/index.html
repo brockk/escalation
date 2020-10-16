@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,9 +43,10 @@
 
 
 
-
 <meta property="og:title" content="Function reference" />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -79,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -131,6 +130,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -250,6 +250,30 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="eff.html">eff()</a></code> </p>
+        </td>
+        <td><p>Binary efficacy outcomes.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="eff_at_dose.html">eff_at_dose()</a></code> </p>
+        </td>
+        <td><p>Number of toxicities seen at each dose.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="eff_limit.html">eff_limit()</a></code> </p>
+        </td>
+        <td><p>Efficacy rate limit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="empiric_eff_rate.html">empiric_eff_rate()</a></code> </p>
+        </td>
+        <td><p>Observed efficacy rate at each dose.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="empiric_tox_rate.html">empiric_tox_rate()</a></code> </p>
         </td>
         <td><p>Observed toxicity rate at each dose.</p></td>
@@ -298,9 +322,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="get_empiric_crm_skeleton_weights.html">get_empiric_crm_skeleton_weights()</a></code> </p>
+        </td>
+        <td><p>Get posterior model weights for several empiric CRM skeletons.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_mtpi.html">get_mtpi()</a></code> </p>
         </td>
         <td><p>Get an object to fit the mTPI dose-finding model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_random_selector.html">get_random_selector()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit a dose-selector that randomly selects doses.</p></td>
       </tr><tr>
         
         <td>
@@ -322,9 +358,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="get_trialr_efftox.html">get_trialr_efftox()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit the EffTox model using the trialr package.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_trialr_nbg.html">get_trialr_nbg()</a></code> </p>
         </td>
         <td><p>Get an object to fit the NBG dose-finding model using the trialr package.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_wages_and_tait.html">get_wages_and_tait()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit Wages &amp; Tait's model for phase I/II dose-finding.</p></td>
       </tr><tr>
         
         <td>
@@ -334,9 +382,27 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="is_randomising.html">is_randomising()</a></code> </p>
+        </td>
+        <td><p>Is this selector currently randomly allocating doses?</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mean_prob_eff.html">mean_prob_eff()</a></code> </p>
+        </td>
+        <td><p>Mean efficacy rate at each dose.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mean_prob_tox.html">mean_prob_tox()</a></code> </p>
         </td>
         <td><p>Mean toxicity rate at each dose.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="median_prob_eff.html">median_prob_eff()</a></code> </p>
+        </td>
+        <td><p>Median efficacy rate at each dose.</p></td>
       </tr><tr>
         
         <td>
@@ -382,6 +448,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="num_eff.html">num_eff()</a></code> </p>
+        </td>
+        <td><p>Total number of efficacies seen.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="num_patients.html">num_patients()</a></code> </p>
         </td>
         <td><p>Number of patients evaluated.</p></td>
@@ -394,9 +466,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="parse_phase1_2_outcomes.html">parse_phase1_2_outcomes()</a></code> </p>
+        </td>
+        <td><p>Parse a string of phase I/II dose-finding outcomes to vector notation.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="parse_phase1_outcomes.html">parse_phase1_outcomes()</a></code> </p>
         </td>
         <td><p>Parse a string of phase I dose-finding outcomes to vector notation.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="phase1_2_outcomes_to_cohorts.html">phase1_2_outcomes_to_cohorts()</a></code> </p>
+        </td>
+        <td><p>Break a phase I/II outcome string into a list of cohort parts.</p></td>
       </tr><tr>
         
         <td>
@@ -412,13 +496,19 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="prob_eff_quantile.html">prob_eff_quantile()</a></code> </p>
+        </td>
+        <td><p>Quantile of the efficacy rate at each dose.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="prob_recommend.html">prob_recommend()</a></code> </p>
         </td>
         <td><p>Probability of recommendation</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="prob_tox_exceeds.html">prob_tox_exceeds()</a></code> </p>
+          <p><code><a href="prob_tox_exceeds.html">prob_tox_exceeds()</a></code> <code><a href="prob_tox_exceeds.html">prob_eff_exceeds()</a></code> </p>
         </td>
         <td><p>Probability that the toxicity rate exceeds some threshold.</p></td>
       </tr><tr>
@@ -430,7 +520,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="prob_tox_samples.html">prob_tox_samples()</a></code> </p>
+          <p><code><a href="prob_tox_samples.html">prob_tox_samples()</a></code> <code><a href="prob_tox_samples.html">prob_eff_samples()</a></code> </p>
         </td>
         <td><p>Get samples of the probability of toxicity.</p></td>
       </tr><tr>
@@ -439,6 +529,12 @@
           <p><code><a href="recommended_dose.html">recommended_dose()</a></code> </p>
         </td>
         <td><p>Recommended dose for next patient or cohort.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="select_boin_mtd.html">select_boin_mtd()</a></code> </p>
+        </td>
+        <td><p>Select dose by BOIN's MTD-choosing algorithm.</p></td>
       </tr><tr>
         
         <td>
@@ -532,6 +628,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="tox_limit.html">tox_limit()</a></code> </p>
+        </td>
+        <td><p>Toxicity rate limit</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="tox_target.html">tox_target()</a></code> </p>
         </td>
         <td><p>Target toxicity rate</p></td>
@@ -566,7 +668,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

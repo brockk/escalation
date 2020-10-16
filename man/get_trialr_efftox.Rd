@@ -63,8 +63,8 @@ an object of type \code{\link{selector_factory}} that can fit the
 EffTox model to outcomes.
 }
 \description{
-This function returns an object that can be used to fit an EffTox model using
-methods provided by the trialr package.
+This function returns an object that can be used to fit the EffTox model for
+phase I/II dose-finding using methods provided by the trialr package.
 }
 \examples{
 efftox_priors <- trialr::efftox_priors

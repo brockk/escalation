@@ -349,6 +349,6 @@ prob_tox_samples.trialr_crm_selector <- function(x, tall = FALSE,...) {
 summary.trialr_crm_selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- Skeleton <- NULL
   summary.selector(object) %>%
-    mutate(Skeleton = object$skeleton) %>%
+    mutate(Skeleton = c(NA, object$skeleton)) %>%
     select(Dose, N, Tox, EmpiricToxRate, Skeleton, everything())
 }

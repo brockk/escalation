@@ -47,6 +47,11 @@ n_at_dose.derived_dose_selector <- function(x, ...) {
 }
 
 #' @export
+is_randomising.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% is_randomising(...))
+}
+
+#' @export
 tox_at_dose.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% tox_at_dose(...))
 }

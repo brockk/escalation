@@ -2,8 +2,8 @@
 #' Get an object to fit the EffTox model using the trialr package.
 #'
 #' @description
-#' This function returns an object that can be used to fit an EffTox model using
-#' methods provided by the trialr package.
+#' This function returns an object that can be used to fit the EffTox model for
+#' phase I/II dose-finding using methods provided by the trialr package.
 #'
 #' @param parent_selector_factory optional object of type
 #' \code{\link{selector_factory}} that is in charge of dose selection before

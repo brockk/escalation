@@ -185,6 +185,16 @@ continue.random_selector <- function(x, ...) {
 }
 
 #' @export
+is_randomising.random_selector <- function(x, ...) {
+  return(TRUE)
+}
+
+#' @export
+prob_administer.random_selector <- function(x, ...) {
+  return(x$prob_select)
+}
+
+#' @export
 tox_at_dose.random_selector <- function(x, ...) {
   return(x$df_c$tox)
 }

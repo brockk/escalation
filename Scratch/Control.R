@@ -25,7 +25,6 @@
 # usethis::use_coverage()
 
 
-# Something else ----
 library(escalation)
 getwd()
 

@@ -134,6 +134,10 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
   expect_true(is.integer(n_at_recommended_dose(x)))
   expect_equal(length(n_at_recommended_dose(x)), 1)
 
+  expect_equal(is_randomising(x), FALSE)
+  expect_true(is.logical(is_randomising(x)))
+  expect_equal(length(is_randomising(x)), 1)
+
   expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
   expect_true(is.numeric(prob_administer(x)))
   expect_equal(length(prob_administer(x)), num_doses(x))
@@ -164,6 +168,12 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
 
   expect_true(is.data.frame(prob_tox_samples(x)))
   expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
+
+  # Expect summary to not error. This is how that is tested, apparently:
+  expect_error(summary(x), NA)
+  expect_output(print(x))
+  expect_true(tibble::is_tibble(as_tibble(x)))
+  expect_true(nrow(as_tibble(x)) >= num_doses(x))
 
 
   # Example 2, using trivial outcome string
@@ -228,6 +238,10 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
   expect_true(is.integer(n_at_recommended_dose(x)))
   expect_equal(length(n_at_recommended_dose(x)), 1)
 
+  expect_equal(is_randomising(x), FALSE)
+  expect_true(is.logical(is_randomising(x)))
+  expect_equal(length(is_randomising(x)), 1)
+
   expect_true(is.numeric(prob_administer(x)))
   expect_equal(length(prob_administer(x)), num_doses(x))
 
@@ -257,6 +271,12 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
 
   expect_true(is.data.frame(prob_tox_samples(x)))
   expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
+
+  # Expect summary to not error. This is how that is tested, apparently:
+  expect_error(summary(x), NA)
+  expect_output(print(x))
+  expect_true(tibble::is_tibble(as_tibble(x)))
+  expect_true(nrow(as_tibble(x)) >= num_doses(x))
 
 
   # Example 3, using tibble of outcomes
@@ -328,6 +348,10 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
   expect_true(is.integer(n_at_recommended_dose(x)))
   expect_equal(length(n_at_recommended_dose(x)), 1)
 
+  expect_equal(is_randomising(x), FALSE)
+  expect_true(is.logical(is_randomising(x)))
+  expect_equal(length(is_randomising(x)), 1)
+
   expect_equal(unname(prob_administer(x)), c(0.5,0.5,0,0,0))
   expect_true(is.numeric(prob_administer(x)))
   expect_equal(length(prob_administer(x)), num_doses(x))
@@ -358,6 +382,12 @@ test_that('demand_n_at_dose_selector supports correct interface.', {
 
   expect_true(is.data.frame(prob_tox_samples(x)))
   expect_true(is.data.frame(prob_tox_samples(x, tall = TRUE)))
+
+  # Expect summary to not error. This is how that is tested, apparently:
+  expect_error(summary(x), NA)
+  expect_output(print(x))
+  expect_true(tibble::is_tibble(as_tibble(x)))
+  expect_true(nrow(as_tibble(x)) >= num_doses(x))
 
 })
 

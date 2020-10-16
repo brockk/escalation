@@ -51,13 +51,15 @@ model \%>\% fit(outcomes) \%>\% recommended_dose()
 # However, we can use this method to select dose at every dose decision:
 model2 <- get_boin(num_doses = 5, target = target) \%>\%
   select_boin_mtd(when = 'always')
-model2 \%>\% fit(outcomes) \%>\% recommended_dose()
+model2 \%>\% fit('1NNT') \%>\% recommended_dose()
+model2 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
 
 # and with any underlying model:
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 model3 <- get_dfcrm(skeleton = skeleton, target = target) \%>\%
   select_boin_mtd(when = 'always')
-model3 \%>\% fit(outcomes) \%>\% recommended_dose()
+model3 \%>\% fit('1NNT') \%>\% recommended_dose()
+model3 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
 
 }
 \references{

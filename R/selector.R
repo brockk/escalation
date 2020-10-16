@@ -53,6 +53,7 @@
 #'   \item \code{\link{continue}}
 #'   \item \code{\link{n_at_dose}}
 #'   \item \code{\link{n_at_recommended_dose}}
+#'   \item \code{\link{is_randomising}}
 #'   \item \code{\link{prob_administer}}
 #'   \item \code{\link{tox_at_dose}}
 #'   \item \code{\link{empiric_tox_rate}}
@@ -155,6 +156,7 @@
 #' fit %>% continue()
 #' fit %>% n_at_dose()
 #' fit %>% n_at_recommended_dose()
+#' fit %>% is_randomising()
 #' fit %>% prob_administer()
 #' fit %>% tox_at_dose()
 #' fit %>% empiric_tox_rate()
@@ -236,12 +238,28 @@ n_at_recommended_dose.selector <- function(x, ...) {
 }
 
 #' @export
+is_randomising.selector <- function(x, ...) {
+  # By default, dose selectors are deterministic:
+  return(FALSE)
+}
+
+#' @export
 prob_administer.selector <- function(x, ...) {
   n_doses <- num_doses(x)
   n_d <- n_at_dose(x)
   names(n_d) <- 1:n_doses
   n_d / sum(n_d)
 }
+
+#' @importFrom purrr map_int
+#' @export
+tox_at_dose.selector <- function(x, ...) {
+  dose_indices <- 1:(num_doses(x))
+  tox_seen <- tox(x)
+  d <- doses_given(x)
+  map_int(dose_indices, ~ sum(tox_seen[d == .x]))
+}
+
 
 #' @export
 empiric_tox_rate.selector <- function(x, ...) {
@@ -254,17 +272,24 @@ dose_admissible.selector <- function(x, ...) {
 }
 
 #' @export
+#' @importFrom tibble as_tibble
 summary.selector <- function(object, ...) {
-  {dose <- n <- tox <- empiric_tox_rate <- mean_prob_tox <-
-    median_prob_tox <- NULL}
-  tibble(
-    dose = dose_indices(object),
-    tox = tox_at_dose(object),
-    n = n_at_dose(object),
-    empiric_tox_rate = empiric_tox_rate(object),
-    mean_prob_tox = mean_prob_tox(object),
-    median_prob_tox = median_prob_tox(object)
-  )
+  as_tibble(object)
+  # {dose <- n <- tox <- empiric_tox_rate <- mean_prob_tox <-
+  #   median_prob_tox <- prob_rand = NULL}
+  # tb <- tibble(
+  #   dose = dose_indices(object),
+  #   tox = tox_at_dose(object),
+  #   n = n_at_dose(object),
+  #   empiric_tox_rate = empiric_tox_rate(object),
+  #   mean_prob_tox = mean_prob_tox(object),
+  #   median_prob_tox = median_prob_tox(object),
+  #   admissible = dose_admissible(object)
+  # )
+  # if(is_randomising(object)) {
+  #   tb$prob_rand = prob_administer(object)
+  # }
+  # tb
 }
 
 #' @importFrom stringr str_to_title
@@ -327,8 +352,8 @@ print.selector <- function(x, ...) {
   # cat(paste0('Model entropy: ', format(round(x$entropy, 2), nsmall = 2)))
 }
 
-#' @importFrom tibble as_tibble
 #' @export
+#' @importFrom tibble as_tibble
 as_tibble.selector <- function(x, ...) {
 
   dose_labs <- c('NoDose', as.character(dose_indices(x)))
@@ -339,13 +364,18 @@ as_tibble.selector <- function(x, ...) {
     rec_bool <- c(FALSE, dose_indices(x) == rec_d)
   }
 
-  tibble(
+  tb <- tibble(
     dose = ordered(dose_labs, levels = dose_labs),
     tox = c(0, tox_at_dose(x)),
     n = c(0, n_at_dose(x)),
     empiric_tox_rate = c(0, empiric_tox_rate(x)),
     mean_prob_tox = c(0, mean_prob_tox(x)),
     median_prob_tox = c(0, median_prob_tox(x)),
+    admissible = c(TRUE, dose_admissible(x)),
     recommended = rec_bool
   )
+  if(is_randomising(x)) {
+    tb$prob_rand = c(0, prob_administer(x))
+  }
+  tb
 }

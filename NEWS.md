@@ -1,4 +1,11 @@
 
+# escalation 0.1.4
+
+* Added Neuenschwander, Branson & Sponer's method for phase I.
+* Added Ji et al.'s TPI & mTI methods for phase I.
+* Added Thall & Cook's EffTox method for phase I/II.
+* Added Wages & Tait's method for phase I/II.
+
 # escalation 0.1.3
 
 * Mainly small changes to comply with dplyr v1.0.

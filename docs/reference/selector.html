@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,8 +43,8 @@
 
 
 
-
 <meta property="og:title" content="Dose selector. — selector" />
+
 <meta property="og:description" content="This is a core class in this package. It encapsulates that an object (e.g. a
 CRM model, a 3+3 model) is able to recommend doses, keep track of how many
 patients have been treated at what doses, what toxicity outcomes have been
@@ -79,7 +77,9 @@ MCMC method will be able to quantify any probability you like by working with
 posterior samples. In contrast, a method like the crm
 function in dfcrm that uses the plug-in method to estimate posterior
 dose-toxicity curves cannot natively estimate the median probability of tox." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -111,7 +111,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -163,6 +163,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -184,6 +185,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox." />
     </div>
 
     <div class="ref-description">
+    
     <p>This is a core class in this package. It encapsulates that an object (e.g. a
 CRM model, a 3+3 model) is able to recommend doses, keep track of how many
 patients have been treated at what doses, what toxicity outcomes have been
@@ -216,11 +218,11 @@ MCMC method will be able to quantify any probability you like by working with
 posterior samples. In contrast, a method like the <code><a href='https://rdrr.io/pkg/dfcrm/man/crm.html'>crm</a></code>
 function in <code>dfcrm</code> that uses the plug-in method to estimate posterior
 dose-toxicity curves cannot natively estimate the median probability of tox.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>selector</span><span class='op'>(</span><span class='op'>)</span></pre>
-
-
+    <pre class="usage"><span class='fu'>selector</span>()</pre>
+        
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Every <code>selector</code> object implements the following functions:</p><ul>
@@ -237,6 +239,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox.</p>
 <li><p><code><a href='continue.html'>continue</a></code></p></li>
 <li><p><code><a href='n_at_dose.html'>n_at_dose</a></code></p></li>
 <li><p><code><a href='n_at_recommended_dose.html'>n_at_recommended_dose</a></code></p></li>
+<li><p><code><a href='is_randomising.html'>is_randomising</a></code></p></li>
 <li><p><code><a href='prob_administer.html'>prob_administer</a></code></p></li>
 <li><p><code><a href='tox_at_dose.html'>tox_at_dose</a></code></p></li>
 <li><p><code><a href='empiric_tox_rate.html'>empiric_tox_rate</a></code></p></li>
@@ -247,78 +250,73 @@ dose-toxicity curves cannot natively estimate the median probability of tox.</p>
 <li><p><code><a href='prob_tox_exceeds.html'>prob_tox_exceeds</a></code></p></li>
 <li><p><code><a href='supports_sampling.html'>supports_sampling</a></code></p></li>
 <li><p><code><a href='prob_tox_samples.html'>prob_tox_samples</a></code></p></li>
+</ul><p>Some selectors also add:</p><ul>
+<li><p><code><a href='tox_limit.html'>tox_limit</a></code></p></li>
+<li><p><code><a href='eff_limit.html'>eff_limit</a></code></p></li>
+<li><p><code><a href='eff.html'>eff</a></code></p></li>
+<li><p><code><a href='num_eff.html'>num_eff</a></code></p></li>
+<li><p><code><a href='eff_at_dose.html'>eff_at_dose</a></code></p></li>
+<li><p><code><a href='empiric_eff_rate.html'>empiric_eff_rate</a></code></p></li>
+<li><p><code><a href='mean_prob_eff.html'>mean_prob_eff</a></code></p></li>
+<li><p><code><a href='median_prob_eff.html'>median_prob_eff</a></code></p></li>
+<li><p><code><a href='prob_eff_quantile.html'>prob_eff_quantile</a></code></p></li>
+<li><p><code><a href='prob_tox_exceeds.html'>prob_eff_exceeds</a></code></p></li>
+<li><p><code><a href='prob_tox_samples.html'>prob_eff_samples</a></code></p></li>
 </ul>
 
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='selector_factory.html'>selector_factory</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Start with a simple CRM model</span>
-<span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
-<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
-<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span>
+<span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
+<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
+<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
 
 <span class='co'># Add a rule to stop when 9 patients are treated at the recommended dose</span>
-<span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='stop_when_n_at_dose.html'>stop_when_n_at_dose</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>9</span>, dose <span class='op'>=</span> <span class='st'>'recommended'</span><span class='op'>)</span>
+<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='stop_when_n_at_dose.html'>stop_when_n_at_dose</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>9</span>, <span class='kw'>dose</span> <span class='kw'>=</span> <span class='st'>'recommended'</span>)
 
 <span class='co'># Add a rule to stop if toxicity rate at lowest dose likely exceeds target</span>
-<span class='va'>model3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='stop_when_n_at_dose.html'>stop_when_n_at_dose</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>9</span>, dose <span class='op'>=</span> <span class='st'>'recommended'</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='stop_when_too_toxic.html'>stop_when_too_toxic</a></span><span class='op'>(</span>dose <span class='op'>=</span> <span class='fl'>1</span>, tox_threshold <span class='op'>=</span> <span class='va'>target</span>, confidence <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='no'>model3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='stop_when_n_at_dose.html'>stop_when_n_at_dose</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>9</span>, <span class='kw'>dose</span> <span class='kw'>=</span> <span class='st'>'recommended'</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='stop_when_too_toxic.html'>stop_when_too_toxic</a></span>(<span class='kw'>dose</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>tox_threshold</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>confidence</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
 
 <span class='co'># We now have three CRM models that differ in their stopping behaviour.</span>
 <span class='co'># Let's fit each to some outcomes to see those differences:</span>
 
-<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NTT 1NNT'</span>
-<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
-<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
-<span class='va'>fit3</span> <span class='op'>&lt;-</span> <span class='va'>model3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
+<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTT 1NNT'</span>
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
+<span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='no'>model3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
 
-<span class='va'>fit1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='va'>fit1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='va'>fit3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='va'>fit3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># Already model3 wants to stop because of excessive toxicity.</span>
+<span class='no'>fit1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='no'>fit1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>fit3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='no'>fit3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># Already model3 wants to stop because of excessive toxicity.</span>
 
 <span class='co'># Let's carry on with models 1 and 2 by adding another cohort:</span>
 
-<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NTT 1NNT 1NNN'</span>
-<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
-<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
+<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTT 1NNT 1NNN'</span>
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
 
-<span class='va'>fit1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='va'>fit1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='no'>fit1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='no'>fit1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># Model1 wants to continue - in fact it will never stop.</span>
 <span class='co'># In contrast, model2 has seen 9 at dose 1 so, rather than suggest dose 1</span>
 <span class='co'># again, it suggests the trial should stop.</span>
 
 <span class='co'># For contrast, let us consider a BOIN model on the same outcomes</span>
-<span class='va'>boin_fitter</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_boin.html'>get_boin</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>skeleton</span><span class='op'>)</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span>
-<span class='va'>fit4</span> <span class='op'>&lt;-</span> <span class='va'>boin_fitter</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
-<span class='va'>fit4</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='va'>fit4</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>boin_fitter</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_boin.html'>get_boin</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>skeleton</span>), <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
+<span class='no'>fit4</span> <span class='kw'>&lt;-</span> <span class='no'>boin_fitter</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
+<span class='no'>fit4</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='no'>fit4</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Full selector interface:</span>
-<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='va'>fit2</span>
-<span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tox_target.html'>tox_target</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.25</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_patients.html'>num_patients</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 12</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='cohort.html'>cohort</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 1 1 1 2 2 2 3 3 3 4 4 4</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='doses_given.html'>doses_given</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 1 1 1 2 2 2 1 1 1 1 1 1</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tox.html'>tox</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0 0 0 0 1 1 0 0 1 0 0 0</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_tox.html'>num_tox</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 4</span><span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='no'>fit2</span>
+<span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tox_target.html'>tox_target</a></span>()</div><div class='output co'>#&gt; [1] 0.25</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_patients.html'>num_patients</a></span>()</div><div class='output co'>#&gt; [1] 12</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='cohort.html'>cohort</a></span>()</div><div class='output co'>#&gt;  [1] 1 1 1 2 2 2 3 3 3 4 4 4</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='doses_given.html'>doses_given</a></span>()</div><div class='output co'>#&gt;  [1] 1 1 1 2 2 2 1 1 1 1 1 1</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tox.html'>tox</a></span>()</div><div class='output co'>#&gt;  [1] 0 0 0 0 1 1 0 0 1 0 0 0</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_tox.html'>num_tox</a></span>()</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span>()</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 4</span><span>
 #&gt;    patient cohort  dose   tox
 #&gt;      </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span>       1      1     1     0
@@ -332,36 +330,20 @@ dose-toxicity curves cannot natively estimate the median probability of tox.</p>
 #&gt; </span><span style='color: #BCBCBC;'> 9</span><span>       9      3     1     1
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span>      10      4     1     0
 #&gt; </span><span style='color: #BCBCBC;'>11</span><span>      11      4     1     0
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span>      12      4     1     0</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_doses.html'>num_doses</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='dose_indices.html'>dose_indices</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1 2 3 4 5</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='n_at_dose.html'>n_at_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 9 3 0 0 0</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='n_at_recommended_dose.html'>n_at_recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 9</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_administer.html'>prob_administer</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    1    2    3    4    5 
-#&gt; 0.75 0.25 0.00 0.00 0.00 </div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tox_at_dose.html'>tox_at_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1 2 0 0 0</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='empiric_tox_rate.html'>empiric_tox_rate</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1111111 0.6666667       NaN       NaN       NaN</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='mean_prob_tox.html'>mean_prob_tox</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.2069561 0.2979677 0.4824122 0.6176620 0.7644430</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='median_prob_tox.html'>median_prob_tox</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.2069561 0.2979677 0.4824122 0.6176620 0.7644430</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='dose_admissible.html'>dose_admissible</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE TRUE TRUE TRUE TRUE</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span><span class='op'>(</span><span class='fl'>0.9</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.3649670 0.4608277 0.6272346 0.7346974 0.8420860</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_exceeds.html'>prob_tox_exceeds</a></span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.009230096 0.054695783 0.442521884 0.851725376 0.996745367</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='supports_sampling.html'>supports_sampling</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_samples.html'>prob_tox_samples</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 4,000 x 6</span><span>
-#&gt;    .draw    `1`   `2`   `3`   `4`   `5`
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     0.261  0.356 0.537 0.663 0.795
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     0.195  0.284 0.469 0.606 0.757
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     0.426  0.519 0.674 0.770 0.865
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     0.154  0.237 0.420 0.564 0.727
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     0.074</span><span style='text-decoration: underline;'>0</span><span> 0.135 0.300 0.451 0.642
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     0.291  0.387 0.565 0.685 0.810
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     0.168  0.254 0.438 0.579 0.738
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     0.485  0.574 0.716 0.802 0.884
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     0.353  0.449 0.617 0.727 0.837
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    0.181  0.269 0.454 0.593 0.747
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span>      12      4     1     0</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_doses.html'>num_doses</a></span>()</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='dose_indices.html'>dose_indices</a></span>()</div><div class='output co'>#&gt; [1] 1 2 3 4 5</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='n_at_dose.html'>n_at_dose</a></span>()</div><div class='output co'>#&gt; [1] 9 3 0 0 0</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='n_at_recommended_dose.html'>n_at_recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 9</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='is_randomising.html'>is_randomising</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_administer.html'>prob_administer</a></span>()</div><div class='output co'>#&gt;    1    2    3    4    5 
+#&gt; 0.75 0.25 0.00 0.00 0.00 </div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tox_at_dose.html'>tox_at_dose</a></span>()</div><div class='output co'>#&gt; [1] 1 2 0 0 0</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='empiric_tox_rate.html'>empiric_tox_rate</a></span>()</div><div class='output co'>#&gt; [1] 0.1111111 0.6666667       NaN       NaN       NaN</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='mean_prob_tox.html'>mean_prob_tox</a></span>()</div><div class='output co'>#&gt; [1] 0.2069561 0.2979677 0.4824122 0.6176620 0.7644430</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='median_prob_tox.html'>median_prob_tox</a></span>()</div><div class='output co'>#&gt; [1] 0.2069561 0.2979677 0.4824122 0.6176620 0.7644430</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='dose_admissible.html'>dose_admissible</a></span>()</div><div class='output co'>#&gt; [1] TRUE TRUE TRUE TRUE TRUE</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span>(<span class='fl'>0.9</span>)</div><div class='output co'>#&gt; [1] 0.3649670 0.4608277 0.6272346 0.7346974 0.8420860</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_exceeds.html'>prob_tox_exceeds</a></span>(<span class='fl'>0.5</span>)</div><div class='output co'>#&gt; [1] 0.009230096 0.054695783 0.442521884 0.851725376 0.996745367</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='supports_sampling.html'>supports_sampling</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_samples.html'>prob_tox_samples</a></span>()</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 4,000 x 6</span><span>
+#&gt;    .draw   `1`   `2`   `3`   `4`   `5`
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1     0.294 0.391 0.568 0.688 0.812
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2     0.154 0.237 0.420 0.564 0.727
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3     0.237 0.331 0.514 0.644 0.782
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4     0.300 0.397 0.573 0.692 0.815
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5     0.168 0.254 0.438 0.580 0.738
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6     0.360 0.456 0.623 0.732 0.840
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7     0.163 0.248 0.432 0.574 0.734
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8     0.176 0.263 0.448 0.588 0.744
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9     0.178 0.266 0.450 0.590 0.745
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10    0.353 0.449 0.618 0.727 0.837
 #&gt; </span><span style='color: #949494;'># … with 3,990 more rows</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -378,7 +360,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

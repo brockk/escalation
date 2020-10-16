@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,13 +43,15 @@
 
 
 
-
 <meta property="og:title" content="Calculate dose-path probabilities — calculate_probabilities" />
+
 <meta property="og:description" content="Crystallise a set of dose_paths with probabilities to calculate
 how likely each path is. Once probabilised in this way, the probabilities of
 the terminal nodes in this set of paths will sum to 1. This allows users to
 calculate operating characteristics." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -83,7 +83,7 @@ calculate operating characteristics." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -135,6 +135,7 @@ calculate operating characteristics." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -156,14 +157,16 @@ calculate operating characteristics." />
     </div>
 
     <div class="ref-description">
+    
     <p>Crystallise a set of <code><a href='dose_paths.html'>dose_paths</a></code> with probabilities to calculate
 how likely each path is. Once probabilised in this way, the probabilities of
 the terminal nodes in this set of paths will sum to 1. This allows users to
 calculate operating characteristics.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>calculate_probabilities</span><span class='op'>(</span><span class='va'>dose_paths</span>, <span class='va'>true_prob_tox</span><span class='op'>)</span></pre>
-
+    <pre class="usage"><span class='fu'>calculate_probabilities</span>(<span class='no'>dose_paths</span>, <span class='no'>true_prob_tox</span>, <span class='kw'>true_prob_eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -175,24 +178,43 @@ calculate operating characteristics.</p>
       <th>true_prob_tox</th>
       <td><p>Numeric vector, true probability of toxicity.</p></td>
     </tr>
+    <tr>
+      <th>true_prob_eff</th>
+      <td><p>vector of true efficacy probabilities, optionally NULL
+if efficacy not analysed.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Extra parameters</p></td>
+    </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='dose_paths.html'>dose_paths</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Calculate dose paths for the first three cohorts in a 3+3 trial of 5 doses:</span>
-<span class='va'>paths</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='get_dose_paths.html'>get_dose_paths</a></span><span class='op'>(</span>cohort_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># Phase 1 example.</span>
+<span class='co'># Calculate dose paths for the first three cohorts in a 3+3 trial of 5 doses:</span>
+<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='get_dose_paths.html'>get_dose_paths</a></span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>3</span>))
 
 <span class='co'># Set the true probabilities of toxicity</span>
-<span class='va'>true_prob_tox</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span><span class='op'>)</span>
+<span class='no'>true_prob_tox</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span>)
 <span class='co'># And calculate exact operating performance</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>paths</span> <span class='op'>%&gt;%</span> <span class='fu'>calculate_probabilities</span><span class='op'>(</span><span class='va'>true_prob_tox</span><span class='op'>)</span>
-<span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     NoDose          1          2          3          4          5 
-#&gt; 0.12854451 0.33600635 0.19081343 0.29807918 0.04655654 0.00000000 </div></pre>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>paths</span> <span class='kw'>%&gt;%</span> <span class='fu'>calculate_probabilities</span>(<span class='no'>true_prob_tox</span>)
+<span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;     NoDose          1          2          3          4          5 
+#&gt; 0.12854451 0.33600635 0.19081343 0.29807918 0.04655654 0.00000000 </div><div class='input'>
+<span class='co'># Phase 1/2 example.</span>
+<span class='no'>prob_select</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.3</span>, <span class='fl'>0.5</span>, <span class='fl'>0.07</span>, <span class='fl'>0.03</span>)
+<span class='no'>selector_factory</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_random_selector.html'>get_random_selector</a></span>(<span class='kw'>prob_select</span> <span class='kw'>=</span> <span class='no'>prob_select</span>,
+                                        <span class='kw'>supports_efficacy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='no'>selector_factory</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='get_dose_paths.html'>get_dose_paths</a></span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='message'>You have requested 100 paths. Be patient.</span></div><div class='input'><span class='no'>true_prob_eff</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.27</span>, <span class='fl'>0.35</span>, <span class='fl'>0.41</span>, <span class='fl'>0.44</span>, <span class='fl'>0.45</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>paths</span> <span class='kw'>%&gt;%</span> <span class='fu'>calculate_probabilities</span>(<span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
+                                       <span class='kw'>true_prob_eff</span> <span class='kw'>=</span> <span class='no'>true_prob_eff</span>)
+<span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;     NoDose          1          2          3          4          5 
+#&gt; 0.00000000 0.10881060 0.28244334 0.41956189 0.14690224 0.04228193 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -208,7 +230,7 @@ calculate operating characteristics.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

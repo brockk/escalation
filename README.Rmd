@@ -31,6 +31,8 @@ It starts by providing functions to use dose-escalation methodologies like the c
 * `get_tpi()`
 * `get_mtpi()`
 * `get_boin()`
+* `get_trialr_efftox()`
+* `get_wages_and_tait()`
 * `get_three_plus_three()`
 
 These functions fetch model fitting objects.
@@ -120,13 +122,17 @@ The classes capable of performing this core role are:
 
 * `get_dfcrm()`, using the model-fitting code from [`dfcrm`](https://cran.r-project.org/package=dfcrm)
 * `get_trialr_crm()` using the model-fitting code from [`trialr`](https://cran.r-project.org/package=trialr)
+* `get_trialr_nbg()`
 * `get_boin()` using the model-fitting code from [`BOIN`](https://cran.r-project.org/package=BOIN)
 * `get_tpi()`
 * `get_mtpi()`
+* `get_trialr_efftox()`
+* `get_wages_and_tait()`
 * `get_three_plus_three()`
 * and `follow_path()`
 
-The last four are implemented natively in `escalation`.
+Where indicated these methods rely on external packages.
+Otherwise, methods are implemented natively in `escalation`.
 We look at each now.
 
 ### get_dfcrm

@@ -32,6 +32,8 @@ interval design (BOIN), and the perennial 3+3:
   - `get_tpi()`
   - `get_mtpi()`
   - `get_boin()`
+  - `get_trialr_efftox()`
+  - `get_wages_and_tait()`
   - `get_three_plus_three()`
 
 These functions fetch model fitting objects. Where possible, technical
@@ -144,15 +146,18 @@ performing this core role are:
     [`dfcrm`](https://cran.r-project.org/package=dfcrm)
   - `get_trialr_crm()` using the model-fitting code from
     [`trialr`](https://cran.r-project.org/package=trialr)
+  - `get_trialr_nbg()`
   - `get_boin()` using the model-fitting code from
     [`BOIN`](https://cran.r-project.org/package=BOIN)
   - `get_tpi()`
   - `get_mtpi()`
+  - `get_trialr_efftox()`
+  - `get_wages_and_tait()`
   - `get_three_plus_three()`
   - and `follow_path()`
 
-The last four are implemented natively in `escalation`. We look at each
-now.
+Where indicated these methods rely on external packages. Otherwise,
+methods are implemented natively in `escalation`. We look at each now.
 
 ### get\_dfcrm
 
@@ -246,8 +251,7 @@ We could instead fit the CRM models above using the
 Brock 2019; Brock 2020).
 
 Reusing the `skeleton` and `target` variables defined above, we fit the
-same empiric
-model
+same empiric model
 
 ``` r
 model <- get_trialr_crm(skeleton = skeleton, target = target, model = 'empiric',
@@ -288,18 +292,18 @@ fit %>% prob_tox_samples() %>% head(10)
 ```
 
     ## # A tibble: 10 x 6
-    ##    .draw      `1`      `2`        `3`      `4`     `5`
-    ##    <chr>    <dbl>    <dbl>      <dbl>    <dbl>   <dbl>
-    ##  1 1     8.92e- 4 4.53e- 3 0.0388     0.117    0.302  
-    ##  2 2     4.54e- 1 5.45e- 1 0.694      0.785    0.874  
-    ##  3 3     3.18e-11 8.53e- 9 0.0000139  0.000615 0.0162 
-    ##  4 4     1.62e-13 1.48e-10 0.00000121 0.000123 0.00659
-    ##  5 5     6.64e-11 1.50e- 8 0.0000195  0.000771 0.0184 
-    ##  6 6     6.95e- 5 6.37e- 4 0.0119     0.0535   0.195  
-    ##  7 7     4.16e- 3 1.48e- 2 0.0791     0.187    0.393  
-    ##  8 8     1.29e- 1 2.08e- 1 0.388      0.535    0.706  
-    ##  9 9     8.61e- 2 1.52e- 1 0.321      0.472    0.658  
-    ## 10 10    4.07e- 4 2.48e- 3 0.0270     0.0918   0.264
+    ##    .draw      `1`          `2`       `3`      `4`    `5`
+    ##    <chr>    <dbl>        <dbl>     <dbl>    <dbl>  <dbl>
+    ##  1 1     3.92e- 4 0.00241      0.0265    0.0908   0.262 
+    ##  2 2     2.23e- 5 0.000266     0.00704   0.0378   0.161 
+    ##  3 3     2.56e- 7 0.00000859   0.000891  0.00964  0.0752
+    ##  4 4     1.77e- 7 0.00000646   0.000751  0.00860  0.0706
+    ##  5 5     2.02e- 6 0.0000420    0.00232   0.0181   0.107 
+    ##  6 6     4.81e-11 0.0000000117 0.0000168 0.000698 0.0174
+    ##  7 7     3.02e- 3 0.0116       0.0682    0.169    0.372 
+    ##  8 8     3.02e- 3 0.0116       0.0682    0.169    0.372 
+    ##  9 9     6.96e- 2 0.129        0.291     0.442    0.635 
+    ## 10 10    2.58e- 2 0.0601       0.184     0.327    0.536
 
 That facilitates really flexible inference. For example, what is the
 probability that toxicity at dose 3 is at least 5% greater than that at
@@ -354,16 +358,15 @@ fit %>% recommended_dose()
     ## [1] 7
 
 However, we see that it is a close call as to which dose is closest to
-the target toxicity
-    level:
+the target toxicity level:
 
 ``` r
 fit %>% mean_prob_tox()
 ```
 
-    ##  [1] 0.01168978 0.03060546 0.06441110 0.13412093 0.20161576 0.26448051
-    ##  [7] 0.32196553 0.37403343 0.46317143 0.53521895 0.66186624 0.74066516
-    ## [13] 0.82881229 0.87486314 0.90240598
+    ##  [1] 0.01258690 0.03252256 0.06752086 0.13847209 0.20636157 0.26917718
+    ##  [7] 0.32637010 0.37801151 0.46612242 0.53711249 0.66158702 0.73901450
+    ## [13] 0.82594636 0.87171076 0.89929305
 
 This is perhaps unsurprising in a situation with so many doses.
 
@@ -1262,17 +1265,18 @@ If you want help using the package, feel free to contact me by email.
 
 <div id="refs" class="references">
 
-<div id="ref-Brock2019">
-
-Brock, Kristian. 2019. “trialr: Bayesian Clinical Trial Designs in R and
-Stan.” *arXiv E-Prints*, June, arXiv:1907.00161.
-
-</div>
-
 <div id="ref-trialr">
 
 Brock, Kristian. 2020. *Trialr: Clinical Trial Designs in ’Rstan’*.
 <https://cran.r-project.org/package=trialr>.
+
+</div>
+
+<div id="ref-Brock2019">
+
+Brock, Kristian. 2019. “trialr: Bayesian Clinical Trial Designs in R and
+Stan.” *arXiv E-Prints*, June, arXiv:1907.00161.
+<http://arxiv.org/abs/1907.00161>.
 
 </div>
 

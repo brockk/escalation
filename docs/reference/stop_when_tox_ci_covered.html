@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,13 +43,15 @@
 
 
 
-
 <meta property="og:title" content="Stop when uncertainty interval of prob tox is covered. — stop_when_tox_ci_covered" />
+
 <meta property="og:description" content="This method stops a dose-finding trial when the symmetric uncertainty
 interval for the probability of toxicity falls within a range. This allows
 trials to be stopped when sufficient precision on the pobability of toxicity
 has been achieved. See Details." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -83,7 +83,7 @@ has been achieved. See Details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -135,6 +135,7 @@ has been achieved. See Details." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -156,20 +157,22 @@ has been achieved. See Details." />
     </div>
 
     <div class="ref-description">
+    
     <p>This method stops a dose-finding trial when the symmetric uncertainty
 interval for the probability of toxicity falls within a range. This allows
 trials to be stopped when sufficient precision on the pobability of toxicity
 has been achieved. See Details.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>stop_when_tox_ci_covered</span><span class='op'>(</span>
-  <span class='va'>parent_selector_factory</span>,
-  <span class='va'>dose</span>,
-  <span class='va'>lower</span>,
-  <span class='va'>upper</span>,
-  width <span class='op'>=</span> <span class='fl'>0.9</span>
-<span class='op'>)</span></pre>
-
+    <pre class="usage"><span class='fu'>stop_when_tox_ci_covered</span>(
+  <span class='no'>parent_selector_factory</span>,
+  <span class='no'>dose</span>,
+  <span class='no'>lower</span>,
+  <span class='no'>upper</span>,
+  <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.9</span>
+)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -198,11 +201,12 @@ is covered.</p></td>
 from the 5th to the 95th percentiles.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit a
 dose-finding model to outcomes.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The method for calculating probability mass for toxicity rates will
@@ -218,44 +222,35 @@ package needs no such assumption because it samples from the posterior
 parameter distribution and uses those samples to infer on the posterior
 probability of toxicity at each dose, dependent on the chosen model for the
 dose-toxicity curve.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
-<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
+    <pre class="examples"><div class='input'><span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
+<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
 
 <span class='co'># We compare a CRM model without this stopping rule:</span>
-<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span>
+<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
 <span class='co'># To two with it, the first demanding a relatively tight CI:</span>
-<span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>stop_when_tox_ci_covered</span><span class='op'>(</span>dose <span class='op'>=</span> <span class='st'>'recommended'</span>, lower <span class='op'>=</span> <span class='fl'>0.15</span>, upper <span class='op'>=</span> <span class='fl'>0.35</span><span class='op'>)</span>
+<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>stop_when_tox_ci_covered</span>(<span class='kw'>dose</span> <span class='kw'>=</span> <span class='st'>'recommended'</span>, <span class='kw'>lower</span> <span class='kw'>=</span> <span class='fl'>0.15</span>, <span class='kw'>upper</span> <span class='kw'>=</span> <span class='fl'>0.35</span>)
 <span class='co'># and the second demanding a relatively loose CI:</span>
-<span class='va'>model3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>stop_when_tox_ci_covered</span><span class='op'>(</span>dose <span class='op'>=</span> <span class='st'>'recommended'</span>, lower <span class='op'>=</span> <span class='fl'>0.05</span>, upper <span class='op'>=</span> <span class='fl'>0.45</span><span class='op'>)</span>
+<span class='no'>model3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>stop_when_tox_ci_covered</span>(<span class='kw'>dose</span> <span class='kw'>=</span> <span class='st'>'recommended'</span>, <span class='kw'>lower</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>upper</span> <span class='kw'>=</span> <span class='fl'>0.45</span>)
 
-<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'</span>
-<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
-<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
-<span class='va'>fit3</span> <span class='op'>&lt;-</span> <span class='va'>model3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
+<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'</span>
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
+<span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='no'>model3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
 
 <span class='co'># Naturally the first does not advocate stopping:</span>
-<span class='va'>fit1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='va'>fit1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>fit1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='no'>fit1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># The second does not advocate stopping either:</span>
-<span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># This is because the CI is too wide:</span>
-<span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span><span class='op'>(</span>p <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.005596063 0.018576910 0.090744056 0.204717651 0.413022708</div><div class='input'><span class='va'>fit2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span><span class='op'>(</span>p <span class='op'>=</span> <span class='fl'>0.95</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1509501 0.2337941 0.4168693 0.5608330 0.7243968</div><div class='input'>
+<span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># This is because the CI is too wide:</span>
+<span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</div><div class='output co'>#&gt; [1] 0.005596063 0.018576910 0.090744056 0.204717651 0.413022708</div><div class='input'><span class='no'>fit2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</div><div class='output co'>#&gt; [1] 0.1509501 0.2337941 0.4168693 0.5608330 0.7243968</div><div class='input'>
 <span class='co'># However, the third design advocates stopping because the CI at the</span>
 <span class='co'># recommended dose is covered:</span>
-<span class='va'>fit3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='va'>fit3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># To verify the veracity, inspect the quantiles:</span>
-<span class='va'>fit3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span><span class='op'>(</span>p <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.005596063 0.018576910 0.090744056 0.204717651 0.413022708</div><div class='input'><span class='va'>fit3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span><span class='op'>(</span>p <span class='op'>=</span> <span class='fl'>0.95</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1509501 0.2337941 0.4168693 0.5608330 0.7243968</div></pre>
+<span class='no'>fit3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='no'>fit3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># To verify the veracity, inspect the quantiles:</span>
+<span class='no'>fit3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</div><div class='output co'>#&gt; [1] 0.005596063 0.018576910 0.090744056 0.204717651 0.413022708</div><div class='input'><span class='no'>fit3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_tox_quantile.html'>prob_tox_quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</div><div class='output co'>#&gt; [1] 0.1509501 0.2337941 0.4168693 0.5608330 0.7243968</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -271,7 +266,7 @@ dose-toxicity curve.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

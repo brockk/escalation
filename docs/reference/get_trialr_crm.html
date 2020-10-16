@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,8 +43,8 @@
 
 
 
-
 <meta property="og:title" content="Get an object to fit the CRM model using the trialr package. — get_trialr_crm" />
+
 <meta property="og:description" content="This function returns an object that can be used to fit a CRM model using
 methods provided by the trialr package.
 Dose selectors are designed to be daisy-chained together to achieve different
@@ -58,7 +56,9 @@ provided by follow_path. In this example, when the observed
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -90,7 +90,7 @@ See Examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -142,6 +142,7 @@ See Examples." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -163,6 +164,7 @@ See Examples." />
     </div>
 
     <div class="ref-description">
+    
     <p>This function returns an object that can be used to fit a CRM model using
 methods provided by the trialr package.</p>
 <p>Dose selectors are designed to be daisy-chained together to achieve different
@@ -174,10 +176,11 @@ provided by <code><a href='follow_path.html'>follow_path</a></code>. In this exa
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>get_trialr_crm</span><span class='op'>(</span>parent_selector_factory <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>skeleton</span>, <span class='va'>target</span>, <span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span></pre>
-
+    <pre class="usage"><span class='fu'>get_trialr_crm</span>(<span class='kw'>parent_selector_factory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -208,60 +211,56 @@ for more details.</p></td>
       <td><p>Extra args are passed to <code><a href='https://rdrr.io/pkg/trialr/man/stan_crm.html'>stan_crm</a></code>.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit the
 CRM model to outcomes.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Kristian Brock (2020). trialr: Clinical Trial Designs in 'rstan'.
 R package version 0.1.5. https://github.com/brockk/trialr</p>
 <p>Kristian Brock (2019). trialr: Bayesian Clinical Trial Designs in R and Stan.
 arXiv preprint arXiv:1907.00161.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
-<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
+    <pre class="examples"><div class='input'><span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
+<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
 <span class='co'># The model to use must be specified in trialr:</span>
-<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'>get_trialr_crm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span>,
-                         model <span class='op'>=</span> <span class='st'>'empiric'</span>, beta_sd <span class='op'>=</span> <span class='fl'>1.34</span><span class='op'>)</span>
+<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_trialr_crm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>,
+                         <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1.34</span>)
 <span class='co'># Refer to the trialr documentation for more details on model forms.</span>
-<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
-<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
+<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
 <span class='co'># But we can provide extra args to trialr that are than passed onwards to</span>
 <span class='co'># the call to trialr::stan_crm to override the defaults.</span>
 <span class='co'># For example, if we want the one-parameter logistic model, we run:</span>
-<span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'>get_trialr_crm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span>,
-                         model <span class='op'>=</span> <span class='st'>'logistic'</span>, a0 <span class='op'>=</span> <span class='fl'>3</span>,
-                         beta_mean <span class='op'>=</span> <span class='fl'>0</span>, beta_sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># And, if we want the two-parameter logistic model, we run:</span>
-<span class='va'>model3</span> <span class='op'>&lt;-</span> <span class='fu'>get_trialr_crm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span>,
-                         model <span class='op'>=</span> <span class='st'>'logistic2'</span>,
-                         alpha_mean <span class='op'>=</span> <span class='fl'>0</span>, alpha_sd <span class='op'>=</span> <span class='fl'>2</span>,
-                         beta_mean <span class='op'>=</span> <span class='fl'>0</span>, beta_sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>model3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'>get_trialr_crm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>,
+                         <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'logistic'</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+                         <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># And, if we want the two-parameter logistic model, we run:</span>
+<span class='no'>model3</span> <span class='kw'>&lt;-</span> <span class='fu'>get_trialr_crm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>,
+                         <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'logistic2'</span>,
+                         <span class='kw'>alpha_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+                         <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>model3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
 <span class='co'># We can use an initial dose-escalation plan, a pre-specified path that</span>
 <span class='co'># should be followed until trial outcomes deviate, at which point the CRM</span>
 <span class='co'># model takes over. For instance, if we want to use two patients at each of</span>
 <span class='co'># the first three doses in the absence of toxicity, irrespective the model's</span>
 <span class='co'># advice, we would run:</span>
-<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='follow_path.html'>follow_path</a></span><span class='op'>(</span><span class='st'>'1NN 2NN 3NN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>get_trialr_crm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span>, model <span class='op'>=</span> <span class='st'>'empiric'</span>,
-                 beta_sd <span class='op'>=</span> <span class='fl'>1.34</span><span class='op'>)</span>
+<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='follow_path.html'>follow_path</a></span>(<span class='st'>'1NN 2NN 3NN'</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>get_trialr_crm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>,
+                 <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1.34</span>)
 
 <span class='co'># If outcomes match the desired path, the path is followed further:</span>
-<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NN 2N'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NN 2N'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
 <span class='co'># But when the outcomes diverge:</span>
-<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NN 2T'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
+<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NN 2T'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
 <span class='co'># Or the pre-specified path comes to an end:</span>
-<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NN 2NN 3NN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='co'># ...the CRM model takes over.</span>
+<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NN 2NN 3NN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 5</div><div class='input'># ...the CRM model takes over.
 
 </div></pre>
   </div>
@@ -279,7 +278,7 @@ arXiv preprint arXiv:1907.00161.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

@@ -454,6 +454,25 @@ n_at_recommended_dose <- function(x, ...) {
   UseMethod('n_at_recommended_dose')
 }
 
+#' Is this selector currently randomly allocating doses?
+#'
+#' Get the percentage of patients evaluated at each dose under investigation.
+#'
+#' @param x Object of class \code{\link{selector}}
+#' @param ... arguments passed to other methods
+#'
+#' @return a logical value
+#' @export
+#'
+#' @examples
+#' outcomes <- '1NNN 2NTN'
+#' fit <- get_random_selector(prob_select = c(0.1, 0.6, 0.3)) %>%
+#'   fit(outcomes)
+#' fit %>% is_randomising()
+is_randomising <- function(x, ...) {
+  UseMethod('is_randomising')
+}
+
 #' Percentage of patients treated at each dose.
 #'
 #' Get the percentage of patients evaluated at each dose under investigation.

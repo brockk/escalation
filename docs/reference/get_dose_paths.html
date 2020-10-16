@@ -15,13 +15,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -45,13 +43,15 @@
 
 
 
-
 <meta property="og:title" content="Calculate future dose paths. — get_dose_paths" />
+
 <meta property="og:description" content="A dose-escalation design exists to select doses in response to observed
 outcomes. The entire space of possible responses can be calculated to show
 the behaviour of a design in response to all feasible outcomes. This function
 performs that task." />
+
 <meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -83,7 +83,7 @@ performs that task." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -135,6 +135,7 @@ performs that task." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -156,14 +157,16 @@ performs that task." />
     </div>
 
     <div class="ref-description">
+    
     <p>A dose-escalation design exists to select doses in response to observed
 outcomes. The entire space of possible responses can be calculated to show
 the behaviour of a design in response to all feasible outcomes. This function
 performs that task.</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>get_dose_paths</span><span class='op'>(</span><span class='va'>selector_factory</span>, <span class='va'>cohort_sizes</span>, <span class='va'>...</span><span class='op'>)</span></pre>
-
+    <pre class="usage"><span class='fu'>get_dose_paths</span>(<span class='no'>selector_factory</span>, <span class='no'>cohort_sizes</span>, <span class='no'>...</span>)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -180,16 +183,16 @@ performs that task.</p>
       <td><p>Extra args are passed onwards.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Object of type <code><a href='dose_paths.html'>dose_paths</a></code>.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Calculate paths for a 3+3 design for the next two cohorts of three patients</span>
-<span class='va'>paths</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>get_dose_paths</span><span class='op'>(</span>cohort_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-</div></pre>
+<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>get_dose_paths</span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +208,7 @@ performs that task.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>
