@@ -95,5 +95,5 @@ Ji, Y., Liu, P., Li, Y., & Bekele, B. N. (2010).
 
 Ji, Y., & Yang, S. (2017).
 On the Interval-Based Dose-Finding Designs, 1–26.
-Retrieved from http://arxiv.org/abs/1706.03277
+Retrieved from https://arxiv.org/abs/1706.03277
 }

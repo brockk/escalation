@@ -243,11 +243,11 @@
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    NA    NoDo…     0     0              0          0              0      </span>
-<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0317         0.00720</span>
-<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0647         0.0252 </span>
-<span class="co">#&gt; 4     0.25 3         0     2              0          0.129          0.0784 </span>
-<span class="co">#&gt; 5     0.4  4         0     1              0          0.220          0.176  </span>
-<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.341          0.325  </span>
+<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0327         0.00699</span>
+<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0665         0.0245 </span>
+<span class="co">#&gt; 4     0.25 3         0     2              0          0.131          0.0768 </span>
+<span class="co">#&gt; 5     0.4  4         0     1              0          0.221          0.174  </span>
+<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.341          0.322  </span>
 <span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
 <p>We can see that they closely agree on model estimates of the probability of toxicity at each dose. Note that the median perfectly matches the mean in the <code>dfcrm</code> fit because it assumes a normal posterior distribution on <span class="math inline">\(\beta\)</span>. In contrast, the <code>trialr</code> class uses <code>Stan</code> to fit the model using Hamiltonian Monte Carlo sampling. The posterior distributions for the probabilities of toxicity are evidently non-normal and positively-skewed because the median estimates are less than the mean estimates.</p>
 <p>Let us imagine instead that we want to fit the empiric model. That simply requires we change the <code>model</code> variable and adjust the prior parameters:</p>
@@ -279,11 +279,11 @@
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    NA    NoDo…     0     0              0          0              0      </span>
-<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0339         0.00698</span>
-<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0700         0.0298 </span>
-<span class="co">#&gt; 4     0.25 3         0     2              0          0.144          0.101  </span>
-<span class="co">#&gt; 5     0.4  4         0     1              0          0.249          0.219  </span>
-<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.379          0.371  </span>
+<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0294         0.00567</span>
+<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0626         0.0257 </span>
+<span class="co">#&gt; 4     0.25 3         0     2              0          0.133          0.0913 </span>
+<span class="co">#&gt; 5     0.4  4         0     1              0          0.235          0.206  </span>
+<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.364          0.356  </span>
 <span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
 <p>In this example, the model estimates are broadly consistent across methodology and model type. However, this is not the general case. To illustrate this point, let us examine a two parameter logistic model fit using <code>trialr</code> (note: this model is not implemented in <code>dfcrm</code>):</p>
 <div class="sourceCode" id="cb12"><pre class="downlit">
@@ -295,11 +295,11 @@
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    NA    NoDo…     0     0              0          0              0      </span>
-<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0367         0.00470</span>
-<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0597         0.0185 </span>
-<span class="co">#&gt; 4     0.25 3         0     2              0          0.108          0.0641 </span>
-<span class="co">#&gt; 5     0.4  4         0     1              0          0.203          0.169  </span>
-<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.402          0.375  </span>
+<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0351         0.00419</span>
+<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0568         0.0169 </span>
+<span class="co">#&gt; 4     0.25 3         0     2              0          0.104          0.0625 </span>
+<span class="co">#&gt; 5     0.4  4         0     1              0          0.199          0.165  </span>
+<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.404          0.379  </span>
 <span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
 <p>Now the estimate of toxicity at the highest dose is high relative to the other models. The extra free parameter in the two-parameter model offers more flexibility. There has been a debate in the literature about one-parameter vs two-parameter models (and possibly more). It is generally accepted that a single parameter model is too simplistic to accurately estimate <span class="math inline">\(p_i\)</span> over the entire dose range. However, it will be sufficient to identify the dose closest to <span class="math inline">\(p_T\)</span>, and if that is the primary objective of the trial, the simplicity of a one-parameter model may be entirely justified. The interested reader is directed to <span class="citation">O’Quigley, Pepe, and Fisher (1990)</span> and <span class="citation">Neuenschwander, Branson, and Gsponer (2008)</span>.</p>
 <p>Note that the CRM does not natively implement stopping rules, so these classes on their own will always advocate trial continuance:</p>
@@ -358,12 +358,12 @@
 <span class="co">#&gt; # A tibble: 6 x 3</span>
 <span class="co">#&gt;   .draw dose  prob_tox</span>
 <span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 1     1        0.531</span>
-<span class="co">#&gt; 2 2     1        0.233</span>
-<span class="co">#&gt; 3 3     1        0.361</span>
-<span class="co">#&gt; 4 4     1        0.581</span>
-<span class="co">#&gt; 5 5     1        0.581</span>
-<span class="co">#&gt; 6 6     1        0.507</span></pre></div>
+<span class="co">#&gt; 1 1     1        0.386</span>
+<span class="co">#&gt; 2 2     1        0.322</span>
+<span class="co">#&gt; 3 3     1        0.390</span>
+<span class="co">#&gt; 4 4     1        0.671</span>
+<span class="co">#&gt; 5 5     1        0.439</span>
+<span class="co">#&gt; 6 6     1        0.472</span></pre></div>
 <p>and these facilitate flexible visualisation:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
@@ -391,8 +391,8 @@
                    scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span>
 <span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths</span><span class="op">)</span></pre></div>
-<div id="htmlwidget-cf67a718a304f963b984" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cf67a718a304f963b984">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"3\" [label = \"5\", fontcolor = \"#2A788EFF\", fillcolor = \"#FDE725FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"10\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"13\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"14\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We see that the design would willingly skip dose 3 if no tox is seen in the first cohort. This might warrant suppressing dose-dkipping by appending a <code><a href="../reference/dont_skip_doses.html">dont_skip_doses(when_escalating = TRUE)</a></code> selector.</p>
+<div id="htmlwidget-23f259295d4ab16a6130" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-23f259295d4ab16a6130">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"3\" [label = \"5\", fontcolor = \"#2A788EFF\", fillcolor = \"#FDE725FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"10\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"13\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"14\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We see that the design would willingly skip dose 3 if no tox is seen in the first cohort. This might warrant suppressing dose-dkipping by appending a <code><a href="../reference/dont_skip_doses.html">dont_skip_doses(when_escalating = TRUE)</a></code> selector.</p>
 <p>Dose-paths can also be run for in-progress trials where some outcomes have been established. For more information on working with dose-paths, refer to the dose-paths vignette.</p>
 </div>
 <div id="simulation" class="section level2">
@@ -491,7 +491,7 @@
 <p>Brock, Kristian. 2020. <em>Trialr: Clinical Trial Designs in ’Rstan’</em>. <a href="https://cran.r-project.org/package=trialr">https://cran.r-project.org/package=trialr</a>.</p>
 </div>
 <div id="ref-Brock2019">
-<p>Brock, Kristian. 2019. “trialr: Bayesian Clinical Trial Designs in R and Stan.” <em>arXiv E-Prints</em>, June, arXiv:1907.00161. <a href="http://arxiv.org/abs/1907.00161">http://arxiv.org/abs/1907.00161</a>.</p>
+<p>Brock, Kristian. 2019. “trialr: Bayesian Clinical Trial Designs in R and Stan.” <em>arXiv E-Prints</em>, June, arXiv:1907.00161. <a href="https://arxiv.org/abs/1907.00161">https://arxiv.org/abs/1907.00161</a>.</p>
 </div>
 <div id="ref-dfcrm">
 <p>Cheung, Ken. 2013. <em>Dfcrm: Dose-Finding by the Continual Reassessment Method</em>. <a href="https://CRAN.R-project.org/package=dfcrm">https://CRAN.R-project.org/package=dfcrm</a>.</p>

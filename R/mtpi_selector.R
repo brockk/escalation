@@ -70,7 +70,7 @@
 #'
 #' Ji, Y., & Yang, S. (2017).
 #' On the Interval-Based Dose-Finding Designs, 1–26.
-#' Retrieved from http://arxiv.org/abs/1706.03277
+#' Retrieved from https://arxiv.org/abs/1706.03277
 get_mtpi <- function(num_doses, target,
                     epsilon1, epsilon2,
                     exclusion_certainty,
