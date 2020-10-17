@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,17 +45,15 @@
 
 
 
-<meta property="og:title" content="Demand there are n patients at a dose before condisdering stopping. — demand_n_at_dose" />
 
+<meta property="og:title" content="Demand there are n patients at a dose before condisdering stopping. — demand_n_at_dose" />
 <meta property="og:description" content="This method continues a dose-finding trial until there are n patients at a
 dose. Once that condition is met, it delegates stopping responsibility to its
 parent dose selector, whatever that might be. This class is greedy in that it
 meets its own needs before asking any other selectors in a chain what they
 want. Thus, different behaviours may be achieved by nesting dose selectors
 in different orders. See examples." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -137,7 +137,6 @@ in different orders. See examples." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -159,18 +158,16 @@ in different orders. See examples." />
     </div>
 
     <div class="ref-description">
-    
     <p>This method continues a dose-finding trial until there are n patients at a
 dose. Once that condition is met, it delegates stopping responsibility to its
 parent dose selector, whatever that might be. This class is greedy in that it
 meets its own needs before asking any other selectors in a chain what they
 want. Thus, different behaviours may be achieved by nesting dose selectors
 in different orders. See examples.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>demand_n_at_dose</span>(<span class='no'>parent_selector_factory</span>, <span class='no'>n</span>, <span class='no'>dose</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>demand_n_at_dose</span><span class='op'>(</span><span class='va'>parent_selector_factory</span>, <span class='va'>n</span>, <span class='va'>dose</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -189,43 +186,47 @@ in different orders. See examples.</p>
 or an integer to continue until there are n at a particular dose-level.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit a
 dose-finding model to outcomes.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
-<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
+    <pre class="examples"><div class='input'><span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
+<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
 
 <span class='co'># This model will demand 9 at any dose before it countenances stopping.</span>
-<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>demand_n_at_dose</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>9</span>, <span class='kw'>dose</span> <span class='kw'>=</span> <span class='st'>'any'</span>)
+<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>demand_n_at_dose</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>9</span>, dose <span class='op'>=</span> <span class='st'>'any'</span><span class='op'>)</span>
 
 <span class='co'># This model will recommend continuing:</span>
-<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NNT 1NNN 2TNN 2NNN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># It tells you to continue because there is no selector considering when</span>
+<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NNT 1NNN 2TNN 2NNN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># It tells you to continue because there is no selector considering when</span>
 <span class='co'># you should stop - dfcrm implements no stopping rule by default.</span>
 
 <span class='co'># In contrast, we can add a stopping selector to discern the behaviour of</span>
 <span class='co'># demand_n_at_dose. We will demand 9 are seen at the recommended dose before</span>
 <span class='co'># stopping is permitted in model3:</span>
-<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>)
-<span class='no'>model3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>demand_n_at_dose</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>9</span>, <span class='kw'>dose</span> <span class='kw'>=</span> <span class='st'>'recommended'</span>)
+<span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
+<span class='va'>model3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>demand_n_at_dose</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>9</span>, dose <span class='op'>=</span> <span class='st'>'recommended'</span><span class='op'>)</span>
 
 <span class='co'># This model advocates stopping because 12 patients are seen in total:</span>
-<span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NNN 1NNN 2TNN 2NNN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># But this model advocates continuing because 9 patients have not been seen</span>
+<span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NNN 1NNN 2TNN 2NNN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># But this model advocates continuing because 9 patients have not been seen</span>
 <span class='co'># at any dose yet:</span>
-<span class='no'>model3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NNN 1NNN 2TNN 2NNN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># This shows how demand_n_at_dose overrides stopping behaviours that come</span>
+<span class='va'>model3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NNN 1NNN 2TNN 2NNN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># This shows how demand_n_at_dose overrides stopping behaviours that come</span>
 <span class='co'># before it in the daisychain.</span>
 
 <span class='co'># Once 9 are seen at the recommended dose, the decision to stop is made:</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='no'>model3</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NNN 1NNN 2TNN 2NNN 2TTN'</span>)
-<span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div></pre>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='va'>model3</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NNN 1NNN 2TNN 2NNN 2TTN'</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='continue.html'>continue</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -241,7 +242,7 @@ dose-finding model to outcomes.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

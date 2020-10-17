@@ -89,7 +89,7 @@ fit \%>\% mean_prob_tox()
 \references{
 Neuenschwander, B., Branson, M., & Gsponer, T. (2008).
 Critical aspects of the Bayesian approach to phase I cancer trials.
-Statistics in Medicine, 27, 2420–2439. https://doi.org/10.1002/sim
+Statistics in Medicine, 27, 2420–2439. https://doi.org/10.1002/sim.3230
 
 Brock, K. (2020). trialr: Clinical Trial Designs in 'rstan'.
 R package version 0.1.5. https://github.com/brockk/trialr

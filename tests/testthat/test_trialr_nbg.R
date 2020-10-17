@@ -20,21 +20,28 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
     dose = rep(c(1:4, 7), c(3, 4, 5, 4, 2)),
     tox = rep(0:1, c(16, 2)))
 
-  # bcrm version
-  sdose <- log(dose / 250)
-  ## Bivariate lognormal prior
-  mu <- c(2.15, 0.52)
-  Sigma <- rbind(c(0.84^2, 0.134), c(0.134, 0.80^2))
-  fit1 <- bcrm::bcrm(stop = list(nmax=18),
-                     data = df,
-                     sdose = sdose,
-                     dose = dose,
-                     ff = "logit2",
-                     prior.alpha = list(4, mu, Sigma),
-                     target.tox = target,
-                     constrain = FALSE,
-                     pointest = "mean",
-                     method = "rjags")
+  # # bcrm version
+  # sdose <- log(dose / 250)
+  # ## Bivariate lognormal prior
+  # mu <- c(2.15, 0.52)
+  # Sigma <- rbind(c(0.84^2, 0.134), c(0.134, 0.80^2))
+  # fit1 <- bcrm::bcrm(stop = list(nmax=18),
+  #                    data = df,
+  #                    sdose = sdose,
+  #                    dose = dose,
+  #                    ff = "logit2",
+  #                    prior.alpha = list(4, mu, Sigma),
+  #                    target.tox = target,
+  #                    constrain = FALSE,
+  #                    pointest = "mean",
+  #                    method = "rjags")
+  # bcrm_dose <- fit1$ndose[[1]]$ndose
+  # bcrm_prob_tox <- fit1$ndose[[1]]$mean
+  # Yields:
+  bcrm_dose <- 7
+  bcrm_prob_tox <- c(0.01276366, 0.03170250, 0.06454400, 0.13103260, 0.19505604,
+                     0.25486603, 0.30990977, 0.36015142, 0.44716663, 0.51852928,
+                     0.64632144, 0.72710146, 0.81804596, 0.86567496, 0.89421686)
 
   # trialr version
   outcomes <- '1NNN 2NNNN 3NNNN 4NNNN 7TT'
@@ -45,11 +52,11 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
     fit(outcomes = outcomes)
 
   # MTD matches?
-  expect_equal(fit1$ndose[[1]]$ndose, recommended_dose(fit2))
+  expect_equal(bcrm_dose, recommended_dose(fit2))
 
   # mean_prob_tox matches?
   epsilon <- 0.04
-  expect_true(all(abs(fit1$ndose[[1]]$mean - mean_prob_tox(fit2)) < epsilon))
+  expect_true(all(abs(bcrm_prob_tox - mean_prob_tox(fit2)) < epsilon))
 
   # mean_prob_tox matches NBG publication?
   epsilon <- 0.04

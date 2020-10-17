@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,8 +45,8 @@
 
 
 
-<meta property="og:title" content="Number of nodes in dose-paths analysis — num_dose_path_nodes" />
 
+<meta property="og:title" content="Number of nodes in dose-paths analysis — num_dose_path_nodes" />
 <meta property="og:description" content="Number of possible nodes in an exhaustive analysis of dose-paths in a
 dose-finding trial. The number of nodes at depth i is the the number of nodes
 at depth i-1 multiplied by the number of possible cohort outcomes at depth i.
@@ -53,9 +55,7 @@ cohort outcomes at the current depth, then there are 64 possible nodes at the
 current depth. Knowing the number of nodes in a dose-paths analysis helps the
 analyst decide whether simulation or dose-paths are a better tool for
 assessing operating characteristics of a dose-finding design." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -139,7 +139,6 @@ assessing operating characteristics of a dose-finding design." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -161,7 +160,6 @@ assessing operating characteristics of a dose-finding design." />
     </div>
 
     <div class="ref-description">
-    
     <p>Number of possible nodes in an exhaustive analysis of dose-paths in a
 dose-finding trial. The number of nodes at depth i is the the number of nodes
 at depth i-1 multiplied by the number of possible cohort outcomes at depth i.
@@ -170,11 +168,10 @@ cohort outcomes at the current depth, then there are 64 possible nodes at the
 current depth. Knowing the number of nodes in a dose-paths analysis helps the
 analyst decide whether simulation or dose-paths are a better tool for
 assessing operating characteristics of a dose-finding design.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>num_dose_path_nodes</span>(<span class='no'>num_patient_outcomes</span>, <span class='no'>cohort_sizes</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>num_dose_path_nodes</span><span class='op'>(</span><span class='va'>num_patient_outcomes</span>, <span class='va'>cohort_sizes</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -188,21 +185,22 @@ each single patient</p></td>
       <td><p>integer vector of cohort sizes</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>integer vector, number of nodes at increasing depths. The total
 number of nodes is the sum of this vector.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># In a 3+3 design, there are two possible outcomes for each patient and</span>
 <span class='co'># patients are evaluated in cohorts of three. In an analysis of dose-paths in</span>
 <span class='co'># the first two cohorts of three, how many nodes are there?</span>
-<span class='fu'>num_dose_path_nodes</span>(<span class='kw'>num_patient_outcomes</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>3</span>, <span class='fl'>2</span>))</div><div class='output co'>#&gt; [1]  1  4 16</div><div class='input'><span class='co'># In contrast, using an EffTox design there are four possible outcomes for</span>
+<span class='fu'>num_dose_path_nodes</span><span class='op'>(</span>num_patient_outcomes <span class='op'>=</span> <span class='fl'>2</span>, cohort_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  1  4 16</div><div class='input'><span class='co'># In contrast, using an EffTox design there are four possible outcomes for</span>
 <span class='co'># each patient. In a similar analysis of dose-paths in the first two cohorts</span>
 <span class='co'># of three, how many nodes are there now?</span>
-<span class='fu'>num_dose_path_nodes</span>(<span class='kw'>num_patient_outcomes</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>3</span>, <span class='fl'>2</span>))</div><div class='output co'>#&gt; [1]   1  20 400</div></pre>
+<span class='fu'>num_dose_path_nodes</span><span class='op'>(</span>num_patient_outcomes <span class='op'>=</span> <span class='fl'>4</span>, cohort_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]   1  20 400</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -218,7 +216,7 @@ number of nodes is the sum of this vector.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -100,8 +100,8 @@
 
       
 
-      </header><script src="A205-CRM_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="A205-CRM_files/viz-1.8.2/viz.js"></script><link href="A205-CRM_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="A205-CRM_files/grViz-binding-1.0.5/grViz.js"></script><div class="row">
+      </header><script src="A205-CRM_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="A205-CRM_files/htmlwidgets-1.5.2/htmlwidgets.js"></script><script src="A205-CRM_files/viz-1.8.2/viz.js"></script><link href="A205-CRM_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="A205-CRM_files/grViz-binding-1.0.6.1/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Continual Reassessment Method</h1>
@@ -196,31 +196,37 @@
 </ul>
 <p><code>trialr</code> models are fit in <code>escalation</code> using the <code>get_trialr_crm</code> function.</p>
 <p>Let us commence by replicating an example from p.21 of <span class="citation">Cheung (2011)</span>. They choose the following parameters:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">skeleton</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.05</span>, <span class="fl">0.12</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.55</span>)
-<span class="no">target</span> <span class="kw">&lt;-</span> <span class="fl">0.25</span>
-<span class="no">a0</span> <span class="kw">&lt;-</span> <span class="fl">3</span>
-<span class="no">beta_sd</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">1.34</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="va">skeleton</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.12</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.55</span><span class="op">)</span>
+<span class="va">target</span> <span class="op">&lt;-</span> <span class="fl">0.25</span>
+<span class="va">a0</span> <span class="op">&lt;-</span> <span class="fl">3</span>
+<span class="va">beta_sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">1.34</span><span class="op">)</span></pre></div>
 <p>Let us define a model fitter using the <code>dfcrm</code> package:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">escalation</span>)
-<span class="no">model1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'logistic'</span>,
-                    <span class="kw">intcpt</span> <span class="kw">=</span> <span class="no">a0</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="no">beta_sd</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">escalation</span><span class="op">)</span>
+<span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'logistic'</span>, 
+                    intcpt <span class="op">=</span> <span class="va">a0</span>, scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span></pre></div>
 <p>and a fitter using the <code>trialr</code> package:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">model2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'logistic'</span>,
-                         <span class="kw">a0</span> <span class="kw">=</span> <span class="no">a0</span>, <span class="kw">beta_mean</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="no">beta_sd</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'logistic'</span>, 
+                         a0 <span class="op">=</span> <span class="va">a0</span>, beta_mean <span class="op">=</span> <span class="fl">0</span>, beta_sd <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span></pre></div>
 <p>Names for the function parameters <code>skeleton</code>, <code>target</code>, and <code>model</code> are standardised by <code>escalation</code> because they are fundamental. Further parameters (i.e. those in the second lines of each of the above examples) are passed onwards to the model-fitting functions in <code>dfcrm</code> and <code>trialr</code>. You can see that some of these parameter names vary between the approaches. E.g., what <code>dfcrm</code> calls the <code>intcpt</code>, <code>trialr</code> calls <code>a0</code>. Refer to the documentation of the <code>crm</code> function in <code>dfcrm</code> and <code>stan_crm</code> in <code>trialr</code> for further information.</p>
 <p>We then fit those models to the notional outcomes described in the source text:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">outcomes</span> <span class="kw">&lt;-</span> <span class="st">'3N 5N 5T 3N 4N'</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="va">outcomes</span> <span class="op">&lt;-</span> <span class="st">'3N 5N 5T 3N 4N'</span>
 
-<span class="no">fit1</span> <span class="kw">&lt;-</span> <span class="no">model1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="no">outcomes</span>)
-<span class="no">fit2</span> <span class="kw">&lt;-</span> <span class="no">model2</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="no">outcomes</span>)</pre></body></html></div>
+<span class="va">fit1</span> <span class="op">&lt;-</span> <span class="va">model1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span>
+<span class="va">fit2</span> <span class="op">&lt;-</span> <span class="va">model2</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span></pre></div>
 <p>The dose recommended by each of the models for the next patient is:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fit1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="va">fit1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; [1] 4</span>
-<span class="no">fit2</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
-<span class="co">#&gt; [1] 4</span></pre></body></html></div>
+<span class="va">fit2</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] 4</span></pre></div>
 <p>Thankfully, the models agree. They advocate staying at dose 4, wary of the toxicity already seen at dose 5.</p>
 <p>If we take a summary of each model fit:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">fit1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="va">fit1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 9</span>
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
@@ -230,29 +236,33 @@
 <span class="co">#&gt; 4     0.25 3         0     2              0         0.0817          0.0817 </span>
 <span class="co">#&gt; 5     0.4  4         0     1              0         0.182           0.182  </span>
 <span class="co">#&gt; 6     0.55 5         1     2              0.5       0.331           0.331  </span>
-<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></body></html></div>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">fit2</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">fit2</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 9</span>
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    NA    NoDo…     0     0              0          0              0      </span>
-<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0297         0.00625</span>
-<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0619         0.0224 </span>
-<span class="co">#&gt; 4     0.25 3         0     2              0          0.125          0.0715 </span>
-<span class="co">#&gt; 5     0.4  4         0     1              0          0.213          0.165  </span>
-<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.331          0.310  </span>
-<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></body></html></div>
+<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0317         0.00720</span>
+<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0647         0.0252 </span>
+<span class="co">#&gt; 4     0.25 3         0     2              0          0.129          0.0784 </span>
+<span class="co">#&gt; 5     0.4  4         0     1              0          0.220          0.176  </span>
+<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.341          0.325  </span>
+<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
 <p>We can see that they closely agree on model estimates of the probability of toxicity at each dose. Note that the median perfectly matches the mean in the <code>dfcrm</code> fit because it assumes a normal posterior distribution on <span class="math inline">\(\beta\)</span>. In contrast, the <code>trialr</code> class uses <code>Stan</code> to fit the model using Hamiltonian Monte Carlo sampling. The posterior distributions for the probabilities of toxicity are evidently non-normal and positively-skewed because the median estimates are less than the mean estimates.</p>
 <p>Let us imagine instead that we want to fit the empiric model. That simply requires we change the <code>model</code> variable and adjust the prior parameters:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">model3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                    <span class="kw">scale</span> <span class="kw">=</span> <span class="no">beta_sd</span>)
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                    scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span>
 
-<span class="no">model4</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                         <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="no">beta_sd</span>)</pre></body></html></div>
+<span class="va">model4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                         beta_sd <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span></pre></div>
 <p>Fitting each to the same set of outcomes yields:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">fit3</span> <span class="kw">&lt;-</span> <span class="no">model3</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="no">outcomes</span>)
-<span class="no">fit4</span> <span class="kw">&lt;-</span> <span class="no">model4</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="no">outcomes</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">fit3</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="va">fit3</span> <span class="op">&lt;-</span> <span class="va">model3</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span>
+<span class="va">fit4</span> <span class="op">&lt;-</span> <span class="va">model4</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="va">fit3</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 9</span>
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
@@ -262,71 +272,78 @@
 <span class="co">#&gt; 4     0.25 3         0     2              0         0.101           0.101  </span>
 <span class="co">#&gt; 5     0.4  4         0     1              0         0.219           0.219  </span>
 <span class="co">#&gt; 6     0.55 5         1     2              0.5       0.372           0.372  </span>
-<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></body></html></div>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">fit4</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="va">fit4</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 9</span>
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    NA    NoDo…     0     0              0          0              0      </span>
-<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0287         0.00571</span>
-<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0623         0.0258 </span>
-<span class="co">#&gt; 4     0.25 3         0     2              0          0.134          0.0916 </span>
-<span class="co">#&gt; 5     0.4  4         0     1              0          0.237          0.206  </span>
-<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.367          0.357  </span>
-<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></body></html></div>
+<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0339         0.00698</span>
+<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0700         0.0298 </span>
+<span class="co">#&gt; 4     0.25 3         0     2              0          0.144          0.101  </span>
+<span class="co">#&gt; 5     0.4  4         0     1              0          0.249          0.219  </span>
+<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.379          0.371  </span>
+<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
 <p>In this example, the model estimates are broadly consistent across methodology and model type. However, this is not the general case. To illustrate this point, let us examine a two parameter logistic model fit using <code>trialr</code> (note: this model is not implemented in <code>dfcrm</code>):</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">model5</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'logistic2'</span>,
-                         <span class="kw">alpha_mean</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">alpha_sd</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">beta_mean</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="fl">1</span>)
-<span class="no">fit5</span> <span class="kw">&lt;-</span> <span class="no">model5</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="no">outcomes</span>)
-<span class="no">fit5</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="va">model5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'logistic2'</span>, 
+                         alpha_mean <span class="op">=</span> <span class="fl">0</span>, alpha_sd <span class="op">=</span> <span class="fl">2</span>, beta_mean <span class="op">=</span> <span class="fl">0</span>, beta_sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">fit5</span> <span class="op">&lt;-</span> <span class="va">model5</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span>
+<span class="va">fit5</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 9</span>
 <span class="co">#&gt;   Skeleton dose    tox     n empiric_tox_rate mean_prob_tox median_prob_tox</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    NA    NoDo…     0     0              0          0              0      </span>
-<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0376         0.00410</span>
-<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0600         0.0171 </span>
-<span class="co">#&gt; 4     0.25 3         0     2              0          0.108          0.0624 </span>
-<span class="co">#&gt; 5     0.4  4         0     1              0          0.204          0.166  </span>
-<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.413          0.392  </span>
-<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></body></html></div>
+<span class="co">#&gt; 2     0.05 1         0     0            NaN          0.0367         0.00470</span>
+<span class="co">#&gt; 3     0.12 2         0     0            NaN          0.0597         0.0185 </span>
+<span class="co">#&gt; 4     0.25 3         0     2              0          0.108          0.0641 </span>
+<span class="co">#&gt; 5     0.4  4         0     1              0          0.203          0.169  </span>
+<span class="co">#&gt; 6     0.55 5         1     2              0.5        0.402          0.375  </span>
+<span class="co">#&gt; # … with 2 more variables: admissible &lt;lgl&gt;, recommended &lt;lgl&gt;</span></pre></div>
 <p>Now the estimate of toxicity at the highest dose is high relative to the other models. The extra free parameter in the two-parameter model offers more flexibility. There has been a debate in the literature about one-parameter vs two-parameter models (and possibly more). It is generally accepted that a single parameter model is too simplistic to accurately estimate <span class="math inline">\(p_i\)</span> over the entire dose range. However, it will be sufficient to identify the dose closest to <span class="math inline">\(p_T\)</span>, and if that is the primary objective of the trial, the simplicity of a one-parameter model may be entirely justified. The interested reader is directed to <span class="citation">O’Quigley, Pepe, and Fisher (1990)</span> and <span class="citation">Neuenschwander, Branson, and Gsponer (2008)</span>.</p>
 <p>Note that the CRM does not natively implement stopping rules, so these classes on their own will always advocate trial continuance:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">fit1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span>()
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="va">fit1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span>
-<span class="no">fit5</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span>()
-<span class="co">#&gt; [1] TRUE</span></pre></body></html></div>
+<span class="va">fit5</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span></pre></div>
 <p>and identify each dose as admissible:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">fit1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span>()
-<span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE</span></pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="va">fit1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE</span></pre></div>
 <p>This behaviour can be altered by appending classes to advocate stopping for consensus:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">model6</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="fl">0.3</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                         <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="st">'recommended'</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">6</span>)
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="va">model6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="fl">0.3</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                         beta_sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="st">'recommended'</span>, n <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
 
-<span class="no">fit6</span> <span class="kw">&lt;-</span> <span class="no">model6</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="st">'2NNN 3TTT 2NTN'</span>)
+<span class="va">fit6</span> <span class="op">&lt;-</span> <span class="va">model6</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2NNN 3TTT 2NTN'</span><span class="op">)</span>
 
-<span class="no">fit6</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span>()
+<span class="va">fit6</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; [1] FALSE</span>
-<span class="no">fit6</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
-<span class="co">#&gt; [1] 2</span></pre></body></html></div>
+<span class="va">fit6</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] 2</span></pre></div>
 <p>Or for stopping under excess toxicity:</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">model7</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="fl">0.3</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                         <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">tox_threshold</span> <span class="kw">=</span> <span class="fl">0.3</span>, <span class="kw">confidence</span> <span class="kw">=</span> <span class="fl">0.8</span>)
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="va">model7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="fl">0.3</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                         beta_sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">1</span>, tox_threshold <span class="op">=</span> <span class="fl">0.3</span>, confidence <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
 
-<span class="no">fit7</span> <span class="kw">&lt;-</span> <span class="no">model7</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span>(<span class="st">'1NTT 1TTN'</span>)
+<span class="va">fit7</span> <span class="op">&lt;-</span> <span class="va">model7</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NTT 1TTN'</span><span class="op">)</span>
 
-<span class="no">fit7</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span>()
+<span class="va">fit7</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; [1] FALSE</span>
-<span class="no">fit7</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span>()
+<span class="va">fit7</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; [1] NA</span>
-<span class="no">fit7</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span>()
-<span class="co">#&gt; [1] FALSE FALSE FALSE FALSE FALSE</span></pre></body></html></div>
+<span class="va">fit7</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] FALSE FALSE FALSE FALSE FALSE</span></pre></div>
 <p>Or both:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">model8</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="fl">0.3</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                         <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="st">'recommended'</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">6</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">tox_threshold</span> <span class="kw">=</span> <span class="fl">0.3</span>, <span class="kw">confidence</span> <span class="kw">=</span> <span class="fl">0.8</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="va">model8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_crm.html">get_trialr_crm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="fl">0.3</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                         beta_sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="st">'recommended'</span>, n <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">1</span>, tox_threshold <span class="op">=</span> <span class="fl">0.3</span>, confidence <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></pre></div>
 <p>For more information, check the package README and the other vignettes.</p>
 </div>
 <div id="dfcrm-vs-trialr" class="section level3">
@@ -334,28 +351,30 @@
 <a href="#dfcrm-vs-trialr" class="anchor"></a>dfcrm vs trialr</h3>
 <p>So which method should you use? The answer depends on how you plan to use the models.</p>
 <p>The <code>trialr</code> classes produce posterior samples:</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">fit7</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/prob_tox_samples.html">prob_tox_samples</a></span>(<span class="kw">tall</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>()
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="va">fit7</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/prob_tox_samples.html">prob_tox_samples</a></span><span class="op">(</span>tall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 3</span>
 <span class="co">#&gt;   .draw dose  prob_tox</span>
 <span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 1     1        0.538</span>
-<span class="co">#&gt; 2 2     1        0.473</span>
-<span class="co">#&gt; 3 3     1        0.503</span>
-<span class="co">#&gt; 4 4     1        0.553</span>
-<span class="co">#&gt; 5 5     1        0.572</span>
-<span class="co">#&gt; 6 6     1        0.523</span></pre></body></html></div>
+<span class="co">#&gt; 1 1     1        0.531</span>
+<span class="co">#&gt; 2 2     1        0.233</span>
+<span class="co">#&gt; 3 3     1        0.361</span>
+<span class="co">#&gt; 4 4     1        0.581</span>
+<span class="co">#&gt; 5 5     1        0.581</span>
+<span class="co">#&gt; 6 6     1        0.507</span></pre></div>
 <p>and these facilitate flexible visualisation:</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+<div class="sourceCode" id="cb19"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
-<span class="no">fit7</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/prob_tox_samples.html">prob_tox_samples</a></span>(<span class="kw">tall</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">.draw</span> <span class="kw">=</span> <span class="no">.draw</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>()) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">.draw</span> <span class="kw">&lt;=</span> <span class="fl">200</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">dose</span>, <span class="no">prob_tox</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">group</span> <span class="kw">=</span> <span class="no">.draw</span>), <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.2</span>)</pre></body></html></div>
+<span class="va">fit7</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/prob_tox_samples.html">prob_tox_samples</a></span><span class="op">(</span>tall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.draw <span class="op">=</span> <span class="va">.draw</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.draw</span> <span class="op">&lt;=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">dose</span>, <span class="va">prob_tox</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>group <span class="op">=</span> <span class="va">.draw</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></pre></div>
 <p><img src="A205-CRM_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>However, MCMC sampling is an expensive computational procedure compared to the numerical integration used in <code>dfcrm</code>. If you envisage fitting lots of models, perhaps in simulations or dose-paths (see below) and favour a model offered by <code>dfcrm</code>, we recommend using <code>get_dfcrm</code>. However, if you favour a model only offered by <code>trialr</code>, or if you are willing for calculation to be slow in order to get posterior samples, then use <code>trialr</code>.</p>
 </div>
@@ -363,37 +382,42 @@
 <h2 class="hasAnchor">
 <a href="#dose-paths" class="anchor"></a>Dose paths</h2>
 <p>We can use the <code>get_dose_paths</code> function in <code>escalation</code> to calculate exhaustive model recommendations in response to every possible set of outcomes in future cohorts. For instance, at the start of a trial using an empiric CRM, we can examine all possible paths a trial might take in the first two cohorts of three patients, starting at dose 2:</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">skeleton</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.05</span>, <span class="fl">0.12</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.55</span>)
-<span class="no">target</span> <span class="kw">&lt;-</span> <span class="fl">0.25</span>
-<span class="no">beta_sd</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="va">skeleton</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.12</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.55</span><span class="op">)</span>
+<span class="va">target</span> <span class="op">&lt;-</span> <span class="fl">0.25</span>
+<span class="va">beta_sd</span> <span class="op">&lt;-</span> <span class="fl">1</span>
 
-<span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                   <span class="kw">scale</span> <span class="kw">=</span> <span class="no">beta_sd</span>)
-<span class="no">paths</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span>(<span class="kw">cohort_sizes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">3</span>), <span class="kw">next_dose</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span>(<span class="no">paths</span>)</pre></body></html></div>
-<div id="htmlwidget-d4f9dfc04122982b317f" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d4f9dfc04122982b317f">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"3\" [label = \"5\", fontcolor = \"#2A788EFF\", fillcolor = \"#FDE725FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"10\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"13\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"14\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We see that the design would willingly skip dose 3 if no tox is seen in the first cohort. This might warrant suppressing dose-dkipping by appending a <code><a href="../reference/dont_skip_doses.html">dont_skip_doses(when_escalating = TRUE)</a></code> selector.</p>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                   scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span>
+<span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths</span><span class="op">)</span></pre></div>
+<div id="htmlwidget-cf67a718a304f963b984" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cf67a718a304f963b984">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"3\" [label = \"5\", fontcolor = \"#2A788EFF\", fillcolor = \"#FDE725FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"10\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"13\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"14\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We see that the design would willingly skip dose 3 if no tox is seen in the first cohort. This might warrant suppressing dose-dkipping by appending a <code><a href="../reference/dont_skip_doses.html">dont_skip_doses(when_escalating = TRUE)</a></code> selector.</p>
 <p>Dose-paths can also be run for in-progress trials where some outcomes have been established. For more information on working with dose-paths, refer to the dose-paths vignette.</p>
 </div>
 <div id="simulation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulation" class="anchor"></a>Simulation</h2>
 <p>We can use the <code>simulate_trials</code> function to calculate operating characteristics for a design. Let us use the example above and tell the design to stop when the lowest dose is too toxic, when 9 patients have already been evaluated at the candidate dose, or when a sample size of <span class="math inline">\(n=24\)</span> is reached:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-                   <span class="kw">scale</span> <span class="kw">=</span> <span class="no">beta_sd</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">tox_threshold</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">confidence</span> <span class="kw">=</span> <span class="fl">0.8</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="st">'recommended'</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">9</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fl">24</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb21"><pre class="downlit">
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+                   scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">1</span>, tox_threshold <span class="op">=</span> <span class="va">target</span>, confidence <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="st">'recommended'</span>, n <span class="op">=</span> <span class="fl">9</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">24</span><span class="op">)</span></pre></div>
 <p>For the sake of speed, we will run just fifty iterations:</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">num_sims</span> <span class="kw">&lt;-</span> <span class="fl">50</span></pre></body></html></div>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">50</span></pre></div>
 <p>In real life, however, we would naturally run many thousands of iterations. Let us investigate under the following true probabilities of toxicity:</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">sc1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb23"><pre class="downlit">
+<span class="va">sc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span><span class="op">)</span></pre></div>
 <p>The simulated behaviour is:</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
-<span class="no">sims</span> <span class="kw">&lt;-</span> <span class="no">model</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span>(<span class="kw">num_sims</span> <span class="kw">=</span> <span class="no">num_sims</span>, <span class="kw">true_prob_tox</span> <span class="kw">=</span> <span class="no">sc1</span>, <span class="kw">next_dose</span> <span class="kw">=</span> <span class="fl">1</span>)
+<div class="sourceCode" id="cb24"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">sc1</span>, next_dose <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
-<span class="no">sims</span>
+<span class="va">sims</span>
 <span class="co">#&gt; Number of iterations: 50 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of doses: 5 </span>
@@ -420,13 +444,14 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Trial duration:</span>
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;   0.400   8.325  13.250  13.558  20.150  30.300</span></pre></body></html></div>
+<span class="co">#&gt;   0.400   8.325  13.250  13.558  20.150  30.300</span></pre></div>
 <p>We see that the chances of stopping for excess toxicity and recommending no dose is about 1-in-4. Dose 1 is the clear favourite to be identified. Interestingly, the <code>stop_when_n_at_dose</code> class reduces the expected sample size to 12-13 patints. Without it:</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span>(<span class="kw">skeleton</span> <span class="kw">=</span> <span class="no">skeleton</span>, <span class="kw">target</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">model</span> <span class="kw">=</span> <span class="st">'empiric'</span>,
-          <span class="kw">scale</span> <span class="kw">=</span> <span class="no">beta_sd</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span>(<span class="kw">dose</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">tox_threshold</span> <span class="kw">=</span> <span class="no">target</span>, <span class="kw">confidence</span> <span class="kw">=</span> <span class="fl">0.8</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fl">24</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span>(<span class="kw">num_sims</span> <span class="kw">=</span> <span class="no">num_sims</span>, <span class="kw">true_prob_tox</span> <span class="kw">=</span> <span class="no">sc1</span>, <span class="kw">next_dose</span> <span class="kw">=</span> <span class="fl">1</span>)
+<div class="sourceCode" id="cb25"><pre class="downlit">
+<span class="fu"><a href="../reference/get_dfcrm.html">get_dfcrm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span>, model <span class="op">=</span> <span class="st">'empiric'</span>, 
+          scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_when_too_toxic.html">stop_when_too_toxic</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">1</span>, tox_threshold <span class="op">=</span> <span class="va">target</span>, confidence <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">24</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">sc1</span>, next_dose <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; Number of iterations: 50 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of doses: 5 </span>
@@ -453,7 +478,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Trial duration:</span>
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;    0.20    3.60   21.65   16.53   24.82   31.60</span></pre></body></html></div>
+<span class="co">#&gt;    0.20    3.60   21.65   16.53   24.82   31.60</span></pre></div>
 <p>expected sample size is much higher and the chances of erroneously stopping early are also higher. These phenomena would justify a wider simulation study in a real situation.</p>
 <p>For more information on running dose-finding simulations, refer to the simulation vignette.</p>
 </div>
@@ -475,7 +500,7 @@
 <p>Cheung, Ying Kuen. 2011. <em>Dose Finding by the Continual Reassessment Method</em>. New York: Chapman &amp; Hall / CRC Press.</p>
 </div>
 <div id="ref-Neuenschwander2008">
-<p>Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008. “Critical aspects of the Bayesian approach to phase I cancer trials.” <em>Statistics in Medicine</em> 27: 2420–39. <a href="https://doi.org/10.1002/sim">https://doi.org/10.1002/sim</a>.</p>
+<p>Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008. “Critical aspects of the Bayesian approach to phase I cancer trials.” <em>Statistics in Medicine</em> 27: 2420–39. <a href="https://doi.org/10.1002/sim.3230">https://doi.org/10.1002/sim.3230</a>.</p>
 </div>
 <div id="ref-OQuigley1990">
 <p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual Reassessment Method: A Practical Design for Phase 1 Clinical Trials in Cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
@@ -485,6 +510,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
         <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
     </nav>
 </div>
@@ -498,7 +524,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -68,17 +68,24 @@ test_that('trialr_crm_selector matches bcrm.', {
     dose = rep(c(1:4, 7), c(3, 4, 5, 4, 2)),
     tox = rep(0:1, c(16, 2)))
 
-  # bcrm version
-  fit1 <- bcrm::bcrm(stop = list(nmax=18),
-                     data = df,
-                     p.tox0 = skeleton,
-                     dose = dose,
-                     ff = "power",
-                     prior.alpha = list(3, 0, 1.34^2),
-                     target.tox = target,
-                     constrain = FALSE,
-                     sdose.calculate = "median",
-                     pointest = "mean")
+  # # bcrm version
+  # fit1 <- bcrm::bcrm(stop = list(nmax=18),
+  #                    data = df,
+  #                    p.tox0 = skeleton,
+  #                    dose = dose,
+  #                    ff = "power",
+  #                    prior.alpha = list(3, 0, 1.34^2),
+  #                    target.tox = target,
+  #                    constrain = FALSE,
+  #                    sdose.calculate = "median",
+  #                    pointest = "mean")
+  # bcrm_dose <- fit1$ndose[[1]]$ndose
+  # bcrm_prob_tox <- fit1$ndose[[1]]$mean
+  # Yields
+  bcrm_dose <- 9
+  bcrm_prob_tox <- c(0.07015495, 0.08657340, 0.10073468, 0.11345014, 0.12513580,
+                     0.14632099, 0.16543985, 0.24440829, 0.33268033, 0.46747152,
+                     0.55775747, 0.64098831, 0.75674204, 0.86470521, 0.93341409)
 
   # trialr version
   outcomes <- '1NNN 2NNNN 3NNNN 4NNNN 7TT'
@@ -87,11 +94,11 @@ test_that('trialr_crm_selector matches bcrm.', {
     fit(outcomes = outcomes)
 
   # MTD matches?
-  expect_equal(fit1$ndose[[1]]$ndose, recommended_dose(fit2))
+  expect_equal(bcrm_dose, recommended_dose(fit2))
 
   # mean_prob_tox matches?
   epsilon <- 0.02
-  expect_true(all(abs(fit1$ndose[[1]]$mean - mean_prob_tox(fit2)) < epsilon))
+  expect_true(all(abs(bcrm_prob_tox - mean_prob_tox(fit2)) < epsilon))
 
 
   # TODO test agreement of other methods. logistic2 is a problem. See /Scratch

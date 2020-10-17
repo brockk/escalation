@@ -30,7 +30,7 @@ mTPI is one of a series of dose-finding trial designs that works by partitioning
 These designs make dose-selection decisions that are determined by the interval in which the probability of toxicity for the current dose is believed to reside.
 
 There are a great many similarities and a few subtle differences between the TPI and mTPI designs.
-For more on the TPI design, refer to the [TPI vignette](https://brockk.github.io/escalation/articles/TPI.html).
+For more on the TPI design, refer to the TPI vignette.
 
 
 # Summary of the mTPI Design

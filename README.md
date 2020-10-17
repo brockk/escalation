@@ -292,18 +292,18 @@ fit %>% prob_tox_samples() %>% head(10)
 ```
 
     ## # A tibble: 10 x 6
-    ##    .draw      `1`          `2`       `3`      `4`    `5`
-    ##    <chr>    <dbl>        <dbl>     <dbl>    <dbl>  <dbl>
-    ##  1 1     3.92e- 4 0.00241      0.0265    0.0908   0.262 
-    ##  2 2     2.23e- 5 0.000266     0.00704   0.0378   0.161 
-    ##  3 3     2.56e- 7 0.00000859   0.000891  0.00964  0.0752
-    ##  4 4     1.77e- 7 0.00000646   0.000751  0.00860  0.0706
-    ##  5 5     2.02e- 6 0.0000420    0.00232   0.0181   0.107 
-    ##  6 6     4.81e-11 0.0000000117 0.0000168 0.000698 0.0174
-    ##  7 7     3.02e- 3 0.0116       0.0682    0.169    0.372 
-    ##  8 8     3.02e- 3 0.0116       0.0682    0.169    0.372 
-    ##  9 9     6.96e- 2 0.129        0.291     0.442    0.635 
-    ## 10 10    2.58e- 2 0.0601       0.184     0.327    0.536
+    ##    .draw      `1`          `2`       `3`     `4`    `5`
+    ##    <chr>    <dbl>        <dbl>     <dbl>   <dbl>  <dbl>
+    ##  1 1     3.96e- 1 0.491        0.651     0.753   0.854 
+    ##  2 2     2.72e- 1 0.368        0.548     0.672   0.801 
+    ##  3 3     5.79e- 1 0.657        0.776     0.846   0.911 
+    ##  4 4     4.62e- 1 0.553        0.700     0.790   0.877 
+    ##  5 5     5.76e- 3 0.0190       0.0920    0.207   0.415 
+    ##  6 6     6.95e- 3 0.0219       0.100     0.219   0.429 
+    ##  7 7     2.21e-10 0.0000000379 0.0000340 0.00111 0.0226
+    ##  8 8     6.95e- 2 0.129        0.291     0.442   0.635 
+    ##  9 9     6.02e- 2 0.115        0.272     0.423   0.619 
+    ## 10 10    9.29e- 2 0.161        0.333     0.483   0.667
 
 That facilitates really flexible inference. For example, what is the
 probability that toxicity at dose 3 is at least 5% greater than that at
@@ -318,7 +318,7 @@ fit %>% prob_tox_samples() %>%
     ## # A tibble: 1 x 1
     ##    prob
     ##   <dbl>
-    ## 1 0.546
+    ## 1 0.584
 
 ‘More likely than not’, is the answer.
 
@@ -1236,11 +1236,9 @@ devtools::install_github("brockk/escalation")
 
 # Future Plans
 
-I plan to add model-fitting functions for:
-
-  - EffTox via [trialr](https://cran.r-project.org/package=trialr)
-  - CRM via [bcrm](https://cran.r-project.org/package=bcrm)
-  - EWOC via [ewoc](https://cran.r-project.org/package=ewoc)
+I plan to add model-fitting functions for EWOC via
+[ewoc](https://cran.r-project.org/package=ewoc), further methods for
+phase I/II designs, and perhaps also methods for dual agents.
 
 I want to investigate adding some further stopping functions like those
 researched by Zohar and Chevret (2001).
@@ -1353,7 +1351,8 @@ Continual Reassessment Method via a Modified Allocation Rule.”
 
 Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008.
 “Critical aspects of the Bayesian approach to phase I cancer trials.”
-*Statistics in Medicine* 27: 2420–39. <https://doi.org/10.1002/sim>.
+*Statistics in Medicine* 27: 2420–39.
+<https://doi.org/10.1002/sim.3230>.
 
 </div>
 

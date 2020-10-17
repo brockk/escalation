@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,12 +45,10 @@
 
 
 
+
 <meta property="og:title" content="Sample times between patient arrivals using the exponential distribution. — cohorts_of_n" />
-
 <meta property="og:description" content="Sample times between patient arrivals using the exponential distribution." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -132,7 +132,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -154,13 +153,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Sample times between patient arrivals using the exponential distribution.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>cohorts_of_n</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>mean_time_delta</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>cohorts_of_n</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>3</span>, mean_time_delta <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -174,18 +171,19 @@
 the reciprocal of the rate parameter in an Exponential distribution.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>data.frame</code> with column time_delta containing durations of time
 between patient arrivals.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>cohorts_of_n</span>()</div><div class='output co'>#&gt;   time_delta
+    <pre class="examples"><div class='input'><span class='fu'>cohorts_of_n</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   time_delta
 #&gt; 1        0.6
 #&gt; 2        0.8
-#&gt; 3        0.2</div><div class='input'><span class='fu'>cohorts_of_n</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>mean_time_delta</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt;    time_delta
+#&gt; 3        0.2</div><div class='input'><span class='fu'>cohorts_of_n</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>10</span>, mean_time_delta <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    time_delta
 #&gt; 1         0.9
 #&gt; 2         2.6
 #&gt; 3         3.4
@@ -211,7 +209,7 @@ between patient arrivals.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

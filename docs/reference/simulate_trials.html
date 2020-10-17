@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,16 +45,14 @@
 
 
 
-<meta property="og:title" content="Simulate clinical trials. — simulate_trials" />
 
+<meta property="og:title" content="Simulate clinical trials. — simulate_trials" />
 <meta property="og:description" content="This function takes a selector_factory, such as that returned
 by get_dfcrm, get_boin or
 get_three_plus_three, and conducts many notional clinical
 trials. We conduct simulations to learn about the operating characteristics
 of adaptive trial designs." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -136,7 +136,6 @@ of adaptive trial designs." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -158,23 +157,21 @@ of adaptive trial designs." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function takes a <code><a href='selector_factory.html'>selector_factory</a></code>, such as that returned
 by <code><a href='get_dfcrm.html'>get_dfcrm</a></code>, <code><a href='get_boin.html'>get_boin</a></code> or
 <code><a href='get_three_plus_three.html'>get_three_plus_three</a></code>, and conducts many notional clinical
 trials. We conduct simulations to learn about the operating characteristics
 of adaptive trial designs.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>simulate_trials</span>(
-  <span class='no'>selector_factory</span>,
-  <span class='no'>num_sims</span>,
-  <span class='no'>true_prob_tox</span>,
-  <span class='kw'>true_prob_eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
-    
+    <pre class="usage"><span class='fu'>simulate_trials</span><span class='op'>(</span>
+  <span class='va'>selector_factory</span>,
+  <span class='va'>num_sims</span>,
+  <span class='va'>true_prob_tox</span>,
+  true_prob_eff <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -201,11 +198,10 @@ probabilities. NULL if efficacy not analysed.</p></td>
       <td><p>Extra args are passed onwards.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Object of type <code><a href='simulations.html'>simulations</a></code>.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>By default, dose decisions in simulated trials are made after each cohort of
@@ -242,7 +238,6 @@ This is done to conserve memory. With a high number of simulated trials,
 storing many model fits per trial may cause the executing machine to run out
 of memory. However, you can force this method to retain all model fits by
 specifying <code>return_all_fits = TRUE</code>. See Examples.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='simulations.html'>simulations</a></code></p>
@@ -251,97 +246,108 @@ specifying <code>return_all_fits = TRUE</code>. See Examples.</p>
 <p><code><a href='get_boin.html'>get_boin</a></code></p>
 <p><code><a href='get_three_plus_three.html'>get_three_plus_three</a></code></p>
 <p><code><a href='cohorts_of_n.html'>cohorts_of_n</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>true_prob_tox</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span>)
+    <pre class="examples"><div class='input'><span class='va'>true_prob_tox</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span><span class='op'>)</span>
 
 <span class='co'># Regular usage examples, for 3+3:</span>
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>)
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span><span class='op'>)</span>
 <span class='co'># and continual reassessment method:</span>
-<span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
-<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>)
+<span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
+<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span><span class='op'>)</span>
 
 <span class='co'># Lots of useful information is contained in the returned object:</span>
-<span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_patients.html'>num_patients</a></span>()</div><div class='output co'>#&gt;  [1] 12 12 12 12 12 12 12 12 12 12</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_doses.html'>num_doses</a></span>()</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='dose_indices.html'>dose_indices</a></span>()</div><div class='output co'>#&gt; [1] 1 2 3 4 5</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='n_at_dose.html'>n_at_dose</a></span>()</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 5</span><span>
+<span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_patients.html'>num_patients</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 12 12 12 12 12 12 12 12 12 12</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_doses.html'>num_doses</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='dose_indices.html'>dose_indices</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1 2 3 4 5</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='n_at_dose.html'>n_at_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 10 x 5</span><span>
 #&gt;      `1`   `2`   `3`   `4`   `5`
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     3     3     3     3     0
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     3     3     3     3     0
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     3     0     3     6     0
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     9     0     0     3     0
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>     3     0     0     6     3
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     3     6     0     3     0
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     6     6     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     3     3     3     3     0
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     3     3     3     3     0
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     3     3     3     3     0</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='n_at_recommended_dose.html'>n_at_recommended_dose</a></span>()</div><div class='output co'>#&gt;  [1] 3 3 3 0 0 6 6 3 3 3</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tox_at_dose.html'>tox_at_dose</a></span>()</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 10 x 5</span><span>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>     3     3     3     3     0
+#&gt; </span><span style='color: #555555;'> 2</span><span>     3     3     3     3     0
+#&gt; </span><span style='color: #555555;'> 3</span><span>     3     0     3     6     0
+#&gt; </span><span style='color: #555555;'> 4</span><span>     9     0     0     3     0
+#&gt; </span><span style='color: #555555;'> 5</span><span>     3     0     0     6     3
+#&gt; </span><span style='color: #555555;'> 6</span><span>     3     6     0     3     0
+#&gt; </span><span style='color: #555555;'> 7</span><span>     6     6     0     0     0
+#&gt; </span><span style='color: #555555;'> 8</span><span>     3     3     3     3     0
+#&gt; </span><span style='color: #555555;'> 9</span><span>     3     3     3     3     0
+#&gt; </span><span style='color: #555555;'>10</span><span>     3     3     3     3     0</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='n_at_recommended_dose.html'>n_at_recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 3 3 3 0 0 6 6 3 3 3</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tox_at_dose.html'>tox_at_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 10 x 5</span><span>
 #&gt;      `1`   `2`   `3`   `4`   `5`
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     0     0     0     2     0
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     0     0     2     1     0
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     0     0     0     4     0
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     1     0     0     3     0
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>     0     0     0     2     2
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     0     1     0     2     0
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     1     2     0     0     0
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     0     0     1     2     0
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     0     1     2     1     0
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     0     0     3     2     0</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='num_tox.html'>num_tox</a></span>()</div><div class='output co'>#&gt;  [1] 2 3 4 4 4 3 3 3 4 5</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt;  [1] 3 3 3 2 3 2 2 3 2 2</div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_administer.html'>prob_administer</a></span>()</div><div class='output co'>#&gt;     1     2     3     4     5 
-#&gt; 0.325 0.225 0.150 0.275 0.025 </div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span>()</div><div class='output co'>#&gt; NoDose      1      2      3      4      5 
-#&gt;    0.0    0.0    0.5    0.5    0.0    0.0 </div><div class='input'><span class='no'>sims</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='trial_duration.html'>trial_duration</a></span>()</div><div class='output co'>#&gt;  [1]  6.3 10.5 11.4  6.9  6.5 12.2 11.6 10.8 14.4  9.6</div><div class='input'>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>     0     0     0     2     0
+#&gt; </span><span style='color: #555555;'> 2</span><span>     0     0     2     1     0
+#&gt; </span><span style='color: #555555;'> 3</span><span>     0     0     0     4     0
+#&gt; </span><span style='color: #555555;'> 4</span><span>     1     0     0     3     0
+#&gt; </span><span style='color: #555555;'> 5</span><span>     0     0     0     2     2
+#&gt; </span><span style='color: #555555;'> 6</span><span>     0     1     0     2     0
+#&gt; </span><span style='color: #555555;'> 7</span><span>     1     2     0     0     0
+#&gt; </span><span style='color: #555555;'> 8</span><span>     0     0     1     2     0
+#&gt; </span><span style='color: #555555;'> 9</span><span>     0     1     2     1     0
+#&gt; </span><span style='color: #555555;'>10</span><span>     0     0     3     2     0</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='num_tox.html'>num_tox</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 2 3 4 4 4 3 3 3 4 5</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 3 3 3 2 3 2 2 3 2 2</div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_administer.html'>prob_administer</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     1     2     3     4     5 
+#&gt; 0.325 0.225 0.150 0.275 0.025 </div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; NoDose      1      2      3      4      5 
+#&gt;    0.0    0.0    0.5    0.5    0.0    0.0 </div><div class='input'><span class='va'>sims</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='trial_duration.html'>trial_duration</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1]  6.3 10.5 11.4  6.9  6.5 12.2 11.6 10.8 14.4  9.6</div><div class='input'>
 <span class='co'># By default, dose decisions are made after each cohort of 3 patients. See</span>
 <span class='co'># Details. To override, specify an alternative function via the</span>
 <span class='co'># sample_patient_arrivals parameter. E.g. to use cohorts of 2, we run:</span>
-<span class='no'>patient_arrivals_func</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>current_data</span>) <span class='fu'><a href='cohorts_of_n.html'>cohorts_of_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
-    <span class='kw'>sample_patient_arrivals</span> <span class='kw'>=</span> <span class='no'>patient_arrivals_func</span>)
+<span class='va'>patient_arrivals_func</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>current_data</span><span class='op'>)</span> <span class='fu'><a href='cohorts_of_n.html'>cohorts_of_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span>,
+    sample_patient_arrivals <span class='op'>=</span> <span class='va'>patient_arrivals_func</span><span class='op'>)</span>
 
 <span class='co'># To simulate the culmination of trials that are partly completed, specify</span>
 <span class='co'># the outcomes already observed via the previous_outcomes parameter:</span>
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-<span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>) <span class='kw'>%&gt;%</span>
-<span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
-                <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='st'>'1NTN'</span>)
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span>,
+                previous_outcomes <span class='op'>=</span> <span class='st'>'1NTN'</span><span class='op'>)</span>
 <span class='co'># Outcomes can be described by above outcome string method or data-frame:</span>
-  <span class='no'>previous_outcomes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-    <span class='kw'>patient</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
-    <span class='kw'>cohort</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>),
-    <span class='kw'>tox</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>),
-    <span class='kw'>dose</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
-  )
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
-                  <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='no'>previous_outcomes</span>)
+  <span class='va'>previous_outcomes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    patient <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
+    cohort <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
+    tox <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>,
+    dose <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span>,
+                  previous_outcomes <span class='op'>=</span> <span class='va'>previous_outcomes</span><span class='op'>)</span>
 
 <span class='co'># We can specify the immediate next dose:</span>
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>12</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
-                  <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span>,
+                  next_dose <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 
 <span class='co'># By default, the method will stop simulated trials after 30 dose selections.</span>
 <span class='co'># To suppress this, specify i_like_big_trials = TRUE. However, please take</span>
 <span class='co'># care to specify selectors that will eventually stop!</span>
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>99</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
-                  <span class='kw'>i_like_big_trials</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='stop_at_n.html'>stop_at_n</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>99</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>1</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span>,
+                  i_like_big_trials <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># By default, only the final model fit is retained for each simulated trial.</span>
 <span class='co'># To retain all interim model fits, specify return_all_fits = TRUE.</span>
-<span class='no'>sims</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>simulate_trials</span>(<span class='kw'>num_sims</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>true_prob_tox</span> <span class='kw'>=</span> <span class='no'>true_prob_tox</span>,
-                  <span class='kw'>return_all_fits</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>simulate_trials</span><span class='op'>(</span>num_sims <span class='op'>=</span> <span class='fl'>10</span>, true_prob_tox <span class='op'>=</span> <span class='va'>true_prob_tox</span>,
+                  return_all_fits <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='co'># Verify that there are now many analyses per trial with:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>sims</span>$<span class='no'>fits</span>, <span class='no'>length</span>)</div><div class='output co'>#&gt;  [1] 5 2 6 5 6 4 6 4 3 2</div></span></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>sims</span><span class='op'>$</span><span class='va'>fits</span>, <span class='va'>length</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 5 2 6 5 6 4 6 4 3 2</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -357,7 +363,7 @@ specifying <code>return_all_fits = TRUE</code>. See Examples.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

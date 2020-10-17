@@ -7,7 +7,7 @@ Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com",
          role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3921-0166"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
 Description: Methods for working with dose-finding clinical trials. We provide 
-    implementations of many dose-finging clinical trial designs, including the 
+    implementations of many dose-finding clinical trial designs, including the 
     continual reassessment method (CRM) by O'Quigley et al. (1990) 
     <doi:10.2307/2531628>, the toxicity probability interval (TPI) design by Ji
     et al. (2007) <doi:10.1177/1740774507079442>, the modified TPI (mTPI) design
@@ -52,8 +52,5 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
-    covr,
-    bcrm,
-    R2WinBUGS,
-    rjags
+    covr
 VignetteBuilder: knitr

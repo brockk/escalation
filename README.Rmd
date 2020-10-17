@@ -895,11 +895,7 @@ devtools::install_github("brockk/escalation")
 
 # Future Plans
 
-I plan to add model-fitting functions for:
-
-* EffTox via [trialr](https://cran.r-project.org/package=trialr)
-* CRM via [bcrm](https://cran.r-project.org/package=bcrm)
-* EWOC via [ewoc](https://cran.r-project.org/package=ewoc) 
+I plan to add model-fitting functions for EWOC via [ewoc](https://cran.r-project.org/package=ewoc), further methods for phase I/II designs, and perhaps also methods for dual agents.
 
 I want to investigate adding some further stopping functions like those researched by @zohar_continual_2001.
 

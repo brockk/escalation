@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,15 +45,13 @@
 
 
 
-<meta property="og:title" content="Dose-paths with probabilities attached. — crystallised_dose_paths" />
 
+<meta property="og:title" content="Dose-paths with probabilities attached. — crystallised_dose_paths" />
 <meta property="og:description" content="dose_paths reflect all possible paths a dose-finding trial may
 take. When the probability of those paths is calculated using an assumed set
 of true dose-event probabilities, in this package those paths are said to be
 crysallised. Once crystallised, operating charactersitics can be calculated." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -135,7 +135,6 @@ crysallised. Once crystallised, operating charactersitics can be calculated." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -157,21 +156,19 @@ crysallised. Once crystallised, operating charactersitics can be calculated." />
     </div>
 
     <div class="ref-description">
-    
     <p><code><a href='dose_paths.html'>dose_paths</a></code> reflect all possible paths a dose-finding trial may
 take. When the probability of those paths is calculated using an assumed set
 of true dose-event probabilities, in this package those paths are said to be
 crysallised. Once crystallised, operating charactersitics can be calculated.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>crystallised_dose_paths</span>(
-  <span class='no'>dose_paths</span>,
-  <span class='no'>true_prob_tox</span>,
-  <span class='kw'>true_prob_eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>terminal_nodes</span>
-)</pre>
-    
+    <pre class="usage"><span class='fu'>crystallised_dose_paths</span><span class='op'>(</span>
+  <span class='va'>dose_paths</span>,
+  <span class='va'>true_prob_tox</span>,
+  true_prob_eff <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>terminal_nodes</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -193,24 +190,24 @@ optionally NULL if efficacy not evaluated.</p></td>
       <td><p>tibble of terminal nodes on the dose-paths</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of type crystallised_dose_paths</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Calculate dose paths for the first three cohorts in a 3+3 trial of 5 doses:</span>
-<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span>(<span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='get_dose_paths.html'>get_dose_paths</a></span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>3</span>))
+<span class='va'>paths</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_three_plus_three.html'>get_three_plus_three</a></span><span class='op'>(</span>num_doses <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='get_dose_paths.html'>get_dose_paths</a></span><span class='op'>(</span>cohort_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># Set the true probabilities of toxicity</span>
-<span class='no'>true_prob_tox</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span>)
+<span class='va'>true_prob_tox</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.12</span>, <span class='fl'>0.27</span>, <span class='fl'>0.44</span>, <span class='fl'>0.53</span>, <span class='fl'>0.57</span><span class='op'>)</span>
 <span class='co'># Crytallise the paths with the probabilities of toxicity</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>paths</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='calculate_probabilities.html'>calculate_probabilities</a></span>(<span class='no'>true_prob_tox</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>paths</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='calculate_probabilities.html'>calculate_probabilities</a></span><span class='op'>(</span><span class='va'>true_prob_tox</span><span class='op'>)</span>
 <span class='co'># And then examine, for example, the probabilities of recommending each dose</span>
 <span class='co'># at the terminal nodes of these paths:</span>
-<span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;     NoDose          1          2          3          4          5 
+<span class='fu'><a href='prob_recommend.html'>prob_recommend</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     NoDose          1          2          3          4          5 
 #&gt; 0.12854451 0.33600635 0.19081343 0.29807918 0.04655654 0.00000000 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -227,7 +224,7 @@ optionally NULL if efficacy not evaluated.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

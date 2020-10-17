@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,14 +45,12 @@
 
 
 
-<meta property="og:title" content="Get an object to fit the NBG dose-finding model using the trialr package. — get_trialr_nbg" />
 
+<meta property="og:title" content="Get an object to fit the NBG dose-finding model using the trialr package. — get_trialr_nbg" />
 <meta property="og:description" content="This function returns an object that can be used to fit a Neuenschwander,
 Branson and Gsponer (NBG) model for dose-finding using methods provided by
 the trialr package." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -134,7 +134,6 @@ the trialr package." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -156,25 +155,23 @@ the trialr package." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function returns an object that can be used to fit a Neuenschwander,
 Branson and Gsponer (NBG) model for dose-finding using methods provided by
 the trialr package.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>get_trialr_nbg</span>(
-  <span class='kw'>parent_selector_factory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>real_doses</span>,
-  <span class='no'>d_star</span>,
-  <span class='no'>target</span>,
-  <span class='no'>alpha_mean</span>,
-  <span class='no'>alpha_sd</span>,
-  <span class='no'>beta_mean</span>,
-  <span class='no'>beta_sd</span>,
-  <span class='no'>...</span>
-)</pre>
-    
+    <pre class="usage"><span class='fu'>get_trialr_nbg</span><span class='op'>(</span>
+  parent_selector_factory <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>real_doses</span>,
+  <span class='va'>d_star</span>,
+  <span class='va'>target</span>,
+  <span class='va'>alpha_mean</span>,
+  <span class='va'>alpha_sd</span>,
+  <span class='va'>beta_mean</span>,
+  <span class='va'>beta_sd</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -224,12 +221,11 @@ See Details. Also see documentation for trialr package for further details.</p><
       <td><p>Extra args are passed to <code><a href='https://rdrr.io/pkg/trialr/man/stan_nbg.html'>stan_nbg</a></code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit the
 NBG model to outcomes.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The model form implemented in trialr is:</p>
@@ -244,31 +240,31 @@ provided by <code><a href='follow_path.html'>follow_path</a></code>. In this exa
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See examples under <code><a href='get_dfcrm.html'>get_dfcrm</a></code>.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Neuenschwander, B., Branson, M., &amp; Gsponer, T. (2008).
 Critical aspects of the Bayesian approach to phase I cancer trials.
-Statistics in Medicine, 27, 2420–2439. https://doi.org/10.1002/sim</p>
+Statistics in Medicine, 27, 2420–2439. https://doi.org/10.1002/sim.3230</p>
 <p>Brock, K. (2020). trialr: Clinical Trial Designs in 'rstan'.
 R package version 0.1.5. https://github.com/brockk/trialr</p>
 <p>Brock, K. (2019). trialr: Bayesian Clinical Trial Designs in R and Stan.
 arXiv preprint arXiv:1907.00161.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>real_doses</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>25</span>, <span class='fl'>40</span>, <span class='fl'>60</span>)
-<span class='no'>d_star</span> <span class='kw'>&lt;-</span> <span class='fl'>60</span>
-<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
+    <pre class="examples"><div class='input'><span class='va'>real_doses</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>25</span>, <span class='fl'>40</span>, <span class='fl'>60</span><span class='op'>)</span>
+<span class='va'>d_star</span> <span class='op'>&lt;-</span> <span class='fl'>60</span>
+<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'>get_trialr_nbg</span>(<span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='no'>real_doses</span>, <span class='kw'>d_star</span> <span class='kw'>=</span> <span class='no'>d_star</span>,
-                        <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>,
-                        <span class='kw'>alpha_mean</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                        <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>get_trialr_nbg</span><span class='op'>(</span>real_doses <span class='op'>=</span> <span class='va'>real_doses</span>, d_star <span class='op'>=</span> <span class='va'>d_star</span>,
+                        target <span class='op'>=</span> <span class='va'>target</span>,
+                        alpha_mean <span class='op'>=</span> <span class='fl'>2</span>, alpha_sd <span class='op'>=</span> <span class='fl'>1</span>,
+                        beta_mean <span class='op'>=</span> <span class='fl'>0.5</span>, beta_sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 <span class='co'># Refer to the trialr documentation for more details on model &amp; priors.</span>
-<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='no'>model</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>)
-<span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='mean_prob_tox.html'>mean_prob_tox</a></span>()</div><div class='output co'>#&gt; [1] 0.1218123 0.2504148 0.5658892 0.7301690 0.8297591</div><div class='input'>
+<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='va'>model</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='va'>fit</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='mean_prob_tox.html'>mean_prob_tox</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.1218123 0.2504148 0.5658892 0.7301690 0.8297591</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -285,7 +281,7 @@ arXiv preprint arXiv:1907.00161.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

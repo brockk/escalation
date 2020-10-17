@@ -2,7 +2,7 @@
 #'
 #' @description
 #' escalation provides methods for working with dose-finding clinical trials.
-#' We provide implementations of many dose-finging clinical trial designs,
+#' We provide implementations of many dose-finding clinical trial designs,
 #' ncluding the continual reassessment method (CRM) by O'Quigley et al. (1990)
 #' <doi:10.2307/2531628>, the toxicity probability interval (TPI) design by Ji
 #' et al. (2007) <doi:10.1177/1740774507079442>, the modified TPI (mTPI) design

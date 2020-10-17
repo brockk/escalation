@@ -11,8 +11,8 @@ This is a core class in this package. It encapsulates that an object (e.g. a
 CRM model, a 3+3 model) is able to recommend doses, keep track of how many
 patients have been treated at what doses, what toxicity outcomes have been
 seen, and whether a trial should continue. It offers a consistent interface
-to dose-finding methods from several packages, including \code{dfcrm} and
-\code{BOIN}.  \code{bcrm} and \code{trialr} will be added.
+to many dose-finding methods, including CRM, TPI, mTPI, BOIN, EffTox, 3+3,
+and more.
 
 Once you have a standardised interface, modularisation offers a powerful way
 to adorn dose-finding methods with extra desirable behaviour. \code{selector}

@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,15 +45,13 @@
 
 
 
-<meta property="og:title" content="Mean efficacy rate at each dose. — mean_prob_eff" />
 
+<meta property="og:title" content="Mean efficacy rate at each dose. — mean_prob_eff" />
 <meta property="og:description" content="Get the estimated mean efficacy rate at each dose under investigation. This
 is a set of modelled statistics. The underlying models estimate efficacy
 probabilities in different ways. If no model-based estimate of the mean is
 available, this function will return a vector of NAs." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -135,7 +135,6 @@ available, this function will return a vector of NAs." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -157,16 +156,14 @@ available, this function will return a vector of NAs." />
     </div>
 
     <div class="ref-description">
-    
     <p>Get the estimated mean efficacy rate at each dose under investigation. This
 is a set of modelled statistics. The underlying models estimate efficacy
 probabilities in different ways. If no model-based estimate of the mean is
 available, this function will return a vector of NAs.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>mean_prob_eff</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>mean_prob_eff</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -179,29 +176,29 @@ available, this function will return a vector of NAs.</p>
       <td><p>arguments passed to other methods</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a numerical vector</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>efftox_priors</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>trialr</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/trialr/man/efftox_priors.html'>efftox_priors</a></span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_priors</span>(<span class='kw'>alpha_mean</span> <span class='kw'>=</span> -<span class='fl'>7.9593</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>3.5487</span>,
-                   <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>1.5482</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>3.5018</span>,
-                   <span class='kw'>gamma_mean</span> <span class='kw'>=</span> <span class='fl'>0.7367</span>, <span class='kw'>gamma_sd</span> <span class='kw'>=</span> <span class='fl'>2.5423</span>,
-                   <span class='kw'>zeta_mean</span> <span class='kw'>=</span> <span class='fl'>3.4181</span>, <span class='kw'>zeta_sd</span> <span class='kw'>=</span> <span class='fl'>2.4406</span>,
-                   <span class='kw'>eta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>eta_sd</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-                   <span class='kw'>psi_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>psi_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>real_doses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_trialr_efftox.html'>get_trialr_efftox</a></span>(<span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='no'>real_doses</span>,
-                           <span class='kw'>efficacy_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>toxicity_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
-                           <span class='kw'>p_e</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>p_t</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-                           <span class='kw'>eff0</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tox1</span> <span class='kw'>=</span> <span class='fl'>0.65</span>,
-                           <span class='kw'>eff_star</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>tox_star</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
-                           <span class='kw'>priors</span> <span class='kw'>=</span> <span class='no'>p</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>2020</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>model</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1N 2E 3B'</span>)
-<span class='fu'>mean_prob_eff</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0.2185840 0.6032928 0.8875453 0.9420494 0.9584555</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>efftox_priors</span> <span class='op'>&lt;-</span> <span class='fu'>trialr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/trialr/man/efftox_priors.html'>efftox_priors</a></span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>efftox_priors</span><span class='op'>(</span>alpha_mean <span class='op'>=</span> <span class='op'>-</span><span class='fl'>7.9593</span>, alpha_sd <span class='op'>=</span> <span class='fl'>3.5487</span>,
+                   beta_mean <span class='op'>=</span> <span class='fl'>1.5482</span>, beta_sd <span class='op'>=</span> <span class='fl'>3.5018</span>,
+                   gamma_mean <span class='op'>=</span> <span class='fl'>0.7367</span>, gamma_sd <span class='op'>=</span> <span class='fl'>2.5423</span>,
+                   zeta_mean <span class='op'>=</span> <span class='fl'>3.4181</span>, zeta_sd <span class='op'>=</span> <span class='fl'>2.4406</span>,
+                   eta_mean <span class='op'>=</span> <span class='fl'>0</span>, eta_sd <span class='op'>=</span> <span class='fl'>0.2</span>,
+                   psi_mean <span class='op'>=</span> <span class='fl'>0</span>, psi_sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>real_doses</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span><span class='op'>)</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_trialr_efftox.html'>get_trialr_efftox</a></span><span class='op'>(</span>real_doses <span class='op'>=</span> <span class='va'>real_doses</span>,
+                           efficacy_hurdle <span class='op'>=</span> <span class='fl'>0.5</span>, toxicity_hurdle <span class='op'>=</span> <span class='fl'>0.3</span>,
+                           p_e <span class='op'>=</span> <span class='fl'>0.1</span>, p_t <span class='op'>=</span> <span class='fl'>0.1</span>,
+                           eff0 <span class='op'>=</span> <span class='fl'>0.5</span>, tox1 <span class='op'>=</span> <span class='fl'>0.65</span>,
+                           eff_star <span class='op'>=</span> <span class='fl'>0.7</span>, tox_star <span class='op'>=</span> <span class='fl'>0.25</span>,
+                           priors <span class='op'>=</span> <span class='va'>p</span>, iter <span class='op'>=</span> <span class='fl'>1000</span>, chains <span class='op'>=</span> <span class='fl'>1</span>, seed <span class='op'>=</span> <span class='fl'>2020</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>model</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1N 2E 3B'</span><span class='op'>)</span>
+<span class='fu'>mean_prob_eff</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.2185840 0.6032928 0.8875453 0.9420494 0.9584555</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -217,7 +214,7 @@ available, this function will return a vector of NAs.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

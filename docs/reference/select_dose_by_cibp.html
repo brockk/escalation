@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,15 +45,13 @@
 
 
 
-<meta property="og:title" content="Select dose by the CIBP selection criterion. — select_dose_by_cibp" />
 
+<meta property="og:title" content="Select dose by the CIBP selection criterion. — select_dose_by_cibp" />
 <meta property="og:description" content="This method selects dose by the convex infinite bounds penalisation (CIBP)
 criterion of Mozgunov &amp;amp; Jaki. Their method is mindful of the uncertainty in
 the estimates of the probability of toxicity and uses an asymmetry parameter
 to penalise escalation to risky doses." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -135,7 +135,6 @@ to penalise escalation to risky doses." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -157,16 +156,14 @@ to penalise escalation to risky doses." />
     </div>
 
     <div class="ref-description">
-    
     <p>This method selects dose by the convex infinite bounds penalisation (CIBP)
 criterion of Mozgunov &amp; Jaki. Their method is mindful of the uncertainty in
 the estimates of the probability of toxicity and uses an asymmetry parameter
 to penalise escalation to risky doses.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>select_dose_by_cibp</span>(<span class='no'>parent_selector_factory</span>, <span class='no'>a</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>select_dose_by_cibp</span><span class='op'>(</span><span class='va'>parent_selector_factory</span>, <span class='va'>a</span>, target <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -184,31 +181,31 @@ to penalise escalation to risky doses.</p>
 provided, the value will be sought from the parent dose-selector.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit a
 dose-finding model to outcomes.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Mozgunov P, Jaki T. Improving safety of the continual reassessment method via
 a modified allocation rule. Statistics in Medicine.1-17. doi:10.1002/sim.8450</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
-<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.33</span>
+    <pre class="examples"><div class='input'><span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
+<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.33</span>
 
 <span class='co'># Let's compare escalation behaviour of a CRM model without CIBP criterion:</span>
-<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
+<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span>
 <span class='co'># To one with the CIBP criterion:</span>
-<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>select_dose_by_cibp</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>0.3</span>)
+<span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_dfcrm.html'>get_dfcrm</a></span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select_dose_by_cibp</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>
 
 <span class='co'># Despite one-in-three tox at first dose, regular model is ready to escalate:</span>
-<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NTN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># But the model using CIBP is more risk averse:</span>
-<span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NTN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
+<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NTN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># But the model using CIBP is more risk averse:</span>
+<span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NTN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -225,7 +222,7 @@ a modified allocation rule. Statistics in Medicine.1-17. doi:10.1002/sim.8450</p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

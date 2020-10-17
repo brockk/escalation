@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,8 +45,8 @@
 
 
 
-<meta property="og:title" content="Get an object to fit the CRM model using the dfcrm package. — get_dfcrm" />
 
+<meta property="og:title" content="Get an object to fit the CRM model using the dfcrm package. — get_dfcrm" />
 <meta property="og:description" content="This function returns an object that can be used to fit a CRM model using
 methods provided by the dfcrm package.
 Dose selectors are designed to be daisy-chained together to achieve different
@@ -56,9 +58,7 @@ provided by follow_path. In this example, when the observed
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -142,7 +142,6 @@ See Examples." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -164,7 +163,6 @@ See Examples." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function returns an object that can be used to fit a CRM model using
 methods provided by the dfcrm package.</p>
 <p>Dose selectors are designed to be daisy-chained together to achieve different
@@ -176,11 +174,10 @@ provided by <code><a href='follow_path.html'>follow_path</a></code>. In this exa
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>get_dfcrm</span>(<span class='kw'>parent_selector_factory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='no'>...</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>get_dfcrm</span><span class='op'>(</span>parent_selector_factory <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>skeleton</span>, <span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -204,12 +201,11 @@ probabilities.</p></td>
       <td><p>Extra args are passed to <code><a href='https://rdrr.io/pkg/dfcrm/man/crm.html'>crm</a></code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an object of type <code><a href='selector_factory.html'>selector_factory</a></code> that can fit the
 CRM model to outcomes.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Cheung, K. 2019. dfcrm: Dose-Finding by the Continual Reassessment Method.
@@ -219,36 +215,40 @@ Chapman and Hall/CRC. ISBN 9781420091519</p>
 <p>O’Quigley J, Pepe M, Fisher L. Continual reassessment method: a practical
 design for phase 1 clinical trials in cancer. Biometrics. 1990;46(1):33-48.
 doi:10.2307/2531628</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
-<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
-<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_dfcrm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
+    <pre class="examples"><div class='input'><span class='va'>skeleton</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span><span class='op'>)</span>
+<span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fl'>0.25</span>
+<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'>get_dfcrm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span>
 
 <span class='co'># By default, dfcrm fits the empiric model:</span>
-<span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
-<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+<span class='va'>outcomes</span> <span class='op'>&lt;-</span> <span class='st'>'1NNN 2NTN'</span>
+<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
 <span class='co'># But we can provide extra args to get_dfcrm that are than passed onwards to</span>
 <span class='co'># the call to dfcrm::crm to override the defaults. For example, if we want</span>
 <span class='co'># the one-parameter logistic model:</span>
-<span class='no'>model2</span> <span class='kw'>&lt;-</span> <span class='fu'>get_dfcrm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'logistic'</span>)
-<span class='no'>model2</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='no'>outcomes</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># dfcrm does not offer a two-parameter logistic model but other classes do.</span>
+<span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'>get_dfcrm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span>, model <span class='op'>=</span> <span class='st'>'logistic'</span><span class='op'>)</span>
+<span class='va'>model2</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='co'># dfcrm does not offer a two-parameter logistic model but other classes do.</span>
 
 <span class='co'># We can use an initial dose-escalation plan, a pre-specified path that</span>
 <span class='co'># should be followed until trial outcomes deviate, at which point the CRM</span>
 <span class='co'># model takes over. For instance, if we want to use two patients at each of</span>
 <span class='co'># the first three doses in the absence of toxicity, irrespective the model's</span>
 <span class='co'># advice, we would run:</span>
-<span class='no'>model1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='follow_path.html'>follow_path</a></span>(<span class='st'>'1NN 2NN 3NN'</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>get_dfcrm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>)
+<span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='follow_path.html'>follow_path</a></span><span class='op'>(</span><span class='st'>'1NN 2NN 3NN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>get_dfcrm</span><span class='op'>(</span>skeleton <span class='op'>=</span> <span class='va'>skeleton</span>, target <span class='op'>=</span> <span class='va'>target</span><span class='op'>)</span>
 
 <span class='co'># If outcomes match the desired path, the path is followed further:</span>
-<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NN 2N'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NN 2N'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
 <span class='co'># But when the outcomes diverge:</span>
-<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NN 2T'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
+<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NN 2T'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1</div><div class='input'>
 <span class='co'># Or the pre-specified path comes to an end:</span>
-<span class='no'>model1</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span>(<span class='st'>'1NN 2NN 3NN'</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span>()</div><div class='output co'>#&gt; [1] 5</div><div class='input'># The CRM model takes over.
+<span class='va'>model1</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='st'>'1NN 2NN 3NN'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='recommended_dose.html'>recommended_dose</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 5</div><div class='input'><span class='co'># The CRM model takes over.</span>
 
 </div></pre>
   </div>
@@ -266,7 +266,7 @@ doi:10.2307/2531628</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
