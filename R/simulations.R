@@ -181,7 +181,13 @@ num_tox.simulations <- function(x, ...) {
 #' @importFrom tibble as_tibble
 #' @export
 eff_at_dose.simulations <- function(x, ...) {
-  if(x$supports_efficacy) {
+
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(x),
+    x$supports_efficacy,
+    FALSE
+  )
+  if(supports_efficacy) {
     x$fits %>%
       map(~ tail(.x, 1)[[1]]) %>%
       map('fit') %>%
@@ -253,6 +259,12 @@ trial_duration.simulations <- function(x, method = 0, ...) {
 #' @export
 print.simulations <- function(x, ...) {
 
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(x),
+    x$supports_efficacy,
+    FALSE
+  )
+
   cat('Number of iterations:', length(x$fits), '\n')
   cat('\n')
 
@@ -265,7 +277,7 @@ print.simulations <- function(x, ...) {
   print(ptox, digits = 3)
   cat('\n')
 
-  if(x$supports_efficacy) {
+  if(supports_efficacy) {
     peff <- x$true_prob_eff
     names(peff) <- dose_indices(x)
     cat('True probability of efficacy:\n')
@@ -289,7 +301,7 @@ print.simulations <- function(x, ...) {
   print(summary(num_tox(x)))
   cat('\n')
 
-  if(x$supports_efficacy) {
+  if(supports_efficacy) {
     cat('Total efficacies:\n')
     print(summary(num_eff(x)))
     cat('\n')
@@ -303,9 +315,15 @@ print.simulations <- function(x, ...) {
 #' @export
 summary.simulations <- function(object, ...) {
 
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(object),
+    object$supports_efficacy,
+    FALSE
+  )
+
   dose_labs <- c('NoDose', as.character(dose_indices(object)))
 
-  if(object$supports_efficacy) {
+  if(supports_efficacy) {
     tibble(
       dose = ordered(dose_labs, levels = dose_labs),
       tox = c(0, colMeans(tox_at_dose(object))),
@@ -335,9 +353,15 @@ summary.simulations <- function(object, ...) {
 #' @export
 as_tibble.simulations <- function(x, ...) {
 
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(x),
+    x$supports_efficacy,
+    FALSE
+  )
+
   .iteration <- .depth <- time <- true_prob_tox <- true_prob_tox <- NULL
 
-  if(x$supports_efficacy) {
+  if(supports_efficacy) {
     x$fits %>%
       imap_dfr(.f = function(batch, i) {
         map_dfr(batch, function(y) {

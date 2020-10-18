@@ -61,3 +61,10 @@ devtools::build_manual()
 
 # Build
 devtools::build()
+
+# Reverse dependencies
+devtools::revdep('escalation')
+# install.packages("revdepcheck")
+# devtools::install_github('r-lib/revdepcheck')
+library(revdepcheck)
+revdep_check(num_workers = 2)

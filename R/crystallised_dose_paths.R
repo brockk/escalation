@@ -164,7 +164,12 @@ num_tox.crystallised_dose_paths <- function(x, ...) {
 #' @export
 eff_at_dose.crystallised_dose_paths <- function(x, ...) {
 
-  if(x$supports_efficacy) {
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(x),
+    x$supports_efficacy,
+    FALSE
+  )
+  if(supports_efficacy) {
     d <- var <- prob_outcomes <- scaled_var <- . <- NULL
 
     var_vec <- x$terminal_nodes %>%
@@ -243,6 +248,12 @@ prob_administer.crystallised_dose_paths <- function(x, ...) {
 #' @export
 print.crystallised_dose_paths <- function(x, ...) {
 
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(x),
+    x$supports_efficacy,
+    FALSE
+  )
+
   cat('Number of nodes:',  length(x$dose_paths), '\n')
   cat('Number of terminal nodes:', nrow(x$terminal_nodes), '\n')
   cat('\n')
@@ -256,7 +267,7 @@ print.crystallised_dose_paths <- function(x, ...) {
   print(ptox, digits = 3)
   cat('\n')
 
-  if(x$supports_efficacy) {
+  if(supports_efficacy) {
     peff <- x$true_prob_eff
     names(peff) <- dose_indices(x)
     cat('True probability of efficacy:\n')
@@ -296,7 +307,7 @@ print.crystallised_dose_paths <- function(x, ...) {
   cat('\n')
   cat('\n')
 
-  if(x$supports_efficacy) {
+  if(supports_efficacy) {
     cat('Expected total efficacies:\n')
     cat(num_eff(x))
     cat('\n')
@@ -307,9 +318,15 @@ print.crystallised_dose_paths <- function(x, ...) {
 #' @export
 summary.crystallised_dose_paths <- function(object, ...) {
 
+  supports_efficacy <- ifelse(
+    'supports_efficacy' %in% names(object),
+    object$supports_efficacy,
+    FALSE
+  )
+
   dose_labs <- c('NoDose', as.character(dose_indices(object)))
 
-  if(object$supports_efficacy) {
+  if(supports_efficacy) {
     tibble(
       dose = ordered(dose_labs, levels = dose_labs),
       tox = c(0, tox_at_dose(object)),

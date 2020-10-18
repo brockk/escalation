@@ -634,12 +634,12 @@ sum(prob_administer(x))
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 
 # Use 3+3
-get_three_plus_three(num_doses = length(skeleton)) %>%
+get_three_plus_three(num_doses = 5) %>%
   simulate_trials(num_sims = 50, true_prob_tox = true_prob_tox) -> sims
 sims
 
-get_three_plus_three(num_doses = length(skeleton)) %>%
-  simulate_trials(num_sims = 5, true_prob_tox = true_prob_tox,
+get_three_plus_three(num_doses = 5) %>%
+  simulate_trials(num_sims = 50, true_prob_tox = true_prob_tox,
            return_all_fits = TRUE) -> sims
 
 # Use dfcrm
@@ -671,7 +671,8 @@ get_trialr_crm(skeleton = skeleton, target = target,
     next_dose = 2) -> sims
 
 # Use BOIN
-get_boin(num_doses = length(skeleton), target = target) %>%
+set.seed(2020)
+get_boin(num_doses = 5, target = target) %>%
   stop_at_n(n = 12) %>%
   simulate_trials(
     num_sims = 50,
