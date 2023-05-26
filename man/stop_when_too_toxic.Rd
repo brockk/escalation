@@ -2,7 +2,7 @@
 % Please edit documentation in R/stop_when_too_toxic.R
 \name{stop_when_too_toxic}
 \alias{stop_when_too_toxic}
-\title{Stop when a dose is too toxic.}
+\title{Stop trial and recommend no dose when a dose is too toxic.}
 \usage{
 stop_when_too_toxic(parent_selector_factory, dose, tox_threshold, confidence)
 }
@@ -21,14 +21,14 @@ supporting that the toxicity rate exceeds the threshold.}
 }
 \value{
 an object of type \code{\link{selector_factory}} that can fit a
-dose-finding model to outcomes.
+  dose-finding model to outcomes.
 }
 \description{
-This method stops a dose-finding trial when sufficient probabilistic
-confidence is reached that the rate of toxicity at a dose exceeds some
-threshold. In other words, it stops when it is likely that a dose is too
-toxic. It can stop when the rule is triggered at the recommended dose, at a
-particular dose, or at any dose. See Details.
+This method stops a dose-finding trial and recommends no dose when sufficient
+probabilistic confidence is reached that the rate of toxicity at a dose
+exceeds some threshold. In other words, it stops when it is likely that a
+dose is too toxic. It can stop when the rule is triggered at the recommended
+dose, at a particular dose, or at any dose. See Details.
 }
 \details{
 The method for calculating probability mass for toxicity rates will
@@ -39,11 +39,11 @@ slope parameter in a CRM model. It does not use MCMC to draw samples from the
 posterior distribution. Thus, to perform inference on the posterior
 probability of toxicity, this package assumes the dfcrm slope parameter
 follows a normal distribution with the mean and variance calculated by dfcrm.
-In contrast, the \code{stan_crm} function in the \code{trialr}
-package needs no such assumption because it samples from the posterior
-parameter distribution and uses those samples to infer on the posterior
-probability of toxicity at each dose, dependent on the chosen model for the
-dose-toxicity curve.
+In contrast, the \code{stan_crm} function in the \code{trialr} package needs
+no such assumption because it samples from the posterior parameter
+distribution and uses those samples to infer on the posterior probability of
+toxicity at each dose, dependent on the chosen model for the dose-toxicity
+curve.
 }
 \examples{
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)

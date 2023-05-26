@@ -1,11 +1,11 @@
 
-#' Stop when a dose is too toxic.
+#' Stop trial and recommend no dose when a dose is too toxic.
 #'
-#' This method stops a dose-finding trial when sufficient probabilistic
-#' confidence is reached that the rate of toxicity at a dose exceeds some
-#' threshold. In other words, it stops when it is likely that a dose is too
-#' toxic. It can stop when the rule is triggered at the recommended dose, at a
-#' particular dose, or at any dose. See Details.
+#' This method stops a dose-finding trial and recommends no dose when sufficient
+#' probabilistic confidence is reached that the rate of toxicity at a dose
+#' exceeds some threshold. In other words, it stops when it is likely that a
+#' dose is too toxic. It can stop when the rule is triggered at the recommended
+#' dose, at a particular dose, or at any dose. See Details.
 #'
 #' The method for calculating probability mass for toxicity rates will
 #' ultimately be determined by the dose-finding model used and the attendant
@@ -15,23 +15,23 @@
 #' posterior distribution. Thus, to perform inference on the posterior
 #' probability of toxicity, this package assumes the dfcrm slope parameter
 #' follows a normal distribution with the mean and variance calculated by dfcrm.
-#' In contrast, the \code{stan_crm} function in the \code{trialr}
-#' package needs no such assumption because it samples from the posterior
-#' parameter distribution and uses those samples to infer on the posterior
-#' probability of toxicity at each dose, dependent on the chosen model for the
-#' dose-toxicity curve.
+#' In contrast, the \code{stan_crm} function in the \code{trialr} package needs
+#' no such assumption because it samples from the posterior parameter
+#' distribution and uses those samples to infer on the posterior probability of
+#' toxicity at each dose, dependent on the chosen model for the dose-toxicity
+#' curve.
 #'
 #' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param dose \code{'any'} to stop when any dose is too toxic;
-#' \code{'recommended'} to stop when the recommended dose is too toxic; or an
-#' integer to stop when a particular dose-level is too toxic.
+#'   \code{'recommended'} to stop when the recommended dose is too toxic; or an
+#'   integer to stop when a particular dose-level is too toxic.
 #' @param tox_threshold We are interested in toxicity probabilities greater than
-#' this threshold.
+#'   this threshold.
 #' @param confidence Stop when there is this much total probability mass
-#' supporting that the toxicity rate exceeds the threshold.
+#'   supporting that the toxicity rate exceeds the threshold.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit a
-#' dose-finding model to outcomes.
+#'   dose-finding model to outcomes.
 #'
 #' @export
 #'
@@ -109,16 +109,11 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
 
 #' @export
 recommended_dose.stop_when_too_toxic_selector <- function(x, ...) {
-  prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
-  if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-    if(!is.na(prob_too_tox[x$dose]) &
-       prob_too_tox[x$dose] >= x$confidence) {
-      return(NA)
-    }
+  if(continue(x)) {
+    return(x$parent %>% recommended_dose())
+  } else {
+    return(NA)
   }
-
-  # By default:
-  return(x$parent %>% recommended_dose())
 }
 
 #' @export
