@@ -30,6 +30,7 @@ getwd()
 
 # Remake man files
 .rs.restartR()
+roxygen2::roxygenise()
 roxygen2::roxygenise(clean = TRUE)
 # To preview a man file
 rstudioapi::previewRd('man/tox_at_dose.Rd')
