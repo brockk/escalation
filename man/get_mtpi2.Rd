@@ -17,6 +17,8 @@ get_mtpi2(
 )
 }
 \arguments{
+\item{parent_selector_factory}{Object of type \code{\link{selector_factory}}.}
+
 \item{num_doses}{Number of doses under investigation.}
 
 \item{target}{We seek a dose with this probability of toxicity.}
@@ -45,8 +47,8 @@ an object of type \code{\link{selector_factory}} that can fit the
 mTPI-2 model to outcomes.
 }
 \description{
-The modified toxicity probability interval 2 (mTPI-2) is a dose-escalation 
-design by Guo et al. As the name suggests, it is an adaptation of the mTPI 
+The modified toxicity probability interval 2 (mTPI-2) is a dose-escalation
+design by Guo et al. As the name suggests, it is an adaptation of the mTPI
 design.
 }
 \section{Details}{
@@ -66,9 +68,9 @@ The trial commences at a starting dose, possibly dose 1. If dose \eqn{i}
 has just been evaluated in patient(s), dose selection decisions proceed by
 calculating the unit probability mass of the true toxicity rate at dose
 \eqn{i} using the partition of the probability space into subintervals with
-equal length given by\eqn{(\epsilon_{1} + \epsilon_{2})}. \eqn{EI} is the 
-equivalence interval \eqn{p_{T} - epsilon_{1}, p_{T} - epsilon_{2}}, with 
-\eqn{LI} the set of all intervals below, and \eqn{HI} the set of all 
+equal length given by\eqn{(\epsilon_{1} + \epsilon_{2})}. \eqn{EI} is the
+equivalence interval \eqn{p_{T} - epsilon_{1}, p_{T} - epsilon_{2}}, with
+\eqn{LI} the set of all intervals below, and \eqn{HI} the set of all
 intervals above.
 The unit probability mass (UPM) of an interval is the posterior probability
 that the true toxicity rate belongs to the interval divided by the width of
@@ -76,11 +78,11 @@ the interval. The interval with maximal UPM determines the recommendation for
 the next patient(s), with the intervals corresponding to decisions to
 escalate, stay, and de-escalate dose, respectively. Further to this are rules
 that prevent escalation to an inadmissible dose.
-In the original mTPI paper, the authors demonstrate acceptable operating 
-performance using \eqn{\alpha = \beta = 1}, \eqn{K_{1} = 1}, 
+In the original mTPI paper, the authors demonstrate acceptable operating
+performance using \eqn{\alpha = \beta = 1}, \eqn{K_{1} = 1},
 \eqn{K_{2} = 1.5} and  \eqn{\xi = 0.95}.
-The authors of the mTPI-2 approach show desirable performance as compared 
-to the original mTPI method, under particular parameter choices. 
+The authors of the mTPI-2 approach show desirable performance as compared
+to the original mTPI method, under particular parameter choices.
 See the publications for full details.
 }
 
@@ -102,7 +104,7 @@ Ji, Y., & Yang, S. (2017).
 On the Interval-Based Dose-Finding Designs, 1–26.
 Retrieved from https://arxiv.org/abs/1706.03277
 
-Guo, W., Wang, SJ., Yang, S., Lynn, H., Ji, Y. (2017). 
-A Bayesian Interval Dose-Finding Design Addressing Ockham's Razor: mTPI-2. 
+Guo, W., Wang, SJ., Yang, S., Lynn, H., Ji, Y. (2017).
+A Bayesian Interval Dose-Finding Design Addressing Ockham's Razor: mTPI-2.
 https://doi.org/10.1016/j.cct.2017.04.006
 }

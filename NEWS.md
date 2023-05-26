@@ -1,4 +1,9 @@
 
+# escalation 0.1.5
+
+* Add mTPI2 dose-finding method
+* Fixed some bugs
+
 # escalation 0.1.4
 
 * Added Neuenschwander, Branson & Sponer's method for phase I.

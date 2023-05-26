@@ -9,3 +9,5 @@
 ^codecov\.yml$
 ^\Scratch$
 ^revdep$
+^doc$
+^Meta$

@@ -51,11 +51,11 @@ devtools::test()
 # Build vignettes
 devtools::build_vignettes()
 
-# pkgdown site
-pkgdown::build_site()
-
 # Check
 devtools::check()
+
+# pkgdown site (do this once happy with version number, i.e. after checks)
+pkgdown::build_site()
 
 # Manual
 devtools::build_manual()

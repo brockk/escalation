@@ -30,6 +30,7 @@ It starts by providing functions to use dose-escalation methodologies like the c
 * `get_trialr_nbg()`
 * `get_tpi()`
 * `get_mtpi()`
+* `get_mtpi2()`
 * `get_boin()`
 * `get_trialr_efftox()`
 * `get_wages_and_tait()`

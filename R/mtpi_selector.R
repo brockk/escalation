@@ -4,6 +4,7 @@
 #' The modified toxicity probability interval (mTPI)is a dose-escalation design
 #' by Ji et al. As the name suggests, it is an adaptation of the TPI design.
 #'
+#' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param num_doses Number of doses under investigation.
 #' @param target We seek a dose with this probability of toxicity.
 #' @param epsilon1 This parameter determines the lower bound of the
@@ -77,7 +78,7 @@ get_mtpi <- function(parent_selector_factory = NULL,
                      exclusion_certainty,
                      alpha = 1, beta = 1,
                      ...) {
-  
+
   x <- list(
     parent_selector_factory = parent_selector_factory,
     num_doses = num_doses,
@@ -89,7 +90,7 @@ get_mtpi <- function(parent_selector_factory = NULL,
     beta = beta,
     extra_args = list(...)
   )
-  
+
   class(x) <- c('mtpi_selector_factory',
                 'tox_selector_factory',
                 'selector_factory')
@@ -102,7 +103,7 @@ mtpi_selector <- function(parent_selector = NULL,
                           exclusion_certainty,
                           alpha, beta,
                           ...) {
-  
+
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
@@ -111,14 +112,14 @@ mtpi_selector <- function(parent_selector = NULL,
     stop('outcomes should be a character string or a data-frame.')
   }
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
-  
+
   # Checks
   if(nrow(df) > 0) {
     if(max(df$dose) > num_doses) {
       stop('mtpi_selector - maximum dose given exceeds number of doses.')
     }
   }
-  
+
   if(nrow(df) == 0) {
     recommended_dose <- 1
     continue <- TRUE
@@ -146,7 +147,7 @@ mtpi_selector <- function(parent_selector = NULL,
     upm_ui <- prob_ui / ei_lower
     upm_ei <- prob_ei / (ei_upper - ei_lower)
     upm_oi <- prob_oi / (1 - ei_upper)
-    
+
     if(last_dose < num_doses) {
       # Escalation is possible.
       # Scale upm_ei by the identity function measuring whether the next dose
@@ -166,7 +167,7 @@ mtpi_selector <- function(parent_selector = NULL,
         }
       }
     }
-    
+
     if(upm_ui > pmax(upm_ei, upm_oi)) {
       # Escalate if possible
       recommended_dose <- min(num_doses, last_dose + 1)
@@ -194,7 +195,7 @@ mtpi_selector <- function(parent_selector = NULL,
       stop('Hypothetically infeasible situation in mtpi_selector.')
     }
   }
-  
+
   l <- list(
     parent = parent_selector,
     cohort = df$cohort,
@@ -211,7 +212,7 @@ mtpi_selector <- function(parent_selector = NULL,
     recommended_dose = recommended_dose,
     continue = continue
   )
-  
+
   class(l) = c('mtpi_selector', 'tox_selector', 'selector')
   l
 }
@@ -221,13 +222,13 @@ mtpi_selector <- function(parent_selector = NULL,
 
 #' @export
 fit.mtpi_selector_factory <- function(selector_factory, outcomes, ...) {
-  
+
   if(is.null(selector_factory$parent)) {
     parent <- NULL
   } else {
     parent <- selector_factory$parent %>% fit(outcomes, ...)
   }
-  
+
   args <- list(
     parent = parent,
     outcomes = outcomes,
@@ -277,7 +278,7 @@ num_doses.mtpi_selector <- function(x, ...) {
 
 #' @export
 recommended_dose.mtpi_selector <- function(x, ...) {
-  
+
   if(!is.null(x$parent)) {
     parent_dose <- recommended_dose(x$parent)
     parent_cont <- continue(x$parent)
@@ -285,7 +286,7 @@ recommended_dose.mtpi_selector <- function(x, ...) {
       return(parent_dose)
     }
   }
-  
+
   # by default:
   return(as.integer(x$recommended_dose))
 }
@@ -302,7 +303,7 @@ tox_at_dose.mtpi_selector <- function(x, ...) {
 
 #' @export
 mean_prob_tox.mtpi_selector <- function(x, ...) {
-  
+
   post_mean = (x$alpha + tox_at_dose(x)) / (x$alpha + x$beta + n_at_dose(x))
   post_var = (x$alpha + tox_at_dose(x)) *
     (x$beta + n_at_dose(x) - tox_at_dose(x)) /

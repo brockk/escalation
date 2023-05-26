@@ -1,10 +1,11 @@
 
 #' Get an object to fit the mTPI-2 dose-finding model.
 #'
-#' The modified toxicity probability interval 2 (mTPI-2) is a dose-escalation 
-#' design by Guo et al. As the name suggests, it is an adaptation of the mTPI 
+#' The modified toxicity probability interval 2 (mTPI-2) is a dose-escalation
+#' design by Guo et al. As the name suggests, it is an adaptation of the mTPI
 #' design.
 #'
+#' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param num_doses Number of doses under investigation.
 #' @param target We seek a dose with this probability of toxicity.
 #' @param epsilon1 This parameter determines the lower bound of the
@@ -40,9 +41,9 @@
 #' has just been evaluated in patient(s), dose selection decisions proceed by
 #' calculating the unit probability mass of the true toxicity rate at dose
 #' \eqn{i} using the partition of the probability space into subintervals with
-#' equal length given by\eqn{(\epsilon_{1} + \epsilon_{2})}. \eqn{EI} is the 
-#' equivalence interval \eqn{p_{T} - epsilon_{1}, p_{T} - epsilon_{2}}, with 
-#' \eqn{LI} the set of all intervals below, and \eqn{HI} the set of all 
+#' equal length given by\eqn{(\epsilon_{1} + \epsilon_{2})}. \eqn{EI} is the
+#' equivalence interval \eqn{p_{T} - epsilon_{1}, p_{T} - epsilon_{2}}, with
+#' \eqn{LI} the set of all intervals below, and \eqn{HI} the set of all
 #' intervals above.
 #' The unit probability mass (UPM) of an interval is the posterior probability
 #' that the true toxicity rate belongs to the interval divided by the width of
@@ -50,11 +51,11 @@
 #' the next patient(s), with the intervals corresponding to decisions to
 #' escalate, stay, and de-escalate dose, respectively. Further to this are rules
 #' that prevent escalation to an inadmissible dose.
-#' In the original mTPI paper, the authors demonstrate acceptable operating 
-#' performance using \eqn{\alpha = \beta = 1}, \eqn{K_{1} = 1}, 
+#' In the original mTPI paper, the authors demonstrate acceptable operating
+#' performance using \eqn{\alpha = \beta = 1}, \eqn{K_{1} = 1},
 #' \eqn{K_{2} = 1.5} and  \eqn{\xi = 0.95}.
-#' The authors of the mTPI-2 approach show desirable performance as compared 
-#' to the original mTPI method, under particular parameter choices. 
+#' The authors of the mTPI-2 approach show desirable performance as compared
+#' to the original mTPI method, under particular parameter choices.
 #' See the publications for full details.
 #'
 #' @export
@@ -75,17 +76,17 @@
 #' Ji, Y., & Yang, S. (2017).
 #' On the Interval-Based Dose-Finding Designs, 1–26.
 #' Retrieved from https://arxiv.org/abs/1706.03277
-#' 
-#' Guo, W., Wang, SJ., Yang, S., Lynn, H., Ji, Y. (2017). 
-#' A Bayesian Interval Dose-Finding Design Addressing Ockham's Razor: mTPI-2. 
+#'
+#' Guo, W., Wang, SJ., Yang, S., Lynn, H., Ji, Y. (2017).
+#' A Bayesian Interval Dose-Finding Design Addressing Ockham's Razor: mTPI-2.
 #' https://doi.org/10.1016/j.cct.2017.04.006
-#' 
+#'
 get_mtpi2 <- function(parent_selector_factory = NULL, num_doses, target,
                      epsilon1, epsilon2,
                      exclusion_certainty,
                      alpha = 1, beta = 1,
                      ...) {
-  
+
   x <- list(
     parent_selector_factory = parent_selector_factory,
     num_doses = num_doses,
@@ -97,7 +98,7 @@ get_mtpi2 <- function(parent_selector_factory = NULL, num_doses, target,
     beta = beta,
     extra_args = list(...)
   )
-  
+
   class(x) <- c('mtpi2_selector_factory',
                 'tox_selector_factory',
                 'selector_factory')
@@ -109,7 +110,7 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
                           exclusion_certainty,
                           alpha, beta,
                           ...) {
-  
+
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
@@ -117,16 +118,16 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
   } else {
     stop('outcomes should be a character string or a data-frame.')
   }
-  
+
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
-  
+
   # Checks
   if(nrow(df) > 0) {
     if(max(df$dose) > num_doses) {
       stop('mtpi2_selector - maximum dose given exceeds number of doses.')
     }
   }
-  
+
   if(nrow(df) == 0) {
     recommended_dose <- 1
     continue <- TRUE
@@ -142,44 +143,45 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
     prob_unsafe <- pbeta(target, post_alpha, post_beta, lower.tail = FALSE)
     delta <- epsilon1 + epsilon2
     ei_lower_lim <- max(target - epsilon1, 0)
-    ei_lower <- data.frame(upper = matrix(data = seq(from = ei_lower_lim, 
-                                                     to = 0, by = -delta), 
-                       ncol = 1, byrow = T)) %>% 
+    lower <- upper <- NULL
+    ei_lower <- data.frame(upper = matrix(data = seq(from = ei_lower_lim,
+                                                     to = 0, by = -delta),
+                       ncol = 1, byrow = T)) %>%
       mutate(lower = pmax(upper - delta, 0),
              delta = upper - lower) %>%
       filter(delta != 0)
     ei_upper_lim <- min(target + epsilon2, 1)
-    ei_upper <- data.frame(lower = matrix(data = seq(from = ei_upper_lim, 
+    ei_upper <- data.frame(lower = matrix(data = seq(from = ei_upper_lim,
                                                      to = 1, by = delta),
-                                          ncol = 1, byrow = T)) %>% 
+                                          ncol = 1, byrow = T)) %>%
       mutate(upper = pmin(lower + delta, 1),
              delta = upper - lower) %>%
       filter(delta != 0)
     # prob_ui, prob_ei & prob_oi are the posterior probabilities that the true
-    # tox rate at given dose is in the (multiple) underdose, equivalent-dose, 
-    # and (multiple) overdose regions. They form a partition: prob_ui_i + 
+    # tox rate at given dose is in the (multiple) underdose, equivalent-dose,
+    # and (multiple) overdose regions. They form a partition: prob_ui_i +
     # prob_ei + prob_oi_i = 1
-    prob_ui <- apply(ei_lower, 1, 
-                     FUN = function(x){pbeta(x[1], post_alpha, post_beta, 
+    prob_ui <- apply(ei_lower, 1,
+                     FUN = function(x){pbeta(x[1], post_alpha, post_beta,
                                              lower.tail = TRUE) -
         pbeta(x[2], post_alpha, post_beta, lower.tail = TRUE)})
-    
+
     prob_ei <- pbeta(ei_upper_lim, post_alpha, post_beta, lower.tail = TRUE) -
       pbeta(ei_lower_lim, post_alpha, post_beta, lower.tail = TRUE)
-    
-    
-    prob_oi <- apply(ei_upper, 1, 
-                     FUN = function(x){pbeta(x[2], post_alpha, post_beta, 
+
+
+    prob_oi <- apply(ei_upper, 1,
+                     FUN = function(x){pbeta(x[2], post_alpha, post_beta,
                                              lower.tail = TRUE) -
                          pbeta(x[1], post_alpha, post_beta, lower.tail = TRUE)})
-    
-    
+
+
     # The UPM are the posterior intervals probabilities divided by the interval
     # width
     upm_ui <- prob_ui / (ei_lower$delta)
     upm_ei <- prob_ei / (ei_upper_lim - ei_lower_lim)
     upm_oi <- prob_oi / (ei_upper$delta)
-    
+
     if(last_dose < num_doses) {
       # Escalation is possible.
       # Scale upm_ei by the identity function measuring whether the next dose
@@ -199,7 +201,7 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
         }
       }
     }
-    
+
     if(max(upm_ei, upm_oi, upm_ui) %in% upm_ui) {
       # Escalate if possible
       recommended_dose <- min(num_doses, last_dose + 1)
@@ -245,7 +247,7 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
     recommended_dose = recommended_dose,
     continue = continue
   )
-  
+
   class(l) = c('mtpi2_selector', 'tox_selector', 'selector')
   l
 }
@@ -255,13 +257,13 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
 
 #' @export
 fit.mtpi2_selector_factory <- function(selector_factory, outcomes, ...) {
-  
+
   if(is.null(selector_factory$parent)) {
     parent <- NULL
   } else {
     parent <- selector_factory$parent %>% fit(outcomes, ...)
   }
-  
+
   args <- list(
     parent = parent,
     outcomes = outcomes,
@@ -311,7 +313,7 @@ num_doses.mtpi2_selector <- function(x, ...) {
 
 #' @export
 recommended_dose.mtpi2_selector <- function(x, ...) {
-  
+
   if(!is.null(x$parent)) {
     parent_dose <- recommended_dose(x$parent)
     parent_cont <- continue(x$parent)
@@ -319,7 +321,7 @@ recommended_dose.mtpi2_selector <- function(x, ...) {
       return(parent_dose)
     }
   }
-  
+
   # By default:
   return(as.integer(x$recommended_dose))
 }
@@ -336,7 +338,7 @@ tox_at_dose.mtpi2_selector <- function(x, ...) {
 
 #' @export
 mean_prob_tox.mtpi2_selector <- function(x, ...) {
-  
+
   post_mean = (x$alpha + tox_at_dose(x)) / (x$alpha + x$beta + n_at_dose(x))
   post_var = (x$alpha + tox_at_dose(x)) *
     (x$beta + n_at_dose(x) - tox_at_dose(x)) /

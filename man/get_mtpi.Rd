@@ -17,6 +17,8 @@ get_mtpi(
 )
 }
 \arguments{
+\item{parent_selector_factory}{Object of type \code{\link{selector_factory}}.}
+
 \item{num_doses}{Number of doses under investigation.}
 
 \item{target}{We seek a dose with this probability of toxicity.}
