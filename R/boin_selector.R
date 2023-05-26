@@ -80,9 +80,25 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
                           cohortsize = n_d + 1, ...)
     this_bound <- bound$full_boundary_tab[, n_d]
     if(tox_d <= this_bound['Escalate if # of DLT <=']) {
+      # The trial can continue
+      continue <- TRUE
       # Escalate, if possible
       recommended_dose <- pmin(num_doses, last_dose + 1)
-      continue <- TRUE
+      # But check recommended_dose is not eliminated, if using stopping rule
+      n_r <- df_c$n[recommended_dose]
+      if(use_stopping_rule & n_r > 0) {
+        rec_bound <- get.boundary(target = target, ncohort = 1,
+                                  cohortsize = n_r + 1, ...)
+        this_rec_bound <- rec_bound$full_boundary_tab[, n_r]
+        tox_r <- df_c$tox[recommended_dose]
+
+        if( !is.na(this_rec_bound['Eliminate if # of DLT >=']) &
+            tox_r >= this_rec_bound['Eliminate if # of DLT >=']) {
+          # Do not escalate. Stay at last_dose
+          recommended_dose <- last_dose
+        }
+      }
+
     } else if(tox_d >= this_bound['Deescalate if # of DLT >=']) {
       # De-escalate and possibly eliminate
       if(use_stopping_rule &

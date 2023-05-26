@@ -387,6 +387,23 @@ test_that('BOIN advises stopping when indicated', {
   boin_fitter <- get_boin(num_doses = num_doses, target = target,
                           use_stopping_rule = TRUE)
 
+  # Design should continue
+  x <- fit(boin_fitter, '1T')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
+
+  # Design should continue
+  x <- fit(boin_fitter, '1TT')
+  expect_equal(recommended_dose(x), 1)
+  expect_true(continue(x))
+  expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
+
+  # Design should stop
+  x <- fit(boin_fitter, '1TTT')
+  expect_true(is.na(recommended_dose(x)))
+  expect_false(continue(x))
+  expect_equal(dose_admissible(x), rep(FALSE, num_doses(x)))
 
   # Design should escalate
   x <- fit(boin_fitter, '1N')
@@ -495,5 +512,38 @@ test_that('BOIN prob_tox_exceeds matches boin package', {
   # And similar values where not NA
   expect_true(all(abs(prob_tox_1[!is.na(prob_tox_1)] -
                         prob_tox_2[!is.na(prob_tox_2)]) < 0.01))
+
+})
+
+
+test_that('boin_selector respects eliminated doses', {
+
+  model <- get_boin(num_doses = 3, target = 0.25, use_stopping_rule = TRUE)
+
+  # After 3/3 tox, it should descalate but never re-escalate:
+  fit <- model %>% fit('2TTT')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
+
+  fit <- model %>% fit('2TTT 1N')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
+
+  fit <- model %>% fit('2TTT 1NN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
+
+  fit <- model %>% fit('2TTT 1NNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
+
+  fit <- model %>% fit('2TTT 1NNNNNNNNNNN')
+  expect_equal(fit %>% recommended_dose(), 1)
+  expect_true(fit %>% continue())
+  expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
 
 })
