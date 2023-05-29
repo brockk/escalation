@@ -37,7 +37,6 @@ Description: Methods for working with dose-finding clinical trials. We provide
     patients.
 License: GPL (>=3)
 Encoding: UTF-8
-LazyData: true
 Depends: 
   magrittr
 Imports:

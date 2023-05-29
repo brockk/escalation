@@ -6,9 +6,9 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/brockk/escalation.svg?branch=master)](https://travis-ci.org/brockk/escalation)
+status](https://app.travis-ci.org/brockk/escalation.svg?branch=master)](https://app.travis-ci.com/brockk/escalation)
 [![Codecov test
-coverage](https://codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg)](https://codecov.io/gh/brockk/escalation?branch=master)
+coverage](https://app.codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg)](https://app.codecov.io/gh/brockk/escalation?branch=master)
 [![cran
 version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
 ![](https://cranlogs.r-pkg.org/badges/escalation)
@@ -295,18 +295,18 @@ fit %>% prob_tox_samples() %>% head(10)
 ```
 
     ## # A tibble: 10 × 6
-    ##    .draw      `1`     `2`    `3`    `4`   `5`
-    ##    <chr>    <dbl>   <dbl>  <dbl>  <dbl> <dbl>
-    ##  1 1     0.00107  0.00519 0.0421 0.123  0.311
-    ##  2 2     0.142    0.223   0.405  0.550  0.716
-    ##  3 3     0.00190  0.00810 0.0550 0.147  0.344
-    ##  4 4     0.0380   0.0810  0.220  0.368  0.573
-    ##  5 5     0.0312   0.0696  0.201  0.346  0.554
-    ##  6 6     0.000202 0.00144 0.0195 0.0741 0.234
-    ##  7 7     0.000312 0.00202 0.0239 0.0847 0.252
-    ##  8 8     0.0687   0.128   0.290  0.441  0.633
-    ##  9 9     0.000361 0.00226 0.0255 0.0885 0.259
-    ## 10 10    0.000615 0.00340 0.0327 0.104  0.283
+    ##    .draw      `1`          `2`       `3`     `4`    `5`
+    ##    <chr>    <dbl>        <dbl>     <dbl>   <dbl>  <dbl>
+    ##  1 1     1.14e- 5 0.000159     0.00516   0.0308  0.144 
+    ##  2 2     4.57e- 5 0.000462     0.00981   0.0470  0.182 
+    ##  3 3     4.49e- 5 0.000455     0.00972   0.0468  0.181 
+    ##  4 4     4.76e- 3 0.0164       0.0842    0.195   0.402 
+    ##  5 5     6.90e-10 0.0000000909 0.0000576 0.00158 0.0274
+    ##  6 6     1.10e- 2 0.0312       0.124     0.251   0.463 
+    ##  7 7     1.10e- 2 0.0312       0.124     0.251   0.463 
+    ##  8 8     1.26e- 2 0.0347       0.132     0.262   0.474 
+    ##  9 9     3.41e- 7 0.0000107    0.00102   0.0105  0.0789
+    ## 10 10    1.48e- 4 0.00114      0.0169    0.0674  0.222
 
 That facilitates really flexible inference. For example, what is the
 probability that toxicity at dose 3 is at least 5% greater than that at
@@ -321,7 +321,7 @@ fit %>% prob_tox_samples() %>%
     ## # A tibble: 1 × 1
     ##    prob
     ##   <dbl>
-    ## 1 0.569
+    ## 1 0.571
 
 ‘More likely than not’, is the answer.
 
