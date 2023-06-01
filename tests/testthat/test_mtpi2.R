@@ -1,5 +1,5 @@
 
-test_that('mtpi_selector matches published example.', {
+test_that('mtpi2_selector matches published example.', {
 
   # Reproduce decisions conveyed in Figure 3 in Guo et al. (2017)
   # at https://doi.org/10.1016/j.cct.2017.04.006
@@ -515,14 +515,14 @@ test_that('mtpi_selector matches published example.', {
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 })
 
-test_that('mtpi_selector supports correct interface.', {
+test_that('mtpi2_selector supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_mtpi(num_doses = num_doses, target = target,
-                           epsilon1 = 0.05, epsilon2 = 0.05,
-                           exclusion_certainty = 0.9)
+  model_fitter <- get_mtpi2(num_doses = num_doses, target = target,
+                            epsilon1 = 0.05, epsilon2 = 0.05,
+                            exclusion_certainty = 0.9)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -839,11 +839,11 @@ test_that('mtpi_selector supports correct interface.', {
 
 })
 
-test_that('mtpi_selector respects suspended doses', {
+test_that('mtpi2_selector respects suspended doses', {
 
-  model <- get_mtpi(num_doses = 5, target = 0.3,
-                    epsilon1 = 0.05, epsilon2 = 0.05,
-                    exclusion_certainty = 0.7)
+  model <- get_mtpi2(num_doses = 5, target = 0.3,
+                     epsilon1 = 0.05, epsilon2 = 0.05,
+                     exclusion_certainty = 0.7)
 
 
   fit <- model %>% fit('2N')
