@@ -1,5 +1,6 @@
 
 library(escalation)
+library(testthat)
 
 # Table 1
 model <- get_mtpi(num_doses = 8, target = 0.25,
@@ -20,10 +21,26 @@ sc6 <- c(0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75)
 set.seed(123)
 sims1 <- model %>%
   simulate_trials(num_sims = 1000, true_prob_tox = sc1, next_dose = 1)
-prob_recommend(sims1)
-colMeans(n_at_dose(sims1))
-mean(num_tox(sims1) / num_patients(sims1))
-mean(num_patients(sims1))
+expect_equal(
+  unname(prob_recommend(sims1)),
+  c(0, 0.14, 0.78, 0.08, 0, 0, 0, 0, 0),
+  tolerance = 0.1
+)
+expect_equal(
+  unname(colMeans(n_at_dose(sims1))),
+  c(7.1, 18.3, 4.4, 0.2, 0, 0, 0, 0),
+  tolerance = 0.2
+)
+expect_equal(
+  mean(num_tox(sims1) / num_patients(sims1)),
+  c(0.24),
+  tolerance = 0.1
+)
+expect_equal(
+  mean(num_patients(sims1)),
+  c(30),
+  tolerance = 0.1
+)
 
 
 # Scenario 2 ----

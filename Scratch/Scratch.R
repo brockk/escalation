@@ -1,8 +1,9 @@
 
+# Load ----
 library(escalation)
 
-# skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-# target <- 0.25
+target <- 0.25
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 
 
 # Parsing ----
@@ -20,7 +21,6 @@ parse_phase1_outcomes(outcomes, as_list = FALSE)
 
 
 # dfcrm ----
-
 crm_fitter <- get_dfcrm(skeleton = skeleton, target = target)
 # Factory interface
 outcomes <- '1NNN 2NNN 3NNT'
@@ -37,6 +37,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -56,7 +57,7 @@ prob_tox_quantile(x, p = 0.95)
 # and standard generics
 print(x)
 summary(x)
-as_tibble(x)
+dplyr::as_tibble(x)
 
 
 # trialr crm ----
@@ -88,6 +89,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -107,7 +109,7 @@ prob_tox_quantile(x, p = 0.95)
 # and standard generics
 print(x)
 summary(x)
-as_tibble(x)
+dplyr::as_tibble(x)
 
 
 # TPI example ----
@@ -127,6 +129,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -158,6 +161,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -173,7 +177,7 @@ dose_admissible(x)
 prob_tox_exceeds(x, target)
 
 # BOIN ----
-num_doses <- 5
+num_doses <- length(skeleton)
 target <- 0.3
 
 boin_fitter <- get_boin(num_doses = num_doses, target = target)
@@ -190,6 +194,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -260,6 +265,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -281,7 +287,7 @@ tox_target(x)
 prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)
 model <- get_random_selector(prob_select = prob_select)
 x <- model %>% fit('1NTN 2NN 5TT')
-x <- model %>% fit('1NTN 2EN 5BB')
+# x <- model %>% fit('1NTN 2EN 5BB') # Fails
 
 # Selector interface
 class(x)
@@ -294,6 +300,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -320,7 +327,7 @@ supports_sampling(x)
 # and standard generics
 print(x)
 summary(x)
-tibble::as_tibble(x)
+dplyr::as_tibble(x)
 
 # trialr EffTox ----
 efftox_priors <- trialr::efftox_priors
@@ -339,6 +346,7 @@ model <- get_trialr_efftox(real_doses = real_doses,
                            eff_star = 0.7, tox_star = 0.25,
                            priors = p, seed = 2020)
 x <- model %>% fit('1N 2E 3B')
+x
 
 # Selector interface
 class(x)
@@ -351,6 +359,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -380,7 +389,7 @@ prob_eff_samples(x)
 # and standard generics
 print(x)
 summary(x)
-tibble::as_tibble(x)
+dplyr::as_tibble(x)
 
 # Wages & Tait ----
 tox_skeleton = c(0.01, 0.08, 0.15, 0.22, 0.29, 0.36)
@@ -406,6 +415,7 @@ model <- get_wages_and_tait(tox_skeleton = tox_skeleton,
                             num_randomise = 20)
 
 x <- model %>% fit('1N 2E 3B')
+x
 
 # Selector interface
 class(x)
@@ -418,6 +428,7 @@ model_frame(x)
 num_doses(x)
 recommended_dose(x)
 continue(x)
+dose_admissible(x)
 n_at_dose(x)
 n_at_dose(x, dose = 0)
 n_at_dose(x, dose = 1)
@@ -447,7 +458,56 @@ prob_eff_samples(x)
 # and standard generics
 print(x)
 summary(x)
-tibble::as_tibble(x)
+dplyr::as_tibble(x)
+
+# BOIN12 ----
+model <- get_boin12(num_doses = 5, phi_t = 0.35, phi_e = 0.25, u2 = 40, u3 = 60)
+
+x <- model %>% fit('1EEB')
+x
+
+# Selector interface
+class(x)
+num_patients(x)
+cohort(x)
+doses_given(x)
+tox(x)
+eff(x)
+model_frame(x)
+num_doses(x)
+recommended_dose(x)
+continue(x)
+dose_admissible(x)
+n_at_dose(x)
+n_at_dose(x, dose = 0)
+n_at_dose(x, dose = 1)
+n_at_dose(x, dose = 'recommended')
+n_at_recommended_dose(x)
+prob_administer(x)
+is_randomising(x)
+tox_at_dose(x)
+eff_at_dose(x)
+empiric_tox_rate(x)
+mean_prob_tox(x)
+median_prob_tox(x)
+empiric_eff_rate(x)
+mean_prob_eff(x)
+median_prob_eff(x)
+dose_admissible(x)
+prob_tox_exceeds(x, 0.5)
+prob_tox_quantile(x, p = 0.05)
+prob_tox_quantile(x, p = 0.5)
+prob_eff_exceeds(x, 0.5)
+prob_eff_quantile(x, p = 0.05)
+prob_eff_quantile(x, p = 0.5)
+supports_sampling(x)
+# prob_tox_samples(x)
+# prob_eff_samples(x)
+
+# and standard generics
+print(x)
+summary(x)
+dplyr::as_tibble(x)
 
 # Dose paths ----
 cohort_sizes <- c(3, 3, 3)
@@ -498,28 +558,28 @@ selector_factory <- get_trialr_efftox(real_doses = real_doses,
 # Get paths
 cohort_sizes <- c(2, 2)
 paths1 <- selector_factory %>% get_dose_paths(cohort_sizes = cohort_sizes)
-as_tibble(paths1) %>% print(n = 100)
+dplyr::as_tibble(paths1) %>% print(n = 100)
 
-spread_paths(as_tibble(paths1)) %>%
-  select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
-         'outcomes2', 'next_dose2') %>%
+spread_paths(dplyr::as_tibble(paths1)) %>%
+  dplyr::select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
+                'outcomes2', 'next_dose2') %>%
   print(n=1000)
 
 # In-progress trials:
 paths2 <- selector_factory %>%
   get_dose_paths(cohort_sizes = cohort_sizes, previous_outcomes = '1NTN')
-as_tibble(paths2) %>% print(n = 100)
-spread_paths(as_tibble(paths2)) %>%
-  select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
-         'outcomes2', 'next_dose2', 'outcomes3', 'next_dose3') %>%
-    print(n=100)
+dplyr::as_tibble(paths2) %>% print(n = 100)
+spread_paths(dplyr::as_tibble(paths2)) %>%
+  dplyr::select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
+                'outcomes2', 'next_dose2') %>%
+  print(n=100)
 
 paths3 <- selector_factory %>%
   get_dose_paths(cohort_sizes = cohort_sizes, previous_outcomes = '1NTT')
-as_tibble(paths3) %>% print(n = 100)
-spread_paths(as_tibble(paths3)) %>%
-  select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
-         'outcomes2', 'next_dose2', 'outcomes3', 'next_dose3') %>%
+dplyr::as_tibble(paths3) %>% print(n = 100)
+spread_paths(dplyr::as_tibble(paths3)) %>%
+  dplyr::select('outcomes0', 'next_dose0', 'outcomes1', 'next_dose1',
+                'outcomes2', 'next_dose2') %>%
   print(n = 100)
 
 paths <- paths1
@@ -628,6 +688,30 @@ prob_administer(x)
 sum(prob_administer(x))
 
 
+# Patient samples ----
+set.seed(2023)
+patients <- PatientSample$new()
+patients$num_patients
+patients$tox_u
+patients$eff_u
+patients$expand_to(num_patients = 2)
+patients$num_patients
+patients$tox_u
+patients$eff_u
+patients$get_tox_u(1)
+patients$get_tox_u(1)
+patients$get_tox_u(2)
+patients$get_tox_u(2)
+patients$get_patient_tox(i = 1, prob_tox = 0.4)
+patients$get_patient_tox(i = 1, prob_tox = 0.5)
+patients$get_patient_tox(i = 2, prob_tox = 0.3)
+patients$get_patient_tox(i = 2, prob_tox = 0.4)
+patients$get_tox_u(i = 3)
+patients$get_patient_tox(i = 3, prob_tox = 0.01)
+patients$get_patient_tox(i = 3, prob_tox = 0.05)
+patients$get_patient_tox(i = 1:3, prob_tox = 0.1)
+patients$get_patient_tox(i = 3:5, prob_tox = 0.1)
+
 # Simulation ----
 
 # Sc 1
@@ -640,7 +724,7 @@ sims
 
 get_three_plus_three(num_doses = 5) %>%
   simulate_trials(num_sims = 50, true_prob_tox = true_prob_tox,
-           return_all_fits = TRUE) -> sims
+                  return_all_fits = TRUE) -> sims
 
 # Use dfcrm
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
@@ -724,14 +808,14 @@ prob_recommend(sims)
 prob_administer(sims)
 trial_duration(sims)
 summary(trial_duration(sims))
-tibble::as_tibble(sims) %>% print(n = 30)
+dplyr::as_tibble(sims) %>% print(n = 30)
 
 library(ggplot2)
-tibble::as_tibble(sims) %>%
+dplyr::as_tibble(sims) %>%
   ggplot(aes(x = dose, y = mean_prob_tox)) +
   geom_line(aes(group = .iteration))
 
-tibble::as_tibble(sims) %>%
+dplyr::as_tibble(sims) %>%
   ggplot(aes(x = dose, y = mean_prob_tox)) +
   geom_line(aes(group = .iteration)) +
   facet_wrap(~ .iteration)
@@ -766,14 +850,16 @@ prob_recommend(threeps)
 prob_recommend(crm_sims)
 prob_recommend(boin_sims)
 
-dplyr::bind_rows(
+library(dplyr)
+bind_rows(
   tibble(Method = '3+3', Dose = 0:5, ProbSelect = prob_recommend(threeps)),
   tibble(Method = 'CRM', Dose = 0:5, ProbSelect = prob_recommend(crm_sims)),
   tibble(Method = 'BOIN', Dose = 0:5, ProbSelect = prob_recommend(boin_sims))
 ) %>% ggplot(aes(x = Dose, y = ProbSelect, col = Method)) +
   geom_point() + geom_line() +
   labs(title = 'Model-based vs rule-based dose-finding',
-    subtitle = 'Model-based methods allocate more patients close to target dose.')
+       subtitle = paste0('Model-based methods allocate more patients close to ',
+                         'target dose.'))
 
 # ThreePlusThree in bcrm
 bcrm_3p3 <- bcrm::threep3(
@@ -808,7 +894,7 @@ bcrm_3p3
 ? prob_tox_quantile
 ? prob_tox_exceeds
 
-# selector_factorys
+# selector_factories
 ? get_dfcrm
 ? get_boin
 ? get_tpi
@@ -820,4 +906,3 @@ bcrm_3p3
 ? stop_when_too_toxic
 ? demand_n_at_dose
 ? follow_path
-

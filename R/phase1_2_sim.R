@@ -6,10 +6,11 @@ phase1_2_sim <- function(
   selector_factory,
   true_prob_tox,
   true_prob_eff,
+  patient_sample = PatientSample$new(),
   sample_patient_arrivals = function(df) cohorts_of_n(n=3, mean_time_delta=1),
   previous_outcomes = '',
   next_dose = NULL,
-  i_like_big_trials = FALSE, # Safety net if stop_trial_func is mis-specified...
+  i_like_big_trials = FALSE, # Safety mechanism to avoid infinite trials
   return_all_fits = FALSE
 ) {
   if(is.character(previous_outcomes)) {
@@ -30,8 +31,9 @@ phase1_2_sim <- function(
     time <- rep(0, length(dose))
   }
 
-  i <- 1 # loop counter
-  max_i <- 30
+  i <- 1 # dose-decision counter
+  max_i <- 30 # Maximum number of dose decisions to make; ignored if
+              # i_like_big_trials = TRUE.
   time_now <- 0
   fit <- selector_factory %>% fit(base_df)
   if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
@@ -52,8 +54,17 @@ phase1_2_sim <- function(
     arrival_time_deltas <- cumsum(new_pts$time_delta)
     n_new_pts <- nrow(new_pts)
     new_dose <- rep(next_dose, n_new_pts)
-    new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
-    new_eff <- rbinom(n = n_new_pts, size = 1, prob = true_prob_eff[next_dose])
+    new_pt_indices <- nrow(current_data) + seq(1, n_new_pts)
+    # new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
+    new_tox <- patient_sample$get_patient_tox(
+      i = new_pt_indices,
+      prob_tox = true_prob_tox[next_dose]
+    )
+    # new_eff <- rbinom(n = n_new_pts, size = 1, prob = true_prob_eff[next_dose])
+    new_eff <- patient_sample$get_patient_eff(
+      i = new_pt_indices,
+      prob_tox = true_prob_eff[next_dose]
+    )
     new_cohort <- rep(next_cohort, n_new_pts)
 
     dose <- c(dose, new_dose)

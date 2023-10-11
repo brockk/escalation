@@ -331,10 +331,17 @@ prob_tox_samples.trialr_nbg_selector <- function(x, tall = FALSE,...) {
 
 #' @export
 #' @importFrom magrittr %>%
-#' @importFrom dplyr mutate select everything
+#' @importFrom dplyr mutate select everything all_of
 summary.trialr_nbg_selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- RealDose <- NULL
   summary.selector(object) %>%
     mutate(RealDose = c(NA, object$real_doses)) %>%
-    select(Dose, N, Tox, EmpiricToxRate, RealDose, everything())
+    select(
+      all_of(Dose),
+      all_of(N),
+      all_of(Tox),
+      all_of(EmpiricToxRate),
+      all_of(RealDose),
+      everything()
+    )
 }

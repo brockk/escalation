@@ -183,6 +183,11 @@ num_tox.selector <- function(x, ...) {
 }
 
 #' @export
+num_eff.selector <- function(x, ...) {
+  sum(eff(x))
+}
+
+#' @export
 #' @importFrom tibble tibble
 model_frame.selector <- function(x, ...) {
 

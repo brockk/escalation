@@ -7,6 +7,16 @@ tox_target.derived_dose_selector <- function(x, ...) {
 }
 
 #' @export
+tox_limit.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% tox_limit(...))
+}
+
+#' @export
+eff_limit.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% eff_limit(...))
+}
+
+#' @export
 num_patients.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% num_patients(...))
 }
@@ -27,6 +37,11 @@ tox.derived_dose_selector <- function(x, ...) {
 }
 
 #' @export
+eff.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% eff(...))
+}
+
+#' @export
 num_doses.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% num_doses(...))
 }
@@ -44,6 +59,12 @@ continue.derived_dose_selector <- function(x, ...) {
 #' @export
 n_at_dose.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% n_at_dose(...))
+}
+
+#' @export
+#' @importFrom tibble tibble
+model_frame.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% model_frame(...))
 }
 
 #' @export

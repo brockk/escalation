@@ -1,5 +1,6 @@
 
 library(escalation)
+library(testthat)
 
 # Table 2
 tpi_fitter <- get_tpi(num_doses = 8, target = 0.25, k1 = 1, k2 = 1.5,
@@ -19,10 +20,27 @@ sc6 <- c(0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75)
 set.seed(123)
 sims1 <- tpi_fitter %>%
   simulate_trials(num_sims = 1000, true_prob_tox = sc1, next_dose = 1)
-prob_recommend(sims1)
-colMeans(n_at_dose(sims1))
-mean(num_tox(sims1) / num_patients(sims1))
-mean(num_patients(sims1))
+expect_equal(
+  unname(prob_recommend(sims1)),
+  c(0, 0.13, 0.79, 0.08, 0, 0, 0, 0, 0),
+  tolerance = 0.1
+)
+expect_equal(
+  unname(colMeans(n_at_dose(sims1))),
+  c(7.7, 16.1, 5.8, 0.5, 0, 0, 0, 0),
+  tolerance = 0.2
+)
+expect_equal(
+  mean(num_tox(sims1) / num_patients(sims1)),
+  0.25,
+  tolerance = 0.1
+)
+expect_equal(
+  mean(num_patients(sims1)),
+  30,
+  tolerance = 0.1
+)
+
 
 
 # Scenario 2 ----

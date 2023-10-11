@@ -252,7 +252,8 @@ prob_administer.simulations <- function(x, method = 0, ...) {
 trial_duration.simulations <- function(x, method = 0, ...) {
   x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
-    map_chr('time') %>%
+    # map_chr('time') %>%
+    map_chr(~ as.character(.x$time)) %>%
     as.numeric()
 }
 

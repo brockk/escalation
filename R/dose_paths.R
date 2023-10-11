@@ -59,6 +59,7 @@ as_tibble.dose_paths <- function(x, ...) {
     .parent = map_dbl(x, '.parent'),
     .depth = map_dbl(x, '.depth'),
     outcomes = map_chr(x, 'outcomes'),
+    # outcomes = map_chr(~ as.character(.x$outcomes)),
     next_dose = map_dbl(x, 'next_dose'),
     fit = map(x, 'fit'),
     parent_fit = map(x, 'parent_fit'),

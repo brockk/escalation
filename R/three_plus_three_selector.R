@@ -191,9 +191,13 @@ prob_tox_samples.three_plus_three_selector <- function(
 
 #' @export
 #' @importFrom magrittr %>%
-#' @importFrom dplyr select
+#' @importFrom dplyr select all_of
 summary.three_plus_three_selector <- function(object, ...) {
   MeanProbTox <- MedianProbTox <- NULL
-  summary.selector(object) %>% select(-MeanProbTox, -MedianProbTox)
+  summary.selector(object) %>%
+    select(
+      -all_of(MeanProbTox),
+      -all_of(MedianProbTox)
+    )
 }
 

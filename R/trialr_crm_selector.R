@@ -345,10 +345,17 @@ prob_tox_samples.trialr_crm_selector <- function(x, tall = FALSE,...) {
 
 #' @export
 #' @importFrom magrittr %>%
-#' @importFrom dplyr mutate select everything
+#' @importFrom dplyr mutate select everything all_of
 summary.trialr_crm_selector <- function(object, ...) {
   Dose <- N <- Tox <- EmpiricToxRate <- Skeleton <- NULL
   summary.selector(object) %>%
     mutate(Skeleton = c(NA, object$skeleton)) %>%
-    select(Dose, N, Tox, EmpiricToxRate, Skeleton, everything())
+    select(
+      all_of(Dose),
+      all_of(N),
+      all_of(Tox),
+      all_of(EmpiricToxRate),
+      all_of(Skeleton),
+      everything()
+    )
 }
