@@ -34,7 +34,8 @@
 #' outcomes <- '1NNN 2NTN 2NNN 3NTT'
 #' model %>% fit(outcomes) %>% recommended_dose()
 #'
-#' # However, we can use this method to select dose at every dose decision:
+#' # However, since behaviour is modular in this package, we can use this method
+#' # to select dose at every dose decision:
 #' model2 <- get_boin(num_doses = 5, target = target) %>%
 #'   select_boin_mtd(when = 'always')
 #' model2 %>% fit('1NNT') %>% recommended_dose()
@@ -102,7 +103,9 @@ boin_mtd_dose_selector <- function(parent_selector,
     boin_fit = boin_fit
   )
 
-  class(l) = c('boin_mtd_dose_selector', 'derived_dose_selector', 'selector')
+  class(l) = c('boin_mtd_dose_selector',
+               'derived_dose_selector',
+               'selector')
   l
 }
 
