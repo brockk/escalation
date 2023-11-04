@@ -14,7 +14,7 @@ phase1_2_sim <- function(
   return_all_fits = FALSE
 ) {
   if(is.character(previous_outcomes)) {
-    base_df <- parse_phase1_outcomes(previous_outcomes, as_list = FALSE)
+    base_df <- parse_phase1_2_outcomes(previous_outcomes, as_list = FALSE)
   } else if(is.data.frame(previous_outcomes)) {
     base_df <- spruce_outcomes_df(previous_outcomes)
   } else{
@@ -63,7 +63,7 @@ phase1_2_sim <- function(
     # new_eff <- rbinom(n = n_new_pts, size = 1, prob = true_prob_eff[next_dose])
     new_eff <- patient_sample$get_patient_eff(
       i = new_pt_indices,
-      prob_tox = true_prob_eff[next_dose]
+      prob_eff = true_prob_eff[next_dose]
     )
     new_cohort <- rep(next_cohort, n_new_pts)
 
@@ -72,9 +72,21 @@ phase1_2_sim <- function(
     eff <- c(eff, new_eff)
     cohort <- c(cohort, new_cohort)
     time <- c(time, time_now + arrival_time_deltas)
+
+    z <- c(
+      length(cohort),
+      length(dose),
+      length(tox),
+      length(eff),
+      length(time)
+    )
+    if(min(z) != max(z)) {
+      stop("Weird")
+    }
+
     new_data = data.frame(
       cohort = cohort,
-      patient = 1:length(dose),
+      patient = seq_along(dose),
       dose = dose,
       tox = tox,
       eff = eff,
