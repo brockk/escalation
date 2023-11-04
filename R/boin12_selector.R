@@ -133,7 +133,14 @@ boin12_selector <- function(
   )
   recommended_dose <- x$next_dose
   admissible <- x$admissible
-  continue <- TRUE
+  utility <- x$utility
+  if(recommended_dose <= 0) {
+    recommended_dose <- NA
+    continue <- FALSE
+  } else {
+    continue <- TRUE
+  }
+
   l <- list(
     outcomes = outcomes,
     num_doses = as.integer(num_doses),
@@ -142,6 +149,7 @@ boin12_selector <- function(
     recommended_dose = recommended_dose,
     admissible = admissible,
     continue = continue,
+    utility = utility,
     phi_t = phi_t,
     phi_e = phi_e,
     prior_alpha = prior_alpha,
@@ -346,4 +354,9 @@ prob_tox_samples.boin12_selector <- function(x, tall = FALSE, ...) {
 #' @export
 prob_eff_samples.boin12_selector <- function(x, tall = FALSE, ...) {
   stop('boin12_selector does not support sampling.')
+}
+
+#' @export
+utility.boin12_selector <- function(x, ...) {
+  return(x$utility)
 }

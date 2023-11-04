@@ -297,6 +297,66 @@ summary.selector <- function(object, ...) {
   # tb
 }
 
+#' @export
+eff.selector <- function(x, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_patients(x))))
+}
+
+#' @export
+eff_at_dose.selector <- function(x, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
+#' @export
+empiric_eff_rate.selector <- function(x, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
+#' @export
+mean_prob_eff.selector <- function(x, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
+#' @export
+median_prob_eff.selector <- function(x, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
+#' @export
+prob_eff_exceeds.selector <- function(x, threshold, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
+#' @export
+prob_eff_quantile.selector <- function(x, p, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
+#' @export
+prob_tox_samples.selector <- function(x, ...) {
+  # By default:
+  return(data.frame())
+}
+
+#' @export
+prob_eff_samples.selector <- function(x, ...) {
+  # By default:
+  return(data.frame())
+}
+
+#' @export
+utility.selector <- function(x, ...) {
+  # By default:
+  return(as.numeric(rep(NA, num_doses(x))))
+}
+
 #' @importFrom stringr str_to_title
 #' @importFrom tibble tibble
 #' @export

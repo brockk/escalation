@@ -110,6 +110,7 @@ boin12_next_dose <- function(
     next_dose <- start
     admissible <- rep(FALSE, ndoses)
     admissible[start] <- TRUE
+    utility <- rep(NA, ndoses)
 
     # Let "stopping for n" and "stopping for n at dose" be handled elsewhere
   # }
@@ -130,6 +131,13 @@ boin12_next_dose <- function(
     # Admissible doses (for d-1, d and d+1)
     admissible <- boin12_admissible(data, currentdose, ndoses, phi_t, phi_e, c_t, c_e)
 
+    utility <- boin12_pbenchmark(
+      seq_len(ndoses),
+      data=data,
+      u1=u1, u2=u2, u3=u3, u4=u4, u_b=u_b,
+      alpha=alpha, beta=beta
+    )
+
     # Decision rule of BOIN12 (based on Table 2 in paper PLUS dose exploration rule described in Supp Material top of p8)
     # First look at dose exploration rule
     if(n > 8 & p_t < lambda_d & currentdose!=ndoses & sum(data$Dose==currentdose+1)==0){ # escalate
@@ -149,8 +157,10 @@ boin12_next_dose <- function(
         next_dose <- c(currentdose-1, currentdose)[RDSmax.ind]
       } else {
         # else choose the one that is admissible, or none (0) if neither is
+        # next_dose <- ifelse(currentdose-1 %in% admissible, currentdose-1,
+        #                     ifelse(currentdose %in% admissible, currentdose, 0))
         next_dose <- ifelse(currentdose-1 %in% admissible, currentdose-1,
-                            ifelse(currentdose %in% admissible, currentdose, 0))
+                            ifelse(currentdose %in% admissible, currentdose, 1))
       }
     } else if(length(admissible)==0) {
       # if none admissible
@@ -225,5 +235,10 @@ boin12_next_dose <- function(
   }
 
   # return(next_dose)
-  return(list(next_dose = next_dose, admissible = admissible))
+
+  return(list(
+    next_dose = next_dose,
+    admissible = admissible,
+    utility = utility
+  ))
 }

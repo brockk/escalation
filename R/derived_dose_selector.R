@@ -151,3 +151,23 @@ prob_tox_samples.derived_dose_selector <- function(x, tall = FALSE, ...) {
 prob_eff_samples.derived_dose_selector <- function(x, tall = FALSE, ...) {
   return(prob_eff_samples(x$parent, tall = tall, ...))
 }
+
+#' @export
+utility.derived_dose_selector <- function(x, ...) {
+  return(utility(x$parent, ...))
+}
+
+
+#' @export
+summary.derived_dose_selector <- function(object, ...) {
+  summary(object$parent, ...)
+}
+
+#' @export
+print.derived_dose_selector <- function(x, ...) {
+  print(x$parent, ...)
+}
+#' @export
+as_tibble.derived_dose_selector <- function(x, ...) {
+  as_tibble(x$parent, ...)
+}

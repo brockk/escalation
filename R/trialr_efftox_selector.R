@@ -430,3 +430,9 @@ prob_eff_samples.trialr_efftox_selector <- function(x, tall = FALSE,...) {
     return(df)
   }
 }
+
+#' @export
+utility.trialr_efftox_selector <- function(x, ...) {
+  return(x$trialr_fit$utility)
+}
+
