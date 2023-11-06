@@ -129,7 +129,8 @@ recommended_dose.boin12_obd_dose_selector <- function(x, ...) {
     given <- n_at_dose(x) > 0
     etr_pava <- pava(etr[given])
     # Identify MTD
-    mtd_u <- abs(etr_pava - x$tox_limit)
+    # mtd_u <- abs(etr_pava - x$tox_limit)
+    mtd_u <- abs(etr_pava - tox_limit(x))
     mtd_tox <- min(mtd_u)
     mtd_loc <- tail(mtd_u[mtd_u == mtd_tox], 1)
     mtd <- as.integer(names(mtd_loc))

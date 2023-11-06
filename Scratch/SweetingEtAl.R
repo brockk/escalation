@@ -198,7 +198,7 @@ designs <- list(
 #'                   return_all_fits = TRUE)
 #' # Verify that there are now many analyses per trial with:
 #' sapply(sims$fits, length)
-simulate_trials_new <- function(
+simulate_compare <- function(
     designs,
     num_sims,
     true_prob_tox,
@@ -374,13 +374,13 @@ convergence_plot <- function(x) {
 
 # Run sims ----
 set.seed(2023)
-dependent <- simulate_trials_new(designs,
-                                 num_sims = num_sims,
-                                 true_prob_tox)
-dependent <- simulate_trials_new(designs,
-                                 num_sims = num_sims,
-                                 true_prob_tox,
-                                 true_prob_eff)
+# dependent <- simulate_compare(designs,
+#                               num_sims = num_sims,
+#                               true_prob_tox)
+dependent <- simulate_compare(designs,
+                              num_sims = num_sims,
+                              true_prob_tox,
+                              true_prob_eff)
 ls(dependent)
 class(dependent)
 # dependent[["BOIN12 v1"]]

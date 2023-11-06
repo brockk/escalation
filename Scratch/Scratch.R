@@ -524,6 +524,33 @@ x <- model %>% fit('1NNN 2NNB 3NNE 4BBE')
 x
 show_interface(x)
 
+boin12obd <- function(x) {
+  # Start with empiric tox rate
+  etr <- empiric_tox_rate(x)
+  names(etr) <- dose_indices(x)
+  # Apply isotonic regression to just the given doses
+  given <- n_at_dose(x) > 0
+  etr_pava <- pava(etr[given])
+  # Identify MTD
+  # mtd_u <- abs(etr_pava - x$tox_limit)
+  mtd_u <- abs(etr_pava - tox_limit(x))
+  mtd_tox <- min(mtd_u)
+  mtd_loc <- tail(mtd_u[mtd_u == mtd_tox], 1)
+  mtd <- as.integer(names(mtd_loc))
+  # Select maximal utility dose at or below MTD
+  di <- dose_indices(x)
+  obd <- which.max(utility(x)[di[di <= mtd]])
+  obd
+}
+x <- get_boin12(num_doses = 5, phi_t = 0.35, phi_e = 0.25,
+           u2 = 40, u3 = 60) %>%
+  fit('1NNN 2NEN 3BEB 5EBE')
+x
+utility(x)
+boin12obd(x)
+
+
+
 # # Selector interface
 # class(x)
 # num_patients(x)
