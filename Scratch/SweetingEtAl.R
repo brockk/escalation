@@ -8,7 +8,7 @@ library(tidyr)
 library(forcats)
 
 # num_sims <- 10^4
-num_sims <- 10^2
+num_sims <- 10^3
 num_doses <- 5
 
 # OBD-seeking
@@ -418,126 +418,50 @@ sum(recommended_dose(dependent[[1]]) != recommended_dose(dependent[[2]]),
 sum(recommended_dose(independent[[1]]) != recommended_dose(independent[[2]]),
     na.rm = TRUE)
 
-# # cum_sum_df_dep <- stack_sims_vert(dependent_obd, target_dose = 2)
-# cum_sum_df_dep <- stack_sims_vert(dependent)
-# cum_sum_df_dep %>%
-#   ggplot(aes(x = n, y = .rate, col = design)) +
-#   geom_line() +
-#   ylim(0, 1) +
-#   facet_wrap(~ dose, ncol = 2) +
-#   labs(title = "Convergence of simulation",
-#        subtitle = "Shared patients",
-#        x = "Iterate", y = "Prob(CorrectSelection)") +
-#   theme(legend.position = "bottom") -> p1; p1
-# # cum_sum_df_indep <- stack_sims_vert(independent_obd, target_dose = 2)
-# cum_sum_df_indep <- stack_sims_vert(independent)
-# cum_sum_df_indep %>%
-#   ggplot(aes(x = n, y = .rate, col = design)) +
-#   geom_line() +
-#   ylim(0, 1) +
-#   facet_wrap(~ dose, ncol = 2) +
-#   labs(title = "Convergence of simulation",
-#        subtitle = "Independent patients",
-#        x = "Iterate", y = "Prob(CorrectSelection)") +
-#   theme(legend.position = "bottom") -> p2; p2
-#
-# # Convergence of PCS
-# bind_rows(
-#   cum_sum_df_dep %>%
-#     mutate(series = paste0(design, " (Set 1 simulations)")),
-#   cum_sum_df_indep %>%
-#     filter(design == "BOIN12 variant 2") %>%
-#     mutate(series = paste0(design, " (Set 2 simulations)")),
-# ) %>%
-#   mutate(series = fct_inorder(series)) %>%
-#   ggplot(aes(x = n, y = .rate, col = series)) +
-#   geom_line() +
-#   # coord_cartesian(ylim = c(0.25, 0.4)) +
-#   facet_wrap(~ dose) +
-#   theme(legend.position = "bottom")
-#
-# cum_sum_df_dep %>% count(dose, design)
-# cum_sum_df_dep %>% head(10)
-# test_df1 <- cum_sum_df_dep %>%
-#   filter(dose == 2 & design == "BOIN12 v1")
-# test_df2 <- cum_sum_df_dep %>%
-#   filter(dose == 2 & design == "BOIN12 v2")
-#
-# # # Version 1
-# # test_df1 %>%
-# #   inner_join(test_df2, by = c("dose", "n")) %>%
-# #   select(X = hit.x, Y = hit.y) %>%
-# #   summarise(
-# #     psi1 = mean(X),
-# #     psi2 = mean(Y),
-# #     v_psi1 = var(X) / length(X),
-# #     v_psi2 = var(Y) / length(Y),
-# #     cov_psi12 = cov(X, Y) / length(X),
-# #   ) %>%
-# #   mutate(
-# #     delta = psi1 - psi2,
-# #     v_delta = v_psi1 + v_psi2 - 2 * cov_psi12,
-# #     se_delta = sqrt(v_delta),
-# #     delta_l = delta - 1.96 * se_delta,
-# #     delta_u = delta + 1.96 * se_delta,
-# #   )
-#
-# # # Version 2
-# # test_df1 %>%
-# #   mutate(
-# #     X = cumsum(hit),
-# #     X2 = cumsum(hit^2),
-# #     Var = (X2 / n - (X / n)^2) / n
-# #   ) %>%
-# #   select(-dose, -design, -.l, -.u) %>%
-# #   tail(8)
-# # test_df2 %>%
-# #   mutate(
-# #     X = cumsum(hit),
-# #     X2 = cumsum(hit^2),
-# #     Var = (X2 / n - (X / n)^2) / n
-# #   ) %>%
-# #   select(-dose, -design, -.l, -.u) %>%
-# #   tail(8)
-#
-# # Version 3
-# contrasts_df <-
-#   test_df1 %>% select(dose, n, design, hit) %>%
-#   inner_join(test_df2 %>% select(dose, n, design, hit),
-#              by = c("dose", "n")) %>%
-#   mutate(
-#     X = cumsum(hit.x),
-#     X2 = cumsum(hit.x^2),
-#     Y = cumsum(hit.y),
-#     Y2 = cumsum(hit.y^2),
-#     XY = cumsum(hit.x * hit.y),
-#     psi1 = X / n,
-#     psi2 = Y / n,
-#     v_psi1 = (X2 / n - (X / n)^2) / n,
-#     v_psi2 = (Y2 / n - (Y / n)^2) / n,
-#     cov_psi12 = (XY / n - (X / n) * (Y / n)) / n,
-#     delta = psi1 - psi2,
-#     v_delta = v_psi1 + v_psi2 - 2 * cov_psi12,
-#     se_delta = sqrt(v_delta),
-#     delta_l = delta - 1.96 * se_delta,
-#     delta_u = delta + 1.96 * se_delta,
-#   )
-# contrasts_df
-# contrasts_df %>%
-#   filter(n %% 10 == 0) %>%
-#   # select(-hit.x, -hit.y, -X, -X2, -Y, -Y2, -XY) %>%
-#   ggplot(aes(x = n, y = delta)) +
-#   geom_point(size = 0.4) +
-#   geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
-#   geom_hline(yintercept = 0, linetype = "dashed", col = "red") +
-#   facet_grid(~ dose, labeller = labeller(.cols = label_both))
+cum_sum_df_dep <- stack_sims_vert(dependent)
+cum_sum_df_dep %>%
+  ggplot(aes(x = n, y = .rate, col = design)) +
+  geom_line() +
+  ylim(0, 1) +
+  facet_wrap(~ dose, ncol = 5) +
+  labs(title = "Convergence of simulation",
+       subtitle = "Shared patients",
+       x = "Iterate", y = "Prob(Selection)") +
+  theme(legend.position = "bottom") -> p1; p1
+cum_sum_df_indep <- stack_sims_vert(independent)
+cum_sum_df_indep %>%
+  ggplot(aes(x = n, y = .rate, col = design)) +
+  geom_line() +
+  ylim(0, 1) +
+  facet_wrap(~ dose, ncol = 5) +
+  labs(title = "Convergence of simulation",
+       subtitle = "Independent patients",
+       x = "Iterate", y = "Prob(Selection)") +
+  theme(legend.position = "bottom") -> p2; p2
 
+# Convergence of PCS
+bind_rows(
+  cum_sum_df_dep %>%
+    mutate(series = paste0(design, " (Set 1 simulations)")),
+  cum_sum_df_indep %>%
+    filter(design == "BOIN12 v2") %>%
+    mutate(series = paste0(design, " (Set 2 simulations)")),
+) %>%
+  mutate(series = fct_inorder(series)) %>%
+  ggplot(aes(x = n, y = .rate, col = series)) +
+  geom_line() +
+  # coord_cartesian(ylim = c(0.25, 0.4)) +
+  facet_wrap(~ dose, ncol = 5) +
+  theme(legend.position = "bottom")
+# c.f. Figure 2 in manuscript
+
+# Contrast methods
 contrasts_df2 <- bind_rows(
   compare_sims(dependent) %>% mutate(sims = "paired"),
   compare_sims(independent) %>% mutate(sims = "independent")
 )
 contrasts_df2 %>%
-  filter(v_psi1 < 0 | v_psi2 < 0) # TODO
+  filter(v_psi1 < 0 | v_psi2 < 0) # Problems? TODO
   # filter(se_delta %>% is.na) %>%
   # head(3) %>% t
 # contrasts_df2 %>%
@@ -555,8 +479,7 @@ contrasts_df2 %>%
 #   facet_grid(~ dose, labeller = labeller(.cols = label_both))
 
 contrasts_df2 %>%
-  filter(n %% 10 == 0) %>%
-  # select(-hit.x, -hit.y, -X, -X2, -Y, -Y2, -XY) %>%
+  filter(n %% 50 == 0) %>%
   ggplot(aes(x = n, y = delta)) +
   geom_point(size = 0.4) +
   geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
@@ -566,6 +489,7 @@ contrasts_df2 %>%
                .rows = label_both,
                .cols = label_both)
   )
+# c.f. Figure 3 in manuscript
 
 contrasts_df2 %>%
   count(sims, dose, design.x, design.y)
@@ -784,3 +708,79 @@ contrasts_df2 %>%
 #   "WT1" = wt1,
 #   "WT2" = wt2
 # )
+
+# cum_sum_df_dep %>% count(dose, design)
+# cum_sum_df_dep %>% head(10)
+# test_df1 <- cum_sum_df_dep %>%
+#   filter(dose == 2 & design == "BOIN12 v1")
+# test_df2 <- cum_sum_df_dep %>%
+#   filter(dose == 2 & design == "BOIN12 v2")
+#
+# # # Version 1
+# # test_df1 %>%
+# #   inner_join(test_df2, by = c("dose", "n")) %>%
+# #   select(X = hit.x, Y = hit.y) %>%
+# #   summarise(
+# #     psi1 = mean(X),
+# #     psi2 = mean(Y),
+# #     v_psi1 = var(X) / length(X),
+# #     v_psi2 = var(Y) / length(Y),
+# #     cov_psi12 = cov(X, Y) / length(X),
+# #   ) %>%
+# #   mutate(
+# #     delta = psi1 - psi2,
+# #     v_delta = v_psi1 + v_psi2 - 2 * cov_psi12,
+# #     se_delta = sqrt(v_delta),
+# #     delta_l = delta - 1.96 * se_delta,
+# #     delta_u = delta + 1.96 * se_delta,
+# #   )
+#
+# # # Version 2
+# # test_df1 %>%
+# #   mutate(
+# #     X = cumsum(hit),
+# #     X2 = cumsum(hit^2),
+# #     Var = (X2 / n - (X / n)^2) / n
+# #   ) %>%
+# #   select(-dose, -design, -.l, -.u) %>%
+# #   tail(8)
+# # test_df2 %>%
+# #   mutate(
+# #     X = cumsum(hit),
+# #     X2 = cumsum(hit^2),
+# #     Var = (X2 / n - (X / n)^2) / n
+# #   ) %>%
+# #   select(-dose, -design, -.l, -.u) %>%
+# #   tail(8)
+#
+# # Version 3
+# contrasts_df <-
+#   test_df1 %>% select(dose, n, design, hit) %>%
+#   inner_join(test_df2 %>% select(dose, n, design, hit),
+#              by = c("dose", "n")) %>%
+#   mutate(
+#     X = cumsum(hit.x),
+#     X2 = cumsum(hit.x^2),
+#     Y = cumsum(hit.y),
+#     Y2 = cumsum(hit.y^2),
+#     XY = cumsum(hit.x * hit.y),
+#     psi1 = X / n,
+#     psi2 = Y / n,
+#     v_psi1 = (X2 / n - (X / n)^2) / n,
+#     v_psi2 = (Y2 / n - (Y / n)^2) / n,
+#     cov_psi12 = (XY / n - (X / n) * (Y / n)) / n,
+#     delta = psi1 - psi2,
+#     v_delta = v_psi1 + v_psi2 - 2 * cov_psi12,
+#     se_delta = sqrt(v_delta),
+#     delta_l = delta - 1.96 * se_delta,
+#     delta_u = delta + 1.96 * se_delta,
+#   )
+# contrasts_df
+# contrasts_df %>%
+#   filter(n %% 10 == 0) %>%
+#   # select(-hit.x, -hit.y, -X, -X2, -Y, -Y2, -XY) %>%
+#   ggplot(aes(x = n, y = delta)) +
+#   geom_point(size = 0.4) +
+#   geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
+#   geom_hline(yintercept = 0, linetype = "dashed", col = "red") +
+#   facet_grid(~ dose, labeller = labeller(.cols = label_both))
