@@ -182,24 +182,46 @@ dose_admissible.mtpi2_mtd_dose_selector <- function(x, ...) {
 #' @importFrom stats pbeta
 recommended_dose.mtpi2_mtd_dose_selector <- function(x, ...) {
 
-  prob_tox <- mean_prob_tox(x)
-  target <- tox_target(x)
-  admissible <- dose_admissible(x)
-  abs_delta <- abs(prob_tox - target)
-  abs_delta[!admissible] <- NA
+  mtpi2_mtd <- function(x) {
+    prob_tox <- mean_prob_tox(x)
+    target <- tox_target(x)
+    admissible <- dose_admissible(x)
+    abs_delta <- abs(prob_tox - target)
+    abs_delta[!admissible] <- NA
 
-  if(sum(abs_delta == min(abs_delta, na.rm = TRUE), na.rm = TRUE) == 1) {
-    # There is a single dose closest to target. Select that dose:
-    return(which.min(abs_delta))
-  } else {
-    # We have several doses tied on distance from tox target.
-    candidate <- abs_delta == min(abs_delta, na.rm = TRUE)
-    # Calculate their mean tox
-    pstar <- mean(prob_tox[candidate], na.rm = TRUE)
-    if(pstar < target) {
-      return(max(which(candidate)))
+    if(sum(abs_delta == min(abs_delta, na.rm = TRUE), na.rm = TRUE) == 1) {
+      # There is a single dose closest to target. Select that dose:
+      return(which.min(abs_delta))
     } else {
-      return(min(which(candidate)))
+      # We have several doses tied on distance from tox target.
+      candidate <- abs_delta == min(abs_delta, na.rm = TRUE)
+      # Calculate their mean tox
+      pstar <- mean(prob_tox[candidate], na.rm = TRUE)
+      if(pstar < target) {
+        return(max(which(candidate)))
+      } else {
+        return(min(which(candidate)))
+      }
+    }
+  }
+
+  if(x$when == 'always') {
+    if(num_patients(x) > 0)
+      return(mtpi2_mtd(x))
+    else
+      return(recommended_dose(x$parent, ...))
+  } else if(x$when == 'finally') {
+    parent_d <- recommended_dose(x$parent, ...)
+    parent_cont <- continue(x$parent)
+    if(parent_cont) {
+      # The parent is still going. Do not get in the way:
+      return(parent_d)
+    } else if(is.na(parent_d)){
+      # Do not override an NA recommendation
+      return(NA)
+    } else {
+      # The parent has stopped and recommends a non-NA dose. Get involved:
+      return(mtpi2_mtd(x))
     }
   }
 }

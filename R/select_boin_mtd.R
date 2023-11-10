@@ -134,9 +134,9 @@ recommended_dose.boin_mtd_dose_selector <- function(x, ...) {
     if(num_patients(x) > 0)
       return(x$boin_fit$MTD)
     else
-      return(recommended_dose(x$parent))
+      return(recommended_dose(x$parent, ...))
   } else if(x$when == 'finally') {
-    parent_d <- recommended_dose(x$parent)
+    parent_d <- recommended_dose(x$parent, ...)
     parent_cont <- continue(x$parent)
     if(parent_cont) {
       # The parent is still going. Do not get in the way:

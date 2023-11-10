@@ -152,22 +152,44 @@ mean_prob_tox.mtpi_mtd_dose_selector <- function(x, ...) {
 #' @export
 recommended_dose.mtpi_mtd_dose_selector <- function(x, ...) {
 
-  prob_tox <- mean_prob_tox(x)
-  target <- tox_target(x)
+  mtpi_mtd <- function(x) {
+    prob_tox <- mean_prob_tox(x)
+    target <- tox_target(x)
 
-  abs_delta <- abs(prob_tox - target)
-  if(sum(abs_delta == min(abs_delta)) == 1) {
-    # There is a single dose closest to target. Select that dose:
-    return(which.min(abs_delta))
-  } else {
-    # We have several doses tied on distance from tox target.
-    delta <- prob_tox - target
-    if(sum(delta == -min(abs_delta)) == 1) {
-      # There is a unique dose at (target - q). Select that dose:
-      return(min(which(delta == -min(abs_delta))))
+    abs_delta <- abs(prob_tox - target)
+    if(sum(abs_delta == min(abs_delta)) == 1) {
+      # There is a single dose closest to target. Select that dose:
+      return(which.min(abs_delta))
     } else {
-      # There are several doses at (prob_tox - tox_target). Select the highest:
-      return(max(which(delta == -min(abs_delta))))
+      # We have several doses tied on distance from tox target.
+      delta <- prob_tox - target
+      if(sum(delta == -min(abs_delta)) == 1) {
+        # There is a unique dose at (target - q). Select that dose:
+        return(min(which(delta == -min(abs_delta))))
+      } else {
+        # There are several doses at (prob_tox - tox_target). Select the highest:
+        return(max(which(delta == -min(abs_delta))))
+      }
+    }
+  }
+
+  if(x$when == 'always') {
+    if(num_patients(x) > 0)
+      return(mtpi_mtd(x))
+    else
+      return(recommended_dose(x$parent, ...))
+  } else if(x$when == 'finally') {
+    parent_d <- recommended_dose(x$parent, ...)
+    parent_cont <- continue(x$parent)
+    if(parent_cont) {
+      # The parent is still going. Do not get in the way:
+      return(parent_d)
+    } else if(is.na(parent_d)){
+      # Do not override an NA recommendation
+      return(NA)
+    } else {
+      # The parent has stopped and recommends a non-NA dose. Get involved:
+      return(mtpi_mtd(x))
     }
   }
 }

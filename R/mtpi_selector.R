@@ -114,7 +114,17 @@ mtpi_selector <- function(parent_selector = NULL,
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
 
   # Checks
+  # print("nrow(df)")
+  # print(nrow(df))
   if(nrow(df) > 0) {
+    # print("max(df$dose)")
+    # print(max(df$dose))
+    # if(is.na(max(df$dose))) {
+    #   print("df")
+    #   print(df)
+    # }
+    # print("num_doses")
+    # print(num_doses)
     if(max(df$dose) > num_doses) {
       stop('mtpi_selector - maximum dose given exceeds number of doses.')
     }
