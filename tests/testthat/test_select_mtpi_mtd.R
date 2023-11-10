@@ -1,52 +1,64 @@
 
-test_that('select_boin_mtd works like it should.', {
+test_that('select_mtpi_mtd works like it should.', {
 
-  # Example from p.15 of Yan et al. (2019):
-  n <- c(3, 3, 15, 9, 0)
-  y <- c(0, 0, 4, 4, 0)
-  x <- BOIN::select.mtd(target = 0.3, ntox = y, npts = n)
+  # Contrive situations
+  # Throughout we assume a five-dose scenario that targets 0.25 DLT rate
+  num_doses <- 5
+  target <- 0.25
 
-  model1 <- get_boin(num_doses = 5, target = 0.3) %>%
-    stop_at_n(n = 30) %>%
-    select_boin_mtd()
-  outcomes <- '1NNN 2NNN 3NNN 3NNN 3NNN 3NNT 3TTT 4NNN 4NNT 4TTT'
-  expect_equal(model1 %>% fit(outcomes) %>% recommended_dose(), x$MTD)
-  # The trouble is, get_boin alone would also advocate the same dose:
-  model2 <- get_boin(num_doses = 5, target = 0.3) %>%
-    stop_at_n(n = 30)
-  expect_equal(model2 %>% fit(outcomes) %>% recommended_dose(), x$MTD)
+  model_fitter <- get_mtpi(num_doses = num_doses, target = target,
+                           epsilon1 = 0.05, epsilon2 = 0.05,
+                           exclusion_certainty = 0.95) %>%
+    stop_at_n(n = 50) %>%
+    select_mtpi_mtd(when = 'finally')
 
+  # According to the Ji et al (2010), with observed mean prob-tox:
+  # c(0.1, 0.2, 0.4, 0.5, 0.7), we should choose dose 2
+  outcomes <- "1NNNNNNNNNT 2NNNNNNNNTT 3NNNNNNTTTT 4NNNNNTTTTT 5NNNTTTTTTT"
+  x <- model_fitter %>% fit(outcomes)
+  expect_equal(
+    recommended_dose(x),
+    2
+  )
 
-  # So, to observe that select_boin_mtd is having the desired effect, contrive
-  # a scenario where we know it will diverge from ordinary BOIN, which will only
-  # recommend doses with a single dose of the current dose:
-  model3 <- get_boin(num_doses = 5, target = 0.3) %>%
-    stop_at_n(n = 30) %>%
-    select_boin_mtd(when = 'always')
-  outcomes <- '2NNT 5TTT'
-  expect_lt(model3 %>% fit(outcomes) %>% recommended_dose(),
-            model2 %>% fit(outcomes) %>% recommended_dose())
-  n <- c(0, 3, 0, 0, 3)
-  y <- c(0, 1, 0, 0, 3)
-  x <- BOIN::select.mtd(target = 0.3, ntox = y, npts = n)
-  expect_equal(model3 %>% fit(outcomes) %>% recommended_dose(), x$MTD)
+  # According to the Ji et al (2010), with observed mean prob-tox:
+  # c(0.1, 0.2, 0.3, 0.5, 0.7), we should choose dose 2
+  outcomes <- "1NNNNNNNNNT 2NNNNNNNNTT 3NNNNNNNTTT 4NNNNNTTTTT 5NNNTTTTTTT"
+  x <- model_fitter %>% fit(outcomes)
+  expect_equal(
+    recommended_dose(x),
+    2
+  )
 
-  # At this low sample size, model 2 is not different to a model where
-  # select_boin_mtd only intervenes finally:
-  model4 <- get_boin(num_doses = 5, target = 0.3) %>%
-    stop_at_n(n = 30) %>%
-    select_boin_mtd(when = 'finally')
-  expect_equal(model2 %>% fit(outcomes) %>% recommended_dose(),
-               model4 %>% fit(outcomes) %>% recommended_dose())
+  # According to the Ji et al (2010), with observed mean prob-tox:
+  # c(0.1, 0.2, 0.2, 0.5, 0.7), we should choose dose 3
+  outcomes <- "1NNNNNNNNNT 2NNNNNNNNTT 3NNNNNNNNTT 4NNNNNTTTTT 5NNNTTTTTTT"
+  x <- model_fitter %>% fit(outcomes)
+  expect_equal(
+    recommended_dose(x),
+    3
+  )
+
+  # According to the Ji et al (2010), with observed mean prob-tox:
+  # c(0.1, 0.2, 0.2, 0.3, 0.7), we should choose dose 3
+  outcomes <- "1NNNNNNNNNT 2NNNNNNNNTT 3NNNNNNNNTT 4NNNNNNNTTT 5NNNTTTTTTT"
+  x <- model_fitter %>% fit(outcomes)
+  expect_equal(
+    recommended_dose(x),
+    3
+  )
+
 })
 
-test_that('select_boin_mtd when=finally supports correct interface.', {
+test_that('select_mtpi_mtd when=finally supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_boin(num_doses = num_doses, target = target) %>%
-    select_boin_mtd(when = 'finally')
+  model_fitter <- get_mtpi(num_doses = num_doses, target = target,
+                           epsilon1 = 0.05, epsilon2 = 0.05,
+                           exclusion_certainty = 0.95) %>%
+    select_mtpi_mtd(when = 'finally')
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -363,14 +375,16 @@ test_that('select_boin_mtd when=finally supports correct interface.', {
 
 })
 
-test_that('select_boin_mtd when=finally with stopper supports correct interface.', {
+test_that('select_mtpi_mtd when=finally with stopper supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_boin(num_doses = num_doses, target = target) %>%
+  model_fitter <- get_mtpi(num_doses = num_doses, target = target,
+                           epsilon1 = 0.05, epsilon2 = 0.05,
+                           exclusion_certainty = 0.95) %>%
     stop_at_n(n = 6) %>%
-    select_boin_mtd(when = 'finally')
+    select_mtpi_mtd(when = 'finally')
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -687,13 +701,15 @@ test_that('select_boin_mtd when=finally with stopper supports correct interface.
 
 })
 
-test_that('select_boin_mtd when=always supports correct interface.', {
+test_that('select_mtpi_mtd when=always supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_boin(num_doses = num_doses, target = target) %>%
-    select_boin_mtd(when = 'always')
+  model_fitter <- get_mtpi(num_doses = num_doses, target = target,
+                           epsilon1 = 0.05, epsilon2 = 0.05,
+                           exclusion_certainty = 0.95) %>%
+    select_mtpi_mtd(when = 'always')
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
