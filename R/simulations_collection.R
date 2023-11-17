@@ -7,32 +7,25 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # TODO
+#' }
+#'
+#' @references
+#' Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
+#' Potential outcome simulation for efficient head-to-head comparison of
+#' adaptive dose-finding designs. Preprint.
 make_simulations_collection <- function(sim_map) {
   class(sim_map) <- c("simulations_collection", class(sim_map))
   return(sim_map)
 }
 
-#' Compare the probabilities of dose selection in several simulation sets.
-#'
-#' Normal approximation in derivation of confidence intervals of differences in
-#' probability of selection. Details are in Sweeting et al.
-#'
-#' @inheritParams stack_sims_vert
-#'
-#' @return \code{data.frame}
-#'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr as_tibble inner_join select mutate filter group_by ungroup
 #' @export
-#'
-#' @examples
-#' # TODO
-#'
-#' @references
-#' # TODO
-# compare_sims <- function(sim_map, target_dose = NULL, alpha = 0.05) {
-as_tibble.simulations_collection <- function(sim_map, target_dose = NULL, alpha = 0.05) {
+as_tibble.simulations_collection <- function(x, target_dose = NULL,
+                                             alpha = 0.05) {
+  sim_map <- x
   q <- qnorm(p = alpha / 2, lower.tail = FALSE)
   stacked_df <- stack_sims_vert(sim_map, target_dose, alpha = alpha)
   # Compare each design to every other design:

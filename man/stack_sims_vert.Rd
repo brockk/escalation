@@ -13,14 +13,16 @@ stack_sims_vert(sim_map, target_dose = NULL, alpha = 0.05)
 are analysed if omitted, which is the default.}
 
 \item{alpha}{confidence level for asymptotic normal confidence intervals. The
-default value is 0.05 to get 95% confidence intervals.}
+default value is 0.05 to get 95 percent confidence intervals.}
 }
 \value{
-\code{data.frame}
+a data.frame
 }
 \description{
 Stack \code{\link{simulations_collection}} results vertically
 }
 \examples{
+\dontrun{
 # TODO
+}
 }

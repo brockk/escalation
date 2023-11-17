@@ -5,9 +5,9 @@
 #' @param target_dose optional integer vector, the dose of interest. All doses
 #'          are analysed if omitted, which is the default.
 #' @param alpha confidence level for asymptotic normal confidence intervals. The
-#' default value is 0.05 to get 95% confidence intervals.
+#' default value is 0.05 to get 95 percent confidence intervals.
 #'
-#' @return \code{data.frame}
+#' @return a data.frame
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr map imap reduce
@@ -15,7 +15,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # TODO
+#' }
 stack_sims_vert <- function(sim_map, target_dose = NULL, alpha = 0.05) {
   q <- qnorm(p = alpha / 2, lower.tail = FALSE)
   sim_map %>%

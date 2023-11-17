@@ -2,13 +2,21 @@
 % Please edit documentation in R/convergence_plot.R
 \name{convergence_plot}
 \alias{convergence_plot}
-\title{Title}
+\title{Plot the convergence processes from a collection of simulations.}
 \usage{
-convergence_plot(x)
+convergence_plot(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{object of type \code{\link{simulations_collection}}}
+}
+\value{
+a ggplot2 plot
 }
 \description{
-Title
+Plot the convergence processes from a collection of simulations.
+}
+\examples{
+\dontrun{
+# TODO
+}
 }

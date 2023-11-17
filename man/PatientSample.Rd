@@ -2,10 +2,17 @@
 % Please edit documentation in R/patient_sample.R
 \name{PatientSample}
 \alias{PatientSample}
-\title{Patient tolerance samples for simulations}
+\title{A sample of patients to use in simulations.}
 \description{
-Class to house the latent random variables that govern tox and eff events in
-simulations.
+Class to house the latent random variables that govern toxicity and efficacy
+events in patients. Instances of this class can be used in simulation-like
+tasks to effectively use the same simulated individuals in different designs,
+thus supporting reduced Monte Carlo error and more efficient comparison.
+}
+\references{
+Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
+Potential outcome simulation for efficient head-to-head comparison of
+adaptive dose-finding designs. Preprint.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -15,6 +22,8 @@ simulations.
 \item{\code{tox_u}}{(`numeric(num_patients)`)\cr}
 
 \item{\code{eff_u}}{(`numeric(num_patients)`)\cr}
+
+\item{\code{can_grow}}{(`logical(1)`)\cr}
 }
 \if{html}{\out{</div>}}
 }
@@ -22,6 +31,7 @@ simulations.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-PatientSample-new}{\code{PatientSample$new()}}
+\item \href{#method-PatientSample-set_eff_and_tox}{\code{PatientSample$set_eff_and_tox()}}
 \item \href{#method-PatientSample-expand_to}{\code{PatientSample$expand_to()}}
 \item \href{#method-PatientSample-get_tox_u}{\code{PatientSample$get_tox_u()}}
 \item \href{#method-PatientSample-get_patient_tox}{\code{PatientSample$get_patient_tox()}}
@@ -48,6 +58,31 @@ Creator.
 }
 \subsection{Returns}{
 [PatientSample].
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PatientSample-set_eff_and_tox"></a>}}
+\if{latex}{\out{\hypertarget{method-PatientSample-set_eff_and_tox}{}}}
+\subsection{Method \code{set_eff_and_tox()}}{
+Set the toxicity and efficacy latent variables that govern occurrence of
+toxicity and efficacy events. By default, instances of this class
+automatically grow these latent variables to accommodate arbitrarily high
+sample sizes. However, when you set these latent variables manually via
+this function, you override the ability of the class to self-manage, so
+its ability to grow is turned off by setting the internal variable
+\code{self$can_grow <- FALSE}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PatientSample$set_eff_and_tox(tox_u, eff_u)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tox_u}}{(`numeric()`).}
+
+\item{\code{eff_u}}{(`numeric()`).}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
