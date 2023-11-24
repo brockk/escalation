@@ -8,9 +8,11 @@ test_that('select_mtpi_mtd works like it should.', {
 
   model_fitter <- get_mtpi(num_doses = num_doses, target = target,
                            epsilon1 = 0.05, epsilon2 = 0.05,
-                           exclusion_certainty = 0.95) %>%
+                           exclusion_certainty = 0.95,
+                           alpha = 0, beta = 0) %>%
     stop_at_n(n = 50) %>%
-    select_mtpi_mtd(when = 'finally')
+    select_mtpi_mtd(when = 'finally', exclusion_certainty = 0.95,
+                    alpha = 0, beta = 0)
 
   # According to the Ji et al (2010), with observed mean prob-tox:
   # c(0.1, 0.2, 0.4, 0.5, 0.7), we should choose dose 2
@@ -58,7 +60,7 @@ test_that('select_mtpi_mtd when=finally supports correct interface.', {
   model_fitter <- get_mtpi(num_doses = num_doses, target = target,
                            epsilon1 = 0.05, epsilon2 = 0.05,
                            exclusion_certainty = 0.95) %>%
-    select_mtpi_mtd(when = 'finally')
+    select_mtpi_mtd(when = 'finally', exclusion_certainty = 0.95)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -384,7 +386,7 @@ test_that('select_mtpi_mtd when=finally with stopper supports correct interface.
                            epsilon1 = 0.05, epsilon2 = 0.05,
                            exclusion_certainty = 0.95) %>%
     stop_at_n(n = 6) %>%
-    select_mtpi_mtd(when = 'finally')
+    select_mtpi_mtd(when = 'finally', exclusion_certainty = 0.95)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -709,7 +711,7 @@ test_that('select_mtpi_mtd when=always supports correct interface.', {
   model_fitter <- get_mtpi(num_doses = num_doses, target = target,
                            epsilon1 = 0.05, epsilon2 = 0.05,
                            exclusion_certainty = 0.95) %>%
-    select_mtpi_mtd(when = 'always')
+    select_mtpi_mtd(when = 'always', exclusion_certainty = 0.95)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')

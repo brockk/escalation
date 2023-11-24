@@ -1,7 +1,7 @@
 Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
-Version: 0.1.6.9005
+Version: 0.1.6.9006
 Date: 2023-11-24
 Authors@R: c(
     person("Kristian", "Brock", 

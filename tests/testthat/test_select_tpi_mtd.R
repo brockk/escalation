@@ -1,18 +1,18 @@
 
-test_that('select_mtpi2_mtd works like it should.', {
+test_that('select_tpi_mtd works like it should.', {
 
   # Contrive situations
   # Throughout we assume a five-dose scenario that targets 0.25 DLT rate
   num_doses <- 5
   target <- 0.25
 
-  model_fitter <- get_mtpi2(num_doses = num_doses, target = target,
-                           epsilon1 = 0.05, epsilon2 = 0.05,
-                           exclusion_certainty = 0.95,
-                           alpha = 0, beta = 0) %>%
+  model_fitter <- get_tpi(num_doses = num_doses, target = target,
+                          k1 = 1, k2 = 1.5,
+                          exclusion_certainty = 0.95,
+                          alpha = 0, beta = 0) %>%
     stop_at_n(n = 50) %>%
-    select_mtpi2_mtd(when = 'finally', exclusion_certainty = 0.95,
-                     alpha = 0, beta = 0)
+    select_tpi_mtd(when = 'finally', exclusion_certainty = 0.95,
+                   alpha = 0, beta = 0)
 
   # According to the rule in Guo et al (2017), with observed mean prob-tox:
   # c(0.1, 0.2, 0.4, 0.5, 0.7), we should choose dose 2
@@ -52,15 +52,15 @@ test_that('select_mtpi2_mtd works like it should.', {
 
 })
 
-test_that('select_mtpi2_mtd when=finally supports correct interface.', {
+test_that('select_tpi_mtd when=finally supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_mtpi2(num_doses = num_doses, target = target,
-                           epsilon1 = 0.05, epsilon2 = 0.05,
-                           exclusion_certainty = 0.95) %>%
-    select_mtpi2_mtd(when = 'finally', exclusion_certainty = 0.95)
+  model_fitter <- get_tpi(num_doses = num_doses, target = target,
+                          k1 = 1, k2 = 1.5,
+                          exclusion_certainty = 0.95) %>%
+    select_tpi_mtd(when = 'finally', exclusion_certainty = 0.95)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -377,16 +377,16 @@ test_that('select_mtpi2_mtd when=finally supports correct interface.', {
 
 })
 
-test_that('select_mtpi2_mtd when=finally with stopper supports correct interface.', {
+test_that('select_tpi_mtd when=finally with stopper supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_mtpi2(num_doses = num_doses, target = target,
-                            epsilon1 = 0.05, epsilon2 = 0.05,
-                            exclusion_certainty = 0.95) %>%
+  model_fitter <- get_tpi(num_doses = num_doses, target = target,
+                          k1 = 1, k2 = 1.5,
+                          exclusion_certainty = 0.95) %>%
     stop_at_n(n = 6) %>%
-    select_mtpi2_mtd(when = 'finally', exclusion_certainty = 0.95)
+    select_tpi_mtd(when = 'finally', exclusion_certainty = 0.95)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')
@@ -703,15 +703,15 @@ test_that('select_mtpi2_mtd when=finally with stopper supports correct interface
 
 })
 
-test_that('select_mtpi2_mtd when=always supports correct interface.', {
+test_that('select_tpi_mtd when=always supports correct interface.', {
 
   num_doses <- 5
   target <- 0.3
 
-  model_fitter <- get_mtpi2(num_doses = num_doses, target = target,
-                            epsilon1 = 0.05, epsilon2 = 0.05,
-                            exclusion_certainty = 0.95) %>%
-    select_mtpi2_mtd(when = 'always', exclusion_certainty = 0.95)
+  model_fitter <- get_tpi(num_doses = num_doses, target = target,
+                          k1 = 1, k2 = 1.5,
+                          exclusion_certainty = 0.95) %>%
+    select_tpi_mtd(when = 'always', exclusion_certainty = 0.95)
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NNN 2NTT')

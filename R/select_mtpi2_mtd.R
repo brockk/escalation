@@ -182,6 +182,9 @@ dose_admissible.mtpi2_mtd_dose_selector <- function(x, ...) {
 #' @importFrom stats pbeta
 recommended_dose.mtpi2_mtd_dose_selector <- function(x, ...) {
 
+  # Note that this is legitimately different to mtpi_mtd! The algos for
+  # resolving ties differ. However, it perfectly matches tpi_mtd. See the
+  # papers!
   mtpi2_mtd <- function(x) {
     prob_tox <- mean_prob_tox(x)
     target <- tox_target(x)
