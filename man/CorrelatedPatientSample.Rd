@@ -9,10 +9,12 @@ events in patients. Instances of this class can be used in simulation-like
 tasks to effectively use the same simulated individuals in different designs,
 thus supporting reduced Monte Carlo error and more efficient comparison. This
 class differs from \code{\link{PatientSample}} in that the latent variables
-that underly efficacy and toxicity events, and therefore those events
+that underlie efficacy and toxicity events, and therefore those events
 themselves, are correlated, e.g. for positive association, a patient that
 experiences toxicity has increased probability of experiencing efficacy too.
-The extent to which the events are correlated is controlled by tau. TODO
+Correlated uniformly-distributed variables are obtained by inverting
+bivariate normal variables. The extent to which the events are correlated is
+controlled by rho, the correlation of the two normal variables.
 }
 \references{
 Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
@@ -27,15 +29,9 @@ adaptive dose-finding designs. Preprint.
 \describe{
 \item{\code{num_patients}}{(`integer(1)`)\cr}
 
-\item{\code{tau}}{(`numeric(1)`)\cr}
+\item{\code{mu}}{(`numeric(2)`)\cr}
 
-\item{\code{prob_event}}{(`numeric(41)`)\cr}
-
-\item{\code{xi}}{(`numeric(41)`)\cr}
-
-\item{\code{theta}}{(`numeric(num_patients)`)\cr}
-
-\item{\code{can_grow}}{(`logical(1)`)\cr}
+\item{\code{sigma}}{(`matrix(2, 2)`)\cr}
 }
 \if{html}{\out{</div>}}
 }
@@ -43,11 +39,7 @@ adaptive dose-finding designs. Preprint.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-CorrelatedPatientSample-new}{\code{CorrelatedPatientSample$new()}}
-\item \href{#method-CorrelatedPatientSample-set_theta}{\code{CorrelatedPatientSample$set_theta()}}
 \item \href{#method-CorrelatedPatientSample-expand_to}{\code{CorrelatedPatientSample$expand_to()}}
-\item \href{#method-CorrelatedPatientSample-get_theta}{\code{CorrelatedPatientSample$get_theta()}}
-\item \href{#method-CorrelatedPatientSample-get_patient_tox}{\code{CorrelatedPatientSample$get_patient_tox()}}
-\item \href{#method-CorrelatedPatientSample-get_patient_eff}{\code{CorrelatedPatientSample$get_patient_eff()}}
 \item \href{#method-CorrelatedPatientSample-clone}{\code{CorrelatedPatientSample$clone()}}
 }
 }
@@ -55,6 +47,8 @@ adaptive dose-finding designs. Preprint.
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="escalation" data-topic="PatientSample" data-id="get_eff_u"><a href='../../escalation/html/PatientSample.html#method-PatientSample-get_eff_u'><code>escalation::PatientSample$get_eff_u()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="escalation" data-topic="PatientSample" data-id="get_patient_eff"><a href='../../escalation/html/PatientSample.html#method-PatientSample-get_patient_eff'><code>escalation::PatientSample$get_patient_eff()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="escalation" data-topic="PatientSample" data-id="get_patient_tox"><a href='../../escalation/html/PatientSample.html#method-PatientSample-get_patient_tox'><code>escalation::PatientSample$get_patient_tox()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="escalation" data-topic="PatientSample" data-id="get_tox_u"><a href='../../escalation/html/PatientSample.html#method-PatientSample-get_tox_u'><code>escalation::PatientSample$get_tox_u()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="escalation" data-topic="PatientSample" data-id="set_eff_and_tox"><a href='../../escalation/html/PatientSample.html#method-PatientSample-set_eff_and_tox'><code>escalation::PatientSample$set_eff_and_tox()</code></a></span></li>
 </ul>
@@ -66,7 +60,7 @@ adaptive dose-finding designs. Preprint.
 \subsection{Method \code{new()}}{
 Creator.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$new(num_patients = 0, tau = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$new(num_patients = 0, rho = 0)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -74,35 +68,12 @@ Creator.
 \describe{
 \item{\code{num_patients}}{(`integer(1)`).}
 
-\item{\code{tau}}{(`integer(1)`) standard deviation of normal latent variable}
+\item{\code{rho}}{(`integer(1)`) correlation of}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-[PatientSample].
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CorrelatedPatientSample-set_theta"></a>}}
-\if{latex}{\out{\hypertarget{method-CorrelatedPatientSample-set_theta}{}}}
-\subsection{Method \code{set_theta()}}{
-Set the theta latent variables that govern occurrence of
-toxicity and efficacy events. By default, instances of this class
-automatically grow these latent variables to accommodate arbitrarily high
-sample sizes. However, when you set these latent variables manually via
-this function, you override the ability of the class to self-manage, so
-its ability to grow is turned off by setting the internal variable
-\code{self$can_grow <- FALSE}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$set_theta(theta)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{theta}}{(`numeric()`).}
-}
-\if{html}{\out{</div>}}
+[CorrelatedPatientSample].
 }
 }
 \if{html}{\out{<hr>}}
@@ -117,82 +88,7 @@ Expand sample to size at least num_patients
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{num_patients}}{(`integer(1)`).
-#' @description
-#' Get toxicity latent variable for patient i
-#'
-#' @param i (`integer(1)`) patient index
-get_tox_u = function(i) {
-  if(i > self$num_patients) {
-    self$expand_to(num_patients = i)
-  }
-  return(self$tox_u[i])
-},}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CorrelatedPatientSample-get_theta"></a>}}
-\if{latex}{\out{\hypertarget{method-CorrelatedPatientSample-get_theta}{}}}
-\subsection{Method \code{get_theta()}}{
-Get theta latent variable for patient i
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$get_theta(i)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{i}}{(`integer(1)`) patient index}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CorrelatedPatientSample-get_patient_tox"></a>}}
-\if{latex}{\out{\hypertarget{method-CorrelatedPatientSample-get_patient_tox}{}}}
-\subsection{Method \code{get_patient_tox()}}{
-Get 0 or 1 event marker for whether toxicity occurred in patient i
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$get_patient_tox(i, prob_tox)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{i}}{(`integer(1)`) patient index}
-
-\item{\code{prob_tox}}{(`numeric(1)`) probability of toxicity
-#' @description
-#' Get efficacy latent variable for patient i
-#'
-#' @param i (`integer(1)`) patient index
-get_eff_u = function(i) {
-  if(i > self$num_patients) {
-    self$expand_to(num_patients = i)
-  }
-  return(self$eff_u[i])
-},}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CorrelatedPatientSample-get_patient_eff"></a>}}
-\if{latex}{\out{\hypertarget{method-CorrelatedPatientSample-get_patient_eff}{}}}
-\subsection{Method \code{get_patient_eff()}}{
-Get 0 or 1 event marker for whether efficacy occurred in patient i
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$get_patient_eff(i, prob_eff)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{i}}{(`integer(1)`) patient index}
-
-\item{\code{prob_eff}}{(`numeric(1)`) probability of efficacy}
+\item{\code{num_patients}}{(`integer(1)`).}
 }
 \if{html}{\out{</div>}}
 }

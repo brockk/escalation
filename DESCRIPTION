@@ -1,8 +1,8 @@
 Package: escalation
 Type: Package
 Title: Modular Approach to Dose Finding Clinical Trials
-Version: 0.1.6.9004
-Date: 2023-11-17
+Version: 0.1.6.9005
+Date: 2023-11-24
 Authors@R: c(
     person("Kristian", "Brock", 
       email = "kristian.brock@gmail.com", 
@@ -59,7 +59,8 @@ Imports:
   RColorBrewer,
   viridis,
   binom,
-  R6
+  R6,
+  mvtnorm
 RoxygenNote: 7.2.3
 Suggests: 
     testthat,

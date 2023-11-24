@@ -795,6 +795,22 @@ patients$get_patient_tox(i = 3, prob_tox = 0.01)
 patients$get_patient_tox(i = 3, prob_tox = 0.05)
 patients$get_patient_tox(i = 1:3, prob_tox = 0.1)
 patients$get_patient_tox(i = 3:5, prob_tox = 0.1)
+patients <- PatientSample$new(num_patients = 10)
+patients$num_patients
+patients$tox_u
+patients$eff_u
+patients <- CorrelatedPatientSample$new(num_patients = 10, rho = 0.5)
+patients$num_patients
+patients$tox_u
+patients$eff_u
+cor(patients$tox_u, patients$eff_u)
+patients$expand_to(100)
+patients$num_patients
+cor(patients$tox_u, patients$eff_u)
+patients$get_patient_tox(1, 0.2)
+patients$get_patient_tox(1, 0.9)
+patients$get_patient_eff(97, 0.2)
+patients$get_patient_eff(97, 0.9)
 
 # Simulation ----
 

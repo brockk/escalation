@@ -33,10 +33,15 @@ PatientSample <- R6Class(
     #' @param num_patients (`integer(1)`).
     #' @return [PatientSample].
     initialize = function(num_patients = 0) {
-      self$num_patients <- num_patients
-      self$tox_u <- runif(n = num_patients)
-      self$eff_u <- runif(n = num_patients)
+      # self$num_patients <- num_patients
+      # self$tox_u <- runif(n = num_patients)
+      # self$eff_u <- runif(n = num_patients)
+      self$num_patients <- 0
+      self$tox_u <- numeric(length = 0)
+      self$eff_u <- numeric(length = 0)
       self$can_grow <- TRUE
+
+      self$expand_to(num_patients)
     },
 
     #' @description
@@ -65,6 +70,7 @@ PatientSample <- R6Class(
     #' Expand sample to size at least num_patients
     #'
     #' @param num_patients (`integer(1)`).
+    #' @importFrom stats runif
     expand_to = function(num_patients) {
       if(num_patients > self$num_patients) {
         if(self$can_grow) {
