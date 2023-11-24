@@ -27,7 +27,8 @@ as_tibble.simulations_collection <- function(x, target_dose = NULL,
                                              alpha = 0.05) {
   sim_map <- x
   q <- qnorm(p = alpha / 2, lower.tail = FALSE)
-  stacked_df <- stack_sims_vert(sim_map, target_dose, alpha = alpha)
+  stacked_df <- stack_sims_vert(sim_map = sim_map, target_dose = target_dose,
+                                alpha = alpha)
   # Compare each design to every other design:
   inner_join(
     stacked_df %>%
@@ -41,7 +42,7 @@ as_tibble.simulations_collection <- function(x, target_dose = NULL,
   ) %>%
     # Discard self-comparisons and replicates:
     filter(design.x > design.y) %>%
-    group_by(dose) %>%
+    group_by(dose, design.x, design.y) %>%
     mutate(
       X = cumsum(hit.x),
       X2 = cumsum(hit.x^2),

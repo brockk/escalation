@@ -193,6 +193,10 @@ recommended_dose.tpi_mtd_dose_selector <- function(x, ...) {
     abs_delta <- abs(prob_tox - target)
     abs_delta[!admissible] <- NA
 
+    if(sum(admissible) == 0) {
+      return(NA)
+    }
+
     if(sum(abs_delta == min(abs_delta, na.rm = TRUE), na.rm = TRUE) == 1) {
       # There is a single dose closest to target. Select that dose:
       return(which.min(abs_delta))

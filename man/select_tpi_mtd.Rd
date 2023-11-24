@@ -57,7 +57,7 @@ this class will not reinstate a dangerous dose.
 # This class is intended to make the final dose selection in a mTPI2 trial:
 target <- 0.25
 model <- get_tpi(num_doses = 5, target = target,
-                 epsilon1 = 0.05, epsilon2 = 0.05,
+                 k1 = 1, k2 = 1.5,
                  exclusion_certainty = 0.95) \%>\%
   stop_at_n(n = 12) \%>\%
   select_tpi_mtd(exclusion_certainty = 0.95)
@@ -68,7 +68,7 @@ model \%>\% fit(outcomes) \%>\% recommended_dose()
 # However, since behaviour is modular in this package, we can use this method
 # to select dose at every dose decision if we wanted:
 model2 <- get_tpi(num_doses = 5, target = target,
-                  epsilon1 = 0.05, epsilon2 = 0.05,
+                  k1 = 1, k2 = 1.5,
                   exclusion_certainty = 0.95) \%>\%
   select_tpi_mtd(when = 'always', exclusion_certainty = 0.95)
 model2 \%>\% fit('1NNT') \%>\% recommended_dose()
