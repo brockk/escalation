@@ -110,9 +110,14 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
 #' @export
 recommended_dose.stop_when_too_toxic_selector <- function(x, ...) {
   if(continue(x)) {
-    return(x$parent %>% recommended_dose())
+    return(recommended_dose(x$parent))
   } else {
-    return(NA)
+    stop_for_tox <- stopping_for_toxicity(x)
+    if(stop_for_tox) {
+      return(NA)
+    } else {
+      return(recommended_dose(x$parent))
+    }
   }
 }
 
@@ -122,24 +127,9 @@ continue.stop_when_too_toxic_selector <- function(x, ...) {
   # Stop now if parent wants:
   if(!x$parent %>% continue()) return(FALSE)
 
-  prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
-  if(x$dose == 'any') {
-    if(any(!is.na(prob_too_tox) & prob_too_tox >= x$confidence)) {
-      return(FALSE)
-    }
-  } else if(x$dose == 'recommended') {
-    rec_dose <- x %>% recommended_dose()
-    if(!is.na(prob_too_tox[rec_dose]) &
-       prob_too_tox[rec_dose] >= x$confidence) {
-      return(FALSE)
-    }
-  }
-  else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-    if(!is.na(prob_too_tox[x$dose]) &
-       prob_too_tox[x$dose] >= x$confidence) {
-      return(FALSE)
-    }
-  }
+  # Should we stop for excess toxicity?
+  stop_for_tox <- stopping_for_toxicity(x)
+  if(stop_for_tox) return(FALSE)
 
   # By default:
   return(x$parent %>% continue())
@@ -149,4 +139,30 @@ continue.stop_when_too_toxic_selector <- function(x, ...) {
 dose_admissible.stop_when_too_toxic_selector <- function(x, ...) {
   prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
   return(prob_too_tox < x$confidence)
+}
+
+# Private interface
+
+stopping_for_toxicity <- function(x) {
+  prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
+  if(x$dose == 'any') {
+    if(any(!is.na(prob_too_tox) & prob_too_tox >= x$confidence)) {
+      return(TRUE)
+    }
+  } else if(x$dose == 'recommended') {
+    rec_dose <- x %>% recommended_dose()
+    if(!is.na(prob_too_tox[rec_dose]) &
+       prob_too_tox[rec_dose] >= x$confidence) {
+      return(TRUE)
+    }
+  }
+  else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
+    if(!is.na(prob_too_tox[x$dose]) &
+       prob_too_tox[x$dose] >= x$confidence) {
+      return(TRUE)
+    }
+  }
+
+  # By default
+  return(FALSE)
 }

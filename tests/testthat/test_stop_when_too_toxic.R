@@ -355,3 +355,58 @@ test_that('stop_when_too_toxic_selector supports correct interface.', {
   expect_true(nrow(as_tibble(x)) >= num_doses(x))
 
 })
+
+test_that("stop_when_too_toxic_selector plays nicely with other selectors", {
+
+  skeleton <- c(0.05, 0.10, 0.25, 0.40, 0.60)
+  target <- 0.25
+  design <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    stop_at_n(n = 12) %>%
+    stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.7)
+
+  # Scenario that should continue:
+  x <- design %>% fit("1NNN")
+  expect_equal(
+    recommended_dose(x),
+    4
+  )
+  expect_equal(
+    continue(x),
+    prob_tox_exceeds(x, threshold = 0.35)[1] < 0.7
+  )
+
+  # Another scenario that should continue:
+  x <- design %>% fit("1NNT")
+  expect_equal(
+    recommended_dose(x),
+    1
+  )
+  expect_equal(
+    continue(x),
+    prob_tox_exceeds(x, threshold = 0.35)[1] < 0.7
+  )
+
+  # Scenario that should stop:
+  x <- design %>% fit("1NTT")
+  expect_equal(
+    recommended_dose(x),
+    NA
+  )
+  expect_equal(
+    continue(x),
+    prob_tox_exceeds(x, threshold = 0.35)[1] < 0.7
+  )
+
+  # Scenario where we don't stop for tox but a parent object stops the trial
+  x <- design %>% fit("1NNN 2NNN 3NNN 4NTT")
+  expect_equal(
+    recommended_dose(x),
+    3
+  )
+  expect_equal(
+    continue(x),
+    FALSE
+  )
+  # Dose is given but continue is FALSE, as required.
+
+})
