@@ -17,6 +17,6 @@ Plot the convergence processes from a collection of simulations.
 }
 \examples{
 \dontrun{
-# TODO
+# See ? simulate_compare
 }
 }

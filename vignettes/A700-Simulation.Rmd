@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 Before reading this document on simulating dose-finding trials using the `escalation` package, be sure to check out the [README file](https://brockk.github.io/escalation/).
 It explains how to compose dose-finding designs using the flexible syntax provided in `escalation`.
 
-Once you have composed a design that appeals, you will want to learn about its operating performance by running many simulated trials.
+Once you have composed a design that appeals, you will want to learn about its operating performance by running many simulated trials, and possibly compare it to competing designs.
 That is the focus of this vignette.
 We study simulations because we believe they will predict the performance we can expect in reality.
 By operating performance, we mean:
@@ -39,10 +39,12 @@ By operating performance, we mean:
 * how long trials take;
 * and so on.
 
+We are often interested both in the absolute levels of these quantities, and how they compare to those of competing designs.
+When comparing designs, we have an efficient method called `simulate_compare` that examines the decisions of many design on the same simulated patients to reduce Monte Carlo uncertainty.
 
 # Simulating trials in `escalation`
-Simulations are run using the `simulate_trials` function.
-It can be called on any dose-escalation design.
+Simulations are run using the `simulate_trials` and `simulate_compare` functions.
+These can be called for any dose-escalation designs.
 Specifying dose-escalation models is the focus of the package [README file](https://brockk.github.io/escalation/).
 
 ## The simplest example
@@ -181,7 +183,7 @@ as_tibble(sims) %>%
 
 ## A more complex example
 Let us consider now a model-based dose-finding approach in the same scenario.
-We will investogate a CRM design, using the model from the `dfcrm` package.
+We will investigate a CRM design, using the model from the `dfcrm` package.
 Let us say that we are targeting a 25% toxicity rate:
 
 ```{r}
@@ -209,6 +211,8 @@ sims
 
 The first thing we note is that the CRM design is much less likely to select dose 1 and more likely to select dose 2.
 If we believe that efficacy is associated with toxicity (and we should if we are using the CRM approach), then this is a good thing.
+Note, however, that comparing separate simulations is not the most efficient method to compare competing designs.
+A preferable method is to use `simulate_compare`, demonstrated below.
 
 However, our design has no method to stop if all doses are too toxic.
 We saw above that the 3+3 design occasionally recommended no dose.
@@ -258,7 +262,69 @@ sims
 Pleasingly, the expected sample size only increases by about 3 patients.
 Obviously, the maximum increases by 6 patients.
 
+
+## Comparing competing designs
+In `simulate_compare`, we implement the method of @sweeting2023 to efficiently compare dose-finding designs.
+The crux of this method is to ensure that the same simulated patients are used for each competing design so that, for instance, if a patient is given dose 2 by one design and experiences toxicity, then that patient will also experience toxicity if given dose 2 or above by any other design. 
+Ensuring consistency across simulated iterates in this way reduces Monte Carlo error and allows much faster identification of differences between designs.
+
+For example, let us compare the behaviour of the 3+3 and CRM designs investigated above.
+We start by defining the competing designs in a list with convenient names:
+
+```{r}
+designs <- 
+  list(
+    "3+3" = get_three_plus_three(num_doses = 5),
+    "CRM" = get_dfcrm(skeleton = skeleton, target = target) %>%
+      stop_at_n(n = 12),
+    "Stopping CRM" = get_dfcrm(skeleton = skeleton, target = target) %>%
+      stop_at_n(n = 12) %>%
+      stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8)
+  )
+```
+
+Here we will compare three designs: 3+3; CRM without a toxicity stopping rule; and an otherwise identical CRM design with a toxicity stopping rule.
+The names we provide will be reused.
+
+```{r}
+sims <- simulate_compare(
+  designs, 
+  num_sims = num_sims, 
+  true_prob_tox = true_prob_tox
+)
+```
+
+We provide a convenient function to quickly visualise how the probability of selecting each dose in each design evolved as the simulations progressed:
+
+```{r, fig.width=7, fig.height=5}
+convergence_plot(sims)
+```
+
+We can see immediately, for instance, that the designs generally agree that dose 2 is the best MTD candidate, and that the CRM designs are much more likely to recommend dose 3.
+We can be more precise by formally contrasting the probability of selecting each dose for each pair of designs:
+
+```{r, fig.width=7, fig.height=10}
+as_tibble(sims) %>% 
+  filter(n %% 5 == 0) %>%
+  ggplot(aes(x = n, y = delta)) +
+  geom_point(size = 0.4) +
+  geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
+  geom_hline(yintercept = 0, linetype = "dashed", col = "red") +
+  facet_grid(comparison ~ dose,
+             labeller = labeller(
+               .rows = label_both,
+               .cols = label_both)
+  )
+```
+
+The error bars here reflect 95% symmetric asymptotic normal confidence intervals.
+Change the `alpha = 0.05` parameter when calling `as_tibble(sims)` to get confident intervals for a different significance level.
+We see that, even with the very small sample size of 50 simulated trials, the CRM designs are significantly more likely to recommend dose 3 than the 3+3 design.
+In contrast, in this scenario there is very little difference at all between the two CRM variants.
+
 ## Further refinements
+
+The following behaviours apply to both `simulate_trials` and `simulate_compare`.
 
 ### Cohort size
 All of the above simulations assume that patients are evaluated in cohorts of three.

@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' # TODO
+#' # See ? simulate_compare
 #' }
 convergence_plot <- function(x, ...) {
   stack_sims_vert(x, ...) %>%
@@ -20,7 +20,6 @@ convergence_plot <- function(x, ...) {
     ylim(0, 1) +
     facet_wrap(~ dose, ncol = 5) +
     labs(title = "Convergence of simulation",
-         subtitle = "Shared patients",
          x = "Iterate", y = "Prob(Selection)") +
     theme(legend.position = "bottom")
 }

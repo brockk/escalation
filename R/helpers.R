@@ -56,8 +56,6 @@ pava <- function(x, wt = rep(1, length(x))) {
   x
 }
 
-
-#' @param x object of type \code{\link{dose_selector}}
 #' @importFrom stats pbeta
 #' @importFrom purrr map_dbl
 pava_bb_prob_tox_exceeds <- function(x, threshold, alpha, beta, ...) {

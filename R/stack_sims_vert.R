@@ -15,9 +15,32 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # TODO
-#' }
+#' # In a five-dose scenario, we have assumed probabilities for Prob(tox):
+#' true_prob_tox <- c(0.05, 0.10, 0.15, 0.18, 0.45)
+#' # and Prov(eff):
+#' true_prob_eff <- c(0.40, 0.50, 0.52, 0.53, 0.53)
+#'
+#' # Let us compare two BOIN12 variants that differ in their stopping params:
+#' designs <- list(
+#'   "BOIN12 v1" = get_boin12(num_doses = num_doses,
+#'                            phi_t = 0.35, phi_e = 0.25,
+#'                            u2 = 40, u3 = 60,
+#'                            c_t = 0.95, c_e = 0.9) %>%
+#'     stop_at_n(n = 36),
+#'   "BOIN12 v2" = get_boin12(num_doses = num_doses,
+#'                            phi_t = 0.35, phi_e = 0.25,
+#'                            u2 = 40, u3 = 60,
+#'                            c_t = 0.5, c_e = 0.5) %>%
+#'     stop_at_n(n = 36)
+#' )
+#' # For illustration we run only 10 iterates:
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff
+#' )
+#' stack_sims_vert(x)
 stack_sims_vert <- function(sim_map, target_dose = NULL, alpha = 0.05) {
   q <- qnorm(p = alpha / 2, lower.tail = FALSE)
   sim_map %>%

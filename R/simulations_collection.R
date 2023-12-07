@@ -6,11 +6,6 @@
 #' @return object of class \code{simulations_collection}, inheriting from list
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' # TODO
-#' }
-#'
 #' @references
 #' Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
 #' Potential outcome simulation for efficient head-to-head comparison of

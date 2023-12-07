@@ -29,6 +29,3 @@ numerical vector, posterior weights of the skeletons.
 Get posterior model weights for several empiric CRM skeletons, assuming a
 normal prior on the beta model parameter
 }
-\examples{
-# TODO
-}

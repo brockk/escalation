@@ -12,7 +12,7 @@
 #'   reduces MCMC errors of comparisons, so this method is efficient for
 #'   comparing designs. See Sweeting et al. for full details.
 #'
-#' @details TODO By default, dose decisions in simulated trials are made after each
+#' @details By default, dose decisions in simulated trials are made after each
 #'   cohort of 3 patients. This can be changed by providing a function by the
 #'   \code{sample_patient_arrivals} parameter that simulates the arrival of new
 #'   patients. The new patients will be added to the existing patients and the
@@ -74,83 +74,136 @@
 #' @export
 #'
 #' @examples
-#' # TODO
 #' # In a five-dose scenario, we have assumed probabilities for Prob(tox):
-#' true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+#' true_prob_tox <- c(0.05, 0.10, 0.15, 0.18, 0.45)
+#' # and Prov(eff):
+#' true_prob_eff <- c(0.40, 0.50, 0.52, 0.53, 0.53)
 #'
-#' # Simulate ten 3+3 trials:
-#' sims <- get_three_plus_three(num_doses = 5) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox)
-#' # Likewise, simulate 10 trials using a continual reassessment method:
-#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-#' target <- 0.25
-#' sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   stop_at_n(n = 12) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox)
+#' # Let us compare two BOIN12 variants that differ in their stopping params:
+#' designs <- list(
+#'   "BOIN12 v1" = get_boin12(num_doses = num_doses,
+#'                            phi_t = 0.35, phi_e = 0.25,
+#'                            u2 = 40, u3 = 60,
+#'                            c_t = 0.95, c_e = 0.9) %>%
+#'     stop_at_n(n = 36),
+#'   "BOIN12 v2" = get_boin12(num_doses = num_doses,
+#'                            phi_t = 0.35, phi_e = 0.25,
+#'                            u2 = 40, u3 = 60,
+#'                            c_t = 0.5, c_e = 0.5) %>%
+#'     stop_at_n(n = 36)
+#' )
+#' # For illustration we run only 10 iterates:
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff
+#' )
+#' # To compare toxicity-only designs like CRM etc, we would omit true_prob_eff.
 #'
-#' # Lots of useful information is contained in the returned object:
+#' # We might be interested in the absolute dose recommendation probabilities:
+#' convergence_plot(x)
+#'
+#' # and, perhaps more importantly, how they compare:
+#' as_tibble(x) %>%
+#'   ggplot(aes(x = n, y = delta)) +
+#'   geom_point(size = 0.4) +
+#'   geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
+#'   geom_hline(yintercept = 0, linetype = "dashed", col = "red") +
+#'   facet_grid(comparison ~ dose,
+#'     labeller = labeller(
+#'       .rows = label_both,
+#'       .cols = label_both)
+#'   )
+#'
+#' # Simulations for each design are available by name:
+#' sims <- x$`BOIN12 v1`
+#' # And the usual functions are available on the sims objects:
 #' sims %>% num_patients()
 #' sims %>% num_doses()
 #' sims %>% dose_indices()
 #' sims %>% n_at_dose()
-#' sims %>% n_at_recommended_dose()
-#' sims %>% tox_at_dose()
-#' sims %>% num_tox()
-#' sims %>% recommended_dose()
-#' sims %>% prob_administer()
-#' sims %>% prob_recommend()
-#' sims %>% trial_duration()
+#' # etc
+#' # See ? simulate_trials
 #'
-#' # By default, dose decisions are made after each cohort of 3 patients. See
-#' # Details. To override, specify an alternative function via the
-#' # sample_patient_arrivals parameter. E.g. to use cohorts of 2, we run:
+#' # As with simulate_trials, which examines one design, we also have options to
+#' # tweak the simulation process.
+#'
+#' # By default, dose decisions are made after each cohort of 3 patients. To
+#' # override, specify an alternative function via the sample_patient_arrivals
+#' # parameter. E.g. to use cohorts of 2, we run:
 #' patient_arrivals_func <- function(current_data) cohorts_of_n(n = 2)
-#' sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   stop_at_n(n = 12) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
-#'     sample_patient_arrivals = patient_arrivals_func)
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff,
+#'   sample_patient_arrivals = patient_arrivals_func
+#' )
 #'
 #' # To simulate the culmination of trials that are partly completed, specify
 #' # the outcomes already observed via the previous_outcomes parameter. Imagine
 #' # one cohort has already been evaluated, returning outcomes 1NTN. We can
-#' # simulate the remaining part of the trial with:
-#' sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   stop_at_n(n = 12) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
-#'                   previous_outcomes = '1NTN')
+#' # simulate the remaining part of that trial with:
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff,
+#'   previous_outcomes = '1NTN'
+#' )
+#'
 #' # Outcomes can be described by the above outcome string method or data-frame:
-#'   previous_outcomes <- data.frame(
-#'     patient = 1:3,
-#'     cohort = c(1, 1, 1),
-#'     tox = c(0, 1, 0),
-#'     dose = c(1, 1, 1)
-#'   )
-#' sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   stop_at_n(n = 12) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
-#'                   previous_outcomes = previous_outcomes)
+#' previous_outcomes <- data.frame(
+#'   patient = 1:3,
+#'   cohort = c(1, 1, 1),
+#'   tox = c(0, 1, 0),
+#'   eff = c(1, 1, 0),
+#'   dose = c(1, 1, 1)
+#' )
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff,
+#'   previous_outcomes = previous_outcomes
+#' )
 #'
 #' # We can specify the immediate next dose:
-#' sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   stop_at_n(n = 12) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
-#'                   next_dose = 5)
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff,
+#'   next_dose = 5
+#' )
 #'
 #' # By default, the method will stop simulated trials after 30 dose selections.
 #' # To suppress this, specify i_like_big_trials = TRUE. However, please take
-#' # care to specify selectors that will eventually stop!
-#' sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   stop_at_n(n = 99) %>%
-#'   simulate_trials(num_sims = 1, true_prob_tox = true_prob_tox,
-#'                   i_like_big_trials = TRUE)
+#' # care to specify selectors that will eventually stop! Our designs above use
+#' # stop_at_n so they will not proceed ad infinitum.
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff,
+#'   i_like_big_trials = TRUE
+#' )
 #'
 #' # By default, only the final model fit is retained for each simulated trial.
 #' # To retain all interim model fits, specify return_all_fits = TRUE.
-#' sims <- get_three_plus_three(num_doses = 5) %>%
-#'   simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
-#'                   return_all_fits = TRUE)
-#' # Verify that there are now many analyses per trial with:
-#' sapply(sims$fits, length)
+#' x <- simulate_compare(
+#'   designs,
+#'   num_sims = 10,
+#'   true_prob_tox,
+#'   true_prob_eff,
+#'   return_all_fits = TRUE
+#' )
+#'
+#' @references
+#' Sweeting, M., Slade, D., Jackson, D., Brock, K. (2023)
+#' Potential outcome simulation for efficient head-to-head comparison of
+#' adaptive dose-finding designs. Preprint.
 simulate_compare <- function(
     designs,
     num_sims,

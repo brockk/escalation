@@ -16,9 +16,6 @@
 #'
 #' @export
 #' @importFrom stats integrate
-#'
-#' @examples
-#' # TODO
 get_empiric_crm_skeleton_weights <- function(
   skeletons,
   events_at_dose,

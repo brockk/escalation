@@ -24,7 +24,38 @@ Documentation is hosted at https://brockk.github.io/escalation/
 ## Overview
 `escalation` provides a grammar for dose-finding clinical trials.
 
-It starts by providing functions to use dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), and the perennial 3+3:
+Here is a trivial example.
+Everyone knows that a 3+3 design will escalate after it sees no toxicities in a cohort of three:
+
+```{r, message=FALSE}
+library(escalation)
+
+get_three_plus_three(num_doses = 5) %>% 
+  fit("1NNN") %>% 
+  recommended_dose()
+```
+
+but that it will stick when it sees one-out-of-three toxicities in a cohort:
+
+```{r}
+x <- get_three_plus_three(num_doses = 5) %>% 
+  fit("1NNN 2NNN 3NNT")
+recommended_dose(x)
+continue(x)
+```
+
+Having escalated through doses 1 and 2, here the design advocates treating another cohort at dose 3.
+
+```{r}
+x <- get_three_plus_three(num_doses = 5) %>% 
+  fit("1NNN 2NNN 3NNT 3NTN")
+recommended_dose(x)
+continue(x)
+```
+
+When it sees two-out-of-six toxicities at dose 3, it concludes that dose 3 is too toxic, dose 2 is the MTD, and the trial should stop.
+
+`escalation` provides functions to use common dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), the TPI suite of designs, efficacy-toxicity designs like EffTox or Wages & Tait, and (as we have seen) the perennial 3+3:
 
 * `get_dfcrm()`
 * `get_trialr_crm()`
@@ -37,7 +68,7 @@ It starts by providing functions to use dose-escalation methodologies like the c
 * `get_wages_and_tait()`
 * `get_three_plus_three()`
 
-These functions fetch model fitting objects.
+These functions create model fitting objects.
 Where possible, technical implementations are imported from existing R packages like `dfcrm`, `trialr`, and `BOIN`.
 Where no external implementations is available however, methods are implemented natively in `escalation`.
 
@@ -56,11 +87,11 @@ For example, we can add behaviours to prevent skipping doses, or to stop when we
 * `select_dose_by_cibp()`
 
 Each of these functions overrides the way doses are selected or when a design decides to stop the trial.
-The behaviours can be flexibly combined using the `%>%` operator from the tidyverse.
+The behaviours can be flexibly combined using the `%>%` operator from the `tidyverse` suite.
 
 These models are then fit to trial outcomes to produce dose recommendations.
 No matter how the dose selection behaviours were combined, the resulting model fits supports a standard interface.
-The two most important methods are `recommended_dose()` to get the current dose selection, and `continue()` to learn whether the model advocates continuing patient recruitment.
+The two most important methods are `recommended_dose()` to get the current dose recommendation, and `continue()` to learn whether the design advocates continuing patient recruitment.
 
 Having defined this nomenclature for combining dose selection behaviours and providing a standard interface for the resulting analyses, it is simple to run simulations or calculate dose-pathways for future cohorts of patients.
 
@@ -124,18 +155,19 @@ The classes capable of performing this core role are:
 
 * `get_dfcrm()`, using the model-fitting code from [`dfcrm`](https://cran.r-project.org/package=dfcrm)
 * `get_trialr_crm()` using the model-fitting code from [`trialr`](https://cran.r-project.org/package=trialr)
-* `get_trialr_nbg()`
+* `get_trialr_nbg()` using the model-fitting code from [`trialr`](https://cran.r-project.org/package=trialr)
 * `get_boin()` using the model-fitting code from [`BOIN`](https://cran.r-project.org/package=BOIN)
 * `get_tpi()`
 * `get_mtpi()`
-* `get_trialr_efftox()`
+* `get_mtpi2()`
+* `get_trialr_efftox()` using the model-fitting code from [`trialr`](https://cran.r-project.org/package=trialr)
 * `get_wages_and_tait()`
 * `get_three_plus_three()`
 * and `follow_path()`
 
 Where indicated these methods rely on external packages.
 Otherwise, methods are implemented natively in `escalation`.
-We look at each now.
+We look at several of these below.
 
 ### get_dfcrm
 The continual reassessment method [@OQuigley1990] (CRM) is implemented in the [`dfcrm`](https://CRAN.R-project.org/package=dfcrm) package by @dfcrm.
@@ -206,7 +238,7 @@ fit %>% recommended_dose()
 
 
 ### get_trialr_crm
-We could instead fit the CRM models above using the [`trialr`](https://cran.r-project.org/package=trialr) package by [@@Brock2019; @trialr]. 
+We could instead fit the CRM models above using the [`trialr`](https://cran.r-project.org/package=trialr) package by [@Brock2019; @trialr]. 
 
 Reusing the `skeleton` and `target` variables defined above, we fit the same empiric model 
 ```{r, message=FALSE}
@@ -323,7 +355,7 @@ In this parameterisation, we exclude doses if we are 95% a-posteriori sure that 
 We fit the model to outcomes:
 
 ```{r}
-fit <- model %>% fit('1NNT') 
+fit <- model %>% fit('1NNT')
 ```
 
 and learn that the recommended next dose is
@@ -336,13 +368,26 @@ dose 1, in accordance with Figure 2 of @Ji2010.
 
 See the Modified Toxicity Probability Interval Design vignette for more information.
 
+### get_mtpi2
+mTPI was further updated by @guo2017bayesian to produce mTPI2.
+Its parameterisation is similar to mTPI.
+
+```{r}
+model <- get_mtpi2(num_doses = 5, target = 0.25, 
+                   epsilon1 = 0.05, epsilon2 = 0.05, 
+                   exclusion_certainty = 0.95)
+fit <- model %>% fit('1NNT')
+fit %>% recommended_dose()
+```
+
+Once again, see the Modified Toxicity Probability Interval Design vignette for more information.
+
 
 ### get_boin
 `escalate` also implements the Bayesian Optimal Interval (BOIN) dose-finding design by @liu_bayesian_2015 via the [`BOIN`](https://CRAN.R-project.org/package=BOIN) package [@BOIN].
 
 In contrast to CRM, BOIN does not require a dose-toxicity skeleton.
-In its simplest case, it requires merely the number of doses under investigation and our target toxicity level.
-Continuing with our example above:
+In its simplest case, it requires merely the number of doses under investigation and our target toxicity level:
 
 ```{r}
 target <- 0.25
@@ -380,9 +425,10 @@ In this setting, this is because all doses are considered too toxic.
 This is distinct from scenarios where a design advocates stopping a trial and recommending a dose for further study.
 We will encounter situations like that below.
 
-Since `escalation` provides many flexible options for stopping, we have made it possible to suppress BOIN's native stopping rule via `use_stopping_rule = TRUE`.
+Since `escalation` provides many flexible options for stopping, we have made it possible to suppress BOIN's native stopping rule via `use_stopping_rule = FALSE`.
+In this instance, the user may want to add their own stopping rule, e.g. using `stop_when_too_toxic`.
 
-Similar to the method described above, extra parameters are passed to the `get.boundary` function in the `BOIN` package to customise the escalation procedure.
+Extra parameters are passed to the `get.boundary` function in the `BOIN` package to customise the escalation procedure.
 For instance, the boundaries that guide changes in dose are set to be 60% and 140% of the target toxicity rate, by default.
 To instead use 30% and 170%, we could run:
 
@@ -404,6 +450,37 @@ The parameter names `p.saf` and `p.tox` were chosen by the authors of the `BOIN`
 
 See the Bayesian Optimal Interval Design vignette for more information.
 
+### get_boin12
+`escalation` also supports designs that choose doses according to co-primary efficacy and toxicity outcomes, such as the BOIN12 design [@lin2020boin12].
+
+We provide target toxicity and efficacy thresholds via `phi_t` and `phi_e`, the utility of 'no efficacy and no toxicity' via `u2`, and the utility of 'efficacy with toxicity' via `u3` on a (0, 100) scale:
+
+```{r}
+# Examples in Lin et al.
+model <- get_boin12(num_doses = 5, 
+                    phi_t = 0.35, phi_e = 0.25,
+                    u2 = 40, u3 = 60)
+```
+
+In contrast to the examples above, outcomes now include efficacy as well as toxicity. `E` reflects efficacy only, and `B` reflects both efficacy and toxicity.
+The model-fitting process is largely the same though:
+
+```{r}
+fit <- model %>% fit('1NNN 2ENT 3ETT 2EEN')
+```
+
+We have the usual interface:
+
+```{r}
+fit %>% recommended_dose()
+```
+
+```{r}
+fit %>% continue()
+```
+
+`escalation` also supports other so-called phase I/II designs that select doses by efficacy and toxicity like @wages2015seamless and @thall2004dose.
+See the help pages for more information.
 
 ### get_three_plus_three
 The 3+3 method is an old method for dose-escalation that uses fixed cohorts of three and pre-specified rules to govern dose-selection [@korn1994; @LeTourneau2009].
@@ -878,10 +955,9 @@ model %>%
 
 ## Simulation and dose-paths
 We have described at length above the flexible methods that `escalation` provides to specify dose-escalation designs and tailor trial behaviour.
-Once designs are specified, we can investigate their operating characteristics by simulation using the `simulate_trials` function.
+Once designs are specified, we can investigate their operating characteristics by simulation using the `simulate_trials` function, and efficiently compare designs using @sweeting2023's method in `simulate_compare`.
 We can also exhaustively calculate dose recommendations for future cohorts using the `get_dose_paths` function.
-Both of these topics are the topics of full vignettes.
-Please check them out.
+Both of these topics are the topics of full vignettes so please check them out.
 
 
 
