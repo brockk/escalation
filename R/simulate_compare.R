@@ -81,12 +81,12 @@
 #'
 #' # Let us compare two BOIN12 variants that differ in their stopping params:
 #' designs <- list(
-#'   "BOIN12 v1" = get_boin12(num_doses = num_doses,
+#'   "BOIN12 v1" = get_boin12(num_doses = 5,
 #'                            phi_t = 0.35, phi_e = 0.25,
 #'                            u2 = 40, u3 = 60,
 #'                            c_t = 0.95, c_e = 0.9) %>%
 #'     stop_at_n(n = 36),
-#'   "BOIN12 v2" = get_boin12(num_doses = num_doses,
+#'   "BOIN12 v2" = get_boin12(num_doses = 5,
 #'                            phi_t = 0.35, phi_e = 0.25,
 #'                            u2 = 40, u3 = 60,
 #'                            c_t = 0.5, c_e = 0.5) %>%
@@ -104,6 +104,8 @@
 #' # We might be interested in the absolute dose recommendation probabilities:
 #' convergence_plot(x)
 #'
+#' library(dplyr)
+#' library(ggplot2)
 #' # and, perhaps more importantly, how they compare:
 #' as_tibble(x) %>%
 #'   ggplot(aes(x = n, y = delta)) +
@@ -248,5 +250,5 @@ simulate_compare <- function(
     out[[label]] <- sims
   }
 
-  return(make_simulations_collection(out))
+  return(simulations_collection(out))
 }

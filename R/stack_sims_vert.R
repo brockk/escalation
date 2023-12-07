@@ -22,12 +22,12 @@
 #'
 #' # Let us compare two BOIN12 variants that differ in their stopping params:
 #' designs <- list(
-#'   "BOIN12 v1" = get_boin12(num_doses = num_doses,
+#'   "BOIN12 v1" = get_boin12(num_doses = 5,
 #'                            phi_t = 0.35, phi_e = 0.25,
 #'                            u2 = 40, u3 = 60,
 #'                            c_t = 0.95, c_e = 0.9) %>%
 #'     stop_at_n(n = 36),
-#'   "BOIN12 v2" = get_boin12(num_doses = num_doses,
+#'   "BOIN12 v2" = get_boin12(num_doses = 5,
 #'                            phi_t = 0.35, phi_e = 0.25,
 #'                            u2 = 40, u3 = 60,
 #'                            c_t = 0.5, c_e = 0.5) %>%
@@ -42,7 +42,12 @@
 #' )
 #' stack_sims_vert(x)
 stack_sims_vert <- function(sim_map, target_dose = NULL, alpha = 0.05) {
+
   q <- qnorm(p = alpha / 2, lower.tail = FALSE)
+
+  # Avoid NOTEs
+  r <- n <- .rate <- .se <- NULL
+
   sim_map %>%
     imap(
       ~ {

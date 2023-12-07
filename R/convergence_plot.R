@@ -2,6 +2,7 @@
 #' Plot the convergence processes from a collection of simulations.
 #'
 #' @param x object of type \code{\link{simulations_collection}}
+#' @param ... extra args are passed onwards to stack_sims_vert
 #'
 #' @return a ggplot2 plot
 #'
@@ -14,6 +15,10 @@
 #' # See ? simulate_compare
 #' }
 convergence_plot <- function(x, ...) {
+
+  # Avoid NOTEs
+  n <- .rate <- design <- NULL
+
   stack_sims_vert(x, ...) %>%
     ggplot(aes(x = n, y = .rate, col = design)) +
     geom_line() +

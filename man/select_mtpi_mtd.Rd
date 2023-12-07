@@ -25,6 +25,11 @@ authors' original intentions, the default is 'finally'.}
 \item{target}{We seek a dose with this probability of toxicity. If not
 provided, the value will be sought from the parent dose-selector.}
 
+\item{exclusion_certainty}{Numeric, threshold posterior certainty required to
+exclude a dose for being excessively toxic. The authors discuss values in the
+range 0.7 - 0.95. Set to a value > 1 to suppress the dose exclusion
+mechanism. The authors use the Greek letter xi for this parameter.}
+
 \item{alpha}{First shape parameter of the beta prior distribution on the
 probability of toxicity.}
 
@@ -55,7 +60,7 @@ model <- get_mtpi(num_doses = 5, target = target,
                   epsilon1 = 0.05, epsilon2 = 0.05,
                   exclusion_certainty = 0.95) \%>\%
   stop_at_n(n = 12) \%>\%
-  select_mtpi_mtd()
+  select_mtpi_mtd(exclusion_certainty = 0.95)
 
 outcomes <- '1NNN 2NTN 2NNN 3NTT'
 model \%>\% fit(outcomes) \%>\% recommended_dose()
@@ -65,14 +70,14 @@ model \%>\% fit(outcomes) \%>\% recommended_dose()
 model2 <- get_mtpi(num_doses = 5, target = target,
                    epsilon1 = 0.05, epsilon2 = 0.05,
                    exclusion_certainty = 0.95) \%>\%
-  select_mtpi_mtd(when = 'always')
+  select_mtpi_mtd(when = 'always', exclusion_certainty = 0.95)
 model2 \%>\% fit('1NNT') \%>\% recommended_dose()
 model2 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
 
 # and with any underlying model:
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 model3 <- get_dfcrm(skeleton = skeleton, target = target) \%>\%
-  select_mtpi_mtd(when = 'always')
+  select_mtpi_mtd(when = 'always', exclusion_certainty = 0.95)
 model3 \%>\% fit('1NNT') \%>\% recommended_dose()
 model3 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
 

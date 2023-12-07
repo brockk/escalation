@@ -8,6 +8,8 @@ convergence_plot(x, ...)
 }
 \arguments{
 \item{x}{object of type \code{\link{simulations_collection}}}
+
+\item{...}{extra args are passed onwards to stack_sims_vert}
 }
 \value{
 a ggplot2 plot

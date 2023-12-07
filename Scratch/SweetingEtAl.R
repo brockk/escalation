@@ -56,7 +56,7 @@ independent <- designs %>%
                       true_prob_eff)
     }
   ) %>%
-      make_simulations_collection()
+      simulations_collection()
 ls(independent)
 class(independent)
 independent[[1]]

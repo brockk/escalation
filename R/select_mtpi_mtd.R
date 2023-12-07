@@ -12,6 +12,7 @@
 #' override the parent dose selector when the parent is advocating no dose. Thus
 #' this class will not reinstate a dangerous dose.
 #'
+#' @inheritParams get_mtpi
 #' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param when Either of: 'finally' to select dose only when the parent
 #' dose-selector has finished, by returning continue() == FALSE; or 'always'
@@ -36,7 +37,7 @@
 #'                   epsilon1 = 0.05, epsilon2 = 0.05,
 #'                   exclusion_certainty = 0.95) %>%
 #'   stop_at_n(n = 12) %>%
-#'   select_mtpi_mtd()
+#'   select_mtpi_mtd(exclusion_certainty = 0.95)
 #'
 #' outcomes <- '1NNN 2NTN 2NNN 3NTT'
 #' model %>% fit(outcomes) %>% recommended_dose()
@@ -46,14 +47,14 @@
 #' model2 <- get_mtpi(num_doses = 5, target = target,
 #'                    epsilon1 = 0.05, epsilon2 = 0.05,
 #'                    exclusion_certainty = 0.95) %>%
-#'   select_mtpi_mtd(when = 'always')
+#'   select_mtpi_mtd(when = 'always', exclusion_certainty = 0.95)
 #' model2 %>% fit('1NNT') %>% recommended_dose()
 #' model2 %>% fit('1NNN 2NNT') %>% recommended_dose()
 #'
 #' # and with any underlying model:
 #' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
 #' model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-#'   select_mtpi_mtd(when = 'always')
+#'   select_mtpi_mtd(when = 'always', exclusion_certainty = 0.95)
 #' model3 %>% fit('1NNT') %>% recommended_dose()
 #' model3 %>% fit('1NNN 2NNT') %>% recommended_dose()
 #'

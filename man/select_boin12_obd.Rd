@@ -41,7 +41,8 @@ is advocating no dose. Thus this class will not reinstate a dangerous dose.
 \examples{
 # This class is intended to make the final dose selection in a BOIN12 trial:
 tox_limit <- 0.35
-model <- get_boin12(num_doses = 5, tox_limit = tox_limit) \%>\%
+model <- get_boin12(num_doses = 5, phi_t = 0.35, phi_e = 0.25,
+                    u2 = 40, u3 = 60, n_star = 6) \%>\%
   stop_at_n(n = 12) \%>\%
   select_boin12_obd()
 
@@ -50,17 +51,11 @@ model \%>\% fit(outcomes) \%>\% recommended_dose()
 
 # However, since behaviour is modular in this package, we can use this method
 # to select dose at every dose decision:
-model2 <- get_boin12(num_doses = 5, tox_limit = tox_limit) \%>\%
+model2 <- get_boin12(num_doses = 5, phi_t = 0.35, phi_e = 0.25,
+                    u2 = 40, u3 = 60, n_star = 6) \%>\%
   select_boin12_obd(when = 'always')
 model2 \%>\% fit('1NNT') \%>\% recommended_dose()
 model2 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
-
-# and with any underlying model:
-skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
-model3 <- get_dfcrm(skeleton = skeleton, target = tox_limit) \%>\%
-  select_boin12_obd(when = 'always', tox_limit = tox_limit)
-model3 \%>\% fit('1NNT') \%>\% recommended_dose()
-model3 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
 
 }
 \references{

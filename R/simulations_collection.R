@@ -1,7 +1,7 @@
 
 #' Make an instance of type \code{simulations_collection}
 #'
-#' @param sim_map list, character -> \class{\link{simulations}} object
+#' @param sim_map list, character -> \code{\link{simulations}} object
 #'
 #' @return object of class \code{simulations_collection}, inheriting from list
 #' @export
@@ -10,7 +10,7 @@
 #' Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
 #' Potential outcome simulation for efficient head-to-head comparison of
 #' adaptive dose-finding designs. Preprint.
-make_simulations_collection <- function(sim_map) {
+simulations_collection <- function(sim_map) {
   class(sim_map) <- c("simulations_collection", class(sim_map))
   return(sim_map)
 }
@@ -19,11 +19,20 @@ make_simulations_collection <- function(sim_map) {
 #' @importFrom dplyr as_tibble inner_join select mutate filter group_by ungroup
 #' @export
 as_tibble.simulations_collection <- function(x, target_dose = NULL,
-                                             alpha = 0.05) {
+                                             alpha = 0.05,
+                                             ...) {
   sim_map <- x
   q <- qnorm(p = alpha / 2, lower.tail = FALSE)
   stacked_df <- stack_sims_vert(sim_map = sim_map, target_dose = target_dose,
                                 alpha = alpha)
+
+  # Avoid NOTEs
+  dose <- n <- design <- hit <- NULL
+  design.x <- design.y <- hit.x <- hit.y <- NULL
+  X <- Y <- X2 <- Y2 <- XY <- NULL
+  psi1 <- psi2 <- v_psi1 <- v_psi2 <- cov_psi12 <- NULL
+  v_delta <- delta <- se_delta <- NULL
+
   # Compare each design to every other design:
   inner_join(
     stacked_df %>%
@@ -56,5 +65,6 @@ as_tibble.simulations_collection <- function(x, target_dose = NULL,
       delta_u = delta + q * se_delta,
       comparison = paste0(design.x, " vs ", design.y)
     ) %>%
-    ungroup()
+    ungroup() %>%
+    as_tibble(...)
 }
