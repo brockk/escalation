@@ -13,6 +13,7 @@ coverage](https://app.codecov.io/gh/brockk/escalation/branch/master/graph/badge.
 version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
 ![](https://cranlogs.r-pkg.org/badges/escalation)
 ![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
+[![R-CMD-check](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 by Kristian Brock. Documentation is hosted at
@@ -138,8 +139,6 @@ library(escalation)
 ```
 
     ## Loading required package: magrittr
-
-    ## Warning: package 'magrittr' was built under R version 4.0.5
 
 At the core of the dose selection process is an algorithm or a model
 that selects doses in responses to outcomes. The classes capable of
@@ -295,18 +294,18 @@ fit %>% prob_tox_samples() %>% head(10)
 ```
 
     ## # A tibble: 10 × 6
-    ##    .draw      `1`          `2`       `3`     `4`    `5`
-    ##    <chr>    <dbl>        <dbl>     <dbl>   <dbl>  <dbl>
-    ##  1 1     1.14e- 5 0.000159     0.00516   0.0308  0.144 
-    ##  2 2     4.57e- 5 0.000462     0.00981   0.0470  0.182 
-    ##  3 3     4.49e- 5 0.000455     0.00972   0.0468  0.181 
-    ##  4 4     4.76e- 3 0.0164       0.0842    0.195   0.402 
-    ##  5 5     6.90e-10 0.0000000909 0.0000576 0.00158 0.0274
-    ##  6 6     1.10e- 2 0.0312       0.124     0.251   0.463 
-    ##  7 7     1.10e- 2 0.0312       0.124     0.251   0.463 
-    ##  8 8     1.26e- 2 0.0347       0.132     0.262   0.474 
-    ##  9 9     3.41e- 7 0.0000107    0.00102   0.0105  0.0789
-    ## 10 10    1.48e- 4 0.00114      0.0169    0.0674  0.222
+    ##    .draw      `1`      `2`      `3`          `4`       `5`
+    ##    <chr>    <dbl>    <dbl>    <dbl>        <dbl>     <dbl>
+    ##  1 1     2.54e- 4 1.72e- 3 2.17e- 2 0.0795       0.244    
+    ##  2 2     1.54e- 2 4.05e- 2 1.45e- 1 0.279        0.491    
+    ##  3 3     2.93e- 2 6.63e- 2 1.95e- 1 0.340        0.548    
+    ##  4 4     7.63e- 8 3.38e- 6 5.09e- 4 0.00665      0.0611   
+    ##  5 5     1.75e-10 3.17e- 8 3.06e- 5 0.00104      0.0217   
+    ##  6 6     3.51e-14 4.55e-11 5.94e- 7 0.0000767    0.00508  
+    ##  7 7     1.49e-24 4.85e-19 9.41e-12 0.0000000515 0.0000865
+    ##  8 8     9.34e-16 2.80e-12 1.11e- 7 0.0000253    0.00274  
+    ##  9 9     3.34e-18 3.69e-14 8.18e- 9 0.00000451   0.00105  
+    ## 10 10    2.76e-13 2.22e-10 1.54e- 6 0.000144     0.00722
 
 That facilitates really flexible inference. For example, what is the
 probability that toxicity at dose 3 is at least 5% greater than that at
@@ -321,7 +320,7 @@ fit %>% prob_tox_samples() %>%
     ## # A tibble: 1 × 1
     ##    prob
     ##   <dbl>
-    ## 1 0.571
+    ## 1 0.558
 
 ‘More likely than not’, is the answer.
 
@@ -367,9 +366,9 @@ the target toxicity level:
 fit %>% mean_prob_tox()
 ```
 
-    ##  [1] 0.01258690 0.03252256 0.06752086 0.13847209 0.20636157 0.26917718
-    ##  [7] 0.32637010 0.37801151 0.46612242 0.53711249 0.66158702 0.73901450
-    ## [13] 0.82594636 0.87171076 0.89929305
+    ##  [1] 0.01229476 0.03139614 0.06501636 0.13376511 0.20021181 0.26219444
+    ##  [7] 0.31900339 0.37057264 0.45907389 0.53075063 0.65691058 0.73549743
+    ## [13] 0.82365045 0.86996457 0.89783331
 
 This is perhaps unsurprising in a situation with so many doses.
 
@@ -732,7 +731,7 @@ This is in contrast to the scenario where a trial is stopped because all
 doses are inappropriate. In this scenario, the dose recommendation would
 be `NA`. We will encounter this in examples below.
 
-### stop_when_n\_at_dose
+### stop_when_n_at_dose
 
 Another common approach is to stop a dose-finding experiment when a
 given number of patients have been treated at a particular dose.
@@ -1022,7 +1021,7 @@ fit %>% prob_tox_exceeds(0.35) %>% round(2)
 
 but a non-statistical method like 3+3 does not.
 
-### demand_n\_at_dose
+### demand_n_at_dose
 
 We have looked at many behaviours that provide stopping. We can also
 look at some behaviours that delay stopping.
@@ -1299,18 +1298,18 @@ Method*. <https://CRAN.R-project.org/package=dfcrm>.
 
 <div id="ref-Ji2007" class="csl-entry">
 
-Ji, Yuan, Yisheng Li, and B. Nebiyou Bekele. 2007. “<span
-class="nocase">Dose-finding in phase I clinical trials based on toxicity
-probability intervals</span>.” *Clinical Trials* 4 (3): 235–44.
+Ji, Yuan, Yisheng Li, and B. Nebiyou Bekele. 2007.
+“<span class="nocase">Dose-finding in phase I clinical trials based on
+toxicity probability intervals</span>.” *Clinical Trials* 4 (3): 235–44.
 <https://doi.org/10.1177/1740774507079442>.
 
 </div>
 
 <div id="ref-Ji2010" class="csl-entry">
 
-Ji, Yuan, Ping Liu, Yisheng Li, and B. Nebiyou Bekele. 2010. “<span
-class="nocase">A modified toxicity probability interval method for
-dose-finding trials</span>.” *Clinical Trials* 7 (6): 653–63.
+Ji, Yuan, Ping Liu, Yisheng Li, and B. Nebiyou Bekele. 2010.
+“<span class="nocase">A modified toxicity probability interval method
+for dose-finding trials</span>.” *Clinical Trials* 7 (6): 653–63.
 <https://doi.org/10.1177/1740774510382799>.
 
 </div>
@@ -1353,9 +1352,9 @@ Continual Reassessment Method via a Modified Allocation Rule.”
 
 <div id="ref-Neuenschwander2008" class="csl-entry">
 
-Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008. “<span
-class="nocase">Critical aspects of the Bayesian approach to phase I
-cancer trials</span>.” *Statistics in Medicine* 27: 2420–39.
+Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008.
+“<span class="nocase">Critical aspects of the Bayesian approach to phase
+I cancer trials</span>.” *Statistics in Medicine* 27: 2420–39.
 <https://doi.org/10.1002/sim.3230>.
 
 </div>
