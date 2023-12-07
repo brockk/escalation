@@ -5,15 +5,12 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://app.travis-ci.org/brockk/escalation.svg?branch=master)](https://app.travis-ci.com/brockk/escalation)
-[![Codecov test
-coverage](https://app.codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg)](https://app.codecov.io/gh/brockk/escalation?branch=master)
+[![R-CMD-check](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/brockk/escalation/graph/badge.svg?token=9mDRK6d4Bn)](https://codecov.io/gh/brockk/escalation)
 [![cran
 version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
 ![](https://cranlogs.r-pkg.org/badges/escalation)
 ![](https://cranlogs.r-pkg.org/badges/grand-total/escalation)
-[![R-CMD-check](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 by Kristian Brock. Documentation is hosted at
@@ -348,18 +345,18 @@ fit %>% prob_tox_samples() %>% head(10)
 ```
 
     ## # A tibble: 10 × 6
-    ##    .draw      `1`      `2`          `3`       `4`     `5`
-    ##    <chr>    <dbl>    <dbl>        <dbl>     <dbl>   <dbl>
-    ##  1 1     2.17e- 3 8.95e- 3 0.0585       0.153     0.351  
-    ##  2 2     3.78e- 1 4.74e- 1 0.638        0.743     0.847  
-    ##  3 3     4.60e-17 2.77e-13 0.0000000275 0.0000101 0.00164
-    ##  4 4     1.41e-12 7.80e-10 0.00000328   0.000237  0.00954
-    ##  5 5     1.18e- 4 9.59e- 4 0.0152       0.0629    0.214  
-    ##  6 6     4.51e- 3 1.57e- 2 0.0822       0.192     0.398  
-    ##  7 7     3.83e- 3 1.39e- 2 0.0761       0.182     0.387  
-    ##  8 8     9.15e- 7 2.28e- 5 0.00161      0.0142    0.0934 
-    ##  9 9     8.23e- 3 2.50e- 2 0.108        0.230     0.441  
-    ## 10 10    6.37e- 2 1.20e- 1 0.280        0.431     0.625
+    ##    .draw      `1`      `2`          `3`        `4`     `5`
+    ##    <chr>    <dbl>    <dbl>        <dbl>      <dbl>   <dbl>
+    ##  1 1     4.39e- 2 9.04e- 2 0.235        0.384      0.587  
+    ##  2 2     3.39e- 6 6.24e- 5 0.00294      0.0212     0.117  
+    ##  3 3     8.03e- 2 1.44e- 1 0.311        0.462      0.651  
+    ##  4 4     7.41e- 2 1.35e- 1 0.300        0.451      0.642  
+    ##  5 5     5.32e- 2 1.05e- 1 0.257        0.408      0.606  
+    ##  6 6     5.60e- 7 1.57e- 5 0.00128      0.0122     0.0859 
+    ##  7 7     2.28e-17 1.62e-13 0.0000000199 0.00000812 0.00145
+    ##  8 8     2.14e- 1 3.06e- 1 0.490        0.624      0.769  
+    ##  9 9     2.63e- 1 3.58e- 1 0.539        0.664      0.796  
+    ## 10 10    1.70e- 1 2.56e- 1 0.441        0.582      0.739
 
 That facilitates really flexible inference. For example, what is the
 probability that toxicity at dose 3 is at least 5% greater than that at
@@ -374,7 +371,7 @@ fit %>% prob_tox_samples() %>%
     ## # A tibble: 1 × 1
     ##    prob
     ##   <dbl>
-    ## 1 0.576
+    ## 1 0.586
 
 ‘More likely than not’, is the answer.
 
@@ -1337,7 +1334,7 @@ We have described at length above the flexible methods that `escalation`
 provides to specify dose-escalation designs and tailor trial behaviour.
 Once designs are specified, we can investigate their operating
 characteristics by simulation using the `simulate_trials` function, and
-efficiently compare designs using Sweeting et al. (2024)’s method in
+efficiently compare designs using Sweeting et al. (2023)’s method in
 `simulate_compare`. We can also exhaustively calculate dose
 recommendations for future cohorts using the `get_dose_paths` function.
 Both of these topics are the topics of full vignettes so please check
@@ -1501,10 +1498,10 @@ Method: A Practical Design for Phase 1 Clinical Trials in Cancer.”
 
 </div>
 
-<div id="ref-sweeting2024" class="csl-entry">
+<div id="ref-sweeting2023" class="csl-entry">
 
 Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock.
-2024. “Potential Outcome Simulation for Efficient Head-to-Head
+2023. “Potential Outcome Simulation for Efficient Head-to-Head
 Comparison of Adaptive Dose-Finding Designs.” *Preprint*.
 
 </div>
