@@ -69,3 +69,14 @@ devtools::revdep('escalation')
 # devtools::install_github('r-lib/revdepcheck')
 library(revdepcheck)
 revdep_check(num_workers = 2)
+
+# Use GitHub actions ----
+library(usethis)
+# Build checks:
+# use_github_action_check_standard()
+use_github_action('check-standard')
+devtools::build_readme()
+# Test coverage:
+usethis::use_github_action("test-coverage")
+# Build pkgdown site
+usethis::use_github_action("pkgdown")

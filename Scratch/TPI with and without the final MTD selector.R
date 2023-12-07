@@ -4,15 +4,16 @@ library(dplyr)
 library(ggplot2)
 
 # Load ----
-target <- 0.25
-mtpi_design <- get_mtpi(num_doses = 8, target = target, epsilon1 = 0.05,
-                 epsilon2 = 0.05, exclusion_certainty = 0.95) %>%
+target <- 0.3
+
+tpi_design <- get_tpi(num_doses = 8, target = target, k1 = 1, k2 = 1.5,
+                      exclusion_certainty = 0.95) %>%
   stop_at_n(n = 30)
-mtpi_with_stopper <- mtpi_design %>%
-  select_mtpi_mtd(exclusion_certainty = 0.95)
+tpi_with_iso <- tpi_design %>%
+  select_tpi_mtd(exclusion_certainty = 0.95)
 designs <- list(
-  "mTPI" = mtpi_design,
-  "mTPI plus isotonic" = mtpi_with_stopper
+  "TPI" = tpi_design,
+  "TPI plus isotonic" = tpi_with_iso
 )
 
 # Sc 1 ----
@@ -38,7 +39,7 @@ as_tibble(sc1) %>%
   filter(n == 100) %>%
   select(design.x, design.y, delta_l, delta, delta_u)
 # Compared to a design without the final MTD selector, the design with the
-# final MTD selector is significantly more likely to select dose 1 over dose 2
+# final MTD selector is significantly more like to select dose 2 over 1 & 3
 # in this scenario.
 
 # Sc 2 ----
@@ -64,6 +65,9 @@ as_tibble(sc2) %>%
 # final MTD selector is significantly more like to select dose 5 over higher
 # doses in this scenario.
 
+sc2$TPI
+sc2$`TPI plus isotonic`
+
 # Sc 3 ----
 set.seed(2023)
 sc3 = simulate_compare(
@@ -83,10 +87,9 @@ as_tibble(sc3) %>%
                .rows = label_both,
                .cols = label_both)
   )
-# Compared to a design without the final MTD selector, the design with the
-# final MTD selector is significantly more like to select dose 2 over dose 3
-# in this scenario.
+# Designs are similar in this scenario.
 
+sc3$TPI
 
 # Sc 4 ----
 set.seed(2023)
@@ -107,8 +110,7 @@ as_tibble(sc4) %>%
                .rows = label_both,
                .cols = label_both)
   )
-# All stop? TODO
-
+# A bit more likely to select dose 1 over 2, but not yet sig.
 
 
 # Sc 5 ----
@@ -131,8 +133,11 @@ as_tibble(sc5) %>%
                .cols = label_both)
   )
 # Compared to a design without the final MTD selector, the design with the
-# final MTD selector is significantly more like to select dose 1 over dose 3 in
-# this scenario, buty similar at dose 2.
+# final MTD selector is significantly more like to select dose 1 over dose 3 & 4
+# in this scenario, buty similar at dose 2.
+
+sc5$`TPI plus isotonic`
+
 
 # Sc 6 ----
 set.seed(2023)
@@ -154,5 +159,5 @@ as_tibble(sc6) %>%
                .cols = label_both)
   )
 # Compared to a design without the final MTD selector, the design with the
-# final MTD selector is significantly more like to select doses 1 & 2 over
+# final MTD selector is significantly more like to select doses 2 over
 # higher doses in this scenario.
