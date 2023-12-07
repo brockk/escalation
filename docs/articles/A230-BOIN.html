@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -100,8 +96,8 @@
 
       
 
-      </header><script src="A230-BOIN_files/header-attrs-2.10/header-attrs.js"></script><script src="A230-BOIN_files/htmlwidgets-1.5.2/htmlwidgets.js"></script><script src="A230-BOIN_files/viz-1.8.2/viz.js"></script><link href="A230-BOIN_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="A230-BOIN_files/grViz-binding-1.0.6.1/grViz.js"></script><div class="row">
+      </header><script src="A230-BOIN_files/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="A230-BOIN_files/viz-1.8.2/viz.js"></script><link href="A230-BOIN_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="A230-BOIN_files/grViz-binding-1.0.10/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Bayesian Optimal Interval Design</h1>
@@ -114,18 +110,18 @@
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>The Bayesian Optimal Interval (BOIN) design was introduced by <span class="citation">Liu and Yuan (2015)</span>. It is one of a series of
 dose-finding trial designs that works by partitioning the probability of
 toxicity into a set of intervals. These designs make dose-selection
 decisions that are determined by the interval in which the probability
 of toxicity for the current dose is believed to reside.</p>
 </div>
-<div id="summary-of-the-boin-design" class="section level1">
-<h1 class="hasAnchor">
-<a href="#summary-of-the-boin-design" class="anchor"></a>Summary of the BOIN Design</h1>
+<div class="section level2">
+<h2 id="summary-of-the-boin-design">Summary of the BOIN Design<a class="anchor" aria-label="anchor" href="#summary-of-the-boin-design"></a>
+</h2>
 <p>BOIN seeks a dose with probability of toxicity close to some
 pre-specified target level, <span class="math inline">\(p_T\)</span>.
 Let the probability of toxicity at dose <span class="math inline">\(i\)</span> be <span class="math inline">\(p_i\)</span>. The entire range of possible values
@@ -185,122 +181,120 @@ Furthermore, the design will advocate stopping if the lowest dose is
 inferred to be inadmissible.</p>
 <p>See <span class="citation">Liu and Yuan (2015)</span> and <span class="citation">Yuan and Liu (2018)</span> for full details.</p>
 </div>
-<div id="implementation-in-escalation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#implementation-in-escalation" class="anchor"></a>Implementation in <code>escalation</code>
-</h1>
+<div class="section level2">
+<h2 id="implementation-in-escalation">Implementation in <code>escalation</code><a class="anchor" aria-label="anchor" href="#implementation-in-escalation"></a>
+</h2>
 <p>To demonstrate the method, let us reproduce the dose selection
 sequence in a trial of five doses targeting <span class="math inline">\(p_T = 0.3\)</span>, described in <span class="citation">Yuan and Liu (2018)</span>.</p>
 <p>Opting to take the defaults, <span class="math inline">\(\phi_1 = 0.6
 p_T = 0.18\)</span> and <span class="math inline">\(\phi_2 = 1.4 p_T =
 0.42\)</span>, we create an object to fit the model using:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">escalation</span><span class="op">)</span>
-<span class="co">#&gt; Warning: package 'magrittr' was built under R version 4.0.5</span>
-
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span>, target <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">escalation</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span>, target <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
 <p>This is short-hand for</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span>, target <span class="op">=</span> <span class="fl">0.3</span>, p.saf <span class="op">=</span> <span class="fl">0.18</span>, p.tox <span class="op">=</span> <span class="fl">0.42</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span>, target <span class="op">=</span> <span class="fl">0.3</span>, p.saf <span class="op">=</span> <span class="fl">0.18</span>, p.tox <span class="op">=</span> <span class="fl">0.42</span><span class="op">)</span></span></code></pre></div>
 <p>The text in the paper describes that outcomes ‘1NNN’ were observed in
 the first cohort:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN'</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN'</span><span class="op">)</span></span></code></pre></div>
 <p>leading to advice to escalate:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">fit</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] 2</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
 <p>The next cohort also saw three non-toxicity events, leading to
 advice:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNN'</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] 3</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNN'</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 <p>In the third cohort, two patients had toxicity, leading to
 advice:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNN 3NTT'</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] 2</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNN 3NTT'</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
 <p>The relatively low sample size at dose 3 means that the dose has not
 yet been rendered inadmissible:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">fit</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE</span></pre></div>
-<div id="dose-paths" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dose-paths" class="anchor"></a>Dose paths</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/dose_admissible.html">dose_admissible</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE TRUE TRUE TRUE TRUE</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="dose-paths">Dose paths<a class="anchor" aria-label="anchor" href="#dose-paths"></a>
+</h3>
 <p>We can reproduce some of the advice above using dose-paths to
 exhaustively calculate all possible future model advice. For example,
 after observing <code>1NNN</code> in the first cohort, we can reproduce
 the advice to escalate further after seeing <code>2NNN</code> and then
 de-escalate after seeing <code>3NTT</code> using:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">cohort_sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="va">cohort_sizes</span>, 
-                                  previous_outcomes <span class="op">=</span> <span class="st">'1NNN'</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths</span><span class="op">)</span></pre></div>
-<div id="htmlwidget-95076759d3f5018eb85a" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-95076759d3f5018eb85a">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"3\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"10\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"13\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"14\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Thus, we can trace the path <code>1NNN 2NNN 3NNT</code>, along with
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cohort_sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="va">cohort_sizes</span>, </span>
+<span>                                  previous_outcomes <span class="op">=</span> <span class="st">'1NNN'</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths</span><span class="op">)</span></span></code></pre></div>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-9e8c8128d7b5db699c39" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-9e8c8128d7b5db699c39">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"2\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"3\" [label = \"4\", fontcolor = \"#414487FF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"5\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"6\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"7\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"9\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"10\" [label = \"3\", fontcolor = \"#440154FF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"12\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"13\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"14\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"16\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"17\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"18\" [label = \"2\", fontcolor = \"#FDE725FF\", fillcolor = \"#2A788EFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"20\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n  \"21\" [label = \"1\", fontcolor = \"#7AD151FF\", fillcolor = \"#414487FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Thus, we can trace the path <code>1NNN 2NNN 3NNT</code>, along with
 every other possible path in two cohorts of three after having observed
 <code>1NNN</code>.</p>
 <p>For more information on working with dose-paths, refer to the
 dose-paths vignette.</p>
 </div>
-<div id="simulation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulation" class="anchor"></a>Simulation</h2>
+<div class="section level3">
+<h3 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
+</h3>
 <p><span class="citation">Liu and Yuan (2015)</span> present in their
 Table 4 some simulated operating characteristics. We can use the
 <code>simulate_trials</code> function to reproduce the findings.</p>
 <p>Their example concerns a clinical trial of six doses that targets 25%
 toxicity. We specify the <code>model</code> object to reflect this. They
 also elect to limit the trial to a sample size of <span class="math inline">\(n=36\)</span>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">6</span>, target <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">36</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">6</span>, target <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">36</span><span class="op">)</span></span></code></pre></div>
 <p>Their scenario 1 investigates the true probability vector:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">true_prob_tox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.35</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">true_prob_tox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.35</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
 <p>For the sake of speed, we will run just fifty iterations:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">50</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></code></pre></div>
 <p>In real life, however, we would naturally run many thousands of
 iterations.</p>
 <p>Running the simulation:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="va">sims</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">true_prob_tox</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">true_prob_tox</span><span class="op">)</span></span></code></pre></div>
 <p>we see that from this small sample size, the probability that each
 dose is recommended is similar to that reported:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span>
-<span class="co">#&gt; NoDose      1      2      3      4      5      6 </span>
-<span class="co">#&gt;   0.16   0.68   0.14   0.02   0.00   0.00   0.00</span></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
+<span><span class="co">#&gt; NoDose      1      2      3      4      5      6 </span></span>
+<span><span class="co">#&gt;   0.14   0.56   0.30   0.00   0.00   0.00   0.00</span></span></code></pre></div>
 <p>and so is the expected number of patients treated at each dose
 level:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="fu"><a href="../reference/n_at_dose.html">n_at_dose</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;     1     2     3     4     5     6 </span>
-<span class="co">#&gt; 21.42  9.24  1.56  0.06  0.00  0.00</span></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="fu"><a href="../reference/n_at_dose.html">n_at_dose</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     1     2     3     4     5     6 </span></span>
+<span><span class="co">#&gt; 23.40  8.22  0.96  0.00  0.00  0.00</span></span></code></pre></div>
 <p>For more information on running dose-finding simulations, refer to
 the simulation vignette.</p>
 </div>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-liu_bayesian_2015" class="csl-entry">
 Liu, Suyu, and Ying Yuan. 2015. <span>“Bayesian Optimal Interval Designs
 for Phase <span>I</span> Clinical Trials.”</span> <em>Journal of the
 Royal Statistical Society: Series C (Applied Statistics)</em> 64 (3):
-507–23. <a href="https://doi.org/10.1111/rssc.12089">https://doi.org/10.1111/rssc.12089</a>.
+507–23. <a href="https://doi.org/10.1111/rssc.12089" class="external-link">https://doi.org/10.1111/rssc.12089</a>.
 </div>
 <div id="ref-BOIN" class="csl-entry">
 Yuan, Ying, and Suyu Liu. 2018. <em>BOIN: Bayesian Optimal INterval
 (BOIN) Design for Single-Agent and Drug- Combination Phase i Clinical
-Trials</em>. <a href="https://CRAN.R-project.org/package=BOIN">https://CRAN.R-project.org/package=BOIN</a>.
+Trials</em>. <a href="https://CRAN.R-project.org/package=BOIN" class="external-link">https://CRAN.R-project.org/package=BOIN</a>.
 </div>
 </div>
 </div>
@@ -317,11 +311,13 @@ Trials</em>. <a href="https://CRAN.R-project.org/package=BOIN">https://CRAN.R-pr
 
 
       <footer><div class="copyright">
-  <p>Developed by Kristian Brock.</p>
+  <p></p>
+<p>Developed by Kristian Brock, Daniel Slade, Michael Sweeting.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -329,6 +325,8 @@ Trials</em>. <a href="https://CRAN.R-project.org/package=BOIN">https://CRAN.R-pr
 
   
 
+
+  
 
   </body>
 </html>

@@ -78,6 +78,9 @@ By default, dose decisions in simulated trials are made after each
   by specifying \code{return_all_fits = TRUE}. See Examples.
 }
 \examples{
+\dontrun{
+# Don't run on build because they exceed CRAN time limit
+
 # In a five-dose scenario, we have assumed probabilities for Prob(tox):
 true_prob_tox <- c(0.05, 0.10, 0.15, 0.18, 0.45)
 # and Prov(eff):
@@ -205,6 +208,7 @@ x <- simulate_compare(
   true_prob_eff,
   return_all_fits = TRUE
 )
+}
 
 }
 \references{

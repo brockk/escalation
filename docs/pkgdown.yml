@@ -1,5 +1,5 @@
-pandoc: 2.19.2
-pkgdown: 1.6.1
+pandoc: 3.1.1
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   A100-DoseSelectors: A100-DoseSelectors.html
@@ -10,5 +10,5 @@ articles:
   A230-BOIN: A230-BOIN.html
   A600-DosePaths: A600-DosePaths.html
   A700-Simulation: A700-Simulation.html
-last_built: 2023-05-29T07:49Z
+last_built: 2023-12-07T15:53Z
 

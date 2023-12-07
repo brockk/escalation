@@ -1,4 +1,10 @@
 
+# escalation 0.1.6
+
+* Implement efficient simulation comparison method of Sweeting et al. in simulate_compare()
+* Implement BOIN12 design
+* Add MTD / OBD selectors for TPI, mTPI, mTPI2 and BOIN12 for final dose choice at end of a trial
+
 # escalation 0.1.5
 
 * Add mTPI2 dose-finding method
