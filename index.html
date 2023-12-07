@@ -314,18 +314,18 @@
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_samples.html">prob_tox_samples</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb31"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 10 × 6</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    .draw      `1`      `2`          `3`       `4`     `5`</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 1     2.17e- 3 8.95e- 3 0.0585       0.153     0.351  </span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 2     3.78e- 1 4.74e- 1 0.638        0.743     0.847  </span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 3     4.60e-17 2.77e-13 0.0000000275 0.0000101 0.00164</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 4     1.41e-12 7.80e-10 0.00000328   0.000237  0.00954</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 5     1.18e- 4 9.59e- 4 0.0152       0.0629    0.214  </span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 6     4.51e- 3 1.57e- 2 0.0822       0.192     0.398  </span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 7     3.83e- 3 1.39e- 2 0.0761       0.182     0.387  </span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 8     9.15e- 7 2.28e- 5 0.00161      0.0142    0.0934 </span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 9     8.23e- 3 2.50e- 2 0.108        0.230     0.441  </span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 10    6.37e- 2 1.20e- 1 0.280        0.431     0.625</span></span></code></pre></div>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    .draw      `1`      `2`          `3`        `4`     `5`</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 1     4.39e- 2 9.04e- 2 0.235        0.384      0.587  </span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 2     3.39e- 6 6.24e- 5 0.00294      0.0212     0.117  </span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 3     8.03e- 2 1.44e- 1 0.311        0.462      0.651  </span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 4     7.41e- 2 1.35e- 1 0.300        0.451      0.642  </span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 5     5.32e- 2 1.05e- 1 0.257        0.408      0.606  </span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 6     5.60e- 7 1.57e- 5 0.00128      0.0122     0.0859 </span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 7     2.28e-17 1.62e-13 0.0000000199 0.00000812 0.00145</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 8     2.14e- 1 3.06e- 1 0.490        0.624      0.769  </span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 9     2.63e- 1 3.58e- 1 0.539        0.664      0.796  </span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 10    1.70e- 1 2.56e- 1 0.441        0.582      0.739</span></span></code></pre></div>
 <p>That facilitates really flexible inference. For example, what is the probability that toxicity at dose 3 is at least 5% greater than that at dose 2? Simple to answer using the posterior samples:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -334,7 +334,7 @@
 <div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 1 × 1</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    prob</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;dbl&gt;</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 0.576</span></span></code></pre></div>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 0.586</span></span></code></pre></div>
 <p>‘More likely than not’, is the answer.</p>
 <p>See the Continual Reassessment Method vignette for more details.</p>
 </div>
@@ -816,7 +816,7 @@
 <div class="section level2">
 <h2 id="simulation-and-dose-paths">Simulation and dose-paths<a class="anchor" aria-label="anchor" href="#simulation-and-dose-paths"></a>
 </h2>
-<p>We have described at length above the flexible methods that <code>escalation</code> provides to specify dose-escalation designs and tailor trial behaviour. Once designs are specified, we can investigate their operating characteristics by simulation using the <code>simulate_trials</code> function, and efficiently compare designs using Sweeting et al. (2024)’s method in <code>simulate_compare</code>. We can also exhaustively calculate dose recommendations for future cohorts using the <code>get_dose_paths</code> function. Both of these topics are the topics of full vignettes so please check them out.</p>
+<p>We have described at length above the flexible methods that <code>escalation</code> provides to specify dose-escalation designs and tailor trial behaviour. Once designs are specified, we can investigate their operating characteristics by simulation using the <code>simulate_trials</code> function, and efficiently compare designs using Sweeting et al. (2023)’s method in <code>simulate_compare</code>. We can also exhaustively calculate dose recommendations for future cohorts using the <code>get_dose_paths</code> function. Both of these topics are the topics of full vignettes so please check them out.</p>
 </div>
 </div>
 <div class="section level1">
@@ -888,8 +888,8 @@ Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008. “<span class=
 <div id="ref-OQuigley1990" class="csl-entry">
 O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual Reassessment Method: A Practical Design for Phase 1 Clinical Trials in Cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628" class="external-link uri">https://doi.org/10.2307/2531628</a>.
 </div>
-<div id="ref-sweeting2024" class="csl-entry">
-Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock. 2024. “Potential Outcome Simulation for Efficient Head-to-Head Comparison of Adaptive Dose-Finding Designs.” <em>Preprint</em>.
+<div id="ref-sweeting2023" class="csl-entry">
+Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock. 2023. “Potential Outcome Simulation for Efficient Head-to-Head Comparison of Adaptive Dose-Finding Designs.” <em>Preprint</em>.
 </div>
 <div id="ref-thall2004dose" class="csl-entry">
 Thall, Peter F, and John D Cook. 2004. “Dose-Finding Based on Efficacy–Toxicity Trade-Offs.” <em>Biometrics</em> 60 (3): 684–93.
@@ -944,10 +944,9 @@ Zohar, Sarah, and Sylvie Chevret. 2001. “The Continual Reassessment Method: Co
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://app.travis-ci.com/brockk/escalation" class="external-link"><img src="https://app.travis-ci.org/brockk/escalation.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://app.codecov.io/gh/brockk/escalation?branch=master" class="external-link"><img src="https://app.codecov.io/gh/brockk/escalation/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://cran.r-project.org/package=escalation" class="external-link"><img src="http://www.r-pkg.org/badges/version/escalation" alt="cran version"></a></li>
 <li><a href="https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/brockk/escalation" class="external-link"><img src="https://codecov.io/gh/brockk/escalation/graph/badge.svg?token=9mDRK6d4Bn" alt="codecov"></a></li>
+<li><a href="https://cran.r-project.org/package=escalation" class="external-link"><img src="http://www.r-pkg.org/badges/version/escalation" alt="cran version"></a></li>
 </ul>
 </div>
 
