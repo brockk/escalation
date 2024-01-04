@@ -26,7 +26,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
       </span>
     </div>
 
@@ -64,6 +64,9 @@
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -96,7 +99,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_compare</span><span class="op">(</span><span class="va">designs</span>, <span class="va">num_sims</span>, <span class="va">true_prob_tox</span>, true_prob_eff <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_compare</span><span class="op">(</span></span>
+<span>  <span class="va">designs</span>,</span>
+<span>  <span class="va">num_sims</span>,</span>
+<span>  <span class="va">true_prob_tox</span>,</span>
+<span>  true_prob_eff <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  patient_samples <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rho <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  return_patient_samples <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -118,6 +130,25 @@ probabilities</p></dd>
 <dt>true_prob_eff</dt>
 <dd><p>numeric vector of true but unknown efficacy
 probabilities. NULL if efficacy not analysed.</p></dd>
+
+
+<dt>patient_samples</dt>
+<dd><p>Optional list of length <code>num_sims</code>, where each
+element is an instance of <code><a href="PatientSample.html">PatientSample</a></code> or a subclass like
+<code><a href="CorrelatedPatientSample.html">CorrelatedPatientSample</a></code>. These objects control the occurrence
+of toxicity and efficacy events in patients. They are specifiable to allow
+fine-grained control to users. See the vignette on Simulation.</p></dd>
+
+
+<dt>rho</dt>
+<dd><p>Optional correlation between -1 and 1 for the latent uniform
+variables that determine toxicity and efficacy events. Non-correlated events
+is the default.</p></dd>
+
+
+<dt>return_patient_samples</dt>
+<dd><p>TRUE to get the list of patient sample objects
+returned in the patient_samples attribute of the retured object.</p></dd>
 
 
 <dt>...</dt>

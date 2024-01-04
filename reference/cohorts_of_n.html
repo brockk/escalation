@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@
     </li>
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
+    </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
     </li>
   </ul></li>
 <li>
@@ -104,21 +107,21 @@ between patient arrivals.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">cohorts_of_n</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   time_delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        1.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0.1</span>
 <span class="r-in"><span><span class="fu">cohorts_of_n</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, mean_time_delta <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time_delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        22.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         1.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         4.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         0.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7         9.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        23.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        22.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        1.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         1.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         6.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         2.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         5.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         4.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        5.7</span>
 </code></pre></div>
     </div>
   </div>

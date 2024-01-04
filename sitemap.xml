@@ -28,6 +28,9 @@
     <loc>/articles/A700-Simulation.html</loc>
   </url>
   <url>
+    <loc>/articles/A710-SimulationComparison.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -47,6 +50,9 @@
   </url>
   <url>
     <loc>/reference/as_tibble.dose_paths.html</loc>
+  </url>
+  <url>
+    <loc>/reference/as_tibble.simulations_collection.html</loc>
   </url>
   <url>
     <loc>/reference/calculate_probabilities.html</loc>
@@ -134,6 +140,9 @@
   </url>
   <url>
     <loc>/reference/get_mtpi2.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_potential_outcomes.html</loc>
   </url>
   <url>
     <loc>/reference/get_random_selector.html</loc>

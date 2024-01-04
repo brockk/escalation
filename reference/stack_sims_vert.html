@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@
     </li>
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
+    </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
     </li>
   </ul></li>
 <li>
@@ -135,18 +138,18 @@ default value is 0.05 to get 95 percent confidence intervals.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running BOIN12 v2 </span>
 <span class="r-in"><span><span class="fu">stack_sims_vert</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     dose hit       r     n design    .rate    .se      .l    .u</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 FALSE     0     1 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1 FALSE     0     2 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1 FALSE     0     3 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1 FALSE     0     4 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1 FALSE     0     5 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1 FALSE     0     6 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1 FALSE     0     7 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1 FALSE     0     8 BOIN12 v1 0     0       0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1 TRUE      1     9 BOIN12 v1 0.111 0.105  -<span style="color: #BB0000;">0.094</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.316</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1 FALSE     1    10 BOIN12 v1 0.1   0.094<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">0.085</span><span style="color: #BB0000; text-decoration: underline;">9</span> 0.286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     dose hit       r     n design    .rate   .se      .l    .u</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 TRUE      1     1 BOIN12 v1 1     0      1      1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1 FALSE     1     2 BOIN12 v1 0.5   0.354 -<span style="color: #BB0000;">0.193</span>  1.19 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1 TRUE      2     3 BOIN12 v1 0.667 0.272  0.133  1.20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1 FALSE     2     4 BOIN12 v1 0.5   0.25   0.010<span style="text-decoration: underline;">0</span> 0.990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1 FALSE     2     5 BOIN12 v1 0.4   0.219 -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">4</span> 0.829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1 FALSE     2     6 BOIN12 v1 0.333 0.192 -<span style="color: #BB0000;">0.043</span><span style="color: #BB0000; text-decoration: underline;">9</span> 0.711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1 FALSE     2     7 BOIN12 v1 0.286 0.171 -<span style="color: #BB0000;">0.048</span><span style="color: #BB0000; text-decoration: underline;">9</span> 0.620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1 FALSE     2     8 BOIN12 v1 0.25  0.153 -<span style="color: #BB0000;">0.050</span><span style="color: #BB0000; text-decoration: underline;">1</span> 0.550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1 FALSE     2     9 BOIN12 v1 0.222 0.139 -<span style="color: #BB0000;">0.049</span><span style="color: #BB0000; text-decoration: underline;">4</span> 0.494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1 FALSE     2    10 BOIN12 v1 0.2   0.126 -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">9</span> 0.448</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 90 more rows</span></span>
 </code></pre></div>
     </div>

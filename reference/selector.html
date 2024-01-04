@@ -48,7 +48,7 @@ dose-toxicity curves cannot natively estimate the median probability of tox."><m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
       </span>
     </div>
 
@@ -85,6 +85,9 @@ dose-toxicity curves cannot natively estimate the median probability of tox."><m
     </li>
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
+    </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
     </li>
   </ul></li>
 <li>
@@ -322,16 +325,16 @@ dose-toxicity curves cannot natively estimate the median probability of tox.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,000 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    .draw    `1`   `2`   `3`   `4`   `5`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1     0.115  0.190 0.367 0.516 0.692</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2     0.182  0.270 0.455 0.594 0.748</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3     0.281  0.377 0.556 0.678 0.806</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4     0.079<span style="text-decoration: underline;">9</span> 0.143 0.311 0.462 0.650</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5     0.131  0.210 0.391 0.537 0.707</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6     0.222  0.315 0.498 0.631 0.774</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7     0.151  0.233 0.416 0.560 0.724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8     0.180  0.268 0.452 0.592 0.746</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9     0.209  0.300 0.484 0.619 0.766</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10    0.256  0.351 0.532 0.659 0.793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1     0.282  0.378 0.557 0.679 0.806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2     0.370  0.466 0.632 0.738 0.844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3     0.191  0.281 0.465 0.603 0.754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4     0.112  0.186 0.363 0.512 0.689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5     0.089<span style="text-decoration: underline;">6</span> 0.157 0.328 0.478 0.663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6     0.268  0.363 0.543 0.668 0.799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7     0.290  0.386 0.564 0.685 0.810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8     0.216  0.307 0.492 0.625 0.770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9     0.279  0.375 0.554 0.677 0.804</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10    0.374  0.469 0.634 0.740 0.845</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3,990 more rows</span></span>
 </code></pre></div>
     </div>
