@@ -60,6 +60,16 @@
 #'   probabilities
 #' @param true_prob_eff numeric vector of true but unknown efficacy
 #'   probabilities. NULL if efficacy not analysed.
+#' @param patient_samples Optional list of length \code{num_sims}, where each
+#' element is an instance of \code{\link{PatientSample}} or a subclass like
+#' \code{\link{CorrelatedPatientSample}}. These objects control the occurrence
+#' of toxicity and efficacy events in patients. They are specifiable to allow
+#' fine-grained control to users. See the vignette on Simulation.
+#' @param rho Optional correlation between -1 and 1 for the latent uniform
+#' variables that determine toxicity and efficacy events. Non-correlated events
+#' is the default.
+#' @param return_patient_samples TRUE to get the list of patient sample objects
+#' returned in the patient_samples attribute of the retured object.
 #' @param ... Extra args are passed onwards.
 #'
 #' @seealso \code{\link{simulations}}
@@ -215,9 +225,37 @@ simulate_compare <- function(
     num_sims,
     true_prob_tox,
     true_prob_eff = NULL,
+    patient_samples = NULL,
+    rho = NULL,
+    return_patient_samples = FALSE,
     ...) {
 
-  patient_samples <- lapply(1:num_sims, function(x) PatientSample$new())
+  if(is.null(patient_samples)) {
+    if(!is.null(rho)) {
+      # Correlated toxicity and efficacy events
+      patient_samples <- lapply(
+        1:num_sims,
+        function(x) CorrelatedPatientSample$new(rho = rho)
+      )
+    } else {
+      # Non-correlated toxicity and efficacy events
+      patient_samples <- lapply(
+        1:num_sims,
+        function(x) PatientSample$new()
+      )
+    }
+  } else {
+    if(length(patient_samples) != num_sims) {
+      stop("If specified, patient_samples should be a list of length num_sims")
+    }
+
+    if(!is.null(rho)) {
+      stop("Specify rho or patient_samples (or neither) but not both.
+        If you specify rho, this function will use instances of
+        CorrelatedPatientSample to impart association between events.")
+    }
+  }
+
   out <- list()
   for(label in ls(designs)) {
     cat("Running", label, "\n")
@@ -253,6 +291,9 @@ simulate_compare <- function(
     )
     out[[label]] <- sims
   }
+
+  if(return_patient_samples)
+    attr(out, "patient_samples") <- patient_samples
 
   return(simulations_collection(out))
 }

@@ -44,8 +44,14 @@ When comparing designs, we have an efficient method called `simulate_compare` th
 
 # Simulating trials in `escalation`
 Simulations are run using the `simulate_trials` and `simulate_compare` functions.
-These can be called for any dose-escalation designs.
+These functions can be called for any dose-escalation design in `escalation`.
 Specifying dose-escalation models is the focus of the package [README file](https://brockk.github.io/escalation/).
+
+`simulate_trials` runs simulations for a single particular design. 
+This is the focus of this vignette.
+In contrast, `simulate_compare` compares several competing designs using efficient methods that share notional patients across designs, ensuring efficient comparisons.
+This topic is the focus of the [Simulation Comparison vignette](A710-SimulationComparison.html).
+
 
 ## The simplest example
 Let us start with a very simple example by simulating performance of the 3+3 design in trial of five doses.
@@ -65,6 +71,7 @@ library(escalation)
 ```
 
 For the purposes of illustration, let us simulate a modest number of trials:
+
 ```{r}
 num_sims <- 50
 ```
@@ -262,65 +269,6 @@ sims
 Pleasingly, the expected sample size only increases by about 3 patients.
 Obviously, the maximum increases by 6 patients.
 
-
-## Comparing competing designs
-In `simulate_compare`, we implement the method of @sweeting2023 to efficiently compare dose-finding designs.
-The crux of this method is to ensure that the same simulated patients are used for each competing design so that, for instance, if a patient is given dose 2 by one design and experiences toxicity, then that patient will also experience toxicity if given dose 2 or above by any other design. 
-Ensuring consistency across simulated iterates in this way reduces Monte Carlo error and allows much faster identification of differences between designs.
-
-For example, let us compare the behaviour of the 3+3 and CRM designs investigated above.
-We start by defining the competing designs in a list with convenient names:
-
-```{r}
-designs <- 
-  list(
-    "3+3" = get_three_plus_three(num_doses = 5),
-    "CRM" = get_dfcrm(skeleton = skeleton, target = target) %>%
-      stop_at_n(n = 12),
-    "Stopping CRM" = get_dfcrm(skeleton = skeleton, target = target) %>%
-      stop_at_n(n = 12) %>%
-      stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8)
-  )
-```
-
-Here we will compare three designs: 3+3; CRM without a toxicity stopping rule; and an otherwise identical CRM design with a toxicity stopping rule.
-The names we provide will be reused.
-
-```{r}
-sims <- simulate_compare(
-  designs, 
-  num_sims = num_sims, 
-  true_prob_tox = true_prob_tox
-)
-```
-
-We provide a convenient function to quickly visualise how the probability of selecting each dose in each design evolved as the simulations progressed:
-
-```{r, fig.width=7, fig.height=5}
-convergence_plot(sims)
-```
-
-We can see immediately, for instance, that the designs generally agree that dose 2 is the best MTD candidate, and that the CRM designs are much more likely to recommend dose 3.
-We can be more precise by formally contrasting the probability of selecting each dose for each pair of designs:
-
-```{r, fig.width=7, fig.height=10}
-as_tibble(sims) %>% 
-  filter(n %% 5 == 0) %>%
-  ggplot(aes(x = n, y = delta)) +
-  geom_point(size = 0.4) +
-  geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
-  geom_hline(yintercept = 0, linetype = "dashed", col = "red") +
-  facet_grid(comparison ~ dose,
-             labeller = labeller(
-               .rows = label_both,
-               .cols = label_both)
-  )
-```
-
-The error bars here reflect 95% symmetric asymptotic normal confidence intervals.
-Change the `alpha = 0.05` parameter when calling `as_tibble(sims)` to get confident intervals for a different significance level.
-We see that, even with the very small sample size of 50 simulated trials, the CRM designs are significantly more likely to recommend dose 3 than the 3+3 design.
-In contrast, in this scenario there is very little difference at all between the two CRM variants.
 
 ## Further refinements
 

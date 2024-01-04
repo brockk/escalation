@@ -13,7 +13,10 @@ simulations_collection(sim_map)
 object of class \code{simulations_collection}, inheriting from list
 }
 \description{
-Make an instance of type \code{simulations_collection}
+This object can be cast to a tibble with \code{as_tibble} to generate useful
+pairwise comparisons of the probability of recommending each dose for each
+pair of designs investigated. See
+\code{\link{as_tibble.simulations_collection}} for a description.
 }
 \references{
 Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).

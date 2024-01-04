@@ -33,9 +33,6 @@ PatientSample <- R6Class(
     #' @param num_patients (`integer(1)`).
     #' @return [PatientSample].
     initialize = function(num_patients = 0) {
-      # self$num_patients <- num_patients
-      # self$tox_u <- runif(n = num_patients)
-      # self$eff_u <- runif(n = num_patients)
       self$num_patients <- 0
       self$tox_u <- numeric(length = 0)
       self$eff_u <- numeric(length = 0)
@@ -138,5 +135,6 @@ PatientSample <- R6Class(
       }
       return(as.integer(u < prob_eff))
     }
+
   )
 )

@@ -1,0 +1,306 @@
+---
+title: "Comparing dose-escalation designs by simulation"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Comparing dose-escalation designs by simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The `escalation` package by Kristian Brock.
+Documentation is hosted at https://brockk.github.io/escalation/
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This vignette focuses on the common task of comparing competing dose-escalation designs by simulation.
+Before reading on, be sure you have read the [README file](https://brockk.github.io/escalation/) for a general explanation of how to compose dose-finding designs in `escalation`; and the [Simulation vignette](A700-Simulation.html) for a general introduction to using simulation.
+
+# Comparing competing designs
+In `simulate_compare`, we implement the method of @sweeting2023 to efficiently compare dose-finding designs.
+The crux of this method is to ensure that the same simulated patients are used for each competing design so that, for instance, if a patient is given dose 2 by one design and experiences toxicity, then that patient will also experience toxicity if given dose 2 or above by any other design. 
+Ensuring consistency across simulated iterates in this way reduces Monte Carlo error and allows much faster identification of differences between designs.
+
+For example, let us compare the behaviour of the 3+3 and CRM designs investigated above.
+We start by defining the competing designs in a list with convenient names:
+
+```{r, message=FALSE}
+library(escalation)
+
+target <- 0.25
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+
+designs <- 
+  list(
+    "3+3" = get_three_plus_three(num_doses = 5),
+    "CRM" = get_dfcrm(skeleton = skeleton, target = target) %>%
+      stop_at_n(n = 12),
+    "Stopping CRM" = get_dfcrm(skeleton = skeleton, target = target) %>%
+      stop_at_n(n = 12) %>%
+      stop_when_too_toxic(dose = 1, tox_threshold = 0.35, confidence = 0.8)
+  )
+```
+
+Here we will compare three designs: 3+3; CRM without a toxicity stopping rule; and an otherwise identical CRM design with a toxicity stopping rule.
+The names we provide will be reused.
+
+```{r}
+num_sims <- 50
+true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
+
+sims <- simulate_compare(
+  designs, 
+  num_sims = num_sims, 
+  true_prob_tox = true_prob_tox
+)
+```
+
+We provide a convenient function to quickly visualise how the probability of selecting each dose in each design evolved as the simulations progressed:
+
+```{r, fig.width=7, fig.height=5}
+convergence_plot(sims)
+```
+
+We can see immediately, for instance, that the designs generally agree that dose 2 is the best MTD candidate, and that the CRM designs are much more likely to recommend dose 3.
+We can be more precise by formally contrasting the probability of selecting each dose for each pair of designs:
+
+```{r, fig.width=7, fig.height=10, message=FALSE}
+library(dplyr)
+library(ggplot2)
+
+as_tibble(sims) %>% 
+  filter(n %% 5 == 0) %>%
+  ggplot(aes(x = n, y = delta)) +
+  geom_point(size = 0.4) +
+  geom_linerange(aes(ymin = delta_l, ymax = delta_u)) +
+  geom_hline(yintercept = 0, linetype = "dashed", col = "red") +
+  facet_grid(comparison ~ dose,
+             labeller = labeller(
+               .rows = label_both,
+               .cols = label_both)
+  )
+```
+
+The error bars here reflect 95% symmetric asymptotic normal confidence intervals.
+Change the `alpha = 0.05` parameter when calling `as_tibble(sims)` to get confident intervals for a different significance level.
+We see that, even with the very small sample size of 50 simulated trials, the CRM designs are significantly more likely to recommend dose 3 than the 3+3 design.
+In contrast, in this scenario there is very little difference at all between the two CRM variants.
+
+
+# Working with PatientSamples
+The idea at the core of the method by @sweeting2023 for efficient comparison of competing designs is to use the same patients across different designs.
+This reduces Monte Carlo error by examining where the designs differ in their recommendations given identical inputs.
+
+This is achieved in `escalation` using classes inheriting from `PatientSample`.
+A single `PatientSample` reflects one particular state of the world, where patient $i$ would reliably experience a toxicity or efficacy event if treated at a particular dose. 
+The consistent occurrence of events is managed using latent uniform random variables.
+We show how to import and export these variables, and use them to infer potential outcomes at a range of doses.
+
+To illustrate some of the fine-grained features of working with patient samples, we reproduce the BOIN12 example in @sweeting2023:
+
+```{r}
+num_doses <- 5
+
+designs <- list(
+
+  "BOIN12 v1" = get_boin12(num_doses = num_doses,
+                          phi_t = 0.35, phi_e = 0.25,
+                          u2 = 40, u3 = 60,
+                          c_t = 0.95, c_e = 0.9) %>%
+    stop_when_n_at_dose(n = 12,  dose = 'any') %>%
+    stop_at_n(n = 36),
+
+  "BOIN12 v2" = get_boin12(num_doses = num_doses,
+                          phi_t = 0.35, phi_e = 0.25,
+                          u2 = 40, u3 = 60,
+                          c_t = 0.85, c_e = 0.8
+                          ) %>%
+    stop_when_n_at_dose(n = 12,  dose = 'any') %>%
+    stop_at_n(n = 36)
+)
+```
+
+
+## Exporting the underlying latent variables
+
+By setting `return_patient_samples = TRUE` in the call to `simulate_compare`:
+
+```{r}
+true_prob_tox <- c(0.05, 0.10, 0.15, 0.18, 0.45)
+true_prob_eff <- c(0.40, 0.50, 0.52, 0.53, 0.53)
+
+set.seed(2024)
+x <- simulate_compare(
+  designs = designs, 
+  num_sims = 50, 
+  true_prob_tox = true_prob_tox, 
+  true_prob_eff = true_prob_eff, 
+  return_patient_samples = TRUE
+)
+```
+
+we ensure the generated patient samples are exported in the returned object:
+
+```{r}
+ps <- attr(x, "patient_samples")
+```
+
+There are 50 patient-samples because we performed 50 simulated iterates:
+
+```{r}
+length(ps)
+```
+
+Each iterate is associated with one patient-sample.
+
+For instance, the uniformly-distributed random variables that determine the occurrence of toxicity events in the first simulated iterate are:
+
+```{r}
+ps[[1]]$tox_u
+```
+and the equivalent for efficacy events are:
+
+```{r}
+ps[[1]]$eff_u
+```
+
+These values reflect the patient-specific propensities to toxicity and efficacy.
+For instance, we see that the first patient would always experience a toxicity if treated at a dose with associated true toxicity probability less than `r ps[[1]]$tox_u[1]`.
+Likewise, the same patient would experience efficacy if treated at a dose with associated true efficacy probability less than `r ps[[1]]$eff_u[1]`.
+
+These latent variables can be exported using R's many I/O functions and formats.
+
+## Calculating potential outcomes
+
+We can calculate all potential outcomes for a list of patient-samples by calling `get_potential_outcomes` and providing the true event probabilities:
+
+```{r}
+z <- get_potential_outcomes(
+  patient_samples = ps,
+  true_prob_tox = true_prob_tox,
+  true_prob_eff = true_prob_eff
+)
+```
+
+Note that were we working with tox-only dose-escalation designs like CRM or mTPI (for example), we would omit the `true_prob_eff` parameter.
+
+For instance, the potential outcomes in the first simulated iterate are:
+
+```{r}
+z[[1]]
+```
+
+We see that patient 1 would not have experienced a toxicity at any dose because their underlying toxicity propensity variable was quite high at `r ps[[1]]$tox_u[1]`.
+Gladly, however, the same patient would have experienced efficacy at any dose at or above dose-level 2.
+
+## Importing the underlying latent variables
+We show above how to export the latent event variables to store of use them elsewhere.
+We can also import the latent variables, to mimic the patient population used in some external simulation, for instance.
+
+To do so, we instantiate a list of PatientSample objects, with one for each simulated iterate.
+We will work with ten iterates in the interests of speed:
+
+```{r}
+num_sims <- 10
+ps <- lapply(1:num_sims, function(x) PatientSample$new())
+```
+
+We then call the `set_eff_and_tox` function on each to set the latent toxicity and efficacy propensities to the desired values.
+For illustration, let us simply sample uniform random variables and use those.
+In a more realistic example, we would set the latent variables to the values we wished to import, i.e. those values that were used in some external study or idealised values that we wish to use.
+
+```{r}
+set.seed(2024)
+for(i in seq_len(num_sims)) {
+  tox_u_new <- runif(n = 50)
+  eff_u_new <- runif(n = 50)
+  ps[[i]]$set_eff_and_tox(tox_u = tox_u_new, eff_u = eff_u_new)
+}
+```
+
+We have set the latent variable vectors to have length 50.
+This means we can work with up to 50 patients in each iterate.
+If the simulation tries to use a 51st patient, we will receive an error.
+When setting the latent variables in this way, ensure you use enough values to cover your maximum sample size.
+
+To use the patient-samples we have created in simulated trials, we specify the `patient_samples` parameter:
+
+```{r}
+x1 <- simulate_compare(
+  designs = designs, 
+  num_sims = length(ps), 
+  true_prob_tox = true_prob_tox, 
+  true_prob_eff = true_prob_eff, 
+  patient_samples = ps
+)
+```
+
+Having specified the exact patient population in this way, if we run the simulation study a second time with the same patients:
+
+```{r}
+x2 <- simulate_compare(
+  designs = designs, 
+  num_sims = length(ps), 
+  true_prob_tox = true_prob_tox, 
+  true_prob_eff = true_prob_eff, 
+  patient_samples = ps
+)
+```
+
+we will see that the decisions within design are (usually) identical within a design.
+E.g.
+
+```{r}
+all(
+  recommended_dose(x1[["BOIN12 v1"]]) == 
+    recommended_dose(x2[["BOIN12 v1"]])
+)
+```
+
+The first BOIN12 variant recommends the exact same dose in the two batches because the patients are the same.
+
+For completeness, when might the decisions vary despite the same patients being used?
+In a design that has inherent randomness.
+E.g. Wages & Tait's design features adaptive randomisation, meaning that, even with identical patients, different behaviours will be seen.
+
+
+## Correlated toxicity and efficacy outcomes
+Finally, let us introduce the `CorrelatedPatientSample` to sample correlated toxicity and efficacy events.
+To coerce a correlation of 0.5 _between the latent uniform tox and eff event propensities_, we run:
+
+```{r}
+ps <- CorrelatedPatientSample$new(num_patients = 100, rho = 0.5)
+```
+
+We can observe
+
+```{r}
+cor(ps$tox_u, ps$eff_u)
+```
+
+that the correlation is close to desired.
+Note however, that the correlation of the binary level events is not, in general, equal to the target value of rho, because they depend on the event probabilities:
+
+```{r}
+tox <- sapply(seq_len(100), function(i) ps$get_patient_tox(i, prob_tox = 0.3))
+eff <- sapply(seq_len(100), function(i) ps$get_patient_eff(i, prob_eff = 0.4))
+cor(tox, eff)
+```
+
+
+# Further refinements
+
+Check out the _Further refinements_ section of the [Simulation vignette](A700-Simulation.html) for further ways of refining the behaviour of simulations, including changing the cohort size and timing of patient arrivals, simulating the conclusion of partly-observed trials, tweaking the immediate next dose, returning all interim model fits, and working with large trials.
+The methods described there apply to both `simulate_trials` and `simulate_compare`.
+
+
+# References

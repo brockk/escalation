@@ -4,7 +4,16 @@
 \alias{simulate_compare}
 \title{Simulate clinical trials for several designs using common patients.}
 \usage{
-simulate_compare(designs, num_sims, true_prob_tox, true_prob_eff = NULL, ...)
+simulate_compare(
+  designs,
+  num_sims,
+  true_prob_tox,
+  true_prob_eff = NULL,
+  patient_samples = NULL,
+  rho = NULL,
+  return_patient_samples = FALSE,
+  ...
+)
 }
 \arguments{
 \item{designs}{list, mapping design names to objects of type
@@ -17,6 +26,19 @@ probabilities}
 
 \item{true_prob_eff}{numeric vector of true but unknown efficacy
 probabilities. NULL if efficacy not analysed.}
+
+\item{patient_samples}{Optional list of length \code{num_sims}, where each
+element is an instance of \code{\link{PatientSample}} or a subclass like
+\code{\link{CorrelatedPatientSample}}. These objects control the occurrence
+of toxicity and efficacy events in patients. They are specifiable to allow
+fine-grained control to users. See the vignette on Simulation.}
+
+\item{rho}{Optional correlation between -1 and 1 for the latent uniform
+variables that determine toxicity and efficacy events. Non-correlated events
+is the default.}
+
+\item{return_patient_samples}{TRUE to get the list of patient sample objects
+returned in the patient_samples attribute of the retured object.}
 
 \item{...}{Extra args are passed onwards.}
 }

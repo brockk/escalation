@@ -80,7 +80,7 @@ test_that('PatientSample works like it should.', {
   # Set tox_u and eff_u
   tox_u_new <- runif(n = 20)
   eff_u_new <- runif(n = 20)
-  ps$set_eff_and_tox(tox_u = tox_u_new, eff_u = tox_u_new)
+  ps$set_eff_and_tox(tox_u = tox_u_new, eff_u = eff_u_new)
   expect_equal(
     ps$num_patients,
     20
