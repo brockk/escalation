@@ -17,12 +17,19 @@ test_that('stop_when_tox_ci_covered_selector does what it should.', {
   # This situation should fire neither stopping rule:
   outcomes <- '1NNN 2NNN 3NNT'
   fit1 <- model1 %>% fit(outcomes)
-  fit2 <- model2 %>% fit(outcomes)
-
   expect_equal(fit1 %>% recommended_dose(), 3)
   expect_true(fit1 %>% continue())
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 3."
+  )
+  fit2 <- model2 %>% fit(outcomes)
   expect_equal(fit2 %>% recommended_dose(), 3)
   expect_true(fit2 %>% continue())
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 3."
+  )
 
   # This is because the CI is too wide in each model:
   lower1 <- fit1 %>% prob_tox_quantile(p = 0.05)
@@ -39,12 +46,19 @@ test_that('stop_when_tox_ci_covered_selector does what it should.', {
   # the second:
   outcomes <- '1NNN 2NNN 3NNT 3NNN 3TNT 2NNN'
   fit1 <- model1 %>% fit(outcomes)
-  fit2 <- model2 %>% fit(outcomes)
-
   expect_equal(fit1 %>% recommended_dose(), 3)
   expect_true(fit1 %>% continue())
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 3."
+  )
+  fit2 <- model2 %>% fit(outcomes)
   expect_equal(fit2 %>% recommended_dose(), 3)
   expect_false(fit2 %>% continue())
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending dose 3."
+  )
 
   # This is because the CI is too wide in the first model:
   lower1 <- fit1 %>% prob_tox_quantile(p = 0.05)

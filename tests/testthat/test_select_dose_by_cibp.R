@@ -15,10 +15,16 @@ test_that('select_dose_by_cibp does what it should.', {
   expect_equal(recommended_dose(fit$parent), 2)
   # But the CIBP model will not:
   expect_equal(recommended_dose(fit), 1)
+  expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   # Inspect innards
   expect_equal(fit$a, 0.3)
   expect_null(fit$target)
+
 })
 
 

@@ -770,6 +770,10 @@ test_that('three_plus_three_selector does what it should without de-esc', {
   expect_false(fit1$allow_deescalate)
   expect_equal(fit1 %>% recommended_dose(), 1)
   expect_false(fit1 %>% continue())
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending dose 1."
+  )
 
   # I could wholesale copy and paste down from above to further test this class
 
@@ -785,6 +789,10 @@ test_that('three_plus_three_selector does what it should with de-esc', {
   expect_true(fit1$allow_deescalate)
   expect_equal(fit1 %>% recommended_dose(), 1)
   expect_true(fit1 %>% continue())
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
 
   # I could wholesale copy and paste down from above to further test this class
 
@@ -798,202 +806,402 @@ test_that('three_plus_three_selector de-escalates from doses higher than 1', {
   fit <- threep_model %>% fit('2NNT 2NNN')
   expect_equal(fit %>% recommended_dose(), 3)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1N')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1T')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1NN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1NT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1TT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1NNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1NNT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1NTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NNT 1TTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1N')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1T')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1NN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1NT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1TT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1NNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1NNT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1NTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NNT 2NTT 1TTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1N')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1T')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1NN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1NT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1TT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1NNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1NNT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1NTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NNT 2TTT 1TTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NTT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1N')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1T')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1TT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NTT 1TTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1N')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1T')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1NN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1NT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1TT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1NNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 1."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1NNT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1NTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
   fit <- threep_model %>% fit('2NTT 1NNT 1TTT')
   expect_true(is.na(fit %>% recommended_dose()))
   expect_false(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
 
 })
 

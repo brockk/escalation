@@ -16,12 +16,19 @@ test_that('demand_n_at_dose_selector does what it should.', {
   fit1 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN')
   expect_equal(recommended_dose(fit1), fit1$parent$parent$dfcrm_fit$mtd)
   expect_true(continue(fit1))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 2."
+  )
 
   # But do stop when there are 12 at any particular dose:
   fit2 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
   expect_equal(recommended_dose(fit2), fit2$parent$parent$dfcrm_fit$mtd)
   expect_false(continue(fit2))
-
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending dose 2."
+  )
 
 
   # Example 2 - demand n at any dose
@@ -33,11 +40,19 @@ test_that('demand_n_at_dose_selector does what it should.', {
   fit3 <- model2 %>% fit('1TNN 1NNN 2NTN 2TNN')
   expect_equal(recommended_dose(fit3), fit3$parent$parent$dfcrm_fit$mtd)
   expect_true(continue(fit3))
+  expect_output(
+    print(fit3),
+    "The model advocates continuing at dose 2."
+  )
 
   # But do stop when there are 9 at dose 2:
   fit4 <- model2 %>% fit('1TNN 1NNN 2NTN 2TNN 2NNN')
   expect_equal(recommended_dose(fit4), fit4$parent$parent$dfcrm_fit$mtd)
   expect_false(continue(fit4))
+  expect_output(
+    print(fit4),
+    "The model advocates stopping and recommending dose 2."
+  )
   # Implicitly, this suggests the recommended dose is 2:
   expect_equal(recommended_dose(fit4), 2)
 
@@ -52,11 +67,21 @@ test_that('demand_n_at_dose_selector does what it should.', {
   fit5 <- model3 %>% fit('1TNN 1NNN 2NTN 2TNN')
   expect_equal(recommended_dose(fit5), fit5$parent$parent$dfcrm_fit$mtd)
   expect_true(continue(fit5))
+  expect_output(
+    print(fit5),
+    "The model advocates continuing at dose 2."
+  )
+
 
   # But do stop when there are 9 at dose 2:
   fit6 <- model3 %>% fit('1TNN 1NNN 2NTN 2TNN 2NNN')
   expect_equal(recommended_dose(fit6), fit6$parent$parent$dfcrm_fit$mtd)
   expect_false(continue(fit6))
+  expect_output(
+    print(fit6),
+    "The model advocates stopping and recommending dose 2."
+  )
+
 
 })
 
@@ -406,10 +431,19 @@ test_that('demand_n_at_dose_selector propagates stopping by parent.', {
   fit1 <- model1 %>% fit('1NTT')
   expect_true(continue(fit1))
   expect_false(is.na(recommended_dose(fit1)))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
 
   # Stop and recommend no dose in presence of excess toxicity:
   fit2 <- model1 %>% fit('1NTT 1TTN')
   expect_false(continue(fit2))
   expect_true(is.na(recommended_dose(fit2)))
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+
 
 })

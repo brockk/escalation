@@ -52,6 +52,7 @@ test_that('trialr_crm_selector matches dfcrm_selector.', {
   # mean_prob_tox matches?
   epsilon <- 0.02
   expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
+
 })
 
 

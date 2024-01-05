@@ -19,330 +19,590 @@ test_that('mtpi_selector matches published example.', {
   fit <- model %>% fit('1NNN')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   # Six patients treated
   fit <- model %>% fit('1NNN 1NNN')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   # Nine patients treated
   fit <- model %>% fit('1NNN 1NNN 1NNN')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   # Twelve patients treated
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   # Thirty patients treated
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNN 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NNT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1NTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
   fit <- model %>% fit('1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT 1TTT')
   expect_true(is.na(recommended_dose(fit)))
   expect_false(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), rep(FALSE, num_doses(fit)))
 
 
@@ -353,330 +613,590 @@ test_that('mtpi_selector matches published example.', {
   fit <- model %>% fit('2NNN')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   # Six patients treated
   fit <- model %>% fit('2NNN 2NNN')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   # Nine patients treated
   fit <- model %>% fit('2NNN 2NNN 2NNN')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   # Twelve patients treated
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NTT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   # Thirty patients treated
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 3)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 2)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNN 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NNT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2NTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT 2TTT')
   expect_equal(recommended_dose(fit), 1)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
 
@@ -687,330 +1207,590 @@ test_that('mtpi_selector matches published example.', {
   fit <- model %>% fit('5NNN')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   # Six patients treated
   fit <- model %>% fit('5NNN 5NNN')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   # Nine patients treated
   fit <- model %>% fit('5NNN 5NNN 5NNN')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   # Twelve patients treated
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   # Thirty patients treated
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 5)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
   expect_equal(dose_admissible(fit), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNN 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NNT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5NTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
   fit <- model %>% fit('5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT 5TTT')
   expect_equal(recommended_dose(fit), 4)
   expect_true(continue(fit))
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit), c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
 })
@@ -1349,26 +2129,46 @@ test_that('mtpi_selector respects suspended doses', {
   fit <- model %>% fit('2N')
   expect_equal(fit %>% recommended_dose(), 3)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(fit %>% dose_admissible(), rep(TRUE, num_doses(fit)))
 
   fit <- model %>% fit('3TTT')
   expect_equal(fit %>% recommended_dose(), 2)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('3TTT 2N')
   expect_equal(fit %>% recommended_dose(), 2)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('3TTT 2N 1N')
   expect_equal(fit %>% recommended_dose(), 2)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
   fit <- model %>% fit('3TTT 2N 1N 2NNNNNNNNNNNNNNNNNNN')
   expect_equal(fit %>% recommended_dose(), 2)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
 })

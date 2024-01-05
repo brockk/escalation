@@ -12,11 +12,20 @@ test_that('stop_at_n_selector does what it should.', {
   fit <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN')
   expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   # With 15 patients, this trial should stop:
   fit <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
   expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
   expect_equal(continue(fit), FALSE)
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 2."
+  )
+
 })
 
 test_that('stop_at_n_selector supports correct interface.', {
@@ -366,21 +375,35 @@ test_that('stop_at_n_selector interacts appropriately with other selectors.', {
   fit1 <- model1 %>% fit('1NNN 2NNN 2NNN 3NNN')
   expect_equal(recommended_dose(fit1), 3)
   expect_equal(continue(fit1), TRUE)
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 3."
+  )
 
   fit2 <- model2 %>% fit('1NNN 2NNN 2NNN 3NNN')
   expect_equal(recommended_dose(fit2), 3)
   expect_equal(continue(fit2), FALSE)
-
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending dose 3."
+  )
 
   # With more outcomes, both should advocate stopping
   fit3 <- model1 %>% fit('1NNN 2NNN 2NNN 3NNN 3NNN 3NNN')
   expect_equal(recommended_dose(fit3), 3)
   expect_equal(continue(fit3), FALSE)
+  expect_output(
+    print(fit3),
+    "The model advocates stopping and recommending dose 3."
+  )
 
   fit4 <- model2 %>% fit('1NNN 2NNN 2NNN 3NNN 3NNN 3NNN')
   expect_equal(recommended_dose(fit4), 3)
   expect_equal(continue(fit4), FALSE)
-
+  expect_output(
+    print(fit4),
+    "The model advocates stopping and recommending dose 3."
+  )
 
 
   # Originating from get_dfcrm
@@ -400,20 +423,34 @@ test_that('stop_at_n_selector interacts appropriately with other selectors.', {
   fit1 <- model3 %>% fit('1NNN 2NNN 2NNN 3NNN')
   expect_equal(recommended_dose(fit1), 5)
   expect_equal(continue(fit1), TRUE)
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 5."
+  )
 
   fit2 <- model4 %>% fit('1NNN 2NNN 2NNN 3NNN')
   expect_equal(recommended_dose(fit2), 5)
   expect_equal(continue(fit2), FALSE)
-
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending dose 5."
+  )
 
   # With more outcomes, both should advocate stopping
   fit3 <- model3 %>% fit('1NNN 2NNN 2NNN 5NNN 5NNN 5NNN')
   expect_equal(recommended_dose(fit3), 5)
   expect_equal(continue(fit3), FALSE)
+  expect_output(
+    print(fit3),
+    "The model advocates stopping and recommending dose 5."
+  )
 
   fit4 <- model4 %>% fit('1NNN 2NNN 2NNN 5NNN 5NNN 5NNN')
   expect_equal(recommended_dose(fit4), 5)
   expect_equal(continue(fit4), FALSE)
+  expect_output(
+    print(fit4),
+    "The model advocates stopping and recommending dose 5."
+  )
 
 })
-

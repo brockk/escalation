@@ -18,7 +18,8 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
   df <- data.frame(
     patient=1:18,
     dose = rep(c(1:4, 7), c(3, 4, 5, 4, 2)),
-    tox = rep(0:1, c(16, 2)))
+    tox = rep(0:1, c(16, 2))
+  )
 
   # # bcrm version
   # sdose <- log(dose / 250)
@@ -53,6 +54,10 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
 
   # MTD matches?
   expect_equal(bcrm_dose, recommended_dose(fit2))
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 7."
+  )
 
   # mean_prob_tox matches?
   epsilon <- 0.04
@@ -61,6 +66,7 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
   # mean_prob_tox matches NBG publication?
   epsilon <- 0.04
   expect_true(all(abs(nbg_post_mean - mean_prob_tox(fit2)) < epsilon))
+
 })
 
 

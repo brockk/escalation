@@ -17,6 +17,10 @@ test_that('dont_skip_selector does what it should.', {
 
   expect_equal(recommended_dose(fit1), 2)
   expect_equal(continue(fit1), TRUE)
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 2."
+  )
   expect_true(recommended_dose(fit0) >= recommended_dose(fit1))
 
   ## Skipping forcibly allowed, effectively replicating model0
@@ -25,46 +29,89 @@ test_that('dont_skip_selector does what it should.', {
   fit2 <- model2 %>% fit('1NNN')
   expect_equal(recommended_dose(fit0), recommended_dose(fit2))
   expect_equal(continue(fit0), continue(fit2))
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 4."
+  )
 
-  ## Handle a parent that wants to stop
+  ## Handle parent that wants to stop and rec no dose:
   model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
     stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.9) %>%
     dont_skip_doses(when_escalating = TRUE, when_deescalating = TRUE)
   fit3 <- model3 %>% fit('1TTT')
   expect_true(is.na(recommended_dose(fit3)))
   expect_false(continue(fit3))
+  expect_output(
+    print(fit3),
+    "The model advocates stopping and recommending no dose."
+  )
 
+  ## Handle parent that wants to stop and rec a dose:
+  model4 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    dont_skip_doses(when_escalating = TRUE, when_deescalating = TRUE) %>%
+    stop_when_n_at_dose(n = 3, dose = "any")
+  fit4 <- model4 %>% fit('1NNN 2NNT')
+  expect_equal(recommended_dose(fit4), 2)
+  expect_false(continue(fit4))
+  expect_output(
+    print(fit4),
+    "The model advocates stopping and recommending dose 2."
+  )
 
 
 
   # De-escalation CRM example
 
   ## Just CRM
-  fit3 <- model0 %>% fit('1NNN 2N 3TTT')
+  fit5a <- model0 %>% fit('1NNN 2N 3TTT')
 
   ## CRM Skipping not allowed
-  model4 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses(when_deescalating = TRUE)
-  fit4 <- model4 %>% fit('1NNN 2N 3TTT')
-
-  expect_equal(recommended_dose(fit4), 2)
-  expect_equal(continue(fit4), TRUE)
-  expect_true(recommended_dose(fit3) <= recommended_dose(fit4))
-
-  ## Skipping forcibly allowed, effectively replicating fit3
   model5 <- get_dfcrm(skeleton = skeleton, target = target) %>%
-    dont_skip_doses(when_escalating = FALSE, when_deescalating = FALSE)
-  fit5 <- model2 %>% fit('1NNN 2N 3TTT')
-  expect_equal(recommended_dose(fit3), recommended_dose(fit5))
-  expect_equal(continue(fit3), continue(fit5))
+    dont_skip_doses(when_deescalating = TRUE)
+  fit5 <- model5 %>% fit('1NNN 2N 3TTT')
+  expect_equal(recommended_dose(fit5), 2)
+  expect_equal(continue(fit5), TRUE)
+  expect_output(
+    print(fit5),
+    "The model advocates continuing at dose 2."
+  )
+  expect_true(recommended_dose(fit5a) <= recommended_dose(fit5))
 
-  ## Handle a parent that wants to stop
+  ## Skipping forcibly allowed, effectively replicating unconstrained model
   model6 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    dont_skip_doses(when_escalating = FALSE, when_deescalating = FALSE)
+  fit6 <- model6 %>% fit('1NNN 2N 3TTT')
+  expect_equal(recommended_dose(fit5a), recommended_dose(fit6))
+  expect_equal(continue(fit5a), continue(fit6))
+  expect_output(
+    print(fit6),
+    "The model advocates continuing at dose 1."
+  )
+
+  ## Handle parent that wants to stop and rec no dose:
+  model7 <- get_dfcrm(skeleton = skeleton, target = target) %>%
     stop_when_too_toxic(dose = 1, tox_threshold = target, confidence = 0.9) %>%
-    dont_skip_doses(when_escalating = TRUE, when_deescalating = TRUE)
-  fit6 <- model6 %>% fit('1TTT 2N 3TTT')
-  expect_true(is.na(recommended_dose(fit6)))
-  expect_false(continue(fit6))
+    dont_skip_doses(when_deescalating = TRUE)
+  fit7 <- model7 %>% fit('1TTT 2N 3TTT')
+  expect_true(is.na(recommended_dose(fit7)))
+  expect_false(continue(fit7))
+  expect_output(
+    print(fit7),
+    "The model advocates stopping and recommending no dose."
+  )
+
+  ## Handle parent that wants to stop and rec a dose:
+  model8 <- get_dfcrm(skeleton = skeleton, target = target) %>%
+    dont_skip_doses(when_deescalating = TRUE) %>%
+    stop_when_n_at_dose(n = 3, dose = "any")
+  fit8 <- model8 %>% fit('1TTT 2N 3TTT')
+  expect_equal(recommended_dose(fit8), 2)
+  expect_false(continue(fit8))
+  expect_output(
+    print(fit8),
+    "The model advocates stopping and recommending dose 2."
+  )
+
 })
 
 

@@ -163,10 +163,11 @@ summary.derived_dose_selector <- function(object, ...) {
   summary(object$parent, ...)
 }
 
-#' @export
-print.derived_dose_selector <- function(x, ...) {
-  print(x$parent, ...)
-}
+#' #' @export
+#' print.derived_dose_selector <- function(x, ...) {
+#'   print(x$parent, ...)
+#' }
+
 #' @export
 as_tibble.derived_dose_selector <- function(x, ...) {
   as_tibble(x$parent, ...)

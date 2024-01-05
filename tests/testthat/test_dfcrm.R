@@ -17,6 +17,11 @@ test_that('dfcrm_dose_selector matches dfcrm.', {
                   level = c(2,2,2, 2,2,2, 3,3,3, 2,2,2))
 
   expect_equal(recommended_dose(x), y$mtd)
+  expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(round(mean_prob_tox(x), 2),  round(y$ptox, 2))
   expect_equal(x$dfcrm_fit$model, 'empiric')
   expect_equal(x$dfcrm_fit$prior.var, 0.75)
@@ -40,6 +45,11 @@ test_that('dfcrm_dose_selector matches dfcrm.', {
                   level = c(1,1,1, 2,2,2, 3,3,3, 2,2,2, 3,3,3, 3,3,3, 2,2,2))
 
   expect_equal(recommended_dose(x), y$mtd)
+  expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(round(mean_prob_tox(x), 2),  round(y$ptox, 2))
   expect_equal(x$dfcrm_fit$model, 'logistic')
   expect_equal(x$dfcrm_fit$intcpt, 4)

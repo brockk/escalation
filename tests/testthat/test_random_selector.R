@@ -1,5 +1,4 @@
 
-
 test_that('Phase I random_selector supports correct interface.', {
 
   prob_select = c(0.1, 0.3, 0.5, 0.07, 0.03)

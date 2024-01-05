@@ -10,47 +10,91 @@ test_that('BOIN12 matches published example.', {
   fit <- model %>% fit("1NNN 2ENT 3ETT 2EEN")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   # Section 6 and Figure S2 of Data Supplement
   fit <- model %>% fit("1NNN")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NNN 2NNB")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN 5BEN")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN 5BEN 5NBT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN 5BEN 5NBT 4NEN")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), FALSE)
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending dose 4."
+  )
 
 })
 
@@ -77,66 +121,130 @@ test_that('BOIN12 matches MDAnderson Shiny app - parameterisation 1', {
   fit <- model %>% fit("1EBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1EEB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1EEE")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1EET")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1ETB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1ETT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NEB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NEE")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NET")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NNB")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NNE")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NNN")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NNT")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NTB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NTT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   # Breaks the app
   # fit <- model %>% fit("1TBB")
@@ -158,164 +266,324 @@ test_that('BOIN12 matches MDAnderson Shiny app - parameterisation 1', {
   fit <- model %>% fit("2BBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2EBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2EEB")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2EEE")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2EET")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2ETB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2ETT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NEB")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2NEE")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2NET")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("2NNB")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("2NNE")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("2NNN")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("2NNT")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("2NTB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NTT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2TBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2TTB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2TTT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
 
   # Starting at top dose
   fit <- model %>% fit("5BBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5EBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5EEB")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5EEE")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5EET")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5ETB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5ETT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NEB")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5NEE")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5NET")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNE")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNN")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NTB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NTT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5TBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5TTB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5TTT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
 })
 
@@ -342,54 +610,106 @@ test_that('BOIN12 matches MDAnderson Shiny app - parameterisation 2', {
   fit <- model %>% fit("1EBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1EEB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1EEE")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1EET")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1ETB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1ETT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NEB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NEE")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NET")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NNB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("1NNE")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("1NNN")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   # Breaks the app
   # fit <- model %>% fit("1NNT")
@@ -399,6 +719,10 @@ test_that('BOIN12 matches MDAnderson Shiny app - parameterisation 2', {
   fit <- model %>% fit("1NTB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   # Breaks the app
   # fit <- model %>% fit("1NTT")
@@ -425,50 +749,98 @@ test_that('BOIN12 matches MDAnderson Shiny app - parameterisation 2', {
   fit <- model %>% fit("2BBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2EBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2EEB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2EEE")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2EET")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2ETB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2ETT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NEB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NEE")
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
 
   fit <- model %>% fit("2NET")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NNB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   # fit <- model %>% fit("2NNE")
   # expect_equal(recommended_dose(fit), 1)
@@ -480,112 +852,219 @@ test_that('BOIN12 matches MDAnderson Shiny app - parameterisation 2', {
   fit <- model %>% fit("2NNN")
   expect_equal(recommended_dose(fit), 3)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 3."
+  )
 
   fit <- model %>% fit("2NNT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NTB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2NTT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2TBB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2TTB")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model %>% fit("2TTT")
   expect_equal(recommended_dose(fit), 1)
   expect_equal(continue(fit), TRUE)
-
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   # Starting at top dose
   fit <- model %>% fit("5BBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5EBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5EEB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5EEE")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5EET")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5ETB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5ETT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NEB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NEE")
   expect_equal(recommended_dose(fit), 5)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
 
   fit <- model %>% fit("5NET")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNE")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNN")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NNT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NTB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5NTT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5TBB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5TTB")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
   fit <- model %>% fit("5TTT")
   expect_equal(recommended_dose(fit), 4)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 4."
+  )
 
 })
 

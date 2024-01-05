@@ -1,5 +1,6 @@
 
 test_that('wages_tair_selector does what is should.', {
+
   tox_skeleton = c(0.08, 0.15, 0.22, 0.29)
   eff_skeletons = matrix(nrow = 7, ncol = length(tox_skeleton))
   eff_skeletons[1,] <- c(0.60, 0.50, 0.40, 0.30)

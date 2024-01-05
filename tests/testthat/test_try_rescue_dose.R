@@ -15,12 +15,20 @@ test_that('try_rescue_dose_selector does what it should.', {
   fit1 <- model1 %>% fit('2NNN')
   expect_equal(recommended_dose(fit1), fit1$parent$parent$dfcrm_fit$mtd)
   expect_true(continue(fit1))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 4."
+  )
   expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
 
   # For toxic outcomes, the design 1 will use dose 1 before stopping is allowed
   fit1 <- model1 %>% fit('2TTT')
   expect_equal(recommended_dose(fit1), 1)
   expect_true(continue(fit1))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   # After dose 1 is given the requisite number of times, dose recommendation
@@ -28,11 +36,19 @@ test_that('try_rescue_dose_selector does what it should.', {
   fit1 <- model1 %>% fit('2TTT 1T')
   expect_equal(recommended_dose(fit1), 1)
   expect_true(continue(fit1))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
   fit1 <- model1 %>% fit('2TTT 1TT')
   expect_equal(recommended_dose(fit1), NA)
   expect_false(continue(fit1))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit1), c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 })

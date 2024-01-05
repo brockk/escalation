@@ -10,45 +10,86 @@ test_that('BOIN recommendations match published example.', {
   x <- fit(boin_fitter, '1NNN')
   expect_equal(recommended_dose(x), 2)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 2."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT')
   expect_equal(recommended_dose(x), 2)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 2."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN')
   expect_equal(recommended_dose(x), 4)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 4."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN 3NNT')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN 3NNT 3TNN')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
 
   expect_equal(n_at_dose(x), c(3, 6, 18, 3, 0))
   expect_equal(tox_at_dose(x), c(0, 1, 5, 3, 0))
+
 })
 
 
@@ -391,42 +432,70 @@ test_that('BOIN advises stopping when indicated', {
   x <- fit(boin_fitter, '1T')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should continue
   x <- fit(boin_fitter, '1TT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should stop
   x <- fit(boin_fitter, '1TTT')
   expect_true(is.na(recommended_dose(x)))
   expect_false(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(x), rep(FALSE, num_doses(x)))
 
   # Design should escalate
   x <- fit(boin_fitter, '1N')
   expect_equal(recommended_dose(x), 2)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should de-escalate
   x <- fit(boin_fitter, '1N 2TN')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should not yet stop
   x <- fit(boin_fitter, '1N 2TN 1TT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Now design should stop
   x <- fit(boin_fitter, '1N 2TN 1TTT')
   expect_true(is.na(recommended_dose(x)))
   expect_false(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(x), rep(FALSE, num_doses(x)))
 
   # If those 3 in 4 DLTs occurred at a higher dose, trial should continue but
@@ -434,6 +503,10 @@ test_that('BOIN advises stopping when indicated', {
   x <- fit(boin_fitter, '1N 4TTTT')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(x), c(TRUE, TRUE, TRUE, FALSE, FALSE))
 
 })
@@ -456,24 +529,40 @@ test_that('BOIN stopping rule can be turned off.', {
   x <- fit(boin_fitter, '1N')
   expect_equal(recommended_dose(x), 2)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should de-escalate
   x <- fit(boin_fitter, '1N 2TN')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should not stop here
   x <- fit(boin_fitter, '1N 2TN 1TT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Design should not stop here either
   x <- fit(boin_fitter, '1N 2TN 1TTT')
   expect_equal(recommended_dose(x), 1)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # If those 3 in 4 DLTs occurred at a higher dose, the trial should still
@@ -481,6 +570,10 @@ test_that('BOIN stopping rule can be turned off.', {
   x <- fit(boin_fitter, '1N 4TTTT')
   expect_equal(recommended_dose(x), 3)
   expect_true(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 3."
+  )
   expect_equal(dose_admissible(x), rep(TRUE, num_doses(x)))
 
   # Compare to tests above, this shows that the stopping rule has been disabled.
@@ -524,26 +617,46 @@ test_that('boin_selector respects eliminated doses', {
   fit <- model %>% fit('2TTT')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 1N')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 1NN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 1NNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
 
   fit <- model %>% fit('2TTT 1NNNNNNNNNNN')
   expect_equal(fit %>% recommended_dose(), 1)
   expect_true(fit %>% continue())
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(fit %>% dose_admissible(), c(TRUE, FALSE, FALSE))
 
 })

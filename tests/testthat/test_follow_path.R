@@ -1,3 +1,4 @@
+
 test_that('follow_path does what it should.', {
 
   # Example 1
@@ -6,21 +7,36 @@ test_that('follow_path does what it should.', {
   fit0 <- model1 %>% fit('')
   expect_equal(recommended_dose(fit0), 1)
   expect_equal(continue(fit0), TRUE)
+  expect_output(
+    print(fit0),
+    "The model advocates continuing at dose 1."
+  )
 
   fit1 <- model1 %>% fit('1NNN 2N')
   expect_equal(recommended_dose(fit1), 2)
   expect_equal(continue(fit1), TRUE)
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 2."
+  )
 
   fit2 <- model1 %>% fit('1NNN 2NT')
   expect_equal(recommended_dose(fit2), NA)
   expect_equal(continue(fit2), FALSE)
-
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
 
   # Example 2
   model2 <- follow_path(path = '')
   fit3 <- model2 %>% fit('1NNN 2N')
   expect_equal(recommended_dose(fit3), NA)
   expect_equal(continue(fit3), FALSE)
+  expect_output(
+    print(fit3),
+    "The model advocates stopping and recommending no dose."
+  )
 
 })
 
@@ -402,15 +418,27 @@ test_that('follow_path_selector interacts appropriately with dfcrm', {
   fit <- model1 %>% fit('1NN 2N')
   expect_equal(recommended_dose(fit), 2)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 2."
+  )
   expect_equal(tox_target(fit), 0.25)
 
 
   fit <- model1 %>% fit('1NN 2T')
   expect_equal(recommended_dose(fit), fit$dfcrm_fit$mtd)
   expect_equal(continue(fit), TRUE)
-
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
 
   fit <- model1 %>% fit('1NN 2NN 3NN')
   expect_equal(recommended_dose(fit), fit$dfcrm_fit$mtd)
   expect_equal(continue(fit), TRUE)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 5."
+  )
+
 })

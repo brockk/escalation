@@ -14,6 +14,10 @@ test_that('stop_when_too_toxic_selector does what it should.', {
   prob_too_toxic <- prob_tox_exceeds(fit, target + 0.1)
   expect_equal(recommended_dose(fit), fit$parent$dfcrm_fit$mtd)
   expect_equal(continue(fit), prob_too_toxic[1] < 0.8)
+  expect_output(
+    print(fit),
+    "The model advocates continuing at dose 1."
+  )
   expect_equal(dose_admissible(fit), prob_too_toxic < 0.8)
 
 
@@ -21,8 +25,14 @@ test_that('stop_when_too_toxic_selector does what it should.', {
   set.seed(123)
   fit <- model1 %>% fit('2NTN 1TTT')
   prob_too_toxic <- prob_tox_exceeds(fit, target + 0.1)
+  expect_true(is.na(recommended_dose(fit)))
   expect_equal(continue(fit), prob_too_toxic[1] < 0.8)
+  expect_output(
+    print(fit),
+    "The model advocates stopping and recommending no dose."
+  )
   expect_equal(dose_admissible(fit), prob_too_toxic < 0.8)
+
 })
 
 test_that('stop_when_too_toxic_selector supports correct interface.', {
@@ -374,6 +384,10 @@ test_that("stop_when_too_toxic_selector plays nicely with other selectors", {
     continue(x),
     prob_tox_exceeds(x, threshold = 0.35)[1] < 0.7
   )
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 4."
+  )
 
   # Another scenario that should continue:
   x <- design %>% fit("1NNT")
@@ -384,6 +398,10 @@ test_that("stop_when_too_toxic_selector plays nicely with other selectors", {
   expect_equal(
     continue(x),
     prob_tox_exceeds(x, threshold = 0.35)[1] < 0.7
+  )
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1."
   )
 
   # Scenario that should stop:
@@ -396,6 +414,10 @@ test_that("stop_when_too_toxic_selector plays nicely with other selectors", {
     continue(x),
     prob_tox_exceeds(x, threshold = 0.35)[1] < 0.7
   )
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending no dose."
+  )
 
   # Scenario where we don't stop for tox but a parent object stops the trial
   x <- design %>% fit("1NNN 2NNN 3NNN 4NTT")
@@ -407,6 +429,11 @@ test_that("stop_when_too_toxic_selector plays nicely with other selectors", {
     continue(x),
     FALSE
   )
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending dose 3."
+  )
+
   # Dose is given but continue is FALSE, as required.
 
 })

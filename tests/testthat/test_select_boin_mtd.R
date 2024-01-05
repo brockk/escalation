@@ -10,11 +10,24 @@ test_that('select_boin_mtd works like it should.', {
     stop_at_n(n = 30) %>%
     select_boin_mtd()
   outcomes <- '1NNN 2NNN 3NNN 3NNN 3NNN 3NNT 3TTT 4NNN 4NNT 4TTT'
-  expect_equal(model1 %>% fit(outcomes) %>% recommended_dose(), x$MTD)
+  fit1 <- model1 %>% fit(outcomes)
+  expect_equal(recommended_dose(fit1), x$MTD)
+  expect_false(continue(fit1))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending dose 3."
+  )
+
   # The trouble is, get_boin alone would also advocate the same dose:
   model2 <- get_boin(num_doses = 5, target = 0.3) %>%
     stop_at_n(n = 30)
-  expect_equal(model2 %>% fit(outcomes) %>% recommended_dose(), x$MTD)
+  fit2 <- model2 %>% fit(outcomes)
+  expect_equal(recommended_dose(fit2), x$MTD)
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending dose 3."
+  )
 
 
   # So, to observe that select_boin_mtd is having the desired effect, contrive
@@ -29,7 +42,13 @@ test_that('select_boin_mtd works like it should.', {
   n <- c(0, 3, 0, 0, 3)
   y <- c(0, 1, 0, 0, 3)
   x <- BOIN::select.mtd(target = 0.3, ntox = y, npts = n)
-  expect_equal(model3 %>% fit(outcomes) %>% recommended_dose(), x$MTD)
+  fit3 <- model3 %>% fit(outcomes)
+  expect_equal(recommended_dose(fit3), x$MTD)
+  expect_true(continue(fit3))
+  expect_output(
+    print(fit3),
+    "The model advocates continuing at dose 2."
+  )
 
   # At this low sample size, model 2 is not different to a model where
   # select_boin_mtd only intervenes finally:

@@ -22,6 +22,11 @@ test_that('select_mtpi2_mtd works like it should.', {
     recommended_dose(x),
     2
   )
+  expect_false(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending dose 2."
+  )
 
   # According to the rule in Guo et al (2017), with observed mean prob-tox:
   # c(0.1, 0.2, 0.3, 0.5, 0.7), we should choose dose 2
@@ -30,6 +35,11 @@ test_that('select_mtpi2_mtd works like it should.', {
   expect_equal(
     recommended_dose(x),
     2
+  )
+  expect_false(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending dose 2."
   )
 
   # According to the rule in Guo et al (2017), with observed mean prob-tox:
@@ -40,6 +50,11 @@ test_that('select_mtpi2_mtd works like it should.', {
     recommended_dose(x),
     3
   )
+  expect_false(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending dose 3."
+  )
 
   # According to the rule in Guo et al (2017), with observed mean prob-tox:
   # c(0.1, 0.2, 0.2, 0.3, 0.7), we should choose dose 4
@@ -48,6 +63,11 @@ test_that('select_mtpi2_mtd works like it should.', {
   expect_equal(
     recommended_dose(x),
     4
+  )
+  expect_false(continue(x))
+  expect_output(
+    print(x),
+    "The model advocates stopping and recommending dose 4."
   )
 
 })
