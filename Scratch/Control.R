@@ -56,6 +56,9 @@ devtools::check()
 
 # pkgdown site (do this once happy with version number, i.e. after checks)
 pkgdown::build_site()
+pkgdown::build_articles()
+pkgdown::build_article(name = "A710-SimulationComparison")
+
 
 # Manual
 devtools::build_manual()
