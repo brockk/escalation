@@ -66,7 +66,13 @@ NAs."><meta property="og:image" content="/logo.png"><!-- mathjax --><script src=
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -76,7 +82,7 @@ NAs."><meta property="og:image" content="/logo.png"><!-- mathjax --><script src=
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Quantile of the efficacy rate at each dose.</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/interface.R" class="external-link"><code>R/interface.R</code></a></small>
     <div class="hidden name"><code>prob_eff_quantile.Rd</code></div>
     </div>
 
@@ -131,7 +137,7 @@ NAs.</p>
 <span class="r-in"><span>                           priors <span class="op">=</span> <span class="va">p</span>, iter <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">1</span>, seed <span class="op">=</span> <span class="fl">2020</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="fit.html">fit</a></span><span class="op">(</span><span class="st">'1N 2E 3B'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="prob_tox_quantile.html">prob_tox_quantile</a></span><span class="op">(</span><span class="va">x</span>, p <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1378667 0.3058821 0.8359329 0.9857403 0.9988222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1771691 0.3043096 0.7709524 0.9854797 0.9990776</span>
 </code></pre></div>
     </div>
   </div>
