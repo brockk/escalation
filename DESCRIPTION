@@ -62,6 +62,8 @@ Imports:
   R6,
   mvtnorm
 RoxygenNote: 7.2.3
+URL: https://brockk.github.io/escalation/, https://github.com/brockk/escalation
+BugReports: https://github.com/brockk/escalation/issues
 Suggests: 
     testthat,
     knitr,
