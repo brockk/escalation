@@ -13,7 +13,7 @@ test_that('mtpi_selector matches published example.', {
 
 
 
-  # Tests at dose 1
+  # Tests at dose 1 ----
 
   # Three patients treated
   fit <- model %>% fit('1NNN')
@@ -607,7 +607,7 @@ test_that('mtpi_selector matches published example.', {
 
 
 
-  # Tests at dose 2
+  # Tests at dose 2 ----
 
   # Three patients treated
   fit <- model %>% fit('2NNN')
@@ -1201,7 +1201,7 @@ test_that('mtpi_selector matches published example.', {
 
 
 
-  # Tests at top dose (i.e. escalation impossible)
+  # Tests at top dose (i.e. escalation impossible) ----
 
   # Three patients treated
   fit <- model %>% fit('5NNN')

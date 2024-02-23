@@ -2,16 +2,18 @@
 % Please edit documentation in R/derived_dose_selector.R
 \name{as_tibble.derived_dose_selector}
 \alias{as_tibble.derived_dose_selector}
-\title{#' @export
-print.derived_dose_selector <- function(x, ...) {
-  print(x$parent, ...)
-}}
+\title{Cast \code{dose_selector} object to \code{\link[tibble]{tibble}}.}
 \usage{
 \method{as_tibble}{derived_dose_selector}(x, ...)
 }
-\description{
-#' @export
-print.derived_dose_selector <- function(x, ...) {
-  print(x$parent, ...)
+\arguments{
+\item{x}{Object of class \code{dose_selector}.}
+
+\item{...}{Extra args passed onwards.}
 }
+\value{
+Object of class \code{\link[tibble]{tibble}}
+}
+\description{
+Cast \code{dose_selector} object to \code{\link[tibble]{tibble}}.
 }

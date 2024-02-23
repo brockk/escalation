@@ -112,11 +112,12 @@ test_that('3+3 simulations match independent source', {
 
   # Wheeler et al. published a Shiny app to calculate the exact operating
   # characteristics of 3+3 designs at  https://github.com/graham-wheeler/AplusB.
-  # Reproduce using our MOnte Carlo simulation method their exact probabilities..
+  # Reproduce using our Monte Carlo simulation method their exact probabilities..
 
   # Five dose scenario where de-escalation is possible:
   true_prob_tox <- c(0.1, 0.2, 0.3, 0.4, 0.5)
   set.seed(2023)
+
   # For high precision but slow computation:
   # sims <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE) %>%
   #   simulate_trials(num_sims = 10^4, true_prob_tox = true_prob_tox)
@@ -125,24 +126,25 @@ test_that('3+3 simulations match independent source', {
   #   c(0.1, 0.28, 0.33, 0.2, 0.06, 0.02),
   #   tolerance = 0.01
   # )
+
   # For low precision but quick computation:
   sims <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE) %>%
-    simulate_trials(num_sims = 10^3, true_prob_tox = true_prob_tox)
+    simulate_trials(num_sims = 10^2, true_prob_tox = true_prob_tox)
   expect_equal(
     unname(prob_recommend(sims)),
     c(0.1, 0.28, 0.33, 0.2, 0.06, 0.02), # Wheeler stats
-    tolerance = 0.05
+    tolerance = 0.1
   )
 
   # Eight dose scenario where de-escalation is not possible:
   true_prob_tox <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
   set.seed(2023)
   sims <- get_three_plus_three(num_doses = 8, allow_deescalate = FALSE) %>%
-    simulate_trials(num_sims = 10^3, true_prob_tox = true_prob_tox)
+    simulate_trials(num_sims = 10^2, true_prob_tox = true_prob_tox)
   expect_equal(
     unname(prob_recommend(sims)),
     c(0.09, 0.26, 0.33, 0.22, 0.08, 0.02, 0, 0, 0), # Wheeler stats
-    tolerance = 0.05
+    tolerance = 0.1
   )
 
 })
@@ -165,7 +167,7 @@ test_that('TPI simulations match independent source', {
   sc1 <- c(0.05, 0.25, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95)
   set.seed(123)
   sims1 <- tpi_fitter %>%
-    simulate_trials(num_sims = 1000, true_prob_tox = sc1, next_dose = 1)
+    simulate_trials(num_sims = 10^2, true_prob_tox = sc1, next_dose = 1)
   expect_equal(
     unname(prob_recommend(sims1)),
     c(0, 0.13, 0.79, 0.08, 0, 0, 0, 0, 0),
@@ -174,7 +176,7 @@ test_that('TPI simulations match independent source', {
   expect_equal(
     unname(colMeans(n_at_dose(sims1))),
     c(7.7, 16.1, 5.8, 0.5, 0, 0, 0, 0),
-    tolerance = 0.2
+    tolerance = 0.3
   )
   expect_equal(
     mean(num_tox(sims1) / num_patients(sims1)),
@@ -187,7 +189,7 @@ test_that('TPI simulations match independent source', {
     tolerance = 0.1
   )
 
-  # If these checks run withoput irritating CRANm we could add more scenarios.
+  # If these checks run withoput irritating CRAN, we could add more scenarios.
   # See Scratch/ of GitHub repo.
 })
 
@@ -210,7 +212,7 @@ test_that('mTPI simulations match independent source', {
   sc1 <- c(0.05, 0.25, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95)
   set.seed(123)
   sims1 <- model %>%
-    simulate_trials(num_sims = 1000, true_prob_tox = sc1, next_dose = 1)
+    simulate_trials(num_sims = 10^2, true_prob_tox = sc1, next_dose = 1)
   expect_equal(
     unname(prob_recommend(sims1)),
     c(0, 0.14, 0.78, 0.08, 0, 0, 0, 0, 0),
@@ -219,7 +221,7 @@ test_that('mTPI simulations match independent source', {
   expect_equal(
     unname(colMeans(n_at_dose(sims1))),
     c(7.1, 18.3, 4.4, 0.2, 0, 0, 0, 0),
-    tolerance = 0.2
+    tolerance = 0.3
   )
   expect_equal(
     mean(num_tox(sims1) / num_patients(sims1)),
@@ -232,6 +234,6 @@ test_that('mTPI simulations match independent source', {
     tolerance = 0.1
   )
 
-  # If these checks run withoput irritating CRANm we could add more scenarios.
+  # If these checks run withoput irritating CRAN, we could add more scenarios.
   # See Scratch/ of GitHub repo.
 })

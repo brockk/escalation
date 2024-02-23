@@ -33,28 +33,28 @@ simulations_collection <- function(sim_map) {
 #'
 #' @return a tibble with cols:
 #' \itemize{
-#'  \item{"dose"}{the dose-level}
-#'  \item{"n"}{cumulative inference using the first n simulated iterations}
-#'  \item{"design.x"}{The first design in the comparison, aka design X}
-#'  \item{"hit.x"}{logical showing if design X recommended dose in iterate n}
-#'  \item{"design.y"}{The second design in the comparison, aka design Y}
-#'  \item{"hit.x"}{logical showing if design Y recommended dose in iterate n}
-#'  \item{"X"}{cumulative sum of hit.x within dose, i.e. count of recommendations}
-#'  \item{"X2"}{cumulative sum of hit.x^2 within dose}
-#'  \item{"Y"}{cumulative sum of hit.y within dose, i.e. count of recommendations}
-#'  \item{"Y2"}{cumulative sum of hit.y^2 within dose}
-#'  \item{"XY"}{cumulative sum of hit.x * hit.y within dose}
-#'  \item{"psi1"}{X / n}
-#'  \item{"psi2"}{Y / n}
-#'  \item{"v_psi1"}{variance of psi1}
-#'  \item{"v_psi2"}{variance of psi2}
-#'  \item{"cov_psi12"}{covariance of psi1 and psi2}
-#'  \item{"delta"}{psi1 - psi2}
-#'  \item{"v_delta"}{variance of delta}
-#'  \item{"se_delta"}{standard error of delta}
-#'  \item{"delta_l"}{delta - q * se_delta, where q is alpha / 2 normal quantile}
-#'  \item{"delta_u"}{delta + q * se_delta, where q is alpha / 2 normal quantile}
-#'  \item{"comparison"}{Label of design.x vs design.y, using design names}
+#'  \item \code{dose}, the dose-level
+#'  \item \code{n}, cumulative inference using the first n simulated iterations
+#'  \item \code{design.x}, The first design in the comparison, aka design X
+#'  \item \code{hit.x}, logical showing if design X recommended dose in iterate n
+#'  \item \code{design.y}, The second design in the comparison, aka design Y
+#'  \item \code{hit.x}, logical showing if design Y recommended dose in iterate n
+#'  \item \code{X}, cumulative sum of hit.x within dose, i.e. count of recommendations
+#'  \item \code{X2}, cumulative sum of hit.x^2 within dose
+#'  \item \code{Y}, cumulative sum of hit.y within dose, i.e. count of recommendations
+#'  \item \code{Y2}, cumulative sum of hit.y^2 within dose
+#'  \item \code{XY}, cumulative sum of hit.x * hit.y within dose
+#'  \item \code{psi1}, X / n
+#'  \item \code{psi2}, Y / n
+#'  \item \code{v_psi1}, variance of psi1
+#'  \item \code{v_psi2}, variance of psi2
+#'  \item \code{cov_psi12}, covariance of psi1 and psi2
+#'  \item \code{delta}, psi1 - psi2
+#'  \item \code{v_delta}, variance of delta
+#'  \item \code{se_delta}, standard error of delta
+#'  \item \code{delta_l}, delta - q * se_delta, where q is alpha / 2 normal quantile
+#'  \item \code{delta_u}, delta + q * se_delta, where q is alpha / 2 normal quantile
+#'  \item \code{comparison}, Label of design.x vs design.y, using design names
 #' }
 #'
 #' @importFrom magrittr %>%

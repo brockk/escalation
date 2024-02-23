@@ -53,8 +53,10 @@ designs <-
 Here we will compare three designs: 3+3; CRM without a toxicity stopping rule; and an otherwise identical CRM design with a toxicity stopping rule.
 The names we provide will be reused.
 
+For illustration we use only a small number of replicates:
+
 ```{r}
-num_sims <- 50
+num_sims <- 20
 true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
 
 sims <- simulate_compare(

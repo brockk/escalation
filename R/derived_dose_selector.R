@@ -163,11 +163,14 @@ summary.derived_dose_selector <- function(object, ...) {
   summary(object$parent, ...)
 }
 
-#' #' @export
-#' print.derived_dose_selector <- function(x, ...) {
-#'   print(x$parent, ...)
-#' }
-
+#' Cast \code{dose_selector} object to \code{\link[tibble]{tibble}}.
+#'
+#' @param x Object of class \code{dose_selector}.
+#' @param ... Extra args passed onwards.
+#'
+#' @return Object of class \code{\link[tibble]{tibble}}
+#'
+#' @importFrom tibble as_tibble
 #' @export
 as_tibble.derived_dose_selector <- function(x, ...) {
   as_tibble(x$parent, ...)

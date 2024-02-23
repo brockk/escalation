@@ -6,7 +6,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brockk/escalation/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/brockk/escalation/graph/badge.svg?token=9mDRK6d4Bn)](https://codecov.io/gh/brockk/escalation)
 [![cran
 version](http://www.r-pkg.org/badges/version/escalation)](https://cran.r-project.org/package=escalation)
 ![](https://cranlogs.r-pkg.org/badges/escalation)

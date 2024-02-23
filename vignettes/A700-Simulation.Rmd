@@ -73,7 +73,7 @@ library(escalation)
 For the purposes of illustration, let us simulate a modest number of trials:
 
 ```{r}
-num_sims <- 50
+num_sims <- 20
 ```
 
 In reality, if we want to have confidence in the simulated results, we would tend to run thousands of iterations [@wheelerHowDesignDosefinding2019].
