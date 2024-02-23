@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -113,28 +113,28 @@
     <h2>Value</h2>
     
 
-<p>a tibble with cols:</p><ul><li><p>"dose"the dose-level</p></li>
-<li><p>"n"cumulative inference using the first n simulated iterations</p></li>
-<li><p>"design.x"The first design in the comparison, aka design X</p></li>
-<li><p>"hit.x"logical showing if design X recommended dose in iterate n</p></li>
-<li><p>"design.y"The second design in the comparison, aka design Y</p></li>
-<li><p>"hit.x"logical showing if design Y recommended dose in iterate n</p></li>
-<li><p>"X"cumulative sum of hit.x within dose, i.e. count of recommendations</p></li>
-<li><p>"X2"cumulative sum of hit.x^2 within dose</p></li>
-<li><p>"Y"cumulative sum of hit.y within dose, i.e. count of recommendations</p></li>
-<li><p>"Y2"cumulative sum of hit.y^2 within dose</p></li>
-<li><p>"XY"cumulative sum of hit.x * hit.y within dose</p></li>
-<li><p>"psi1"X / n</p></li>
-<li><p>"psi2"Y / n</p></li>
-<li><p>"v_psi1"variance of psi1</p></li>
-<li><p>"v_psi2"variance of psi2</p></li>
-<li><p>"cov_psi12"covariance of psi1 and psi2</p></li>
-<li><p>"delta"psi1 - psi2</p></li>
-<li><p>"v_delta"variance of delta</p></li>
-<li><p>"se_delta"standard error of delta</p></li>
-<li><p>"delta_l"delta - q * se_delta, where q is alpha / 2 normal quantile</p></li>
-<li><p>"delta_u"delta + q * se_delta, where q is alpha / 2 normal quantile</p></li>
-<li><p>"comparison"Label of design.x vs design.y, using design names</p></li>
+<p>a tibble with cols:</p><ul><li><p><code>dose</code>, the dose-level</p></li>
+<li><p><code>n</code>, cumulative inference using the first n simulated iterations</p></li>
+<li><p><code>design.x</code>, The first design in the comparison, aka design X</p></li>
+<li><p><code>hit.x</code>, logical showing if design X recommended dose in iterate n</p></li>
+<li><p><code>design.y</code>, The second design in the comparison, aka design Y</p></li>
+<li><p><code>hit.x</code>, logical showing if design Y recommended dose in iterate n</p></li>
+<li><p><code>X</code>, cumulative sum of hit.x within dose, i.e. count of recommendations</p></li>
+<li><p><code>X2</code>, cumulative sum of hit.x^2 within dose</p></li>
+<li><p><code>Y</code>, cumulative sum of hit.y within dose, i.e. count of recommendations</p></li>
+<li><p><code>Y2</code>, cumulative sum of hit.y^2 within dose</p></li>
+<li><p><code>XY</code>, cumulative sum of hit.x * hit.y within dose</p></li>
+<li><p><code>psi1</code>, X / n</p></li>
+<li><p><code>psi2</code>, Y / n</p></li>
+<li><p><code>v_psi1</code>, variance of psi1</p></li>
+<li><p><code>v_psi2</code>, variance of psi2</p></li>
+<li><p><code>cov_psi12</code>, covariance of psi1 and psi2</p></li>
+<li><p><code>delta</code>, psi1 - psi2</p></li>
+<li><p><code>v_delta</code>, variance of delta</p></li>
+<li><p><code>se_delta</code>, standard error of delta</p></li>
+<li><p><code>delta_l</code>, delta - q * se_delta, where q is alpha / 2 normal quantile</p></li>
+<li><p><code>delta_u</code>, delta + q * se_delta, where q is alpha / 2 normal quantile</p></li>
+<li><p><code>comparison</code>, Label of design.x vs design.y, using design names</p></li>
 </ul></div>
 
   </div>

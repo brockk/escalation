@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -164,8 +164,9 @@ with convenient names:</p>
 <p>Here we will compare three designs: 3+3; CRM without a toxicity
 stopping rule; and an otherwise identical CRM design with a toxicity
 stopping rule. The names we provide will be reused.</p>
+<p>For illustration we use only a small number of replicates:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
 <span><span class="va">true_prob_tox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.12</span>, <span class="fl">0.27</span>, <span class="fl">0.44</span>, <span class="fl">0.53</span>, <span class="fl">0.57</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_compare.html">simulate_compare</a></span><span class="op">(</span></span>

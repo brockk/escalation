@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -183,7 +183,7 @@ the design tends to target doses with associated toxicity rates of
 <p>For the purposes of illustration, let us simulate a modest number of
 trials:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></code></pre></div>
 <p>In reality, if we want to have confidence in the simulated results,
 we would tend to run thousands of iterations <span class="citation">(Wheeler et al. 2019)</span>. We run a small number
 here so that this vignette compiles quickly.</p>
@@ -201,7 +201,7 @@ of R.</p>
 useful summary information:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span></span>
-<span><span class="co">#&gt; Number of iterations: 50 </span></span>
+<span><span class="co">#&gt; Number of iterations: 20 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of doses: 5 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -211,30 +211,30 @@ useful summary information:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.08   0.38   0.34   0.16   0.04   0.00 </span></span>
+<span><span class="co">#&gt;   0.10   0.45   0.30   0.15   0.00   0.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
 <span><span class="co">#&gt;      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt; 0.3351 0.3730 0.2054 0.0703 0.0162 </span></span>
+<span><span class="co">#&gt; 0.3731 0.3731 0.1791 0.0746 0.0000 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;     6.0     9.0     9.0    11.1    12.0    21.0 </span></span>
+<span><span class="co">#&gt;    6.00    8.25    9.00   10.05   12.00   18.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    2.00    2.00    2.00    2.72    3.00    5.00 </span></span>
+<span><span class="co">#&gt;    2.00    2.00    2.00    2.40    2.25    5.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    3.70    7.65   10.00   11.52   15.07   21.80</span></span></code></pre></div>
+<span><span class="co">#&gt;   4.200   5.925   9.150  10.335  13.950  21.800</span></span></code></pre></div>
 <p>Each of those pieces of information is available progmatically by R
 functions. For instance, the probability of recommending each dose at
 the final analysis, inferred from these simulated iterations, is:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.08   0.38   0.34   0.16   0.04   0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.10   0.45   0.30   0.15   0.00   0.00</span></span></code></pre></div>
 <p>Bear in mind that these probabilities are the result of a random
 process. If we run the simulations again with a different seed, we will
 get different results. Recall also that they are informed by a small
@@ -249,13 +249,13 @@ probably too toxic, or recommend no dose at all.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/num_patients.html">num_patients</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;     6.0     9.0     9.0    11.1    12.0    21.0</span></span></code></pre></div>
+<span><span class="co">#&gt;    6.00    8.25    9.00   10.05   12.00   18.00</span></span></code></pre></div>
 <p>We see that the simulated trials use between 3 and 24 patients, with
 an expected number of 9-12.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/n_at_recommended_dose.html">n_at_recommended_dose</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's </span></span>
-<span><span class="co">#&gt;   3.000   3.000   3.000   3.913   6.000   6.000       4</span></span></code></pre></div>
+<span><span class="co">#&gt;   3.000   3.000   3.000   3.667   3.000   6.000       2</span></span></code></pre></div>
 <p>Of those, 3-4 at treated at the dose that is eventually
 recommended.</p>
 <p>We can see how many patients are treated at each dose on a
@@ -282,7 +282,7 @@ dose-level:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/prob_administer.html">prob_administer</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          1          2          3          4          5 </span></span>
-<span><span class="co">#&gt; 0.33513514 0.37297297 0.20540541 0.07027027 0.01621622</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.37313433 0.37313433 0.17910448 0.07462687 0.00000000</span></span></code></pre></div>
 <p>We might be alarmed to learn that roughly 25% of patients are treated
 at doses 3-5, the doses we believe to be excessively toxic.</p>
 <p>We can also see how many toxicities there were at each dose in the
@@ -307,7 +307,7 @@ replicates:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/num_tox.html">num_tox</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    2.00    2.00    2.00    2.72    3.00    5.00</span></span></code></pre></div>
+<span><span class="co">#&gt;    2.00    2.00    2.00    2.40    2.25    5.00</span></span></code></pre></div>
 <p>We expect to see about 2-3 toxicities using this design in this
 scenario with no iteration producing more than 6 toxicities.</p>
 <p>For convenience, simulations can be cast to a
@@ -408,7 +408,7 @@ How does performance of this simple design compare to the 3+3 above?</p>
 <span>  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">true_prob_tox</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sims</span></span>
-<span><span class="co">#&gt; Number of iterations: 50 </span></span>
+<span><span class="co">#&gt; Number of iterations: 20 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of doses: 5 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -418,11 +418,11 @@ How does performance of this simple design compare to the 3+3 above?</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.00   0.16   0.46   0.32   0.06   0.00 </span></span>
+<span><span class="co">#&gt;   0.00   0.15   0.45   0.30   0.10   0.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
-<span><span class="co">#&gt;     1     2     3     4     5 </span></span>
-<span><span class="co">#&gt; 0.445 0.250 0.130 0.170 0.005 </span></span>
+<span><span class="co">#&gt;      1      2      3      4      5 </span></span>
+<span><span class="co">#&gt; 0.4000 0.2375 0.1375 0.1875 0.0375 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
@@ -430,11 +430,11 @@ How does performance of this simple design compare to the 3+3 above?</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    1.00    2.00    3.00    3.08    4.00    5.00 </span></span>
+<span><span class="co">#&gt;     2.0     3.0     3.0     3.4     4.0     5.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    6.10    9.95   11.80   12.06   13.80   21.30</span></span></code></pre></div>
+<span><span class="co">#&gt;    5.50   10.70   11.80   12.21   15.12   17.30</span></span></code></pre></div>
 <p>The first thing we note is that the CRM design is much less likely to
 select dose 1 and more likely to select dose 2. If we believe that
 efficacy is associated with toxicity (and we should if we are using the
@@ -454,7 +454,7 @@ toxicity:</p>
 <span>  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">true_prob_tox</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sims</span></span>
-<span><span class="co">#&gt; Number of iterations: 50 </span></span>
+<span><span class="co">#&gt; Number of iterations: 20 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of doses: 5 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -464,11 +464,11 @@ toxicity:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.00   0.32   0.42   0.20   0.04   0.02 </span></span>
+<span><span class="co">#&gt;   0.00   0.15   0.50   0.10   0.20   0.05 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
 <span><span class="co">#&gt;     1     2     3     4     5 </span></span>
-<span><span class="co">#&gt; 0.475 0.220 0.110 0.175 0.020 </span></span>
+<span><span class="co">#&gt; 0.438 0.163 0.138 0.212 0.050 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
@@ -476,11 +476,11 @@ toxicity:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    1.00    3.00    3.00    3.42    4.00    5.00 </span></span>
+<span><span class="co">#&gt;    2.00    2.00    3.00    3.15    4.00    5.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    6.40    9.70   12.40   12.33   14.38   25.00</span></span></code></pre></div>
+<span><span class="co">#&gt;    7.60   10.15   12.65   13.12   16.70   19.80</span></span></code></pre></div>
 <p>We now see some trial iterations that stop and recommend <em>no
 dose</em> for further study. We cannot see from this scenario whether
 this design stops frequently enough because an appropriate decision in
@@ -491,7 +491,7 @@ eventually recommended</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/n_at_recommended_dose.html">n_at_recommended_dose</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;     0.0     3.0     3.0     4.8     6.0    12.0</span></span></code></pre></div>
+<span><span class="co">#&gt;    0.00    3.00    3.00    4.05    6.00   12.00</span></span></code></pre></div>
 <p>Similar to the 3+3 design, this CRM design treats 3-4 at the
 recommended dose. We might want to ensure that there are at least 6
 patients at the recommended dose. How would that affect the operating
@@ -507,11 +507,11 @@ dose:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/n_at_recommended_dose.html">n_at_recommended_dose</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    6.00    6.00    6.00    6.54    6.00   12.00</span></span></code></pre></div>
+<span><span class="co">#&gt;     6.0     6.0     6.0     6.9     6.0    12.0</span></span></code></pre></div>
 <p>So how does this affect the expected overall sample size?</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span></span>
-<span><span class="co">#&gt; Number of iterations: 50 </span></span>
+<span><span class="co">#&gt; Number of iterations: 20 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of doses: 5 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -521,23 +521,23 @@ dose:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.00   0.20   0.40   0.36   0.02   0.02 </span></span>
+<span><span class="co">#&gt;   0.00   0.20   0.45   0.25   0.10   0.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
 <span><span class="co">#&gt;      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt; 0.3714 0.2776 0.1918 0.1469 0.0122 </span></span>
+<span><span class="co">#&gt; 0.4149 0.2553 0.1596 0.1596 0.0106 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    12.0    12.0    15.0    14.7    18.0    21.0 </span></span>
+<span><span class="co">#&gt;    12.0    12.0    15.0    14.1    15.0    18.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    1.00    3.00    4.00    3.82    5.00    8.00 </span></span>
+<span><span class="co">#&gt;     2.0     3.0     4.0     3.6     4.0     6.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    8.00   11.62   14.55   15.31   18.55   26.60</span></span></code></pre></div>
+<span><span class="co">#&gt;    8.20   11.07   12.50   13.68   16.30   21.70</span></span></code></pre></div>
 <p>Pleasingly, the expected sample size only increases by about 3
 patients. Obviously, the maximum increases by 6 patients.</p>
 </div>
@@ -586,11 +586,11 @@ and the previous, like the <code>cohorts_of_n</code> function does:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cohorts_of_n.html">cohorts_of_n</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   time_delta</span></span>
-<span><span class="co">#&gt; 1        1.3</span></span>
-<span><span class="co">#&gt; 2        0.2</span></span>
-<span><span class="co">#&gt; 3        0.5</span></span>
-<span><span class="co">#&gt; 4        1.5</span></span>
-<span><span class="co">#&gt; 5        1.0</span></span></code></pre></div>
+<span><span class="co">#&gt; 1        2.2</span></span>
+<span><span class="co">#&gt; 2        0.7</span></span>
+<span><span class="co">#&gt; 3        0.1</span></span>
+<span><span class="co">#&gt; 4        0.1</span></span>
+<span><span class="co">#&gt; 5        0.5</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="sampling-the-conclusion-of-partly-observed-trials">Sampling the conclusion of partly-observed trials<a class="anchor" aria-label="anchor" href="#sampling-the-conclusion-of-partly-observed-trials"></a>
@@ -615,7 +615,7 @@ likely that a low dose will be recommended, as we might expect:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.00   0.28   0.66   0.06   0.00   0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.00   0.40   0.55   0.05   0.00   0.00</span></span></code></pre></div>
 <p>The <code>previous_outcomes</code> can be described by the outcome
 string method demonstrated above. They can also be provided via a
 data-frame, with the following columns:</p>
@@ -637,7 +637,7 @@ results:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5 </span></span>
-<span><span class="co">#&gt;   0.00   0.28   0.66   0.06   0.00   0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.00   0.40   0.55   0.05   0.00   0.00</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="next-dose">Next dose<a class="anchor" aria-label="anchor" href="#next-dose"></a>
@@ -672,8 +672,7 @@ this function to retain all model fits by specifying
 <p>We can verify that there are now many analyses per trial:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">sims</span><span class="op">$</span><span class="va">fits</span>, <span class="va">length</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 4 3 4 7 4 3 3 5 5 4 5 7 3 5 3 7 6 4 3 3 6 5 4 6 4 4 4 4 5 4 2 6 3 4 5 5 7 6</span></span>
-<span><span class="co">#&gt; [39] 5 4 5 3 4 4 4 5 4 5 7 5</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 6 6 4 6 4 5 4 5 5 6 5 5 4 8 5 6 3 4 3 4</span></span></code></pre></div>
 <p>The multiple fits within a single simulated trial are distinguishable
 in <code>tibble</code> view via the <code>.depth</code> column:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
@@ -681,18 +680,18 @@ in <code>tibble</code> view via the <code>.depth</code> column:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 12</span></span></span>
 <span><span class="co">#&gt;    .iteration .depth  time dose     tox     n empiric_tox_rate mean_prob_tox</span></span>
 <span><span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>          1      1   0   NoDose     0     0            0                 0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>          1      1   0   1          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>          1      1   0   2          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>          1      1   0   3          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>          1      1   0   4          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>          1      1   0   5          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>          1      2   1.3 NoDose     0     0            0                 0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>          1      2   1.3 1          1     3            0.333            <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>          1      2   1.3 2          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          1      2   1.3 3          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>          1      2   1.3 4          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>          1      2   1.3 5          0     0          <span style="color: #BB0000;">NaN</span>                <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>          1      1   0   NoDose     0     0                0             0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>          1      1   0   1          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>          1      1   0   2          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>          1      1   0   3          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>          1      1   0   4          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>          1      1   0   5          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>          1      2   1.7 NoDose     0     0                0             0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>          1      2   1.7 1          0     3                0            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>          1      2   1.7 2          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          1      2   1.7 3          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>          1      2   1.7 4          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>          1      2   1.7 5          0     0              <span style="color: #BB0000;">NaN</span>            <span style="color: #BB0000;">NA</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: median_prob_tox &lt;dbl&gt;, admissible &lt;lgl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   recommended &lt;lgl&gt;, true_prob_tox &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>In contrast to the previous usage of <code>as_tibble(sims)</code>, we
