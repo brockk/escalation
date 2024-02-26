@@ -17,9 +17,9 @@ bivariate normal variables. The extent to which the events are correlated is
 controlled by rho, the correlation of the two normal variables.
 }
 \references{
-Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
+Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2024).
 Potential outcome simulation for efficient head-to-head comparison of
-adaptive dose-finding designs. Preprint.
+adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 }
 \section{Super class}{
 \code{\link[escalation:PatientSample]{escalation::PatientSample}} -> \code{CorrelatedPatientSample}

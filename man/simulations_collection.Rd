@@ -19,7 +19,7 @@ pair of designs investigated. See
 \code{\link{as_tibble.simulations_collection}} for a description.
 }
 \references{
-Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
+Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2024).
 Potential outcome simulation for efficient head-to-head comparison of
-adaptive dose-finding designs. Preprint.
+adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 }
