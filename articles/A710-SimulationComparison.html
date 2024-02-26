@@ -135,7 +135,7 @@ introduction to using simulation.</p>
 <div class="section level2">
 <h2 id="comparing-competing-designs">Comparing competing designs<a class="anchor" aria-label="anchor" href="#comparing-competing-designs"></a>
 </h2>
-<p>In <code>simulate_compare</code>, we implement the method of <span class="citation">Sweeting et al. (2023)</span> to efficiently compare
+<p>In <code>simulate_compare</code>, we implement the method of <span class="citation">Sweeting et al. (2024)</span> to efficiently compare
 dose-finding designs. The crux of this method is to ensure that the same
 simulated patients are used for each competing design so that, for
 instance, if a patient is given dose 2 by one design and experiences
@@ -217,7 +217,7 @@ variants.</p>
 <h2 id="working-with-patientsamples">Working with PatientSamples<a class="anchor" aria-label="anchor" href="#working-with-patientsamples"></a>
 </h2>
 <p>The idea at the core of the method by <span class="citation">Sweeting
-et al. (2023)</span> for efficient comparison of competing designs is to
+et al. (2024)</span> for efficient comparison of competing designs is to
 use the same patients across different designs. This reduces Monte Carlo
 error by examining where the designs differ in their recommendations
 given identical inputs.</p>
@@ -229,7 +229,7 @@ occurrence of events is managed using latent uniform random variables.
 We show how to import and export these variables, and use them to infer
 potential outcomes at a range of doses.</p>
 <p>To illustrate some of the fine-grained features of working with
-patient samples, we reproduce the BOIN12 example in <span class="citation">Sweeting et al. (2023)</span>:</p>
+patient samples, we reproduce the BOIN12 example in <span class="citation">Sweeting et al. (2024)</span>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">num_doses</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
@@ -500,8 +500,9 @@ there apply to both <code>simulate_trials</code> and
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-sweeting2023" class="csl-entry">
 Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock.
-2023. <span>“Potential Outcome Simulation for Efficient Head-to-Head
-Comparison of Adaptive Dose-Finding Designs.”</span> <em>Preprint</em>.
+2024. <span>“Potential Outcome Simulation for Efficient Head-to-Head
+Comparison of Adaptive Dose-Finding Designs.”</span> <em>arXiv Preprint
+arXiv:2402.15460</em>.
 </div>
 </div>
 </div>
