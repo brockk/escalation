@@ -10,9 +10,9 @@ tasks to effectively use the same simulated individuals in different designs,
 thus supporting reduced Monte Carlo error and more efficient comparison.
 }
 \references{
-Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2023).
+Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2024).
 Potential outcome simulation for efficient head-to-head comparison of
-adaptive dose-finding designs. Preprint.
+adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

@@ -234,9 +234,9 @@ x <- simulate_compare(
 
 }
 \references{
-Sweeting, M., Slade, D., Jackson, D., Brock, K. (2023)
+Sweeting, M., Slade, D., Jackson, D., & Brock, K. (2024).
 Potential outcome simulation for efficient head-to-head comparison of
-adaptive dose-finding designs. Preprint.
+adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 }
 \seealso{
 \code{\link{simulations}}
