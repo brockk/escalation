@@ -105,7 +105,7 @@ By default, dose decisions in simulated trials are made after each
 
 # In a five-dose scenario, we have assumed probabilities for Prob(tox):
 true_prob_tox <- c(0.05, 0.10, 0.15, 0.18, 0.45)
-# and Prov(eff):
+# and Prob(eff):
 true_prob_eff <- c(0.40, 0.50, 0.52, 0.53, 0.53)
 
 # Let us compare two BOIN12 variants that differ in their stopping params:
