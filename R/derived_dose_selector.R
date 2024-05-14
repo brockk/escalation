@@ -159,19 +159,16 @@ utility.derived_dose_selector <- function(x, ...) {
 
 
 #' @export
-summary.derived_dose_selector <- function(object, ...) {
-  summary(object$parent, ...)
+print.stop_when_too_toxic_selector <- function(x, ...) {
+  .dose_selector_print(x$parent, ...)
 }
 
-#' Cast \code{dose_selector} object to \code{\link[tibble]{tibble}}.
-#'
-#' @param x Object of class \code{dose_selector}.
-#' @param ... Extra args passed onwards.
-#'
-#' @return Object of class \code{\link[tibble]{tibble}}
-#'
-#' @importFrom tibble as_tibble
 #' @export
 as_tibble.derived_dose_selector <- function(x, ...) {
-  as_tibble(x$parent, ...)
+  .dose_selector_to_tibble(x$parent, ...)
+}
+
+#' @export
+summary.derived_dose_selector <- function(object, ...) {
+  summary(object$parent, ...)
 }

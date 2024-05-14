@@ -22,6 +22,7 @@ test_that('dont_skip_selector does what it should.', {
     "The model advocates continuing at dose 2."
   )
   expect_true(recommended_dose(fit0) >= recommended_dose(fit1))
+  check_dose_selector_consistency(fit1)
 
   ## Skipping forcibly allowed, effectively replicating model0
   model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -33,6 +34,7 @@ test_that('dont_skip_selector does what it should.', {
     print(fit2),
     "The model advocates continuing at dose 4."
   )
+  check_dose_selector_consistency(fit2)
 
   ## Handle parent that wants to stop and rec no dose:
   model3 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -45,6 +47,7 @@ test_that('dont_skip_selector does what it should.', {
     print(fit3),
     "The model advocates stopping and recommending no dose."
   )
+  check_dose_selector_consistency(fit3)
 
   ## Handle parent that wants to stop and rec a dose:
   model4 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -57,7 +60,7 @@ test_that('dont_skip_selector does what it should.', {
     print(fit4),
     "The model advocates stopping and recommending dose 2."
   )
-
+  check_dose_selector_consistency(fit4)
 
 
   # De-escalation CRM example
@@ -76,6 +79,7 @@ test_that('dont_skip_selector does what it should.', {
     "The model advocates continuing at dose 2."
   )
   expect_true(recommended_dose(fit5a) <= recommended_dose(fit5))
+  check_dose_selector_consistency(fit5)
 
   ## Skipping forcibly allowed, effectively replicating unconstrained model
   model6 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -87,6 +91,7 @@ test_that('dont_skip_selector does what it should.', {
     print(fit6),
     "The model advocates continuing at dose 1."
   )
+  check_dose_selector_consistency(fit6)
 
   ## Handle parent that wants to stop and rec no dose:
   model7 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -99,6 +104,7 @@ test_that('dont_skip_selector does what it should.', {
     print(fit7),
     "The model advocates stopping and recommending no dose."
   )
+  check_dose_selector_consistency(fit7)
 
   ## Handle parent that wants to stop and rec a dose:
   model8 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -111,6 +117,7 @@ test_that('dont_skip_selector does what it should.', {
     print(fit8),
     "The model advocates stopping and recommending dose 2."
   )
+  check_dose_selector_consistency(fit8)
 
 })
 

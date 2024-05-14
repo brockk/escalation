@@ -67,6 +67,8 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
   epsilon <- 0.04
   expect_true(all(abs(nbg_post_mean - mean_prob_tox(fit2)) < epsilon))
 
+  check_dose_selector_consistency(fit2)
+
 })
 
 

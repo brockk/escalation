@@ -18,6 +18,7 @@ test_that('trialr_efftox_selector supports correct interface.', {
 
   # Example 1, using outcome string
   x <- fit(model_fitter, '1NEN 2NBT')
+  check_dose_selector_consistency(x)
 
   expect_true(is.null(tox_target(x)))
 
@@ -160,6 +161,7 @@ test_that('trialr_efftox_selector supports correct interface.', {
 
   # Example 2, using trivial outcome string
   x <- fit(model_fitter, '')
+  check_dose_selector_consistency(x)
 
   expect_true(is.null(tox_target(x)))
 
@@ -301,6 +303,7 @@ test_that('trialr_efftox_selector supports correct interface.', {
     eff = c(0,1, 0,0, 1,0)
   )
   x <- fit(model_fitter, outcomes)
+  check_dose_selector_consistency(x)
 
   expect_true(is.null(tox_target(x)))
 

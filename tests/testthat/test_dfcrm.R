@@ -25,6 +25,7 @@ test_that('dfcrm_dose_selector matches dfcrm.', {
   expect_equal(round(mean_prob_tox(x), 2),  round(y$ptox, 2))
   expect_equal(x$dfcrm_fit$model, 'empiric')
   expect_equal(x$dfcrm_fit$prior.var, 0.75)
+  check_dose_selector_consistency(x)
 
 
   # Example 2 - Logit model, non-standard intercept parameter
@@ -53,6 +54,8 @@ test_that('dfcrm_dose_selector matches dfcrm.', {
   expect_equal(round(mean_prob_tox(x), 2),  round(y$ptox, 2))
   expect_equal(x$dfcrm_fit$model, 'logistic')
   expect_equal(x$dfcrm_fit$intcpt, 4)
+  check_dose_selector_consistency(x)
+
 })
 
 test_that('dfcrm_selector supports correct interface.', {

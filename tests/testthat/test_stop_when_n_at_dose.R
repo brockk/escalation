@@ -16,6 +16,7 @@ test_that('stop_when_n_at_dose_selector does what it should.', {
     print(fit1),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit1)
 
   # But do stop when there are 12 at any particular dose:
   fit2 <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
@@ -25,7 +26,7 @@ test_that('stop_when_n_at_dose_selector does what it should.', {
     print(fit2),
     "The model advocates stopping and recommending dose 2."
   )
-
+  check_dose_selector_consistency(fit2)
 
   # Example 2 - stopping at recommended dose
   model2 <- get_dfcrm(skeleton = skeleton, target = target) %>%
@@ -39,6 +40,7 @@ test_that('stop_when_n_at_dose_selector does what it should.', {
     print(fit3),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit3)
 
   # But do stop when there are 6 at dose 2:
   fit4 <- model2 %>% fit('1NNN 2NTN 2TNN 2NNN')
@@ -50,7 +52,7 @@ test_that('stop_when_n_at_dose_selector does what it should.', {
   )
   # Implicitly, this suggests the recommended dose is 2:
   expect_equal(recommended_dose(fit4), 2)
-
+  check_dose_selector_consistency(fit4)
 
 
   # Example 3 - stopping at a particular dose
@@ -65,6 +67,7 @@ test_that('stop_when_n_at_dose_selector does what it should.', {
     print(fit5),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit5)
 
   # But do stop when there are 6 at dose 2:
   fit6 <- model3 %>% fit('1NNN 2NTN 2TNN 2NNN')
@@ -74,6 +77,7 @@ test_that('stop_when_n_at_dose_selector does what it should.', {
     print(fit6),
     "The model advocates stopping and recommending dose 2."
   )
+  check_dose_selector_consistency(fit6)
 
 })
 

@@ -99,3 +99,18 @@ recommended_dose.cibp_dose_selector <- function(x, ...) {
     which.min(colMeans(numerator / denominator)) %>% unname()
   }
 }
+
+#' @export
+print.cibp_dose_selector <- function(x, ...) {
+  .dose_selector_print(x, ...)
+}
+
+#' @export
+as_tibble.cibp_dose_selector <- function(x, ...) {
+  .dose_selector_to_tibble(x, ...)
+}
+
+#' @export
+summary.cibp_dose_selector <- function(object, ...) {
+  .dose_selector_summary(object, ...)
+}

@@ -11,6 +11,7 @@ test_that('follow_path does what it should.', {
     print(fit0),
     "The model advocates continuing at dose 1."
   )
+  check_dose_selector_consistency(fit0)
 
   fit1 <- model1 %>% fit('1NNN 2N')
   expect_equal(recommended_dose(fit1), 2)
@@ -19,6 +20,7 @@ test_that('follow_path does what it should.', {
     print(fit1),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit1)
 
   fit2 <- model1 %>% fit('1NNN 2NT')
   expect_equal(recommended_dose(fit2), NA)
@@ -27,6 +29,7 @@ test_that('follow_path does what it should.', {
     print(fit2),
     "The model advocates stopping and recommending no dose."
   )
+  check_dose_selector_consistency(fit2)
 
   # Example 2
   model2 <- follow_path(path = '')
@@ -37,6 +40,7 @@ test_that('follow_path does what it should.', {
     print(fit3),
     "The model advocates stopping and recommending no dose."
   )
+  check_dose_selector_consistency(fit3)
 
 })
 

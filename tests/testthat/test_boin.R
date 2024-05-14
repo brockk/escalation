@@ -14,6 +14,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN')
   expect_equal(recommended_dose(x), 3)
@@ -22,6 +23,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT')
   expect_equal(recommended_dose(x), 2)
@@ -30,6 +32,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN')
   expect_equal(recommended_dose(x), 3)
@@ -38,6 +41,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN')
   expect_equal(recommended_dose(x), 3)
@@ -46,6 +50,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN')
   expect_equal(recommended_dose(x), 4)
@@ -54,6 +59,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 4."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT')
   expect_equal(recommended_dose(x), 3)
@@ -62,6 +68,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN')
   expect_equal(recommended_dose(x), 3)
@@ -70,6 +77,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN 3NNT')
   expect_equal(recommended_dose(x), 3)
@@ -78,6 +86,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(x)
 
   x <- fit(boin_fitter, '1NNN 2NNN 3NTT 2NTN 3NNN 3NNN 4TTT 3NTN 3NNT 3TNN')
   expect_equal(recommended_dose(x), 3)
@@ -86,9 +95,7 @@ test_that('BOIN recommendations match published example.', {
     print(x),
     "The model advocates continuing at dose 3."
   )
-
-  expect_equal(n_at_dose(x), c(3, 6, 18, 3, 0))
-  expect_equal(tox_at_dose(x), c(0, 1, 5, 3, 0))
+  check_dose_selector_consistency(x)
 
 })
 

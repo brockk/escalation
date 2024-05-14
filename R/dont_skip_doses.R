@@ -107,3 +107,18 @@ recommended_dose.dont_skip_selector <- function(x, ...) {
 continue.dont_skip_selector <- function(x, ...) {
   return(continue(x$parent))
 }
+
+#' @export
+print.dont_skip_selector <- function(x, ...) {
+  .dose_selector_print(x, ...)
+}
+
+#' @export
+as_tibble.dont_skip_selector <- function(x, ...) {
+  .dose_selector_to_tibble(x, ...)
+}
+
+#' @export
+summary.dont_skip_selector <- function(object, ...) {
+  .dose_selector_summary(object, ...)
+}

@@ -233,3 +233,18 @@ recommended_dose.mtpi_mtd_dose_selector <- function(x, ...) {
     }
   }
 }
+
+#' @export
+print.mtpi_mtd_dose_selector <- function(x, ...) {
+  .dose_selector_print(x, ...)
+}
+
+#' @export
+as_tibble.mtpi_mtd_dose_selector <- function(x, ...) {
+  .dose_selector_to_tibble(x, ...)
+}
+
+#' @export
+summary.mtpi_mtd_dose_selector <- function(object, ...) {
+  .dose_selector_summary(object, ...)
+}
