@@ -16,6 +16,9 @@
 #' check_dose_selector_consistency(x)
 check_dose_selector_consistency <- function(x) {
 
+  # Avoid NOTEs:
+  recommended <- dose <- NULL
+
   x_df <- summary(x) %>% slice(-1) # drop the NoDose line
   d <- recommended_dose(x)
 
