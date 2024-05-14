@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -106,7 +106,8 @@
 
       
 
-      </header><script src="A205-CRM_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="A205-CRM_files/viz-1.8.2/viz.js"></script><link href="A205-CRM_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+      </header><link href="A205-CRM_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="A205-CRM_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="A205-CRM_files/viz-1.8.2/viz.js"></script><link href="A205-CRM_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
 <script src="A205-CRM_files/grViz-binding-1.0.11/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -320,11 +321,11 @@ of the toxicity already seen at dose 5.</p>
 <span><span class="co">#&gt;   dose     tox     n empiric_tox_rate mean_prob_tox median_prob_tox admissible</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> NoDose     0     0              0          0              0       TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          0     0            <span style="color: #BB0000;">NaN</span>          0.030<span style="text-decoration: underline;">5</span>         0.007<span style="text-decoration: underline;">20</span> TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2          0     0            <span style="color: #BB0000;">NaN</span>          0.063<span style="text-decoration: underline;">1</span>         0.025<span style="text-decoration: underline;">2</span>  TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3          0     2              0          0.127          0.078<span style="text-decoration: underline;">3</span>  TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          0     1              0          0.216          0.176   TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5          1     2              0.5        0.336          0.325   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          0     0            <span style="color: #BB0000;">NaN</span>          0.030<span style="text-decoration: underline;">0</span>         0.007<span style="text-decoration: underline;">31</span> TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2          0     0            <span style="color: #BB0000;">NaN</span>          0.063<span style="text-decoration: underline;">3</span>         0.025<span style="text-decoration: underline;">5</span>  TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3          0     2              0          0.128          0.079<span style="text-decoration: underline;">1</span>  TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          0     1              0          0.219          0.178   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5          1     2              0.5        0.340          0.326   TRUE      </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: recommended &lt;lgl&gt;, Skeleton &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>We can see that they closely agree on model estimates of the
 probability of toxicity at each dose. Note that the median perfectly
@@ -365,11 +366,11 @@ prior parameters:</p>
 <span><span class="co">#&gt;   dose     tox     n empiric_tox_rate mean_prob_tox median_prob_tox admissible</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> NoDose     0     0              0          0              0       TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          0     0            <span style="color: #BB0000;">NaN</span>          0.031<span style="text-decoration: underline;">0</span>         0.006<span style="text-decoration: underline;">56</span> TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2          0     0            <span style="color: #BB0000;">NaN</span>          0.066<span style="text-decoration: underline;">1</span>         0.028<span style="text-decoration: underline;">5</span>  TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3          0     2              0          0.140          0.097<span style="text-decoration: underline;">6</span>  TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          0     1              0          0.244          0.215   TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5          1     2              0.5        0.375          0.367   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          0     0            <span style="color: #BB0000;">NaN</span>          0.030<span style="text-decoration: underline;">9</span>         0.007<span style="text-decoration: underline;">66</span> TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2          0     0            <span style="color: #BB0000;">NaN</span>          0.066<span style="text-decoration: underline;">8</span>         0.031<span style="text-decoration: underline;">8</span>  TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3          0     2              0          0.142          0.105   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          0     1              0          0.249          0.225   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5          1     2              0.5        0.381          0.378   TRUE      </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: recommended &lt;lgl&gt;, Skeleton &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>In this example, the model estimates are broadly consistent across
 methodology and model type. However, this is not the general case. To
@@ -385,11 +386,11 @@ using <code>trialr</code> (note: this model is not implemented in
 <span><span class="co">#&gt;   dose     tox     n empiric_tox_rate mean_prob_tox median_prob_tox admissible</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> NoDose     0     0              0          0              0       TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          0     0            <span style="color: #BB0000;">NaN</span>          0.037<span style="text-decoration: underline;">1</span>         0.004<span style="text-decoration: underline;">64</span> TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2          0     0            <span style="color: #BB0000;">NaN</span>          0.060<span style="text-decoration: underline;">1</span>         0.017<span style="text-decoration: underline;">9</span>  TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3          0     2              0          0.108          0.062<span style="text-decoration: underline;">6</span>  TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          0     1              0          0.203          0.166   TRUE      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5          1     2              0.5        0.408          0.387   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          0     0            <span style="color: #BB0000;">NaN</span>          0.034<span style="text-decoration: underline;">7</span>         0.003<span style="text-decoration: underline;">94</span> TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2          0     0            <span style="color: #BB0000;">NaN</span>          0.056<span style="text-decoration: underline;">7</span>         0.017<span style="text-decoration: underline;">1</span>  TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3          0     2              0          0.105          0.062<span style="text-decoration: underline;">5</span>  TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          0     1              0          0.203          0.164   TRUE      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5          1     2              0.5        0.411          0.384   TRUE      </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: recommended &lt;lgl&gt;, Skeleton &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>Now the estimate of toxicity at the highest dose is high relative to
 the other models. The extra free parameter in the two-parameter model
@@ -461,12 +462,12 @@ use the models.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   .draw dose  prob_tox</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1     1        0.362</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2     1        0.459</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3     1        0.459</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 4     1        0.827</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 5     1        0.722</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 6     1        0.352</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1     1        0.658</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2     1        0.645</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3     1        0.701</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 4     1        0.687</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 5     1        0.674</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 6     1        0.553</span></span></code></pre></div>
 <p>and these facilitate flexible visualisation:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -506,8 +507,8 @@ patients, starting at dose 2:</p>
 <span>                   scale <span class="op">=</span> <span class="va">beta_sd</span><span class="op">)</span></span>
 <span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths</span><span class="op">)</span></span></code></pre></div>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-a1cb863607b5ea95a3f1" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-a1cb863607b5ea95a3f1">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"2\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"3\" [label = \"5\", fillcolor = \"#FDE725FF\", fontcolor = \"#2A788EFF\"] \n  \"4\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"5\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"6\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"7\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"8\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"9\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"10\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"11\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"12\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"13\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"14\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"15\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"16\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"17\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"18\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"19\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"20\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"21\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We see that the design would willingly skip dose 3 if no tox is seen
+<div class="grViz html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"2\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"3\" [label = \"5\", fillcolor = \"#FDE725FF\", fontcolor = \"#2A788EFF\"] \n  \"4\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"5\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"6\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"7\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"8\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"9\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"10\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"11\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"12\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"13\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"14\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"15\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"16\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"17\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"18\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"19\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"20\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"21\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We see that the design would willingly skip dose 3 if no tox is seen
 in the first cohort. This might warrant suppressing dose-dkipping by
 appending a <code>dont_skip_doses(when_escalating = TRUE)</code>
 selector.</p>
@@ -618,7 +619,7 @@ the simulation vignette.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Brock2019" class="csl-entry">
 Brock, Kristian. 2019. <span>“<span class="nocase">trialr: Bayesian
 Clinical Trial Designs in R and Stan</span>.”</span> <em>arXiv
@@ -668,7 +669,7 @@ Cancer.”</span> <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

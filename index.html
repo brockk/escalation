@@ -12,32 +12,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="A Modular Approach to Dose-Finding Clinical Trials">
-<meta property="og:description" content="Methods for working with dose-finding clinical trials. We provide 
-    implementations of many dose-finding clinical trial designs, including the 
-    continual reassessment method (CRM) by OQuigley et al. (1990) 
-    &lt;doi:10.2307/2531628&gt;, the toxicity probability interval (TPI) design by Ji
-    et al. (2007) &lt;doi:10.1177/1740774507079442&gt;, the modified TPI (mTPI) design
-    by Ji et al. (2010) &lt;doi:10.1177/1740774510382799&gt;, the Bayesian optimal 
-    interval design (BOIN) by Liu &amp; Yuan (2015) &lt;doi:10.1111/rssc.12089&gt;, EffTox
-    by Thall &amp; Cook (2004) &lt;doi:10.1111/j.0006-341X.2004.00218.x&gt;; the design of
-    Wages &amp; Tait (2015) &lt;doi:10.1080/10543406.2014.920873&gt;, and the 3+3 
-    described by Korn et al. (1994) &lt;doi:10.1002/sim.4780131802&gt;. All designs
-    are implemented with a common interface. We also offer optional additional 
-    classes to tailor the behaviour of all designs, including avoiding skipping 
-    doses, stopping after n patients have been treated at the recommended dose,  
-    stopping when a toxicity condition is met, or demanding that n patients are 
-    treated before stopping is allowed. By daisy-chaining together these classes
-    using the pipe operator from magrittr', it is simple to tailor the 
-    behaviour of a dose-finding design so it behaves how the trialist wants.
-    Having provided a flexible interface for specifying designs, we then provide
-    functions to run simulations and calculate dose-paths for future cohorts of 
-    patients.">
+<meta property="og:description" content="Methods for working with dose-finding clinical trials. We provide implementations of many dose-finding clinical trial designs, including the continual reassessment method (CRM) by OQuigley et al. (1990) &lt;doi:10.2307/2531628&gt;, the toxicity probability interval (TPI) design by Ji et al. (2007) &lt;doi:10.1177/1740774507079442&gt;, the modified TPI (mTPI) design by Ji et al. (2010) &lt;doi:10.1177/1740774510382799&gt;, the Bayesian optimal interval design (BOIN) by Liu &amp; Yuan (2015) &lt;doi:10.1111/rssc.12089&gt;, EffTox by Thall &amp; Cook (2004) &lt;doi:10.1111/j.0006-341X.2004.00218.x&gt;; the design of Wages &amp; Tait (2015) &lt;doi:10.1080/10543406.2014.920873&gt;, and the 3+3 described by Korn et al. (1994) &lt;doi:10.1002/sim.4780131802&gt;. All designs are implemented with a common interface. We also offer optional additional classes to tailor the behaviour of all designs, including avoiding skipping doses, stopping after n patients have been treated at the recommended dose, stopping when a toxicity condition is met, or demanding that n patients are treated before stopping is allowed. By daisy-chaining together these classes using the pipe operator from magrittr', it is simple to tailor the behaviour of a dose-finding design so it behaves how the trialist wants. Having provided a flexible interface for specifying designs, we then provide functions to run simulations and calculate dose-paths for future cohorts of patients.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -59,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -145,25 +126,25 @@
 <span><span class="fu"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">"1NNN"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>but that it will stick when it sees one-out-of-three toxicities in a cohort:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">"1NNN 2NNN 3NNT"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <p>Having escalated through doses 1 and 2, here the design advocates treating another cohort at dose 3.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">"1NNN 2NNN 3NNT 3NTN"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <p>When it sees two-out-of-six toxicities at dose 3, it concludes that dose 3 is too toxic, dose 2 is the MTD, and the trial should stop.</p>
 <p><code>escalation</code> provides functions to use common dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), the TPI suite of designs, efficacy-toxicity designs like EffTox or Wages &amp; Tait, and (as we have seen) the perennial 3+3:</p>
 <ul>
@@ -281,16 +262,16 @@
 <p>The <code>fit</code> object will tell you the dose recommended by the CRM model to be administered next. Depending on your preference for classic R or tidyverse R, you might run:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="do">## [1] 4</span></span></code></pre></div>
 <p>or</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="do">## [1] 4</span></span></code></pre></div>
 <p>Either way, you get the same answer. The model advocates skipping straight to dose 4. Clinicians are unlikely to feel comfortable with this. We can respecify the model to expressly not skip doses in escalation. We will do that later on.</p>
 <p>For now, let us return to our model fit. We can ask whether the trial should keep going:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <p>Naturally it wants to continue because <code>dfcrm</code> does not implement any stopping rules. Again, we will add various stopping behaviours in sections below.</p>
 <p>The CRM-fitting function in <code>dfcrm</code> accepts many arguments to customise the model form and these are passed onwards by <code>get_dfcrm</code> function via the <code>...</code> parameter. For example, to use the one-parameter logit model in <code>dfcrm</code> (rather than the default empiric model) with the intercept term fixed to take the value 4, we can specify:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -299,7 +280,7 @@
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2NNN 3TNN'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <p><code>intcpt</code> and <code>logistic</code> are the parameter names chosen by the authors of <code>dfcrm</code>.</p>
 </div>
 <div class="section level3">
@@ -315,36 +296,36 @@
 <p>All we have changed is the method of inference. <code>dfcrm</code> uses numerical integration to calculate posterior statistics and plugs those into the dose-toxicity function. In contrast, <code>trialr</code> fits the model using Hamiltonian MCMC sampling via <code>Stan</code>. Thankfully, the two models agree on the desired next dose:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="do">## [1] 4</span></span></code></pre></div>
 <p>and that the trial should continue:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <p>The added bonus we get from the <code>trialr</code> fit, however, is those samples from the posterior distribution:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_samples.html">prob_tox_samples</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 10 × 6</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    .draw      `1`      `2`          `3`        `4`     `5`</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  1 1     4.39e- 2 9.04e- 2 0.235        0.384      0.587  </span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  2 2     3.39e- 6 6.24e- 5 0.00294      0.0212     0.117  </span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  3 3     8.03e- 2 1.44e- 1 0.311        0.462      0.651  </span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  4 4     7.41e- 2 1.35e- 1 0.300        0.451      0.642  </span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  5 5     5.32e- 2 1.05e- 1 0.257        0.408      0.606  </span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  6 6     5.60e- 7 1.57e- 5 0.00128      0.0122     0.0859 </span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  7 7     2.28e-17 1.62e-13 0.0000000199 0.00000812 0.00145</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  8 8     2.14e- 1 3.06e- 1 0.490        0.624      0.769  </span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  9 9     2.63e- 1 3.58e- 1 0.539        0.664      0.796  </span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 10    1.70e- 1 2.56e- 1 0.441        0.582      0.739</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="do">## # A tibble: 10 × 6</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="do">##    .draw      `1`      `2`          `3`        `4`     `5`</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="do">##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="do">##  1 1     4.39e- 2 9.04e- 2 0.235        0.384      0.587  </span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="do">##  2 2     3.39e- 6 6.24e- 5 0.00294      0.0212     0.117  </span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="do">##  3 3     8.03e- 2 1.44e- 1 0.311        0.462      0.651  </span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="do">##  4 4     7.41e- 2 1.35e- 1 0.300        0.451      0.642  </span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a><span class="do">##  5 5     5.32e- 2 1.05e- 1 0.257        0.408      0.606  </span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a><span class="do">##  6 6     5.60e- 7 1.57e- 5 0.00128      0.0122     0.0859 </span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="do">##  7 7     2.28e-17 1.62e-13 0.0000000199 0.00000812 0.00145</span></span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a><span class="do">##  8 8     2.14e- 1 3.06e- 1 0.490        0.624      0.769  </span></span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="do">##  9 9     2.63e- 1 3.58e- 1 0.539        0.664      0.796  </span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="do">## 10 10    1.70e- 1 2.56e- 1 0.441        0.582      0.739</span></span></code></pre></div>
 <p>That facilitates really flexible inference. For example, what is the probability that toxicity at dose 3 is at least 5% greater than that at dose 2? Simple to answer using the posterior samples:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_samples.html">prob_tox_samples</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">`3`</span> <span class="op">&gt;</span> <span class="va">`2`</span> <span class="op">+</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 1 × 1</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    prob</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;dbl&gt;</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 0.586</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="do">## # A tibble: 1 × 1</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="do">##    prob</span></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="do">##   &lt;dbl&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="do">## 1 0.586</span></span></code></pre></div>
 <p>‘More likely than not’, is the answer.</p>
 <p>See the Continual Reassessment Method vignette for more details.</p>
 </div>
@@ -365,13 +346,13 @@
 <p>Sticking at dose 7 is the recommendation:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 7</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="do">## [1] 7</span></span></code></pre></div>
 <p>However, we see that it is a close call as to which dose is closest to the target toxicity level:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/mean_prob_tox.html">mean_prob_tox</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.01229476 0.03139614 0.06501636 0.13376511 0.20021181 0.26219444</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.31900339 0.37057264 0.45907389 0.53075063 0.65691058 0.73549743</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [13] 0.82365045 0.86996457 0.89783331</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="do">##  [1] 0.01229476 0.03139614 0.06501636 0.13376511 0.20021181 0.26219444</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="do">##  [7] 0.31900339 0.37057264 0.45907389 0.53075063 0.65691058 0.73549743</span></span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="do">## [13] 0.82365045 0.86996457 0.89783331</span></span></code></pre></div>
 <p>This is perhaps unsurprising in a situation with so many doses.</p>
 <p>See the Neuenschwander, Branson &amp; Gsponer vignette for more details.</p>
 </div>
@@ -388,7 +369,7 @@
 <p>and the returned model fit obeys the same interface as the other classes described here. For instance, the dose recommended for the next cohort is:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb42"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>See the Toxicity Probability Interval Design vignette for more information.</p>
 </div>
 <div class="section level3">
@@ -405,7 +386,7 @@
 <p>and learn that the recommended next dose is</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb46"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>dose 1, in accordance with Figure 2 of Ji et al. (2010).</p>
 <p>See the Modified Toxicity Probability Interval Design vignette for more information.</p>
 </div>
@@ -419,7 +400,7 @@
 <span>                   exclusion_certainty <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>Once again, see the Modified Toxicity Probability Interval Design vignette for more information.</p>
 </div>
 <div class="section level3">
@@ -437,16 +418,16 @@
 <p>and ask the recommended dose:</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb52"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <p>The BOIN dose selector natively implements stopping rules, as described by Liu &amp; Yuan. For instance, if the bottom dose is too toxic, the design will advise the trial halts:</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2NTN 1TTT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb54"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <p>Notice in this scenario that the recommended dose is <code>NA</code>:</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb56"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
 <p>This clarifies that no dose should be recommended for further study. In this setting, this is because all doses are considered too toxic. This is distinct from scenarios where a design advocates stopping a trial and recommending a dose for further study. We will encounter situations like that below.</p>
 <p>Since <code>escalation</code> provides many flexible options for stopping, we have made it possible to suppress BOIN’s native stopping rule via <code>use_stopping_rule = FALSE</code>. In this instance, the user may want to add their own stopping rule, e.g. using <code>stop_when_too_toxic</code>.</p>
 <p>Extra parameters are passed to the <code>get.boundary</code> function in the <code>BOIN</code> package to customise the escalation procedure. For instance, the boundaries that guide changes in dose are set to be 60% and 140% of the target toxicity rate, by default. To instead use 30% and 170%, we could run:</p>
@@ -455,13 +436,13 @@
 <span>         p.saf <span class="op">=</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="va">target</span>, p.tox <span class="op">=</span> <span class="fl">1.7</span> <span class="op">*</span> <span class="va">target</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNT'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb58"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>To observe the effect of the change, note that the default values suppress escalation in this scenario:</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/get_boin.html">get_boin</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span>, target <span class="op">=</span> <span class="va">target</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNT'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb60"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>The parameter names <code>p.saf</code> and <code>p.tox</code> were chosen by the authors of the <code>BOIN</code> package.</p>
 <p>See the Bayesian Optimal Interval Design vignette for more information.</p>
 </div>
@@ -481,10 +462,10 @@
 <p>We have the usual interface:</p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb64"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb66"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <p><code>escalation</code> also supports other so-called phase I/II designs that select doses by efficacy and toxicity like Wages and Tait (2015) and Thall and Cook (2004). See the help pages for more information.</p>
 </div>
 <div class="section level3">
@@ -497,14 +478,14 @@
 <p>As usual, we can fit the model to some outcomes and learn the recommended dose:</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2NTN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb69"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>Korn et al. (1994) described a variant of 3+3 that permits deescalation to ensure that six patients are treated at a dose before it is recommended. To use that option in our model, we could have run:</p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span>, allow_deescalate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>The model would then advocate deescalation if at least two toxicities are seen at a dose and the dose below has fewer than 6 treated patients:</p>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2NTT'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb72"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="follow_path">follow_path<a class="anchor" aria-label="anchor" href="#follow_path"></a>
@@ -515,14 +496,14 @@
 <p>When fit to data, the method just returns whatever comes next in the sequence:</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NN 2N'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb75"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NN 2NN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb77"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <p>When the outcomes diverge from the pre-specified path, however, this selector does not know what to do:</p>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NN 2NT'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb79"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
 <p>That rather seems to limit its value. The point of this class is that we sometimes want to specify what is occasionally referred to as <em>an initial escalation plan</em>. When trial outcomes diverge from the initial plan, another method takes over. This is a perfect opportunity to show how different selectors can be joined together. Let us say that we wish to follow the initial plan described above, but when the first toxicity event is seen, we want a CRM model to take over. We simply join the functions together using the pipe operator from <code>magrittr</code>:</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/follow_path.html">follow_path</a></span><span class="op">(</span><span class="st">'1NN 2NN 3NNN 4NNN 5NNN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -530,7 +511,7 @@
 <p>Now, when trial outcomes diverge from the path, the CRM model analyses all of the outcomes and recommends the next dose:</p>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NN 2NT'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb82"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>This concludes our look at the core dose-selecting classes. We now turn our attention to the ways in which these methods can be adapted using extra behaviours.</p>
 </div>
 <div class="section level3">
@@ -545,7 +526,7 @@
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2NNN'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb85"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <p>This time, however, the model advocates dose 3. Previously, it wanted to go straight to dose 4.</p>
 <p>We prevented skipping dose in escalation. We could have prevented skipping doses in deescalation with:</p>
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
@@ -567,20 +548,20 @@
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2TNN 2NNN 3NNN'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb90"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <p>The design advocates continuing at dose:</p>
 <div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb92"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <p>In contrast, once 15 patients are seen,</p>
 <div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2TNN 2NNN 3NNN 3NTN'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb94"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <p>the design advocates stopping. It is important to note that, even though the design has stopped, it still recommends that a dose be studied at the next trial phase:</p>
 <div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb96"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" tabindex="-1"></a><span class="do">## [1] 3</span></span></code></pre></div>
 <p>This is in contrast to the scenario where a trial is stopped because all doses are inappropriate. In this scenario, the dose recommendation would be <code>NA</code>. We will encounter this in examples below.</p>
 </div>
 <div class="section level3">
@@ -597,18 +578,18 @@
 <p>The model recommends that dose 2 should be given to more patients:</p>
 <div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb100"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb102"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>If the next cohort results in dose 2 being recommended yet again, i.e. to bring the total number of patients at dose 2 to nine or more, the model stops:</p>
 <div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2TNN 2NTN 2NNN'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb104"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb106"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>In this scenario, dose 2 is the final recommended dose and the trial stops gracefully at a pre-specified stopping rule.</p>
 <p>This behaviour can also be configured to stop when any dose has been given <em>n</em> times:</p>
 <div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
@@ -639,20 +620,20 @@
 <p>The design recommends dose 2 and it also advocates stopping:</p>
 <div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb113"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb115"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <p>This is because the lower bound of the 90% interval for the probability of toxicity at dose 2 is at least 10%:</p>
 <div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb117"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="do">##   1   2   3   4   5 </span></span>
-<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.0 0.1  NA  NA  NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" tabindex="-1"></a><span class="do">##   1   2   3   4   5 </span></span>
+<span id="cb117-2"><a href="#cb117-2" tabindex="-1"></a><span class="do">## 0.0 0.1  NA  NA  NA</span></span></code></pre></div>
 <p>and the upper bound is no more than 40%:</p>
 <div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb119"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="do">##   1   2   3   4   5 </span></span>
-<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.1 0.4  NA  NA  NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" tabindex="-1"></a><span class="do">##   1   2   3   4   5 </span></span>
+<span id="cb119-2"><a href="#cb119-2" tabindex="-1"></a><span class="do">## 0.1 0.4  NA  NA  NA</span></span></code></pre></div>
 <p>It may be intersting to note that our CRM model would not stop in this scenario:</p>
 <div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dfcrm.html">get_dfcrm</a></span><span class="op">(</span>skeleton <span class="op">=</span> <span class="va">skeleton</span>, target <span class="op">=</span> <span class="va">target</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -662,21 +643,21 @@
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NTN 2TNN 2NNN 2NNT 2NTN 2NNN 2TNN'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb121"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb123"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>This is because the lower bound of the 90% CI falls slightly outside the sought range:</p>
 <div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb125"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.04876626 0.09809797 0.24712623 0.39695491 0.59744927</span></span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" tabindex="-1"></a><span class="do">## [1] 0.04876626 0.09809797 0.24712623 0.39695491 0.59744927</span></span></code></pre></div>
 <p>As before, we can specify <code>dose = 'recommended'</code>, <code>dose = 'any'</code>, or a particular numerical dose-level with <code>dose = 3</code>, for example.</p>
 <p>It should be appreciated that this approach only works when the underlying model extends a way of calculating quantiles and uncertainty intervals. The 3+3 lacks a statistical foundation and does not offer quantiles:</p>
 <div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/get_three_plus_three.html">get_three_plus_three</a></span><span class="op">(</span>num_doses <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NTN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/prob_tox_quantile.html">prob_tox_quantile</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb127"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA NA NA NA NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" tabindex="-1"></a><span class="do">## [1] NA NA NA NA NA</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="stop_when_too_toxic">stop_when_too_toxic<a class="anchor" aria-label="anchor" href="#stop_when_too_toxic"></a>
@@ -691,27 +672,27 @@
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NTN'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb130"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb132"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>This is because the probability that the toxicity rate exceeds 35% is less than 70%:</p>
 <div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span><span class="op">(</span><span class="fl">0.35</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb134"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.35 0.53 0.82 0.95 1.00</span></span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" tabindex="-1"></a><span class="do">## [1] 0.35 0.53 0.82 0.95 1.00</span></span></code></pre></div>
 <p>However, with material additional toxicity at dose 1, the design now advocates stopping:</p>
 <div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NTN 1TTT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb136"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <p>Furthermore, no dose is recommended:</p>
 <div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb138"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
 <p>This is because we are now at least 70% sure that the lowest dose is too toxic:</p>
 <div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span><span class="op">(</span><span class="fl">0.35</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb140"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.87 0.95 1.00 1.00 1.00</span></span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" tabindex="-1"></a><span class="do">## [1] 0.87 0.95 1.00 1.00 1.00</span></span></code></pre></div>
 <p>Once again, we can specify <code>dose = 'recommended'</code>, <code>dose = 'any'</code>, or a particular numerical dose-level with <code>dose = 3</code>, for example. We also require that the underlying model supports the calculation of quantiles. BOIN supports this fucntionality:</p>
 <div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_boin.html">get_boin</a></span><span class="op">(</span>target <span class="op">=</span> <span class="va">target</span>, num_doses <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -719,13 +700,13 @@
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NTN 1TTT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb142"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb144"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
 <div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span><span class="op">(</span><span class="fl">0.35</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb146"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.95   NA   NA   NA   NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" tabindex="-1"></a><span class="do">## [1] 0.95   NA   NA   NA   NA</span></span></code></pre></div>
 <p>but a non-statistical method like 3+3 does not.</p>
 </div>
 <div class="section level3">
@@ -742,10 +723,10 @@
 <div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNT 3NTN 3NNN 4TTN 3NTT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb149"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb151"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>the design advocates continuing at dose 2 even though 18 patients have been evaluated. This is because the <code>demand_n_at_dose</code> function is overriding the stopping behaviour of <code>stop_at_n</code>. It is requesting that the trial continue at dose 2 instead of stopping with only three patients treated at the nominal recommended dose.</p>
 <p>It is important to recognise that the order of the functions matters. If we flip the order of the constraints in the example above, the outcome is different:</p>
 <div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
@@ -755,10 +736,10 @@
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NNN 2NNT 3NTN 3NNN 4TTN 3NTT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb153"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb155"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" tabindex="-1"></a><span class="do">## [1] 2</span></span></code></pre></div>
 <p>Now the <code>stop_at_n</code> constraint overrides the action of <code>demand_n_at_dose</code> to halt the trial when <em>n=18</em>, even though only three patients have been evaluated at dose 2. It overrides because it comes later in the decision chain. Users should be aware that commands that come later take precedence.</p>
 <p>Once again, we can specify <code>dose = 'recommended'</code>, <code>dose = 'any'</code>, or a particular numerical dose-level with <code>dose = 3</code>, for example.</p>
 <p>In summary, the <code>demand_n_at_dose</code> function delays stopping in a scenario when a dose is being selected.</p>
@@ -776,34 +757,34 @@
 <div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2TTT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb158"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb160"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>the design will not advocate stopping, even though the posterior confidence that the tox rate at dose 1 exceeds 35% is greater than 80%:</p>
 <div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span><span class="op">(</span><span class="fl">0.35</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb162"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.8673669 0.9307674 0.9857421 0.9971830 0.9998310</span></span></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" tabindex="-1"></a><span class="do">## [1] 0.8673669 0.9307674 0.9857421 0.9971830 0.9998310</span></span></code></pre></div>
 <p>Once two patients are seen at dose 1, stopping can be countenanced. If those two patients tolerate treatment at dose 1:</p>
 <div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2TTT 1NN'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb164"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb166"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 <p>then stopping is not advocated because the posterior belief is now that dose 1 is not excessively toxic:</p>
 <div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_exceeds.html">prob_tox_exceeds</a></span><span class="op">(</span><span class="fl">0.35</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb168"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6683818 0.8195981 0.9668375 0.9951862 0.9998694</span></span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" tabindex="-1"></a><span class="do">## [1] 0.6683818 0.8195981 0.9668375 0.9951862 0.9998694</span></span></code></pre></div>
 <p>However, if even one of those patients at dose 1 experiences toxicity:</p>
 <div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'2TTT 1NT'</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/continue.html">continue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb170"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
 <div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb172"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div>
 <p>Then the trial stops and no dose is recommended.</p>
 <p>The <code>try_rescue_dose</code> function allows researchers to rescue situations where otherwise sensible stopping criteria may prove too sensitive to chance events in very small sample sizes.</p>
 </div>
@@ -820,7 +801,7 @@
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/fit.html">fit</a></span><span class="op">(</span><span class="st">'1NTN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb175"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -972,7 +953,7 @@ Zohar, Sarah, and Sylvie Chevret. 2001. “The Continual Reassessment Method: Co
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
