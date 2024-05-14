@@ -20,6 +20,7 @@ test_that('try_rescue_dose_selector does what it should.', {
     "The model advocates continuing at dose 4."
   )
   expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  check_dose_selector_consistency(fit1)
 
   # For toxic outcomes, the design 1 will use dose 1 before stopping is allowed
   fit1 <- model1 %>% fit('2TTT')
@@ -30,6 +31,7 @@ test_that('try_rescue_dose_selector does what it should.', {
     "The model advocates continuing at dose 1."
   )
   expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
 
   # After dose 1 is given the requisite number of times, dose recommendation
   # and stopping revert to being determined by the underlying dose selector:
@@ -41,6 +43,7 @@ test_that('try_rescue_dose_selector does what it should.', {
     "The model advocates continuing at dose 1."
   )
   expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
 
   fit1 <- model1 %>% fit('2TTT 1TT')
   expect_equal(recommended_dose(fit1), NA)
@@ -50,6 +53,7 @@ test_that('try_rescue_dose_selector does what it should.', {
     "The model advocates stopping and recommending no dose."
   )
   expect_equal(dose_admissible(fit1), c(FALSE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
 
 })
 

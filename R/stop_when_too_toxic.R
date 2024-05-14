@@ -141,6 +141,22 @@ dose_admissible.stop_when_too_toxic_selector <- function(x, ...) {
   return(prob_too_tox < x$confidence)
 }
 
+
+#' @export
+print.stop_when_too_toxic_selector <- function(x, ...) {
+  .dose_selector_print(x, ...)
+}
+
+#' @export
+as_tibble.stop_when_too_toxic_selector <- function(x, ...) {
+  .dose_selector_to_tibble(x, ...)
+}
+
+#' @export
+summary.stop_when_too_toxic_selector <- function(object, ...) {
+  .dose_selector_summary(object, ...)
+}
+
 # Private interface
 
 stopping_for_toxicity <- function(x) {

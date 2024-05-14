@@ -17,6 +17,7 @@ test_that('select_boin_mtd works like it should.', {
     print(fit1),
     "The model advocates stopping and recommending dose 3."
   )
+  check_dose_selector_consistency(fit1)
 
   # The trouble is, get_boin alone would also advocate the same dose:
   model2 <- get_boin(num_doses = 5, target = 0.3) %>%
@@ -28,6 +29,7 @@ test_that('select_boin_mtd works like it should.', {
     print(fit2),
     "The model advocates stopping and recommending dose 3."
   )
+  check_dose_selector_consistency(fit2)
 
 
   # So, to observe that select_boin_mtd is having the desired effect, contrive
@@ -49,6 +51,7 @@ test_that('select_boin_mtd works like it should.', {
     print(fit3),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit3)
 
   # At this low sample size, model 2 is not different to a model where
   # select_boin_mtd only intervenes finally:
@@ -57,6 +60,7 @@ test_that('select_boin_mtd works like it should.', {
     select_boin_mtd(when = 'finally')
   expect_equal(model2 %>% fit(outcomes) %>% recommended_dose(),
                model4 %>% fit(outcomes) %>% recommended_dose())
+
 })
 
 test_that('select_boin_mtd when=finally supports correct interface.', {

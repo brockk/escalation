@@ -16,6 +16,7 @@ test_that('stop_at_n_selector does what it should.', {
     print(fit),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit)
 
   # With 15 patients, this trial should stop:
   fit <- model1 %>% fit('1NNN 2NTN 2TNN 2NNN 2NTT')
@@ -25,6 +26,7 @@ test_that('stop_at_n_selector does what it should.', {
     print(fit),
     "The model advocates stopping and recommending dose 2."
   )
+  check_dose_selector_consistency(fit)
 
 })
 

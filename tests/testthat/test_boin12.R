@@ -14,6 +14,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit)
 
   # Section 6 and Figure S2 of Data Supplement
   fit <- model %>% fit("1NNN")
@@ -23,6 +24,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 2."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB")
   expect_equal(recommended_dose(fit), 3)
@@ -31,6 +33,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE")
   expect_equal(recommended_dose(fit), 3)
@@ -39,6 +42,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 3."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN")
   expect_equal(recommended_dose(fit), 4)
@@ -47,6 +51,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 4."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE")
   expect_equal(recommended_dose(fit), 4)
@@ -55,6 +60,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 4."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE")
   expect_equal(recommended_dose(fit), 4)
@@ -63,6 +69,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 4."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN")
   expect_equal(recommended_dose(fit), 5)
@@ -71,6 +78,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 5."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN 5BEN")
   expect_equal(recommended_dose(fit), 5)
@@ -79,6 +87,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 5."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN 5BEN 5NBT")
   expect_equal(recommended_dose(fit), 4)
@@ -87,6 +96,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates continuing at dose 4."
   )
+  check_dose_selector_consistency(fit)
 
   fit <- model %>% fit("1NNN 2NNB 3NEE 3NTN 4ETE 4NBE 4BNN 5BEN 5NBT 4NEN")
   expect_equal(recommended_dose(fit), 4)
@@ -95,6 +105,7 @@ test_that('BOIN12 matches published example.', {
     print(fit),
     "The model advocates stopping and recommending dose 4."
   )
+  check_dose_selector_consistency(fit)
 
 })
 

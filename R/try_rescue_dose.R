@@ -165,3 +165,18 @@ dose_admissible.try_rescue_dose_selector <- function(x, ...) {
   }
   return(admiss)
 }
+
+#' @export
+print.try_rescue_dose_selector <- function(x, ...) {
+  .dose_selector_print(x, ...)
+}
+
+#' @export
+as_tibble.try_rescue_dose_selector <- function(x, ...) {
+  .dose_selector_to_tibble(x, ...)
+}
+
+#' @export
+summary.try_rescue_dose_selector <- function(object, ...) {
+  .dose_selector_summary(object, ...)
+}

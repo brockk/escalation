@@ -150,3 +150,18 @@ recommended_dose.boin_mtd_dose_selector <- function(x, ...) {
     }
   }
 }
+
+#' @export
+print.boin_mtd_dose_selector <- function(x, ...) {
+  .dose_selector_print(x, ...)
+}
+
+#' @export
+as_tibble.boin_mtd_dose_selector <- function(x, ...) {
+  .dose_selector_to_tibble(x, ...)
+}
+
+#' @export
+summary.boin_mtd_dose_selector <- function(object, ...) {
+  .dose_selector_summary(object, ...)
+}

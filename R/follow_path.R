@@ -153,22 +153,22 @@ tox_at_dose.follow_path_selector <- function(x, ...) {
 
 #' @export
 mean_prob_tox.follow_path_selector <- function(x, ...) {
-  return(rep(NA, num_doses(x)))
+  return(as.numeric(rep(NA, num_doses(x))))
 }
 
 #' @export
 median_prob_tox.follow_path_selector <- function(x, ...) {
-  return(rep(NA, num_doses(x)))
+  return(as.numeric(rep(NA, num_doses(x))))
 }
 
 #' @export
 prob_tox_quantile.follow_path_selector <- function(x, p, ...) {
-  return(rep(NA, num_doses(x)))
+  return(as.numeric(rep(NA, num_doses(x))))
 }
 
 #' @export
 prob_tox_exceeds.follow_path_selector <- function(x, threshold, ...) {
-  return(rep(NA, num_doses(x)))
+  return(as.numeric(rep(NA, num_doses(x))))
 }
 
 #' @export

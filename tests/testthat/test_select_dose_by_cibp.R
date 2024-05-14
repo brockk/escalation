@@ -10,6 +10,7 @@ test_that('select_dose_by_cibp does what it should.', {
 
   # In a scenario where underlying model wille scalaet but CIBP will not:
   fit <- model %>% fit('1NTN')
+  check_dose_selector_consistency(fit)
 
   # Underlying CRM will be ready to escalate:
   expect_equal(recommended_dose(fit$parent), 2)

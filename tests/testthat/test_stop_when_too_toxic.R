@@ -19,7 +19,7 @@ test_that('stop_when_too_toxic_selector does what it should.', {
     "The model advocates continuing at dose 1."
   )
   expect_equal(dose_admissible(fit), prob_too_toxic < 0.8)
-
+  check_dose_selector_consistency(fit)
 
   # But the extra tox event should tip the scale
   set.seed(123)
@@ -32,6 +32,7 @@ test_that('stop_when_too_toxic_selector does what it should.', {
     "The model advocates stopping and recommending no dose."
   )
   expect_equal(dose_admissible(fit), prob_too_toxic < 0.8)
+  check_dose_selector_consistency(fit)
 
 })
 

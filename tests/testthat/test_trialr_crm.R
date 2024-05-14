@@ -23,7 +23,7 @@ test_that('trialr_crm_selector matches dfcrm_selector.', {
   # mean_prob_tox matches?
   epsilon <- 0.02
   expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
-
+  check_dose_selector_consistency(fit2)
 
 
 
@@ -52,6 +52,7 @@ test_that('trialr_crm_selector matches dfcrm_selector.', {
   # mean_prob_tox matches?
   epsilon <- 0.02
   expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
+  check_dose_selector_consistency(fit2)
 
 })
 
@@ -100,7 +101,7 @@ test_that('trialr_crm_selector matches bcrm.', {
   # mean_prob_tox matches?
   epsilon <- 0.02
   expect_true(all(abs(bcrm_prob_tox - mean_prob_tox(fit2)) < epsilon))
-
+  check_dose_selector_consistency(fit2)
 
   # TODO test agreement of other methods. logistic2 is a problem. See /Scratch
 
