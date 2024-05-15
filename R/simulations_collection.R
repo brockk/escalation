@@ -110,3 +110,18 @@ as_tibble.simulations_collection <- function(x, target_dose = NULL,
     ungroup() %>%
     as_tibble(...)
 }
+
+#' @importFrom purrr imap reduce
+#' @importFrom dplyr bind_rows mutate
+#' @importFrom magrittr %>%
+#' @export
+summary.simulations_collection <- function(object, ...) {
+  imap(
+    object,
+    .f = function(sims, label) {
+      summary(sims) %>%
+        mutate(design = label)
+    }
+  ) %>%
+    reduce(bind_rows)
+}

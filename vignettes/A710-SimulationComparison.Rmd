@@ -66,7 +66,13 @@ sims <- simulate_compare(
 )
 ```
 
-We provide a convenient function to quickly visualise how the probability of selecting each dose in each design evolved as the simulations progressed:
+We can vertically stack the simulated performance of each design:
+
+```{r}
+summary(sims)
+```
+
+We also provide a convenient function to quickly visualise how the probability of selecting each dose in each design evolved as the simulations progressed:
 
 ```{r, fig.width=7, fig.height=5}
 convergence_plot(sims)
