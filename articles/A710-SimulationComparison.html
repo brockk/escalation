@@ -177,18 +177,42 @@ stopping rule. The names we provide will be reused.</p>
 <span><span class="co">#&gt; Running 3+3 </span></span>
 <span><span class="co">#&gt; Running CRM </span></span>
 <span><span class="co">#&gt; Running Stopping CRM</span></span></code></pre></div>
-<p>We provide a convenient function to quickly visualise how the
+<p>We can vertically stack the simulated performance of each design:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 18 × 7</span></span></span>
+<span><span class="co">#&gt;    dose     tox     n true_prob_tox prob_recommend prob_administer design      </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> NoDose  0     0             0              0.1           0      3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 1       0.45  4.05          0.12           0.25          0.365  3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2       0.7   3.45          0.27           0.55          0.311  3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 3       1.25  3             0.44           0.05          0.270  3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4       0.15  0.45          0.53           0.05          0.040<span style="text-decoration: underline;">5</span> 3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 5       0.1   0.15          0.57           0             0.013<span style="text-decoration: underline;">5</span> 3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> NoDose  0     0             0              0             0      CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1       0.5   5.1           0.12           0.15          0.425  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2       0.8   2.85          0.27           0.5           0.238  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 3       0.55  1.5           0.44           0.25          0.125  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 4       1.1   2.4           0.53           0.1           0.2    CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 5       0.1   0.15          0.57           0             0.012<span style="text-decoration: underline;">5</span> CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> NoDose  0     0             0              0             0      Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 1       0.5   5.1           0.12           0.15          0.425  Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2       0.8   2.85          0.27           0.5           0.238  Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 3       0.55  1.5           0.44           0.25          0.125  Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 4       1.1   2.4           0.53           0.1           0.2    Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 5       0.1   0.15          0.57           0             0.012<span style="text-decoration: underline;">5</span> Stopping CRM</span></span></code></pre></div>
+<p>We also provide a convenient function to quickly visualise how the
 probability of selecting each dose in each design evolved as the
 simulations progressed:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/convergence_plot.html">convergence_plot</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></code></pre></div>
-<p><img src="A710-SimulationComparison_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p><img src="A710-SimulationComparison_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
 <p>We can see immediately, for instance, that the designs generally
 agree that dose 2 is the best MTD candidate, and that the CRM designs
 are much more likely to recommend dose 3. We can be more precise by
 formally contrasting the probability of selecting each dose for each
 pair of designs:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
@@ -203,7 +227,7 @@ pair of designs:</p>
 <span>               .rows <span class="op">=</span> <span class="va">label_both</span>,</span>
 <span>               .cols <span class="op">=</span> <span class="va">label_both</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="A710-SimulationComparison_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<p><img src="A710-SimulationComparison_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 <p>The error bars here reflect 95% symmetric asymptotic normal
 confidence intervals. Change the <code>alpha = 0.05</code> parameter
 when calling <code>as_tibble(sims)</code> to get confident intervals for
@@ -230,7 +254,7 @@ We show how to import and export these variables, and use them to infer
 potential outcomes at a range of doses.</p>
 <p>To illustrate some of the fine-grained features of working with
 patient samples, we reproduce the BOIN12 example in <span class="citation">Sweeting et al. (2024)</span>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">num_doses</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">designs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -255,7 +279,7 @@ patient samples, we reproduce the BOIN12 example in <span class="citation">Sweet
 </h3>
 <p>By setting <code>return_patient_samples = TRUE</code> in the call to
 <code>simulate_compare</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_prob_tox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>, <span class="fl">0.18</span>, <span class="fl">0.45</span><span class="op">)</span></span>
 <span><span class="va">true_prob_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.40</span>, <span class="fl">0.50</span>, <span class="fl">0.52</span>, <span class="fl">0.53</span>, <span class="fl">0.53</span><span class="op">)</span></span>
 <span></span>
@@ -271,18 +295,18 @@ patient samples, we reproduce the BOIN12 example in <span class="citation">Sweet
 <span><span class="co">#&gt; Running BOIN12 v2</span></span></code></pre></div>
 <p>we ensure the generated patient samples are exported in the returned
 object:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"patient_samples"</span><span class="op">)</span></span></code></pre></div>
 <p>There are 50 patient-samples because we performed 50 simulated
 iterates:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ps</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 50</span></span></code></pre></div>
 <p>Each iterate is associated with one patient-sample.</p>
 <p>For instance, the uniformly-distributed random variables that
 determine the occurrence of toxicity events in the first simulated
 iterate are:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">tox_u</span></span>
 <span><span class="co">#&gt;  [1] 0.69817312 0.70142031 0.30320913 0.44945646 0.11031108 0.13106918</span></span>
 <span><span class="co">#&gt;  [7] 0.29230717 0.81558326 0.02112692 0.96611989 0.64736749 0.91045726</span></span>
@@ -290,7 +314,7 @@ iterate are:</p>
 <span><span class="co">#&gt; [19] 0.88575333 0.30889712 0.65158215 0.03589462 0.22038706 0.24535641</span></span>
 <span><span class="co">#&gt; [25] 0.11568014 0.55189023 0.62894470</span></span></code></pre></div>
 <p>and the equivalent for efficacy events are:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">eff_u</span></span>
 <span><span class="co">#&gt;  [1] 0.4570092149 0.4157109936 0.8765880703 0.8422317195 0.8632152062</span></span>
 <span><span class="co">#&gt;  [6] 0.2954267922 0.6152471751 0.0005296487 0.4411276847 0.0221378489</span></span>
@@ -313,7 +337,7 @@ and formats.</p>
 <p>We can calculate all potential outcomes for a list of patient-samples
 by calling <code>get_potential_outcomes</code> and providing the true
 event probabilities:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_potential_outcomes.html">get_potential_outcomes</a></span><span class="op">(</span></span>
 <span>  patient_samples <span class="op">=</span> <span class="va">ps</span>,</span>
 <span>  true_prob_tox <span class="op">=</span> <span class="va">true_prob_tox</span>,</span>
@@ -324,7 +348,7 @@ CRM or mTPI (for example), we would omit the <code>true_prob_eff</code>
 parameter.</p>
 <p>For instance, the potential outcomes in the first simulated iterate
 are:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">z</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt; $tox</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5]</span></span>
@@ -400,7 +424,7 @@ instance.</p>
 <p>To do so, we instantiate a list of PatientSample objects, with one
 for each simulated iterate. We will work with ten iterates in the
 interests of speed:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">num_sims</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va"><a href="../reference/PatientSample.html">PatientSample</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We then call the <code>set_eff_and_tox</code> function on each to set
@@ -409,7 +433,7 @@ illustration, let us simply sample uniform random variables and use
 those. In a more realistic example, we would set the latent variables to
 the values we wished to import, i.e. those values that were used in some
 external study or idealised values that we wish to use.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">num_sims</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">tox_u_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
@@ -423,7 +447,7 @@ latent variables in this way, ensure you use enough values to cover your
 maximum sample size.</p>
 <p>To use the patient-samples we have created in simulated trials, we
 specify the <code>patient_samples</code> parameter:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_compare.html">simulate_compare</a></span><span class="op">(</span></span>
 <span>  designs <span class="op">=</span> <span class="va">designs</span>, </span>
 <span>  num_sims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ps</span><span class="op">)</span>, </span>
@@ -435,7 +459,7 @@ specify the <code>patient_samples</code> parameter:</p>
 <span><span class="co">#&gt; Running BOIN12 v2</span></span></code></pre></div>
 <p>Having specified the exact patient population in this way, if we run
 the simulation study a second time with the same patients:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_compare.html">simulate_compare</a></span><span class="op">(</span></span>
 <span>  designs <span class="op">=</span> <span class="va">designs</span>, </span>
 <span>  num_sims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ps</span><span class="op">)</span>, </span>
@@ -447,7 +471,7 @@ the simulation study a second time with the same patients:</p>
 <span><span class="co">#&gt; Running BOIN12 v2</span></span></code></pre></div>
 <p>we will see that the decisions within design are (usually) identical
 within a design. E.g.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="va">x1</span><span class="op">[[</span><span class="st">"BOIN12 v1"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> </span>
 <span>    <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="va">x2</span><span class="op">[[</span><span class="st">"BOIN12 v1"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -467,16 +491,16 @@ even with identical patients, different behaviours will be seen.</p>
 sample correlated toxicity and efficacy events. To coerce a correlation
 of 0.5 <em>between the latent uniform tox and eff event
 propensities</em>, we run:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorrelatedPatientSample.html">CorrelatedPatientSample</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>num_patients <span class="op">=</span> <span class="fl">100</span>, rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p>We can observe</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">ps</span><span class="op">$</span><span class="va">tox_u</span>, <span class="va">ps</span><span class="op">$</span><span class="va">eff_u</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.4827035</span></span></code></pre></div>
 <p>that the correlation is close to desired. Note however, that the
 correlation of the binary level events is not, in general, equal to the
 target value of rho, because they depend on the event probabilities:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="va">ps</span><span class="op">$</span><span class="fu">get_patient_tox</span><span class="op">(</span><span class="va">i</span>, prob_tox <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="va">ps</span><span class="op">$</span><span class="fu">get_patient_eff</span><span class="op">(</span><span class="va">i</span>, prob_eff <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">tox</span>, <span class="va">eff</span><span class="op">)</span></span>
