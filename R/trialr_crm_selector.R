@@ -15,6 +15,10 @@
 #' fixed path elects not to continue and responsibility passes to this class.
 #' See Examples.
 #'
+#' The time-to-event variant, TITE-CRM, is used when you specify
+#' \code{tite = TRUE}. This weights the observations to allow dose-selections
+#' based on partially observed outcomes.
+#'
 #' @param parent_selector_factory optional object of type
 #' \code{\link{selector_factory}} that is in charge of dose selection before
 #' this class gets involved. Leave as NULL to just use CRM from the start.
@@ -25,6 +29,7 @@
 #' include empiric, logistic, logistic2. The model form chosen determines which
 #' prior hyperparameters are required. See \code{\link[trialr]{stan_crm}}
 #' for more details.
+#' @param tite FALSE to use regular CRM; TRUE to use TITE-CRM. See Description.
 #' @param ... Extra args are passed to \code{\link[trialr]{stan_crm}}.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -82,13 +87,14 @@
 #' Kristian Brock (2019). trialr: Bayesian Clinical Trial Designs in R and Stan.
 #' arXiv preprint arXiv:1907.00161.
 get_trialr_crm <- function(parent_selector_factory = NULL, skeleton, target,
-                           model, ...) {
+                           model, tite = FALSE, ...) {
 
   x <- list(
     parent_selector_factory = parent_selector_factory,
     skeleton = skeleton,
     target = target,
     model = model,
+    tite = tite,
     extra_args = list(...)
   )
 
@@ -98,11 +104,44 @@ get_trialr_crm <- function(parent_selector_factory = NULL, skeleton, target,
   return(x)
 }
 
+#' Get an object to fit the TITE-CRM model using the trialr package.
+#'
+#' @details
+#' This function is a short-cut to \code{get_trialr_crm(tite = TRUE)}. See
+#' \code{\link{get_trialr_crm}} for full details.
+#'
+#' @inheritParams get_trialr_crm
+#'
+#' @return an object of type \code{\link{selector_factory}} that can fit the
+#' CRM model to outcomes.
+#'
+#' @export
+#'
+#' @examples
+#' # TODO
+get_trialr_crm_tite <- function(parent_selector_factory = NULL, skeleton,
+                                target, model, ...) {
+  return(
+    get_trialr_crm(
+      parent_selector_factory = parent_selector_factory,
+      skeleton = skeleton,
+      target = target,
+      model = model,
+      tite = TRUE,
+      ...
+    )
+  )
+}
+
 #' @importFrom trialr stan_crm
 trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
-                                target, model, ...) {
+                                target, model, tite = FALSE, ...) {
 
   if(is.character(outcomes)) {
+    if(tite) {
+      stop(paste0("Provide outcomes in a data-frame for TITE-CRM with columns ",
+                  "dose, tox and weight"))
+    }
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
     df <- spruce_outcomes_df(outcomes)
@@ -116,6 +155,12 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
       stop('trialr_crm_selector - maximum dose given exceeds number of doses.')
     }
 
+    if(tite) {
+      weights <- df$weight
+    } else {
+      weights <- rep(1, nrow(df))
+    }
+
     if(model %in% c('empiric', 'logistic', 'logistic_gamma')) {
       x <-stan_crm(outcome_str = NULL,
                    skeleton = skeleton,
@@ -123,6 +168,7 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
                    model = model,
                    doses_given = df$dose,
                    tox = df$tox %>% as.integer(),
+                   weights = weights,
                    refresh = 0,
                    # Discard warmup & retain critical variables to save memory
                    save_warmup = FALSE,
@@ -135,6 +181,7 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
                    model = model,
                    doses_given = df$dose,
                    tox = df$tox %>% as.integer(),
+                   weights = weights,
                    refresh = 0,
                    # Discard warmup & retain critical variables to save memory
                    save_warmup = FALSE,
@@ -149,6 +196,7 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
                    model = model,
                    doses_given = df$dose,
                    tox = df$tox %>% as.integer(),
+                   weights = weights,
                    refresh = 0,
                    # Discard warmup & retain critical variables to save memory
                    save_warmup = FALSE,
@@ -171,6 +219,7 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
     outcomes = outcomes,
     skeleton = skeleton,
     target = target,
+    tite = tite,
     trialr_fit = x
   )
 
@@ -195,7 +244,8 @@ fit.trialr_crm_selector_factory <- function(selector_factory, outcomes, ...) {
     outcomes = outcomes,
     skeleton = selector_factory$skeleton,
     target = selector_factory$target,
-    model = selector_factory$model
+    model = selector_factory$model,
+    tite = selector_factory$tite
   )
   args <- append(args, selector_factory$extra_args)
   do.call(trialr_crm_selector, args = args)
@@ -226,6 +276,15 @@ doses_given.trialr_crm_selector <- function(x, ...) {
 #' @export
 tox.trialr_crm_selector <- function(x, ...) {
   return(as.integer(x$trialr_fit$tox))
+}
+
+#' @export
+weight.trialr_crm_selector <- function(x, ...) {
+  if(x$tite) {
+    return(x$trialr_fit$weights)
+  } else {
+    return(rep(1, num_patients(x)))
+  }
 }
 
 #' @export

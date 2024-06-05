@@ -141,6 +141,9 @@ test_that('wages_tair_selector supports correct interface.', {
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
 
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
+
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
 
@@ -278,6 +281,9 @@ test_that('wages_tair_selector supports correct interface.', {
   expect_equal(tox(x), integer(length = 0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -419,6 +425,9 @@ test_that('wages_tair_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))

@@ -4,7 +4,14 @@
 \alias{get_trialr_crm}
 \title{Get an object to fit the CRM model using the trialr package.}
 \usage{
-get_trialr_crm(parent_selector_factory = NULL, skeleton, target, model, ...)
+get_trialr_crm(
+  parent_selector_factory = NULL,
+  skeleton,
+  target,
+  model,
+  tite = FALSE,
+  ...
+)
 }
 \arguments{
 \item{parent_selector_factory}{optional object of type
@@ -20,6 +27,8 @@ probabilities.}
 include empiric, logistic, logistic2. The model form chosen determines which
 prior hyperparameters are required. See \code{\link[trialr]{stan_crm}}
 for more details.}
+
+\item{tite}{FALSE to use regular CRM; TRUE to use TITE-CRM. See Description.}
 
 \item{...}{Extra args are passed to \code{\link[trialr]{stan_crm}}.}
 }
@@ -40,6 +49,10 @@ provided by \code{\link{follow_path}}. In this example, when the observed
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples.
+
+The time-to-event variant, TITE-CRM, is used when you specify
+\code{tite = TRUE}. This weights the observations to allow dose-selections
+based on partially observed outcomes.
 }
 \examples{
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)

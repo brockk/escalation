@@ -4,7 +4,7 @@
 \alias{get_dfcrm}
 \title{Get an object to fit the CRM model using the dfcrm package.}
 \usage{
-get_dfcrm(parent_selector_factory = NULL, skeleton, target, ...)
+get_dfcrm(parent_selector_factory = NULL, skeleton, target, tite = FALSE, ...)
 }
 \arguments{
 \item{parent_selector_factory}{optional object of type
@@ -15,6 +15,8 @@ this class gets involved. Leave as NULL to just use CRM from the start.}
 probabilities.}
 
 \item{target}{We seek a dose with this probability of toxicity.}
+
+\item{tite}{FALSE to use regular CRM; TRUE to use TITE-CRM. See Description.}
 
 \item{...}{Extra args are passed to \code{\link[dfcrm]{crm}}.}
 }
@@ -35,6 +37,11 @@ provided by \code{\link{follow_path}}. In this example, when the observed
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples.
+
+The time-to-event variant, TITE-CRM, is used via the
+\code{dfcrm::titecrm} function when you specify \code{tite = TRUE}. This
+weights the observations to allow dose-selections based on partially observed
+outcomes.
 }
 \examples{
 skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)

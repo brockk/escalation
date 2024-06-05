@@ -16,7 +16,8 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
   d_star = 250
   target <- 0.30
   df <- data.frame(
-    patient=1:18,
+    patient = 1:18,
+    cohort = 1:18,
     dose = rep(c(1:4, 7), c(3, 4, 5, 4, 2)),
     tox = rep(0:1, c(16, 2))
   )
@@ -69,6 +70,86 @@ test_that('trialr_nbg_selector matches bcrm and NBG paper.', {
 
   check_dose_selector_consistency(fit2)
 
+  # Check TITE version. There is no published TITE version of NBG method nor
+  # other software implementation so it is tricky to test. We can use a small
+  # TITE perturbation (weights close to 1) to check the weighted version fits
+  # and recommends close to the non-TITE version.
+  set.seed(2024)
+  w <- pmax(
+    runif(n = nrow(df), min = 0.8, max = 1),
+    df$tox
+  )
+  df$weight <- w
+
+  fit3 <- get_trialr_nbg(real_doses = dose, d_star = d_star, target = target,
+                         alpha_mean = 2.15, alpha_sd = 0.84,
+                         beta_mean = 0.52, beta_sd = 0.8,
+                         tite = TRUE,
+                         seed = 2020) %>%
+    fit(outcomes = df)
+
+  # MTD matches?
+  expect_equal(bcrm_dose, recommended_dose(fit3))
+  expect_output(
+    print(fit3),
+    "The model advocates continuing at dose 7."
+  )
+
+  # mean_prob_tox matches?
+  epsilon <- 0.05
+  expect_true(all(abs(bcrm_prob_tox - mean_prob_tox(fit3)) < epsilon))
+
+  # mean_prob_tox matches NBG publication?
+  epsilon <- 0.05
+  expect_true(all(abs(nbg_post_mean - mean_prob_tox(fit3)) < epsilon))
+
+  check_dose_selector_consistency(fit3)
+
+  # class(fit3)
+  # fit3$tite
+  expect_equal(
+    as.numeric(weight(fit3)),
+    w
+  )
+  expect_equal(
+    as.numeric(fit3$trialr_fit$weights),
+    w
+  )
+
+  fit4 <- get_trialr_nbg_tite(
+    real_doses = dose, d_star = d_star, target = target,
+    alpha_mean = 2.15, alpha_sd = 0.84,
+    beta_mean = 0.52, beta_sd = 0.8,
+    seed = 2020
+  ) %>%
+    fit(outcomes = df)
+
+  # MTD matches?
+  expect_equal(bcrm_dose, recommended_dose(fit4))
+  expect_output(
+    print(fit4),
+    "The model advocates continuing at dose 7."
+  )
+
+  # mean_prob_tox matches?
+  epsilon <- 0.05
+  expect_true(all(abs(bcrm_prob_tox - mean_prob_tox(fit4)) < epsilon))
+
+  # mean_prob_tox matches NBG publication?
+  epsilon <- 0.05
+  expect_true(all(abs(nbg_post_mean - mean_prob_tox(fit4)) < epsilon))
+
+  check_dose_selector_consistency(fit4)
+
+  expect_equal(
+    as.numeric(weight(fit4)),
+    w
+  )
+  expect_equal(
+    as.numeric(fit4$trialr_fit$weights),
+    w
+  )
+
 })
 
 
@@ -102,6 +183,9 @@ test_that('empiric trialr_nbg_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
@@ -209,6 +293,9 @@ test_that('empiric trialr_nbg_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -318,6 +405,9 @@ test_that('empiric trialr_nbg_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))

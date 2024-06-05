@@ -13,6 +13,7 @@ get_trialr_nbg(
   alpha_sd,
   beta_mean,
   beta_sd,
+  tite = FALSE,
   ...
 )
 }
@@ -69,6 +70,10 @@ provided by \code{\link{follow_path}}. In this example, when the observed
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See examples under \code{\link{get_dfcrm}}.
+
+A time-to-event variant, like TITE-CRM, is used when you specify
+\code{tite = TRUE}. This weights the observations to allow dose-selections
+based on partially observed outcomes.
 }
 \examples{
 real_doses <- c(5, 10, 25, 40, 60)

@@ -128,6 +128,9 @@ test_that('boin_selector supports correct interface.', {
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
 
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
+
   expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                cohort = c(1,1,1,2,2,2),
                                                dose = c(1,1,1,2,2,2),
@@ -230,6 +233,9 @@ test_that('boin_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -338,6 +344,9 @@ test_that('boin_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                cohort = c(1,1,1,2,2,2),

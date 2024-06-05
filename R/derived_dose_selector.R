@@ -157,6 +157,10 @@ utility.derived_dose_selector <- function(x, ...) {
   return(utility(x$parent, ...))
 }
 
+#' @export
+weight.derived_dose_selector <- function(x, ...) {
+  return(weight(x$parent))
+}
 
 #' @export
 print.stop_when_too_toxic_selector <- function(x, ...) {

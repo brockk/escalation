@@ -15,12 +15,18 @@
 #' fixed path elects not to continue and responsibility passes to this class.
 #' See Examples.
 #'
+#' The time-to-event variant, TITE-CRM, is used via the
+#' \code{dfcrm::titecrm} function when you specify \code{tite = TRUE}. This
+#' weights the observations to allow dose-selections based on partially observed
+#' outcomes.
+#'
 #' @param parent_selector_factory optional object of type
 #' \code{\link{selector_factory}} that is in charge of dose selection before
 #' this class gets involved. Leave as NULL to just use CRM from the start.
 #' @param skeleton Dose-toxicity skeleton, a non-decreasing vector of
 #' probabilities.
 #' @param target We seek a dose with this probability of toxicity.
+#' @param tite FALSE to use regular CRM; TRUE to use TITE-CRM. See Description.
 #' @param ... Extra args are passed to \code{\link[dfcrm]{crm}}.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -72,12 +78,14 @@
 #' O’Quigley J, Pepe M, Fisher L. Continual reassessment method: a practical
 #' design for phase 1 clinical trials in cancer. Biometrics. 1990;46(1):33-48.
 #' doi:10.2307/2531628
-get_dfcrm <- function(parent_selector_factory = NULL, skeleton, target, ...) {
+get_dfcrm <- function(parent_selector_factory = NULL, skeleton, target,
+                      tite = FALSE, ...) {
 
   x <- list(
     parent_selector_factory = parent_selector_factory,
     skeleton = skeleton,
     target = target,
+    tite = tite,
     extra_args = list(...)
   )
 
@@ -87,11 +95,41 @@ get_dfcrm <- function(parent_selector_factory = NULL, skeleton, target, ...) {
   return(x)
 }
 
-#' @importFrom dfcrm crm
-dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
+#' Get an object to fit the TITE-CRM model using the dfcrm package.
+#'
+#' @details
+#' This function is a short-cut to \code{get_dfcrm(tite = TRUE)}. See
+#' \code{\link{get_dfcrm}} for full details.
+#'
+#' @inheritParams get_dfcrm
+#'
+#' @return an object of type \code{\link{selector_factory}} that can fit the
+#' CRM model to outcomes.
+#'
+#' @export
+#'
+#' @examples
+#' # TODO
+get_dfcrm_tite <- function(parent_selector_factory = NULL, skeleton, target,
                            ...) {
+  get_dfcrm(
+    parent_selector_factory = parent_selector_factory,
+    skeleton = skeleton,
+    target = target,
+    tite = TRUE,
+    ...
+  )
+}
+
+#' @importFrom dfcrm crm titecrm
+dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
+                           tite = FALSE, ...) {
 
   if(is.character(outcomes)) {
+    if(tite) {
+      stop(paste0("Provide outcomes in a data-frame for TITE-CRM with columns ",
+                  "dose, tox and weight"))
+    }
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
     df <- spruce_outcomes_df(outcomes)
@@ -104,12 +142,26 @@ dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
     if(max(df$dose) > length(skeleton)) {
       stop('dfcrm_selector - maximum dose given exceeds number of doses.')
     }
-    x <- crm(prior = skeleton,
-             target = target,
-             tox = df$tox %>% as.integer(),
-             level = df$dose,
-             var.est = TRUE,
-             ...)
+    if(tite) {
+      x <- titecrm(
+        prior = skeleton,
+        target = target,
+        tox = df$tox %>% as.integer(),
+        level = df$dose,
+        weights = df$weight,
+        var.est = TRUE,
+        ...
+      )
+    } else {
+      x <- crm(
+        prior = skeleton,
+        target = target,
+        tox = df$tox %>% as.integer(),
+        level = df$dose,
+        var.est = TRUE,
+        ...
+      )
+    }
   } else {
     x <- list(
       level = integer(length = 0),
@@ -124,6 +176,7 @@ dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
     outcomes = outcomes,
     skeleton = skeleton,
     target = target,
+    tite = tite,
     dfcrm_fit = x
   )
 
@@ -147,7 +200,8 @@ fit.dfcrm_selector_factory <- function(selector_factory, outcomes, ...) {
     parent = parent,
     outcomes = outcomes,
     skeleton = selector_factory$skeleton,
-    target = selector_factory$target
+    target = selector_factory$target,
+    tite = selector_factory$tite
   )
   args <- append(args, selector_factory$extra_args)
   do.call(dfcrm_selector, args = args)
@@ -178,6 +232,15 @@ doses_given.dfcrm_selector <- function(x, ...) {
 #' @export
 tox.dfcrm_selector <- function(x, ...) {
   return(x$dfcrm_fit$tox)
+}
+
+#' @export
+weight.dfcrm_selector <- function(x, ...) {
+  if(x$tite) {
+    return(x$dfcrm_fit$weights)
+  } else {
+    return(rep(1, num_patients(x)))
+  }
 }
 
 #' @export
@@ -256,7 +319,7 @@ prob_tox_exceeds.dfcrm_selector <- function(x, threshold, ...) {
     beta_var <- x$dfcrm_fit$post.var
     if(x$dfcrm_fit$model == 'empiric') {
       return(pnorm(q = log(log(threshold) / log(x$skeleton)),
-              mean = beta_hat, sd = sqrt(beta_var)))
+                   mean = beta_hat, sd = sqrt(beta_var)))
     } else if(x$dfcrm_fit$model == 'logistic') {
       alpha <- x$dfcrm_fit$intcpt
       dose_scaled <- x$dfcrm_fit$dosescaled
