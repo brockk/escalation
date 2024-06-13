@@ -52,7 +52,6 @@ phase1_sim <- function(
     n_new_pts <- nrow(new_pts)
     new_dose <- rep(next_dose, n_new_pts)
     new_pt_indices <- nrow(current_data) + seq(1, n_new_pts)
-    # new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
     new_tox <- patient_sample$get_patient_tox(
       i = new_pt_indices,
       prob_tox = true_prob_tox[next_dose]

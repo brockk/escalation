@@ -60,15 +60,27 @@ adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 \subsection{Method \code{new()}}{
 Creator.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$new(num_patients = 0, rho = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CorrelatedPatientSample$new(
+  num_patients = 0,
+  time_to_tox_func = function() runif(n = 1),
+  time_to_eff_func = function() runif(n = 1),
+  rho = 0
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{num_patients}}{(`integer(1)`).}
+\item{\code{num_patients}}{(`integer(1)`) Number of patients.}
 
-\item{\code{rho}}{(`integer(1)`) correlation of}
+\item{\code{time_to_tox_func}}{(`function`) function taking no args that returns
+a single time of toxicity, given that toxicity occurs.}
+
+\item{\code{time_to_eff_func}}{(`function`) function taking no args that returns
+a single time of efficacy, given that efficacy occurs.}
+
+\item{\code{rho}}{(`integer(1)`) correlation of toxicity and efficacy latent
+variables.}
 }
 \if{html}{\out{</div>}}
 }

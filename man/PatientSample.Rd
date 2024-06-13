@@ -21,7 +21,15 @@ adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 
 \item{\code{tox_u}}{(`numeric(num_patients)`)\cr}
 
+\item{\code{time_to_tox_func}}{(`function`)\cr}
+
+\item{\code{tox_time}}{(`numeric(num_patients)`)\cr}
+
 \item{\code{eff_u}}{(`numeric(num_patients)`)\cr}
+
+\item{\code{time_to_eff_func}}{(`function`)\cr}
+
+\item{\code{eff_time}}{(`numeric(num_patients)`)\cr}
 
 \item{\code{can_grow}}{(`logical(1)`)\cr}
 }
@@ -46,13 +54,23 @@ adaptive dose-finding designs. arXiv preprint arXiv:2402.15460
 \subsection{Method \code{new()}}{
 Creator.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PatientSample$new(num_patients = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PatientSample$new(
+  num_patients = 0,
+  time_to_tox_func = function() runif(n = 1),
+  time_to_eff_func = function() runif(n = 1)
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{num_patients}}{(`integer(1)`).}
+\item{\code{num_patients}}{(`integer(1)`) Number of patients.}
+
+\item{\code{time_to_tox_func}}{(`function`) function taking no args that returns
+a single time of toxicity, given that toxicity occurs.}
+
+\item{\code{time_to_eff_func}}{(`function`) function taking no args that returns
+a single time of efficacy, given that efficacy occurs.}
 }
 \if{html}{\out{</div>}}
 }
@@ -72,15 +90,26 @@ this function, you override the ability of the class to self-manage, so
 its ability to grow is turned off by setting the internal variable
 \code{self$can_grow <- FALSE}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PatientSample$set_eff_and_tox(tox_u, eff_u)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PatientSample$set_eff_and_tox(
+  tox_u,
+  eff_u,
+  tox_time = rep(0, length(tox_u)),
+  eff_time = rep(0, length(eff_u))
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tox_u}}{(`numeric()`).}
+\item{\code{tox_u}}{(`numeric()`) Patient-level toxicity propensities.}
 
-\item{\code{eff_u}}{(`numeric()`).}
+\item{\code{eff_u}}{(`numeric()`) Patient-level efficacy propensities.}
+
+\item{\code{tox_time}}{(`numeric()`) Patient-level toxicity times, given that
+toxicity occurs.}
+
+\item{\code{eff_time}}{(`numeric()`) Patient-level efficacy times, given that
+efficacy occurs.}
 }
 \if{html}{\out{</div>}}
 }
@@ -125,7 +154,7 @@ Get toxicity latent variable for patient i
 \subsection{Method \code{get_patient_tox()}}{
 Get 0 or 1 event marker for whether toxicity occurred in patient i
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PatientSample$get_patient_tox(i, prob_tox)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PatientSample$get_patient_tox(i, prob_tox, time = Inf)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -134,6 +163,8 @@ Get 0 or 1 event marker for whether toxicity occurred in patient i
 \item{\code{i}}{(`integer(1)`) patient index}
 
 \item{\code{prob_tox}}{(`numeric(1)`) probability of toxicity}
+
+\item{\code{time}}{(`numeric(1)`) at time}
 }
 \if{html}{\out{</div>}}
 }
@@ -161,7 +192,7 @@ Get efficacy latent variable for patient i
 \subsection{Method \code{get_patient_eff()}}{
 Get 0 or 1 event marker for whether efficacy occurred in patient i
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PatientSample$get_patient_eff(i, prob_eff)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PatientSample$get_patient_eff(i, prob_eff, time = Inf)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
