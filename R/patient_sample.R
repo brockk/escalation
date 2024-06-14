@@ -174,6 +174,7 @@ PatientSample <- R6Class(
     #'
     #' @param i (`integer(1)`) patient index
     #' @param prob_eff (`numeric(1)`) probability of efficacy
+    #' @param time (`numeric(1)`) at time
     get_patient_eff = function(i, prob_eff, time = Inf) {
       if(length(i) > 1) {
         u <- sapply(i, function(x) self$get_eff_u(x))

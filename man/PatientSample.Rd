@@ -201,6 +201,8 @@ Get 0 or 1 event marker for whether efficacy occurred in patient i
 \item{\code{i}}{(`integer(1)`) patient index}
 
 \item{\code{prob_eff}}{(`numeric(1)`) probability of efficacy}
+
+\item{\code{time}}{(`numeric(1)`) at time}
 }
 \if{html}{\out{</div>}}
 }

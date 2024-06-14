@@ -28,11 +28,15 @@ phase1_sim <- function(
   } else {
     time <- rep(0, length(dose))
   }
+  if(length(time) > 0) {
+    time_now <- max(time)
+  } else {
+    time_now <- 0
+  }
 
   i <- 1 # dose-decision counter
   max_i <- 30 # Maximum number of dose decisions to make; ignored if
               # i_like_big_trials = TRUE.
-  time_now <- 0
   fit <- selector_factory %>% fit(base_df)
   if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
   fits <- list()

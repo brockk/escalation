@@ -251,6 +251,16 @@ fit.trialr_crm_selector_factory <- function(selector_factory, outcomes, ...) {
   do.call(trialr_crm_selector, args = args)
 }
 
+#' @export
+simulation_function.trialr_crm_selector_factory <- function(selector_factory) {
+  if(selector_factory$tite) {
+    return(phase1_tite_sim)
+  } else {
+    return(phase1_sim)
+  }
+}
+
+
 # Selector interface
 
 #' @export
