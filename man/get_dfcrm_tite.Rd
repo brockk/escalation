@@ -30,5 +30,22 @@ This function is a short-cut to \code{get_dfcrm(tite = TRUE)}. See
 \code{\link{get_dfcrm}} for full details.
 }
 \examples{
-# TODO
+skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+target <- 0.25
+model1 <- get_dfcrm_tite(skeleton = skeleton, target = target)
+outcomes <- data.frame(
+  dose = c(1, 1, 2, 2, 3, 3),
+  tox = c(0, 0, 0, 0, 1, 0),
+  weight = c(1, 1, 1, 0.9, 1, 0.5),
+  cohort = c(1, 2, 3, 4, 5, 6)
+)
+fit <- model1 \%>\% fit(outcomes)
+
+}
+\references{
+Cheung, K. 2019. dfcrm: Dose-Finding by the Continual Reassessment Method.
+R package version 0.2-2.1. https://CRAN.R-project.org/package=dfcrm
+
+Cheung, K. 2011. Dose Finding by the Continual Reassessment Method.
+Chapman and Hall/CRC. ISBN 9781420091519
 }

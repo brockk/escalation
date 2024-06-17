@@ -181,6 +181,6 @@ get_posterior_prob_tox_sample <- function(dfcrm_selector, iter) {
 #' cohorts_of_n()
 #' cohorts_of_n(n = 10, mean_time_delta = 5)
 cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
-  time_delta <- rexp(n = n, rate = 1 / mean_time_delta) %>% round(1)
+  time_delta <- rexp(n = n, rate = 1 / mean_time_delta)
   data.frame(time_delta = time_delta)
 }

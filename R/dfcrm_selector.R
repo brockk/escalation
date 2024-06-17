@@ -109,7 +109,23 @@ get_dfcrm <- function(parent_selector_factory = NULL, skeleton, target,
 #' @export
 #'
 #' @examples
-#' # TODO
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model1 <- get_dfcrm_tite(skeleton = skeleton, target = target)
+#' outcomes <- data.frame(
+#'   dose = c(1, 1, 2, 2, 3, 3),
+#'   tox = c(0, 0, 0, 0, 1, 0),
+#'   weight = c(1, 1, 1, 0.9, 1, 0.5),
+#'   cohort = c(1, 2, 3, 4, 5, 6)
+#' )
+#' fit <- model1 %>% fit(outcomes)
+#'
+#' @references
+#' Cheung, K. 2019. dfcrm: Dose-Finding by the Continual Reassessment Method.
+#' R package version 0.2-2.1. https://CRAN.R-project.org/package=dfcrm
+#'
+#' Cheung, K. 2011. Dose Finding by the Continual Reassessment Method.
+#' Chapman and Hall/CRC. ISBN 9781420091519
 get_dfcrm_tite <- function(parent_selector_factory = NULL, skeleton, target,
                            ...) {
   get_dfcrm(
@@ -137,21 +153,29 @@ dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
     stop('outcomes should be a character string or a data-frame.')
   }
 
+  x <- list(
+    level = integer(length = 0),
+    tox = integer(length = 0),
+    mtd = 1,
+    ptox = skeleton
+  )
   if(nrow(df) > 0) {
     # Checks
     if(max(df$dose) > length(skeleton)) {
       stop('dfcrm_selector - maximum dose given exceeds number of doses.')
     }
     if(tite) {
-      x <- titecrm(
-        prior = skeleton,
-        target = target,
-        tox = df$tox %>% as.integer(),
-        level = df$dose,
-        weights = df$weight,
-        var.est = TRUE,
-        ...
-      )
+      if(sum(df$weight) > 0) {
+        x <- titecrm(
+          prior = skeleton,
+          target = target,
+          tox = df$tox %>% as.integer(),
+          level = df$dose,
+          weights = df$weight,
+          var.est = TRUE,
+          ...
+        )
+      }
     } else {
       x <- crm(
         prior = skeleton,
@@ -162,18 +186,13 @@ dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
         ...
       )
     }
-  } else {
-    x <- list(
-      level = integer(length = 0),
-      tox = integer(length = 0),
-      mtd = 1,
-      ptox = skeleton)
   }
 
   l <- list(
     parent = parent_selector,
     cohort = df$cohort,
     outcomes = outcomes,
+    df = df,
     skeleton = skeleton,
     target = target,
     tite = tite,
@@ -226,7 +245,7 @@ tox_target.dfcrm_selector <- function(x, ...) {
 
 #' @export
 num_patients.dfcrm_selector <- function(x, ...) {
-  return(length(x$dfcrm_fit$level))
+  return(nrow(x$df))
 }
 
 #' @export
@@ -236,18 +255,18 @@ cohort.dfcrm_selector <- function(x, ...) {
 
 #' @export
 doses_given.dfcrm_selector <- function(x, ...) {
-  return(x$dfcrm_fit$level)
+  return(x$df$dose)
 }
 
 #' @export
 tox.dfcrm_selector <- function(x, ...) {
-  return(x$dfcrm_fit$tox)
+  return(x$df$tox)
 }
 
 #' @export
 weight.dfcrm_selector <- function(x, ...) {
   if(x$tite) {
-    return(x$dfcrm_fit$weights)
+    return(x$df$weight)
   } else {
     return(rep(1, num_patients(x)))
   }

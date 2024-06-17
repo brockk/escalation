@@ -43,6 +43,9 @@ See Details. Also see documentation for trialr package for further details.}
 \item{beta_sd}{Prior standard deviation of slope variable for normal prior.
 See Details. Also see documentation for trialr package for further details.}
 
+\item{tite}{FALSE to use regular model; TRUE to use TITE version See
+Description.}
+
 \item{...}{Extra args are passed to \code{\link[trialr]{stan_nbg}}.}
 }
 \value{

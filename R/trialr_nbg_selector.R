@@ -36,6 +36,8 @@
 #' \code{log(dose / d_star)} when fitting the model. Sometimes (but not always)
 #' taken to be the max dose in real_doses.
 #' @param target We seek a dose with this probability of toxicity.
+#' @param tite FALSE to use regular model; TRUE to use TITE version See
+#' Description.
 #' @param alpha_mean Prior mean of intercept variable for normal prior.
 #' See Details. Also see documentation for trialr package for further details.
 #' @param alpha_sd Prior standard deviation of intercept variable for normal prior.
@@ -169,20 +171,20 @@ trialr_nbg_selector <- function(parent_selector = NULL, outcomes, real_doses,
       weights <- rep(1, nrow(df))
     }
 
-    x <-stan_nbg(outcome_str = NULL,
-                 real_doses = real_doses,
-                 d_star = d_star,
-                 target = target,
-                 alpha_mean = alpha_mean, alpha_sd = alpha_sd,
-                 beta_mean = beta_mean, beta_sd = beta_sd,
-                 doses_given = df$dose,
-                 tox = df$tox %>% as.integer(),
-                 weights = weights,
-                 refresh = 0,
-                 # Discard warmup & retain critical variables to save memory
-                 save_warmup = FALSE,
-                 pars = c('alpha', 'beta', 'prob_tox'),
-                 ...)
+    x <- stan_nbg(outcome_str = NULL,
+                  real_doses = real_doses,
+                  d_star = d_star,
+                  target = target,
+                  alpha_mean = alpha_mean, alpha_sd = alpha_sd,
+                  beta_mean = beta_mean, beta_sd = beta_sd,
+                  doses_given = df$dose,
+                  tox = df$tox %>% as.integer(),
+                  weights = weights,
+                  refresh = 0,
+                  # Discard warmup & retain critical variables to save memory
+                  save_warmup = FALSE,
+                  pars = c('alpha', 'beta', 'prob_tox'),
+                  ...)
   } else {
     d <- log(real_doses / d_star)
     prob_tox_sample <- inv.logit(
@@ -363,7 +365,7 @@ prob_tox_exceeds.trialr_nbg_selector <- function(x, threshold, ...) {
   } else {
     .draw <- NULL
     (prob_tox_samples(x) %>%
-       select(-.draw) > threshold) %>%
+        select(-.draw) > threshold) %>%
       apply(2, mean) %>%
       as.numeric()
   }

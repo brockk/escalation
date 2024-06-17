@@ -2,6 +2,7 @@
 #' @importFrom stats rbinom
 #' @importFrom magrittr %>%
 #' @importFrom utils tail
+#' @importFrom dplyr tibble
 phase1_tite_sim <- function(
   selector_factory,
   true_prob_tox,
@@ -16,6 +17,10 @@ phase1_tite_sim <- function(
   return_all_fits = FALSE
 ) {
 
+  if(length(max_time) > 1 | max_time <= 0) {
+    stop("max_time should be a strictly positive scalar.")
+  }
+
   if(is.character(previous_outcomes)) {
     base_df <- parse_phase1_outcomes(previous_outcomes, as_list = FALSE)
   } else if(is.data.frame(previous_outcomes)) {
@@ -25,9 +30,9 @@ phase1_tite_sim <- function(
   }
   all_data <- base_df
   if(nrow(base_df) > 0) {
-    message(
-      "Previous outcomes provided. Setting weight for those patients to 1."
-    )
+    # message(
+    #   "Previous outcomes provided. Setting weight for those patients to 1."
+    # )
     base_df$weight <- 1
     if(is.null(time_now)) {
       if("time" %in% colnames(base_df)) {
@@ -53,8 +58,8 @@ phase1_tite_sim <- function(
   tite_dose <- integer(length = 0)
   tite_cohort <- integer(length = 0)
   tite_time <- numeric(length = 0)
-  while(fit %>% continue() & !is.na(next_dose) &
-        (i_like_big_trials | i < max_i)) {
+  while( fit %>% continue() & !is.na(next_dose) &
+         (i_like_big_trials | i < max_i) ) {
 
     arrival_time_delta <- sample_patient_arrivals(all_data)
     if(nrow(arrival_time_delta) != 1) {
@@ -63,9 +68,13 @@ phase1_tite_sim <- function(
         "for TITE simulations."
       ))
     }
-    time_now <- time_now + sum(arrival_time_delta$time_delta)
+    arrival_time_delta <- sum(arrival_time_delta$time_delta)
+    time_now <- time_now + arrival_time_delta
 
     # TITE patient data
+    tite_cohort <- c(tite_cohort, next_cohort)
+    tite_dose <- c(tite_dose, next_dose)
+    tite_time <- c(tite_time, time_now)
     tite_data <- tibble(
       cohort = tite_cohort,
       dose = tite_dose,
@@ -85,11 +94,21 @@ phase1_tite_sim <- function(
                                    tox = tite_data$tox,
                                    max_time = max_time)
     all_data <- bind_rows(base_df, tite_data)
+    all_data$patient <- seq_len(nrow(all_data))
+    # print("i")
+    # print(i)
+    # print("all_data")
+    # print(all_data)
     fit <- selector_factory %>% fit(all_data)
     next_dose <- recommended_dose(fit)
-    tite_cohort <- c(tite_cohort, next_cohort)
-    tite_dose <- c(tite_dose, next_dose)
-    tite_time <- c(tite_time, time_now)
+    # continue(fit)
+    # num_patients(fit)
+    # class(fit)
+    # class(fit$parent)
+
+    # tite_cohort <- c(tite_cohort, next_cohort)
+    # tite_dose <- c(tite_dose, next_dose)
+    # tite_time <- c(tite_time, time_now)
 
     i <- i + 1
     next_cohort <- next_cohort + 1
@@ -101,6 +120,35 @@ phase1_tite_sim <- function(
     warning(paste(
       "Simulation stopped because max depth reached.",
       "Set 'i_like_big_trials = TRUE' to avoid this constraint. "))
+  }
+
+  # Get final dose recommendation at fullest follow-up.
+  # But don't override a scenario where no-dose has been advocated.
+  if(!is.na(next_dose)) {
+    time_now <- time_now + max_time
+    tite_data <- tibble(
+      cohort = tite_cohort,
+      dose = tite_dose,
+      time = tite_time
+    )
+    if(nrow(tite_data) > 0) {
+      tite_data$tox <- patient_sample$get_patient_tox(
+        i = seq_along(tite_dose),
+        prob_tox = true_prob_tox[tite_dose],
+        time = time_now - tite_time
+      )
+    } else {
+      tite_data$tox <- integer(length = 0)
+    }
+    tite_data$weight <- get_weight(now_time = time_now,
+                                   recruited_time = tite_data$time,
+                                   tox = tite_data$tox,
+                                   max_time = max_time)
+    all_data <- bind_rows(base_df, tite_data)
+    all_data$patient <- seq_len(nrow(all_data))
+    fit <- selector_factory %>% fit(all_data)
+    i <- i + 1
+    fits[[i]] <- list(.depth = i, time = time_now, fit = fit)
   }
 
   if(return_all_fits) {

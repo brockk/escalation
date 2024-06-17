@@ -162,45 +162,45 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
     }
 
     if(model %in% c('empiric', 'logistic', 'logistic_gamma')) {
-      x <-stan_crm(outcome_str = NULL,
-                   skeleton = skeleton,
-                   target = target,
-                   model = model,
-                   doses_given = df$dose,
-                   tox = df$tox %>% as.integer(),
-                   weights = weights,
-                   refresh = 0,
-                   # Discard warmup & retain critical variables to save memory
-                   save_warmup = FALSE,
-                   pars = c('beta', 'prob_tox'),
-                   ...)
+      x <- stan_crm(outcome_str = NULL,
+                    skeleton = skeleton,
+                    target = target,
+                    model = model,
+                    doses_given = df$dose,
+                    tox = df$tox %>% as.integer(),
+                    weights = weights,
+                    refresh = 0,
+                    # Discard warmup & retain critical variables to save memory
+                    save_warmup = FALSE,
+                    pars = c('beta', 'prob_tox'),
+                    ...)
     } else if(model == 'logistic2') {
-      x <-stan_crm(outcome_str = NULL,
-                   skeleton = skeleton,
-                   target = target,
-                   model = model,
-                   doses_given = df$dose,
-                   tox = df$tox %>% as.integer(),
-                   weights = weights,
-                   refresh = 0,
-                   # Discard warmup & retain critical variables to save memory
-                   save_warmup = FALSE,
-                   pars = c('alpha', 'beta', 'prob_tox'),
-                   ...)
+      x <- stan_crm(outcome_str = NULL,
+                    skeleton = skeleton,
+                    target = target,
+                    model = model,
+                    doses_given = df$dose,
+                    tox = df$tox %>% as.integer(),
+                    weights = weights,
+                    refresh = 0,
+                    # Discard warmup & retain critical variables to save memory
+                    save_warmup = FALSE,
+                    pars = c('alpha', 'beta', 'prob_tox'),
+                    ...)
     } else {
       warning(paste0('Could not refine variable set for ', model, ' model. ',
                      'The returned object could be larger than is ideal.'))
-      x <-stan_crm(outcome_str = NULL,
-                   skeleton = skeleton,
-                   target = target,
-                   model = model,
-                   doses_given = df$dose,
-                   tox = df$tox %>% as.integer(),
-                   weights = weights,
-                   refresh = 0,
-                   # Discard warmup & retain critical variables to save memory
-                   save_warmup = FALSE,
-                   ...)
+      x <- stan_crm(outcome_str = NULL,
+                    skeleton = skeleton,
+                    target = target,
+                    model = model,
+                    doses_given = df$dose,
+                    tox = df$tox %>% as.integer(),
+                    weights = weights,
+                    refresh = 0,
+                    # Discard warmup & retain critical variables to save memory
+                    save_warmup = FALSE,
+                    ...)
     }
 
   } else {
@@ -210,7 +210,7 @@ trialr_crm_selector <- function(parent_selector = NULL, outcomes, skeleton,
       recommended_dose = 1,
       prob_tox = skeleton,
       median_prob_tox = skeleton
-      )
+    )
   }
 
   l <- list(
@@ -372,7 +372,7 @@ prob_tox_exceeds.trialr_crm_selector <- function(x, threshold, ...) {
   } else {
     .draw <- NULL
     (prob_tox_samples(x) %>%
-       select(-.draw) > threshold) %>%
+        select(-.draw) > threshold) %>%
       apply(2, mean) %>%
       as.numeric()
   }

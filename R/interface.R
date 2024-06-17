@@ -1102,7 +1102,7 @@ prob_recommend <- function(x, ...) {
 #'
 #' @param x Object of type \code{\link{simulations}}.
 #' @param ... arguments passed to other methods
-
+#'
 #' @return vector of numerical times
 #' @export
 #'
