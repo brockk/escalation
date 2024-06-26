@@ -136,6 +136,9 @@
     <loc>/reference/get_dfcrm.html</loc>
   </url>
   <url>
+    <loc>/reference/get_dfcrm_tite.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_dose_paths.html</loc>
   </url>
   <url>
@@ -163,10 +166,16 @@
     <loc>/reference/get_trialr_crm.html</loc>
   </url>
   <url>
+    <loc>/reference/get_trialr_crm_tite.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_trialr_efftox.html</loc>
   </url>
   <url>
     <loc>/reference/get_trialr_nbg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_trialr_nbg_tite.html</loc>
   </url>
   <url>
     <loc>/reference/get_wages_and_tait.html</loc>
@@ -179,6 +188,9 @@
   </url>
   <url>
     <loc>/reference/is_randomising.html</loc>
+  </url>
+  <url>
+    <loc>/reference/linear_follow_up_weight.html</loc>
   </url>
   <url>
     <loc>/reference/mean_prob_eff.html</loc>
@@ -335,5 +347,8 @@
   </url>
   <url>
     <loc>/reference/utility.html</loc>
+  </url>
+  <url>
+    <loc>/reference/weight.html</loc>
   </url>
 </urlset>

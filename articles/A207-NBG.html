@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -150,18 +150,19 @@ the authors used to demonstrate the flexibility of a two-parameter
 approach. In a trial of 15 doses, the investigators saw outcomes:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://brockk.github.io/escalation/" class="external-link">escalation</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: magrittr</span></span>
-<span></span>
+<span><span class="co">#&gt; Loading required package: magrittr</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">dose</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">75</span>, <span class="fl">100</span>, <span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">250</span><span class="op">)</span></span>
 <span><span class="va">outcomes</span> <span class="op">&lt;-</span> <span class="st">'1NNN 2NNNN 3NNNN 4NNNN 7TT'</span></span></code></pre></div>
 <p>Creating a dose-escalation model with NBG’s parameters:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_nbg.html">get_trialr_nbg</a></span><span class="op">(</span>real_doses <span class="op">=</span> <span class="va">dose</span>, d_star <span class="op">=</span> <span class="fl">250</span>, target <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>                        alpha_mean <span class="op">=</span> <span class="fl">2.15</span>, alpha_sd <span class="op">=</span> <span class="fl">0.84</span>,</span>
 <span>                        beta_mean <span class="op">=</span> <span class="fl">0.52</span>, beta_sd <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>                        seed <span class="op">=</span> <span class="fl">2020</span><span class="op">)</span></span></code></pre></div>
 <p>and fitting the model to the observed outcomes:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span>
 <span><span class="co">#&gt; Patient-level data:</span></span>
@@ -229,14 +230,14 @@ for the probability of recommending an overdose. That logic is currently
 not implemented in <code>escalation</code>. However, a proposal that
 addresses the same issue was presented by <span class="citation">Mozgunov and Jaki (2020)</span>, is implemented in
 <code>escalation</code>, and can be applied to the NBG method:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model2</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/select_dose_by_cibp.html">select_dose_by_cibp</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
 <p>Fitting the new model to the same outcomes:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="va">model2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span></span></code></pre></div>
 <p>Rather than sticking at dose 7, the design now prefers to de-escalate
 to dose 6:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 6</span></span></code></pre></div>
 <p>Mozgunov &amp; Jaki’s method was published in relation to the CRM
@@ -254,13 +255,13 @@ response to every possible set of outcomes in future cohorts.</p>
 <p>For instance, at the start of a trial using the NBG model detailed
 above, we can examine all possible paths a trial might take in the first
 two cohorts of three patients, starting at dose 2:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">paths1</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths1</span><span class="op">)</span></span></code></pre></div>
 <div class="grViz html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:672px;height:480px;"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fillcolor = \"#472F7DFF\", fontcolor = \"#35B779FF\"] \n  \"2\" [label = \"10\", fillcolor = \"#35B779FF\", fontcolor = \"#472F7DFF\"] \n  \"3\" [label = \"12\", fillcolor = \"#7AD151FF\", fontcolor = \"#39568CFF\"] \n  \"4\" [label = \"2\", fillcolor = \"#472F7DFF\", fontcolor = \"#35B779FF\"] \n  \"5\" [label = \"4\", fillcolor = \"#39568CFF\", fontcolor = \"#7AD151FF\"] \n  \"6\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"7\" [label = \"2\", fillcolor = \"#472F7DFF\", fontcolor = \"#35B779FF\"] \n  \"8\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"9\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"10\" [label = \"9\", fillcolor = \"#22A884FF\", fontcolor = \"#481A6CFF\"] \n  \"11\" [label = \"2\", fillcolor = \"#472F7DFF\", fontcolor = \"#35B779FF\"] \n  \"12\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"13\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"14\" [label = \"6\", fillcolor = \"#2A788EFF\", fontcolor = \"#D2E21BFF\"] \n  \"15\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"16\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"17\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"18\" [label = \"4\", fillcolor = \"#39568CFF\", fontcolor = \"#7AD151FF\"] \n  \"19\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"20\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n  \"21\" [label = \"1\", fillcolor = \"#481A6CFF\", fontcolor = \"#22A884FF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We can then compare these to the similar advice from the model that
 adds Mozgunov &amp; Jaki’s criterion:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">paths2</span> <span class="op">&lt;-</span> <span class="va">model2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths2</span><span class="op">)</span></span></code></pre></div>
 <div class="grViz html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:672px;height:480px;"></div>
@@ -281,7 +282,7 @@ operating characteristics for a design. Let us take the example above,
 append it with behaviour to stop when the lowest dose is too toxic, when
 9 patients have already been evaluated at the candidate dose, or when a
 sample size of <span class="math inline">\(n=24\)</span> is reached:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dose</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">75</span>, <span class="fl">100</span>, <span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">250</span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_nbg.html">get_trialr_nbg</a></span><span class="op">(</span>real_doses <span class="op">=</span> <span class="va">dose</span>, d_star <span class="op">=</span> <span class="fl">250</span>, target <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>                        alpha_mean <span class="op">=</span> <span class="fl">2.15</span>, alpha_sd <span class="op">=</span> <span class="fl">0.84</span>,</span>
@@ -291,17 +292,17 @@ sample size of <span class="math inline">\(n=24\)</span> is reached:</p>
 <span>  <span class="fu"><a href="../reference/stop_when_n_at_dose.html">stop_when_n_at_dose</a></span><span class="op">(</span>dose <span class="op">=</span> <span class="st">'recommended'</span>, n <span class="op">=</span> <span class="fl">9</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/stop_at_n.html">stop_at_n</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">24</span><span class="op">)</span></span></code></pre></div>
 <p>For the sake of speed, we will run just ten iterations:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">num_sims</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></code></pre></div>
 <p>In real life, however, we would naturally run many thousands of
 iterations.</p>
 <p>Then let us investigate under the following true probabilities of
 toxicity:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.03</span>, <span class="fl">0.10</span>, <span class="fl">0.17</span>, <span class="fl">0.25</span>, <span class="fl">0.35</span>, <span class="fl">0.45</span>, <span class="fl">0.53</span>, <span class="fl">0.60</span>, <span class="fl">0.65</span>, <span class="fl">0.69</span>, </span>
 <span>         <span class="fl">0.72</span>, <span class="fl">0.75</span>, <span class="fl">0.79</span>, <span class="fl">0.80</span><span class="op">)</span></span></code></pre></div>
 <p>The simulated behaviour is:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/simulate_trials.html">simulate_trials</a></span><span class="op">(</span>num_sims <span class="op">=</span> <span class="va">num_sims</span>, true_prob_tox <span class="op">=</span> <span class="va">sc1</span>, next_dose <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -317,27 +318,27 @@ toxicity:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5      6      7      8      9     10 </span></span>
-<span><span class="co">#&gt;    0.0    0.0    0.0    0.1    0.3    0.1    0.2    0.2    0.0    0.1    0.0 </span></span>
+<span><span class="co">#&gt;    0.0    0.0    0.0    0.0    0.1    0.1    0.4    0.2    0.1    0.1    0.0 </span></span>
 <span><span class="co">#&gt;     11     12     13     14     15 </span></span>
 <span><span class="co">#&gt;    0.0    0.0    0.0    0.0    0.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
 <span><span class="co">#&gt;      1      2      3      4      5      6      7      8      9     10     11 </span></span>
-<span><span class="co">#&gt; 0.1299 0.0130 0.0390 0.1558 0.1299 0.1818 0.0909 0.0260 0.0779 0.1299 0.0130 </span></span>
+<span><span class="co">#&gt; 0.1282 0.0000 0.0000 0.0256 0.1667 0.2179 0.1154 0.0641 0.1026 0.1410 0.0128 </span></span>
 <span><span class="co">#&gt;     12     13     14     15 </span></span>
-<span><span class="co">#&gt; 0.0130 0.0000 0.0000 0.0000 </span></span>
+<span><span class="co">#&gt; 0.0256 0.0000 0.0000 0.0000 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;   21.00   21.75   24.00   23.10   24.00   24.00 </span></span>
+<span><span class="co">#&gt;    21.0    24.0    24.0    23.4    24.0    24.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    6.00    7.00    8.00    7.90    8.75   10.00 </span></span>
+<span><span class="co">#&gt;     6.0     7.0     7.0     7.7     9.0    10.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;   18.60   21.90   26.75   25.15   28.27   28.80</span></span></code></pre></div>
+<span><span class="co">#&gt;   18.54   23.74   24.67   25.66   27.22   34.42</span></span></code></pre></div>
 <p>We see that the chances of stopping for excess toxicity and
 recommending no dose are low. Doses 4-7 are the favourites to be
 identified.</p>

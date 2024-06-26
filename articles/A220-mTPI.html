@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -360,11 +360,11 @@ iterations. Their scenario 1 assumes true probability of toxicity:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5      6      7      8 </span></span>
-<span><span class="co">#&gt;   0.00   0.08   0.78   0.14   0.00   0.00   0.00   0.00   0.00 </span></span>
+<span><span class="co">#&gt;   0.00   0.16   0.72   0.10   0.02   0.00   0.00   0.00   0.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
 <span><span class="co">#&gt;     1     2     3     4     5     6     7     8 </span></span>
-<span><span class="co">#&gt; 0.192 0.644 0.152 0.012 0.000 0.000 0.000 0.000 </span></span>
+<span><span class="co">#&gt; 0.238 0.604 0.148 0.010 0.000 0.000 0.000 0.000 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
@@ -372,11 +372,11 @@ iterations. Their scenario 1 assumes true probability of toxicity:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;    4.00    6.00    7.00    7.46    9.00   12.00 </span></span>
+<span><span class="co">#&gt;    5.00    6.00    7.00    7.46    8.75   11.00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;   20.40   27.82   29.55   30.78   34.88   48.90</span></span></code></pre></div>
+<span><span class="co">#&gt;   18.55   26.62   29.19   29.81   31.98   45.52</span></span></code></pre></div>
 <p>This reproduces their finding that dose 2 is overwhelmingly likely to
 be recommended, and that the sample size is virtually guaranteed to be
 30, i.e. early stopping is unlikely.</p>

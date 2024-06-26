@@ -9,7 +9,10 @@ that follows a fixed path in an initial escalation plan, such as that
 provided by follow_path. In this example, when the observed
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
-See Examples."><meta property="og:image" content="/logo.png"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+See Examples.
+The time-to-event variant, TITE-CRM, is used when you specify
+tite = TRUE. This weights the observations to allow dose-selections
+based on partially observed outcomes."><meta property="og:image" content="/logo.png"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -27,7 +30,7 @@ See Examples."><meta property="og:image" content="/logo.png"><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -104,10 +107,20 @@ provided by <code><a href="follow_path.html">follow_path</a></code>. In this exa
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See Examples.</p>
+<p>The time-to-event variant, TITE-CRM, is used when you specify
+<code>tite = TRUE</code>. This weights the observations to allow dose-selections
+based on partially observed outcomes.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_trialr_crm</span><span class="op">(</span>parent_selector_factory <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">skeleton</span>, <span class="va">target</span>, <span class="va">model</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_trialr_crm</span><span class="op">(</span></span>
+<span>  parent_selector_factory <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">skeleton</span>,</span>
+<span>  <span class="va">target</span>,</span>
+<span>  <span class="va">model</span>,</span>
+<span>  tite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -132,6 +145,10 @@ probabilities.</p></dd>
 include empiric, logistic, logistic2. The model form chosen determines which
 prior hyperparameters are required. See <code><a href="https://rdrr.io/pkg/trialr/man/stan_crm.html" class="external-link">stan_crm</a></code>
 for more details.</p></dd>
+
+
+<dt>tite</dt>
+<dd><p>FALSE to use regular CRM; TRUE to use TITE-CRM. See Description.</p></dd>
 
 
 <dt>...</dt>

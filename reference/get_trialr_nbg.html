@@ -19,7 +19,7 @@ the trialr package."><meta property="og:image" content="/logo.png"><!-- mathjax 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -100,6 +100,7 @@ the trialr package.</p>
 <span>  <span class="va">alpha_sd</span>,</span>
 <span>  <span class="va">beta_mean</span>,</span>
 <span>  <span class="va">beta_sd</span>,</span>
+<span>  tite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -147,6 +148,11 @@ See Details. Also see documentation for trialr package for further details.</p><
 See Details. Also see documentation for trialr package for further details.</p></dd>
 
 
+<dt>tite</dt>
+<dd><p>FALSE to use regular model; TRUE to use TITE version See
+Description.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra args are passed to <code><a href="https://rdrr.io/pkg/trialr/man/stan_nbg.html" class="external-link">stan_nbg</a></code>.</p></dd>
 
@@ -172,6 +178,9 @@ provided by <code><a href="follow_path.html">follow_path</a></code>. In this exa
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See examples under <code><a href="get_dfcrm.html">get_dfcrm</a></code>.</p>
+<p>A time-to-event variant, like TITE-CRM, is used when you specify
+<code>tite = TRUE</code>. This weights the observations to allow dose-selections
+based on partially observed outcomes.</p>
     </div>
     <div id="references">
     <h2>References</h2>

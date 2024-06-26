@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -281,13 +281,13 @@ dose is recommended is similar to that reported:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5      6 </span></span>
-<span><span class="co">#&gt;   0.10   0.72   0.16   0.02   0.00   0.00   0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;    0.1    0.7    0.2    0.0    0.0    0.0    0.0</span></span></code></pre></div>
 <p>and so is the expected number of patients treated at each dose
 level:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="fu"><a href="../reference/n_at_dose.html">n_at_dose</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     1     2     3     4     5     6 </span></span>
-<span><span class="co">#&gt; 23.94  8.10  1.62  0.18  0.00  0.00</span></span></code></pre></div>
+<span><span class="co">#&gt; 23.16  9.00  1.38  0.00  0.00  0.00</span></span></code></pre></div>
 <p>For more information on running dose-finding simulations, refer to
 the simulation vignette.</p>
 </div>
