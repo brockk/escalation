@@ -35,15 +35,29 @@ CorrelatedPatientSample <- R6Class("CorrelatedPatientSample",
     #' @description
     #' Creator.
     #'
-    #' @param num_patients (`integer(1)`).
-    #' @param rho (`integer(1)`) correlation of
+    #' @param num_patients (`integer(1)`) Number of patients.
+    #' @param time_to_tox_func (`function`) function taking no args that returns
+    #' a single time of toxicity, given that toxicity occurs.
+    #' @param time_to_eff_func (`function`) function taking no args that returns
+    #' a single time of efficacy, given that efficacy occurs.
+    #' @param rho (`integer(1)`) correlation of toxicity and efficacy latent
+    #' variables.
     #'
     #' @return [CorrelatedPatientSample].
-    initialize = function(num_patients = 0, rho = 0) {
+    initialize = function(
+      num_patients = 0,
+      time_to_tox_func = function() runif(n = 1),
+      time_to_eff_func = function() runif(n = 1),
+      rho = 0
+    ) {
       self$mu <- rep(0, 2)
       self$sigma <- matrix(c(1, rho, rho, 1), ncol = 2)
 
-      super$initialize(num_patients = num_patients)
+      super$initialize(
+        num_patients = num_patients,
+        time_to_tox_func = time_to_tox_func,
+        time_to_eff_func = time_to_eff_func
+      )
     },
 
     #' @description
@@ -59,14 +73,21 @@ CorrelatedPatientSample <- R6Class("CorrelatedPatientSample",
             mean = self$mu,
             sigma = self$sigma
           )
-          self$tox_u <- c(
-            self$tox_u,
-            pnorm(z[, 1])
+          new_tox_u <- pnorm(z[, 1])
+          self$tox_u <- c(self$tox_u, new_tox_u)
+          new_tox_time <- map_dbl(
+            seq_len(num_patients),
+            ~ self$time_to_tox_func()
           )
-          self$eff_u <- c(
-            self$eff_u,
-            pnorm(z[, 2])
+          self$tox_time <- c(self$tox_time, new_tox_time)
+          new_eff_u <- pnorm(z[, 2])
+          self$eff_u <- c(self$eff_u, new_eff_u)
+          new_eff_time <- map_dbl(
+            seq_len(num_patients),
+            ~ self$time_to_eff_func()
           )
+          self$eff_time <- c(self$eff_time, new_eff_time)
+
           self$num_patients <- num_patients
         } else {
           stop("Attempt to grow a fixed patient sample")

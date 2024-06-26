@@ -1,5 +1,5 @@
 
-test_that('trialr_crm_selector matches dfcrm_selector.', {
+test_that('trialr_crm_selector matches dfcrm_selector(tite = FALSE).', {
 
   # Example 1 - Empiric model, non-standard scale parameter
   skeleton <- c(0.1, 0.2, 0.4, 0.55)
@@ -53,6 +53,156 @@ test_that('trialr_crm_selector matches dfcrm_selector.', {
   epsilon <- 0.02
   expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
   check_dose_selector_consistency(fit2)
+
+})
+
+
+test_that('trialr_crm_selector matches dfcrm_selector(tite = TRUE).', {
+
+  # Example 1 - Empiric model, non-standard scale parameter
+  skeleton <- c(0.1, 0.2, 0.4, 0.55)
+  target <- 0.2
+  scale = sqrt(0.75)
+  outcomes_str <- '2NNT 2NNN 3NTT 2NNT'
+  outcomes <- parse_phase1_outcomes(outcomes_str, as_list = FALSE)
+  set.seed(2024)
+  w <- pmax(
+    runif(n = nrow(outcomes), min = 0, max = 1),
+    outcomes$tox
+  )
+  outcomes$weight <- w
+
+  # dfcrm version 1
+  model1 <- get_dfcrm(skeleton = skeleton, target = target, scale = scale,
+                      tite = TRUE)
+  fit1 <- model1 %>% fit(outcomes)
+
+  # trialr version 1
+  model2 <- get_trialr_crm(skeleton = skeleton, target = target,
+                           model = 'empiric', beta_sd = scale, tite = TRUE)
+  fit2 <- model2 %>% fit(outcomes)
+  expect_equal(model2$model, 'empiric')
+  expect_equal(model2$extra_args$beta_sd, sqrt(0.75))
+
+  # MTD matches?
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  # mean_prob_tox matches?
+  epsilon <- 0.05
+  expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
+  check_dose_selector_consistency(fit2)
+
+  expect_equal(
+    as.numeric(weight(fit2)),
+    w
+  )
+  expect_equal(
+    as.numeric(fit2$trialr_fit$weights),
+    w
+  )
+
+  # dfcrm version 2
+  model1 <- get_dfcrm_tite(skeleton = skeleton, target = target, scale = scale)
+  fit1 <- model1 %>% fit(outcomes)
+
+  # trialr version 2
+  model2 <- get_trialr_crm_tite(skeleton = skeleton, target = target,
+                                model = 'empiric', beta_sd = scale)
+  fit2 <- model2 %>% fit(outcomes)
+  expect_equal(model2$model, 'empiric')
+  expect_equal(model2$extra_args$beta_sd, sqrt(0.75))
+
+  # MTD matches?
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  # mean_prob_tox matches?
+  epsilon <- 0.05
+  expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
+  check_dose_selector_consistency(fit2)
+
+  expect_equal(
+    as.numeric(weight(fit2)),
+    w
+  )
+  expect_equal(
+    as.numeric(fit2$trialr_fit$weights),
+    w
+  )
+
+
+  # Example 2 - Logit model, non-standard intercept parameter
+  skeleton <- c(0.1, 0.2, 0.33, 0.45, 0.6, 0.7, 0.8)
+  target <- 0.33
+  outcomes_str <- '1NNN 2NNN 3NTT 2NNN 3TNN 3TNT 2NNN'
+  outcomes <- parse_phase1_outcomes(outcomes_str, as_list = FALSE)
+  set.seed(2024)
+  w <- pmax(
+    runif(n = nrow(outcomes), min = 0, max = 1),
+    outcomes$tox
+  )
+  outcomes$weight <- w
+
+  # dfcrm version 1
+  model1 <- get_dfcrm(skeleton = skeleton, target = target, intcpt = 4,
+                      model = 'logistic', tite = TRUE)
+  fit1 <- model1 %>% fit(outcomes)
+
+  #  trialr version 1
+  model2 <- get_trialr_crm(skeleton = skeleton, target = target,
+                           model = 'logistic', a0 = 4,
+                           beta_mean = 0, beta_sd = sqrt(1.34),
+                           tite = TRUE)
+  fit2 <- model2 %>% fit(outcomes)
+  expect_equal(model2$model, 'logistic')
+  expect_equal(model2$extra_args$a0, 4)
+  expect_equal(model2$extra_args$beta_mean, 0)
+  expect_equal(model2$extra_args$beta_sd, sqrt(1.34))
+
+  # MTD matches?
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  # mean_prob_tox matches?
+  epsilon <- 0.05
+  expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
+  check_dose_selector_consistency(fit2)
+
+  expect_equal(
+    as.numeric(weight(fit2)),
+    w
+  )
+  expect_equal(
+    as.numeric(fit2$trialr_fit$weights),
+    w
+  )
+
+
+  # dfcrm version 2
+  model1 <- get_dfcrm_tite(skeleton = skeleton, target = target, intcpt = 4,
+                           model = 'logistic')
+  fit1 <- model1 %>% fit(outcomes)
+
+  #  trialr version 2
+  model2 <- get_trialr_crm_tite(skeleton = skeleton, target = target,
+                                model = 'logistic', a0 = 4,
+                                beta_mean = 0, beta_sd = sqrt(1.34))
+  fit2 <- model2 %>% fit(outcomes)
+  expect_equal(model2$model, 'logistic')
+  expect_equal(model2$extra_args$a0, 4)
+  expect_equal(model2$extra_args$beta_mean, 0)
+  expect_equal(model2$extra_args$beta_sd, sqrt(1.34))
+
+  # MTD matches?
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  # mean_prob_tox matches?
+  epsilon <- 0.05
+  expect_true(all(abs(mean_prob_tox(fit1) - mean_prob_tox(fit2)) < epsilon))
+  check_dose_selector_consistency(fit2)
+
+  expect_equal(
+    as.numeric(weight(fit2)),
+    w
+  )
+  expect_equal(
+    as.numeric(fit2$trialr_fit$weights),
+    w
+  )
 
 })
 
@@ -136,6 +286,9 @@ test_that('empiric trialr_crm_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
@@ -244,6 +397,9 @@ test_that('empiric trialr_crm_selector supports correct interface.', {
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
 
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
+
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
 
@@ -351,6 +507,9 @@ test_that('empiric trialr_crm_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
@@ -469,6 +628,9 @@ test_that('logistic trialr_crm_selector supports correct interface.', {
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
 
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
+
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
 
@@ -575,6 +737,9 @@ test_that('logistic trialr_crm_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -684,6 +849,9 @@ test_that('logistic trialr_crm_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
@@ -803,6 +971,9 @@ test_that('logistic2 trialr_crm_selector supports correct interface.', {
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
 
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
+
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
 
@@ -909,6 +1080,9 @@ test_that('logistic2 trialr_crm_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -1018,6 +1192,9 @@ test_that('logistic2 trialr_crm_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))

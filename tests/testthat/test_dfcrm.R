@@ -1,5 +1,5 @@
 
-test_that('dfcrm_dose_selector matches dfcrm.', {
+test_that('dfcrm_dose_selector matches dfcrm::crm.', {
 
   # Example 1 - Empiric model, non-standard scale parameter
   skeleton <- c(0.1, 0.2, 0.4, 0.55)
@@ -58,6 +58,151 @@ test_that('dfcrm_dose_selector matches dfcrm.', {
 
 })
 
+test_that('dfcrm_dose_selector matches dfcrm::titecrm.', {
+
+  # Example 1 - Empiric model, non-standard scale parameter ----
+  skeleton <- c(0.1, 0.2, 0.4, 0.55)
+  target <- 0.2
+  scale = sqrt(0.75)
+  outcomes_str <- '2NNT 2NNN 3NTT 2NNT'
+  outcomes <- parse_phase1_outcomes(outcomes_str, as_list = FALSE)
+  set.seed(2024)
+  w <- pmax(
+    runif(n = nrow(outcomes), min = 0, max = 1),
+    outcomes$tox
+  )
+  outcomes$weight <- w
+
+  # dfcrm model
+  y <- dfcrm::titecrm(
+    prior = skeleton, target = target, scale = scale,
+    tox = outcomes$tox,
+    level = outcomes$dose,
+    weights = outcomes$weight
+  )
+
+  # escalation model via get_dfcrm(tite = TRUE)
+  model1 <- get_dfcrm(skeleton = skeleton, target = target, tite = TRUE,
+                      scale = scale)
+  x1 <- model1 %>% fit(outcomes)
+
+  expect_equal(recommended_dose(x1), y$mtd)
+  expect_true(continue(x1))
+  expect_output(
+    print(x1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(round(mean_prob_tox(x1), 2),  round(y$ptox, 2))
+  expect_equal(x1$dfcrm_fit$model, 'empiric')
+  expect_equal(x1$dfcrm_fit$prior.var, 0.75)
+  check_dose_selector_consistency(x1)
+
+  expect_equal(
+    weight(x1),
+    w
+  )
+  expect_equal(
+    x1$dfcrm_fit$weights,
+    w
+  )
+
+  # escalation model via get_dfcrm_tite
+  model2 <- get_dfcrm_tite(skeleton = skeleton, target = target, scale = scale)
+  x2 <- model2 %>% fit(outcomes)
+
+  expect_equal(recommended_dose(x2), y$mtd)
+  expect_true(continue(x2))
+  expect_output(
+    print(x2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(round(mean_prob_tox(x2), 2),  round(y$ptox, 2))
+  expect_equal(x2$dfcrm_fit$model, 'empiric')
+  expect_equal(x2$dfcrm_fit$prior.var, 0.75)
+  check_dose_selector_consistency(x2)
+
+  expect_equal(
+    weight(x2),
+    w
+  )
+  expect_equal(
+    x2$dfcrm_fit$weights,
+    w
+  )
+
+  # Example 2 - Logit model, non-standard intercept parameter ----
+  skeleton <- c(0.1, 0.2, 0.33, 0.45, 0.6, 0.7, 0.8)
+  target <- 0.33
+  outcomes_str <- '1NNN 2NNN 3NTT 2NNN 3TNN 3TNT 2NNN'
+  outcomes <- parse_phase1_outcomes(outcomes_str, as_list = FALSE)
+  set.seed(2024)
+  w <- pmax(
+    runif(n = nrow(outcomes), min = 0, max = 1),
+    outcomes$tox
+  )
+  outcomes$weight <- w
+
+  # dfcrm model
+  y <- dfcrm::titecrm(
+    prior = skeleton, target = target, intcpt = 4,
+    model = 'logistic',
+    tox = outcomes$tox,
+    level = outcomes$dose,
+    weights = outcomes$weight
+  )
+
+  # escalation model via get_dfcrm(tite = TRUE)
+  model1 <- get_dfcrm(skeleton = skeleton, target = target, intcpt = 4,
+                      model = 'logistic', tite = TRUE)
+  x1 <- model1 %>% fit(outcomes)
+
+  expect_equal(recommended_dose(x1), y$mtd)
+  expect_true(continue(x1))
+  expect_output(
+    print(x1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(round(mean_prob_tox(x1), 2),  round(y$ptox, 2))
+  expect_equal(x1$dfcrm_fit$model, 'logistic')
+  expect_equal(x1$dfcrm_fit$intcpt, 4)
+  check_dose_selector_consistency(x1)
+
+  expect_equal(
+    weight(x1),
+    w
+  )
+  expect_equal(
+    x1$dfcrm_fit$weights,
+    w
+  )
+
+  # escalation model via get_dfcrm_tite
+  model2 <- get_dfcrm_tite(skeleton = skeleton, target = target, intcpt = 4,
+                           model = 'logistic')
+  x2 <- model2 %>% fit(outcomes)
+
+  expect_equal(recommended_dose(x2), y$mtd)
+  expect_true(continue(x2))
+  expect_output(
+    print(x2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(round(mean_prob_tox(x2), 2),  round(y$ptox, 2))
+  expect_equal(x2$dfcrm_fit$model, 'logistic')
+  expect_equal(x2$dfcrm_fit$intcpt, 4)
+  check_dose_selector_consistency(x2)
+
+  expect_equal(
+    weight(x2),
+    w
+  )
+  expect_equal(
+    x2$dfcrm_fit$weights,
+    w
+  )
+
+})
+
 test_that('dfcrm_selector supports correct interface.', {
 
   skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
@@ -84,6 +229,9 @@ test_that('dfcrm_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))
@@ -190,6 +338,9 @@ test_that('dfcrm_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -298,6 +449,9 @@ test_that('dfcrm_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,1,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 2)
   expect_true(is.integer(num_tox(x)))

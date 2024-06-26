@@ -28,11 +28,15 @@ phase1_sim <- function(
   } else {
     time <- rep(0, length(dose))
   }
+  if(length(time) > 0) {
+    time_now <- max(time)
+  } else {
+    time_now <- 0
+  }
 
   i <- 1 # dose-decision counter
   max_i <- 30 # Maximum number of dose decisions to make; ignored if
               # i_like_big_trials = TRUE.
-  time_now <- 0
   fit <- selector_factory %>% fit(base_df)
   if(is.null(next_dose)) next_dose <- fit %>% recommended_dose()
   fits <- list()
@@ -52,7 +56,6 @@ phase1_sim <- function(
     n_new_pts <- nrow(new_pts)
     new_dose <- rep(next_dose, n_new_pts)
     new_pt_indices <- nrow(current_data) + seq(1, n_new_pts)
-    # new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
     new_tox <- patient_sample$get_patient_tox(
       i = new_pt_indices,
       prob_tox = true_prob_tox[next_dose]

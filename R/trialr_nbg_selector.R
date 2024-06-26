@@ -23,6 +23,10 @@
 #' fixed path elects not to continue and responsibility passes to this class.
 #' See examples under \code{\link{get_dfcrm}}.
 #'
+#' A time-to-event variant, like TITE-CRM, is used when you specify
+#' \code{tite = TRUE}. This weights the observations to allow dose-selections
+#' based on partially observed outcomes.
+#'
 #' @param parent_selector_factory optional object of type
 #' \code{\link{selector_factory}} that is in charge of dose selection before
 #' this class gets involved. Leave as NULL to just use this model from the start.
@@ -32,6 +36,8 @@
 #' \code{log(dose / d_star)} when fitting the model. Sometimes (but not always)
 #' taken to be the max dose in real_doses.
 #' @param target We seek a dose with this probability of toxicity.
+#' @param tite FALSE to use regular model; TRUE to use TITE version See
+#' Description.
 #' @param alpha_mean Prior mean of intercept variable for normal prior.
 #' See Details. Also see documentation for trialr package for further details.
 #' @param alpha_sd Prior standard deviation of intercept variable for normal prior.
@@ -77,6 +83,7 @@ get_trialr_nbg <- function(parent_selector_factory = NULL, real_doses, d_star,
                            target,
                            alpha_mean, alpha_sd,
                            beta_mean, beta_sd,
+                           tite = FALSE,
                            ...) {
 
   x <- list(
@@ -88,6 +95,7 @@ get_trialr_nbg <- function(parent_selector_factory = NULL, real_doses, d_star,
     alpha_sd = alpha_sd,
     beta_mean = beta_mean,
     beta_sd = beta_sd,
+    tite = tite,
     extra_args = list(...)
   )
 
@@ -97,14 +105,53 @@ get_trialr_nbg <- function(parent_selector_factory = NULL, real_doses, d_star,
   return(x)
 }
 
+#' Get an object to fit a TITE version of the NBG dose-finding model using trialr
+#'
+#' @inheritParams get_trialr_nbg
+#'
+#' @return an object of type \code{\link{selector_factory}} that can fit the
+#' NBG model to outcomes.
+#'
+#' @export
+#'
+#' @examples
+#' # TODO
+get_trialr_nbg_tite <- function(parent_selector_factory = NULL,
+                                real_doses,
+                                d_star,
+                                target,
+                                alpha_mean, alpha_sd,
+                                beta_mean, beta_sd,
+                                ...) {
+  return(
+    get_trialr_nbg(
+      parent_selector_factory = parent_selector_factory,
+      real_doses = real_doses,
+      d_star = d_star,
+      target = target,
+      alpha_mean = alpha_mean,
+      alpha_sd = alpha_sd,
+      beta_mean = beta_mean,
+      beta_sd = beta_sd,
+      tite = TRUE,
+      ...
+    )
+  )
+}
+
 #' @importFrom trialr stan_nbg
 trialr_nbg_selector <- function(parent_selector = NULL, outcomes, real_doses,
                                 d_star, target,
                                 alpha_mean, alpha_sd,
                                 beta_mean, beta_sd,
+                                tite = FALSE,
                                 ...) {
 
   if(is.character(outcomes)) {
+    if(tite) {
+      stop(paste0("Provide outcomes in a data-frame for TITE-CRM with columns ",
+                  "dose, tox and weight"))
+    }
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
   } else if(is.data.frame(outcomes)) {
     df <- spruce_outcomes_df(outcomes)
@@ -117,19 +164,27 @@ trialr_nbg_selector <- function(parent_selector = NULL, outcomes, real_doses,
     if(max(df$dose) > length(real_doses)) {
       stop('trialr_crm_selector - maximum dose given exceeds number of doses.')
     }
-    x <-stan_nbg(outcome_str = NULL,
-                 real_doses = real_doses,
-                 d_star = d_star,
-                 target = target,
-                 alpha_mean = alpha_mean, alpha_sd = alpha_sd,
-                 beta_mean = beta_mean, beta_sd = beta_sd,
-                 doses_given = df$dose,
-                 tox = df$tox %>% as.integer(),
-                 refresh = 0,
-                 # Discard warmup & retain critical variables to save memory
-                 save_warmup = FALSE,
-                 pars = c('alpha', 'beta', 'prob_tox'),
-                 ...)
+
+    if(tite) {
+      weights <- df$weight
+    } else {
+      weights <- rep(1, nrow(df))
+    }
+
+    x <- stan_nbg(outcome_str = NULL,
+                  real_doses = real_doses,
+                  d_star = d_star,
+                  target = target,
+                  alpha_mean = alpha_mean, alpha_sd = alpha_sd,
+                  beta_mean = beta_mean, beta_sd = beta_sd,
+                  doses_given = df$dose,
+                  tox = df$tox %>% as.integer(),
+                  weights = weights,
+                  refresh = 0,
+                  # Discard warmup & retain critical variables to save memory
+                  save_warmup = FALSE,
+                  pars = c('alpha', 'beta', 'prob_tox'),
+                  ...)
   } else {
     d <- log(real_doses / d_star)
     prob_tox_sample <- inv.logit(
@@ -153,6 +208,7 @@ trialr_nbg_selector <- function(parent_selector = NULL, outcomes, real_doses,
     outcomes = outcomes,
     real_doses = real_doses,
     target = target,
+    tite = tite,
     trialr_fit = x
   )
 
@@ -181,11 +237,22 @@ fit.trialr_nbg_selector_factory <- function(selector_factory, outcomes, ...) {
     alpha_mean = selector_factory$alpha_mean,
     alpha_sd = selector_factory$alpha_sd,
     beta_mean = selector_factory$beta_mean,
-    beta_sd = selector_factory$beta_sd
+    beta_sd = selector_factory$beta_sd,
+    tite = selector_factory$tite
   )
   args <- append(args, selector_factory$extra_args)
   do.call(trialr_nbg_selector, args = args)
 }
+
+#' @export
+simulation_function.trialr_nbg_selector_factory <- function(selector_factory) {
+  if(selector_factory$tite) {
+    return(phase1_tite_sim)
+  } else {
+    return(phase1_sim)
+  }
+}
+
 
 # Selector interface
 
@@ -212,6 +279,15 @@ doses_given.trialr_nbg_selector <- function(x, ...) {
 #' @export
 tox.trialr_nbg_selector <- function(x, ...) {
   return(as.integer(x$trialr_fit$tox))
+}
+
+#' @export
+weight.trialr_nbg_selector <- function(x, ...) {
+  if(x$tite) {
+    return(x$trialr_fit$weights)
+  } else {
+    return(rep(1, num_patients(x)))
+  }
 }
 
 #' @export
@@ -289,7 +365,7 @@ prob_tox_exceeds.trialr_nbg_selector <- function(x, threshold, ...) {
   } else {
     .draw <- NULL
     (prob_tox_samples(x) %>%
-       select(-.draw) > threshold) %>%
+        select(-.draw) > threshold) %>%
       apply(2, mean) %>%
       as.numeric()
   }

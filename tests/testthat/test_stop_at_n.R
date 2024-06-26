@@ -59,6 +59,9 @@ test_that('stop_at_n_selector supports correct interface.', {
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
 
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
+
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
 
@@ -165,6 +168,9 @@ test_that('stop_at_n_selector supports correct interface.', {
   expect_equal(tox(x), integer(0))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 0)
   expect_true(is.integer(num_tox(x)))
@@ -274,6 +280,9 @@ test_that('stop_at_n_selector supports correct interface.', {
   expect_equal(tox(x), c(0,0,0, 0,0,1))
   expect_true(is.integer(tox(x)))
   expect_equal(length(tox(x)), num_patients(x))
+
+  expect_true(is.numeric(weight(x)))
+  expect_equal(length(weight(x)), num_patients(x))
 
   expect_equal(num_tox(x), 1)
   expect_true(is.integer(num_tox(x)))

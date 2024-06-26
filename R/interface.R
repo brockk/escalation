@@ -224,6 +224,27 @@ tox <- function(x, ...) {
   UseMethod('tox')
 }
 
+#' Outcome weights.
+#'
+#' Get a vector of the weights attached to outcomes for evaluated patients.
+#'
+#' @param x Object of type \code{\link{selector}}.
+#' @param ... Extra args are passed onwards.
+#'
+#' @return a numerical vector
+#'
+#' @export
+#'
+#' @examples
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
+#' fit <- model %>% fit('1NNN 2NTN')
+#' fit %>% weight()
+weight <- function(x, ...) {
+  UseMethod('weight')
+}
+
 #' Total number of toxicities seen.
 #'
 #' Get the number of toxicities seen in a dose-finding trial.
@@ -1081,7 +1102,7 @@ prob_recommend <- function(x, ...) {
 #'
 #' @param x Object of type \code{\link{simulations}}.
 #' @param ... arguments passed to other methods
-
+#'
 #' @return vector of numerical times
 #' @export
 #'
