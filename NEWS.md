@@ -1,4 +1,22 @@
 
+# escalation 0.1.10
+
+* Added TITE methods
+
+# escalation 0.1.9
+
+* Fixed inheritance problems with as_tibble, summary and print dose_selector generics
+* Added many tests of dose_selector consistency.
+
+# escalation 0.1.8
+
+* Made tests faster for CRAN
+
+# escalation 0.1.7
+
+* Added ability to import and export PatientSamples
+* Split the simulation vignette
+
 # escalation 0.1.6
 
 * Implement efficient simulation comparison method of Sweeting et al. in simulate_compare()
