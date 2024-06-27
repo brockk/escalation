@@ -28,7 +28,7 @@
 #' Details).
 #' @param tox_star Toxicity probability of an equi-utility third point (see
 #' Details).
-#' @param priors instance of class \code{\link{trialr}{efftox_priors}}, the
+#' @param priors instance of class \code{\link[trialr]{efftox_priors}}, the
 #' hyperparameters for normal priors on the six model parameters.
 #' @param ... Extra args are passed to \code{\link[trialr]{stan_efftox}}.
 #'

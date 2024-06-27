@@ -53,7 +53,7 @@ Details).}
 \item{tox_star}{Toxicity probability of an equi-utility third point (see
 Details).}
 
-\item{priors}{instance of class \code{\link{trialr}{efftox_priors}}, the
+\item{priors}{instance of class \code{\link[trialr]{efftox_priors}}, the
 hyperparameters for normal priors on the six model parameters.}
 
 \item{...}{Extra args are passed to \code{\link[trialr]{stan_efftox}}.}
