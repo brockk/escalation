@@ -55,6 +55,7 @@ Every \code{selector} object implements the following functions:
   \item \code{\link{model_frame}}
   \item \code{\link{num_doses}}
   \item \code{\link{dose_indices}}
+  \item \code{\link{dose_strings}}
   \item \code{\link{recommended_dose}}
   \item \code{\link{continue}}
   \item \code{\link{n_at_dose}}
@@ -154,6 +155,7 @@ fit \%>\% num_tox()
 fit \%>\% model_frame()
 fit \%>\% num_doses()
 fit \%>\% dose_indices()
+fit \%>\% dose_strings()
 fit \%>\% recommended_dose()
 fit \%>\% continue()
 fit \%>\% n_at_dose()

@@ -1,7 +1,18 @@
 
-# Make sure columns in an outcomes data-frame are integers.
+# Make sure columns in an outcomes data-frame are present and correct types.
 spruce_outcomes_df <- function(df) {
-  df$dose <- as.integer(df$dose)
+  if(is.list(df$dose)) {
+    df$dose <- map(df$dose, as.integer)
+    # Add dose_string column because, for filtering, dose must ultimately be
+    # represented by a scalar primitive type:
+    df <-
+      df %>%
+      mutate(
+        dose_string = map_chr(dose, dose_vector_to_string)
+      )
+  } else {
+    df$dose <- as.integer(df$dose)
+  }
   df$tox <- as.integer(df$tox)
   if('cohort' %in% colnames(df)) df$cohort <- as.integer(df$cohort)
   if('patient' %in% colnames(df)) df$patient <- as.integer(df$patient)
@@ -10,25 +21,80 @@ spruce_outcomes_df <- function(df) {
 }
 
 
+#' Get all combinations of dose indices
+#'
+#' @param num_doses integer vector of number of doses for length(num_doses)
+#'   treatments
+#'
+#' @return a list, each element being an integer vector
+#'
+#' @importFrom purrr map reduce pmap
+#' @importFrom tidyr expand_grid
+#'
+#' @examples
+#' get_dose_combo_indices(num_doses = c(1, 2))
+#' # returns list(c(1, 1), c(1, 2))
+get_dose_combo_indices <- function(num_doses) {
+  return(
+    map(num_doses, seq_len) %>%
+      reduce(expand_grid) %>%
+      pmap(.f = function(...) as.integer(c(...)))
+  )
+}
+
 #' @importFrom tibble tibble
+#' @importFrom purrr map_int map_chr
 model_frame_to_counts <- function(model_frame, num_doses) {
 
-  if(num_doses <= 0) {
-    df_c <- tibble(dose = integer(length = 0), n = integer(length = 0),
-                  tox = integer(length = 0))
-  } else {
+  if(any(num_doses <= 0)) {
+
+    # What are we doing here??
+    df_c <- tibble(
+      dose = integer(length = 0),
+      n = integer(length = 0),
+      tox = integer(length = 0)
+    )
+    if('eff' %in% colnames(df)) {
+      df_c$eff <- integer(length = 0)
+    }
+
+  } else if(length(num_doses) == 1) {
+
+    # Single treatment scenario
     df <- model_frame
     dose_indices <- 1:num_doses
     dose_counts <- map_int(dose_indices, ~ sum(df$dose == .x))
     tox_counts <- map_int(dose_indices, ~ sum(df$tox[df$dose == .x]))
-    df_c <- tibble(dose = dose_indices, n = dose_counts, tox = tox_counts)
+    df_c <- tibble(
+      dose = dose_indices,
+      n = dose_counts,
+      tox = tox_counts
+    )
+    if('eff' %in% colnames(df)) {
+      df_c$eff <- map_int(dose_indices, ~ sum(df$eff[df$dose == .x]))
+    }
+
+  } else {
+
+    # Multi-treatment scenario
+    df <- model_frame
+    dose_indices <- get_dose_combo_indices(num_doses)
+    dose_string <- map_chr(dose_indices, dose_vector_to_string)
+    dose_counts <- map_int(dose_string, ~ sum(df$dose_string == .x))
+    tox_counts <- map_int(dose_string, ~ sum(df$tox[df$dose_string == .x]))
+    df_c <- tibble(
+      dose = dose_indices,
+      dose_string = dose_string,
+      n = dose_counts,
+      tox = tox_counts
+    )
+    if('eff' %in% colnames(df)) {
+      df_c$eff <- map_int(dose_string, ~ sum(df$eff[df$dose_string == .x]))
+    }
+
   }
 
-  if('eff' %in% colnames(df)) {
-    df_c$eff <- map_int(dose_indices, ~ sum(df$eff[df$dose == .x]))
-  }
-
-  df_c
+  return(df_c)
 }
 
 # Copied from BOIN package (https://cran.r-project.org/package=BOIN) to
@@ -87,7 +153,7 @@ pava_bb_prob_tox_exceeds <- function(x, threshold, alpha, beta, ...) {
 #' @importFrom dplyr mutate group_by slice ungroup select arrange
 #' @importFrom tidyr unnest
 reverse_engineer_prob_tox_quantile <- function(
-  x, p, quantile_candidates = seq(0, 1, length.out = 101), ...) {
+    x, p, quantile_candidates = seq(0, 1, length.out = 101), ...) {
 
   # In dose_selectors, prob_tox_quantile and prob_tox_exceeds should generally
   # be in agreement, similar to how the q() and p() distribution functions in R
@@ -183,4 +249,43 @@ get_posterior_prob_tox_sample <- function(dfcrm_selector, iter) {
 cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
   time_delta <- rexp(n = n, rate = 1 / mean_time_delta)
   data.frame(time_delta = time_delta)
+}
+
+
+#' Go from a single multi-treatment vector of dose-indices to a dose string
+#'
+#' @param x vector of integer dose indices
+#'
+#' @return character
+#'
+#' @export
+#'
+#' @examples
+#' dose_vector_to_string(as.integer(c(1, 3))) # The indices must be integers!
+dose_vector_to_string <- function(x) {
+  if(!is.integer(x)) {
+    stop("x should be of type integer")
+  }
+  if(any(x <= 0)) {
+    stop("x should be strictly positive")
+  }
+  return(paste(x, collapse = "."))
+}
+
+#' Go from a single multi-treatment dose string to a vector of dose-indices
+#'
+#' @param x a multi-treatment dose string like "1.3" or "3.2"
+#'
+#' @return a vector of integer dose-indices
+#' @export
+#'
+#' @examples
+#' dose_string_to_vector("1.3")
+dose_string_to_vector <- function(x) {
+  y <- strsplit(x, "\\.")
+  if(length(y) == 1) {
+    return(as.integer(y[[1]]))
+  } else {
+    stop(paste0("failed to parse '", x, "'"))
+  }
 }

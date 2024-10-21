@@ -57,11 +57,6 @@ continue.derived_dose_selector <- function(x, ...) {
 }
 
 #' @export
-n_at_dose.derived_dose_selector <- function(x, ...) {
-  return(x$parent %>% n_at_dose(...))
-}
-
-#' @export
 #' @importFrom tibble tibble
 model_frame.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% model_frame(...))

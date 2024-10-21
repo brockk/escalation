@@ -49,6 +49,7 @@
 #'   \item \code{\link{model_frame}}
 #'   \item \code{\link{num_doses}}
 #'   \item \code{\link{dose_indices}}
+#'   \item \code{\link{dose_strings}}
 #'   \item \code{\link{recommended_dose}}
 #'   \item \code{\link{continue}}
 #'   \item \code{\link{n_at_dose}}
@@ -153,6 +154,7 @@
 #' fit %>% model_frame()
 #' fit %>% num_doses()
 #' fit %>% dose_indices()
+#' fit %>% dose_strings()
 #' fit %>% recommended_dose()
 #' fit %>% continue()
 #' fit %>% n_at_dose()
@@ -219,28 +221,20 @@ dose_indices.selector <- function(x, ...) {
   }
 }
 
+#' @export
+dose_strings.selector <- function(x, ...) {
+  return(as.character(dose_indices(x)))
+}
+
 #' @importFrom purrr map_int
 #' @export
 n_at_dose.selector <- function(x, dose = NULL, ...) {
-  if(is.null(dose)) {
-    dose_indices <- 1:(num_doses(x))
-    map_int(dose_indices, ~ sum(doses_given(x) == .x))
-  } else if(dose == 'recommended') {
-    n_at_recommended_dose(x)
-  } else {
-    sum(doses_given(x) == dose)
-  }
+  return(.n_at_dose(x, dose, ...))
 }
 
 #' @export
 n_at_recommended_dose.selector <- function(x, ...) {
-  rec_d <- recommended_dose(x)
-  if(is.na(rec_d)) {
-    return(NA)
-  }
-  else {
-    return(n_at_dose(x)[rec_d])
-  }
+  .n_at_recommended_dose(x, ...)
 }
 
 #' @export
@@ -288,34 +282,44 @@ eff_at_dose.selector <- function(x, ...) {
   return(as.numeric(rep(NA, num_doses(x))))
 }
 
+# # @export
+# empiric_eff_rate.selector <- function(x, ...) {
+#   # By default:
+#   return(as.numeric(rep(NA, num_doses(x))))
+# }
+
 #' @export
 empiric_eff_rate.selector <- function(x, ...) {
-  # By default:
-  return(as.numeric(rep(NA, num_doses(x))))
+  return(x %>% eff_at_dose() / x %>% n_at_dose())
 }
+
 
 #' @export
 mean_prob_eff.selector <- function(x, ...) {
   # By default:
-  return(as.numeric(rep(NA, num_doses(x))))
+  # return(as.numeric(rep(NA, num_doses(x))))
+  return(array(as.numeric(NA), dim = num_doses(x)))
 }
 
 #' @export
 median_prob_eff.selector <- function(x, ...) {
   # By default:
-  return(as.numeric(rep(NA, num_doses(x))))
+  # return(as.numeric(rep(NA, num_doses(x))))
+  return(array(as.numeric(NA), dim = num_doses(x)))
 }
 
 #' @export
 prob_eff_exceeds.selector <- function(x, threshold, ...) {
   # By default:
-  return(as.numeric(rep(NA, num_doses(x))))
+  # return(as.numeric(rep(NA, num_doses(x))))
+  return(array(as.numeric(NA), dim = num_doses(x)))
 }
 
 #' @export
 prob_eff_quantile.selector <- function(x, p, ...) {
   # By default:
-  return(as.numeric(rep(NA, num_doses(x))))
+  # return(as.numeric(rep(NA, num_doses(x))))
+  return(array(as.numeric(NA), dim = num_doses(x)))
 }
 
 #' @export
@@ -333,12 +337,14 @@ prob_eff_samples.selector <- function(x, ...) {
 #' @export
 utility.selector <- function(x, ...) {
   # By default:
-  return(as.numeric(rep(NA, num_doses(x))))
+  # return(as.numeric(rep(NA, num_doses(x))))
+  return(array(as.numeric(NA), dim = num_doses(x)))
 }
 
 #' @export
 weight.selector <- function(x, ...) {
-  return(rep(1, num_patients(x)))
+  # return(rep(1, num_patients(x)))
+  return(array(as.integer(1), dim = num_doses(x)))
 }
 
 #' @importFrom stringr str_to_title

@@ -255,7 +255,6 @@ test_that('select_dose_by_cibp supports correct interface.', {
   expect_true(nrow(as_tibble(x)) >= num_doses(x))
 
 
-
   # Example 3, using tibble of outcomes
   set.seed(123)
   outcomes <- tibble(
@@ -321,7 +320,7 @@ test_that('select_dose_by_cibp supports correct interface.', {
   expect_true(is.integer(n_at_dose(x, dose = 1)))
   expect_equal(length(n_at_dose(x, dose = 1)), 1)
 
-  expect_equal(n_at_dose(x, dose = 'recommended'), 0)
+  expect_equal(n_at_dose(x, dose = 'recommended'), 3)
   expect_true(is.integer(n_at_dose(x, dose = 'recommended')))
   expect_equal(length(n_at_dose(x, dose = 'recommended')), 1)
 

@@ -300,10 +300,9 @@ test_that('follow_path_selector supports correct interface.', {
   expect_true(is.integer(n_at_dose(x, dose = 1)))
   expect_equal(length(n_at_dose(x, dose = 1)), 1)
 
-  expect_equal(n_at_dose(x, dose = 'recommended'), NA)
+  expect_true(is.na(n_at_dose(x, dose = 'recommended')))
   expect_equal(length(n_at_dose(x, dose = 'recommended')), 1)
 
-  expect_equal(n_at_recommended_dose(x), NA)
   expect_true(is.na(n_at_recommended_dose(x)))
   expect_equal(length(n_at_recommended_dose(x)), 1)
 
@@ -386,7 +385,6 @@ test_that('follow_path_selector supports correct interface.', {
   expect_true(is.integer(n_at_dose(x)))
   expect_equal(length(n_at_dose(x)), num_doses(x))
 
-  expect_equal(n_at_recommended_dose(x), NA)
   expect_true(is.na(n_at_recommended_dose(x)))
   expect_equal(length(n_at_recommended_dose(x)), 1)
 

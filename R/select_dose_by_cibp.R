@@ -1,5 +1,4 @@
 
-
 #' Select dose by the CIBP selection criterion.
 #'
 #' This method selects dose by the convex infinite bounds penalisation (CIBP)

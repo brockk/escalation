@@ -381,6 +381,28 @@ dose_indices <- function(x, ...) {
   UseMethod('dose_indices')
 }
 
+#' Dose strings
+#'
+#' Get strings representing the doses under investigation, congruent to
+#' dose_indices(x)
+#'
+#' @param x Object of type \code{\link{selector}}.
+#' @param ... Extra args are passed onwards.
+#'
+#' @return a character vector
+#'
+#' @export
+#'
+#' @examples
+#' skeleton <- c(0.05, 0.1, 0.25, 0.4, 0.6)
+#' target <- 0.25
+#' model <- get_dfcrm(skeleton = skeleton, target = target)
+#' fit <- model %>% fit('1NNN 2NTN')
+#' fit %>% dose_strings()
+dose_strings <- function(x, ...) {
+  UseMethod('dose_strings')
+}
+
 #' Recommended dose for next patient or cohort.
 #'
 #' Get the dose recommended for the next patient or cohort in a dose-finding
