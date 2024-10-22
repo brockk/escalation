@@ -53,11 +53,12 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
   }
   num_treatments <- length(num_doses)
 
-  if(is.data.frame(outcomes)) {
+  if(is.character(outcomes)) {
+    df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
+  } else if(is.data.frame(outcomes)) {
     df <- spruce_outcomes_df(outcomes)
   } else {
-    # TODO
-    stop('outcomes should be a data-frame.')
+    stop('outcomes should be a character string or a data-frame.')
   }
 
   df_c <- model_frame_to_counts(df, num_doses = num_doses)

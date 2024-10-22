@@ -8,10 +8,26 @@ test_that("", {
   boin_fitter <- get_boin_comb(num_doses = num_doses, target = target)
 
   # Describing outcomes as character string
-  # TODO
+  outcomes <- "1.1NNN"
+  set.seed(2024)
+  x <- fit(boin_fitter, outcomes)
+  expect_equal(
+    recommended_dose(x),
+    # This is randomly oscillating because that is what the authors chose.
+    c(1, 2)
+    # c(2, 1)
+  )
+  expect_true(
+    continue(x)
+  )
+  # expect_output(
+  #   print(x),
+  #   "The model advocates continuing at dose '1.2'."
+  # )
+  # check_dose_selector_consistency(x)
 
   # Describing outcomes as data.frame
-  df <-
+  outcomes <-
     bind_rows(
       tibble(
         patient = 1,
@@ -32,10 +48,13 @@ test_that("", {
         tox = 0
       )
     )
-  x <- fit(boin_fitter, df)
+  set.seed(2024)
+  x <- fit(boin_fitter, outcomes)
   expect_equal(
     recommended_dose(x),
+    # This is randomly oscillating because that is what the authors chose.
     c(1, 2)
+    # c(2, 1)
   )
   expect_true(
     continue(x)
@@ -46,7 +65,24 @@ test_that("", {
   # )
   # check_dose_selector_consistency(x)
 
-  df <-
+
+  outcomes <- "1.1NNN 1.2NNT"
+  set.seed(2024)
+  x <- fit(boin_fitter, outcomes)
+  expect_equal(
+    recommended_dose(x),
+    c(1, 1)
+  )
+  expect_true(
+    continue(x)
+  )
+  # expect_output(
+  #   print(x),
+  #   "The model advocates continuing at dose '1.1'."
+  # )
+  # check_dose_selector_consistency(x)
+
+  outcomes <-
     bind_rows(
       tibble(
         patient = 1,
@@ -86,7 +122,8 @@ test_that("", {
         tox = 1
       )
     )
-  x <- fit(boin_fitter, df)
+  set.seed(2024)
+  x <- fit(boin_fitter, outcomes)
   expect_equal(
     recommended_dose(x),
     c(1, 1)

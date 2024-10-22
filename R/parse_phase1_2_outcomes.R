@@ -55,19 +55,22 @@
 #'
 parse_phase1_2_outcomes <- function(outcomes, as_list = TRUE) {
   cohorts <- phase1_2_outcomes_to_cohorts(outcomes)
-  doses <- integer(length = 0)
+  doses <- character(length = 0)
   eff <- integer(length = 0)
   tox <- integer(length = 0)
   cohort_ids <- integer(length = 0)
   cohort_id <- 1
+  max_num_tmt <- 0
   for(cohort in cohorts) {
     c_dl <- cohort$dose
+    max_num_tmt <- max(max_num_tmt, length(c_dl))
+    c_dl_s <- dose_vector_to_string(c_dl)
     c_outcomes <- cohort$outcomes
 
-    these_outcomes <- stringr::str_split(c_outcomes, '')[[1]]
+    these_outcomes <- str_split(c_outcomes, '')[[1]]
     these_eff = as.integer((these_outcomes == 'E') | (these_outcomes == 'B'))
     these_tox = as.integer((these_outcomes == 'T') | (these_outcomes == 'B'))
-    these_doses <- rep(c_dl, length(these_tox))
+    these_doses <- rep(c_dl_s, length(these_tox))
 
     doses <- c(doses, these_doses)
     eff = c(eff, these_eff)
@@ -75,18 +78,31 @@ parse_phase1_2_outcomes <- function(outcomes, as_list = TRUE) {
     cohort_ids <- c(cohort_ids, rep(cohort_id, length(these_doses)))
     cohort_id <- cohort_id + 1
   }
+  if(max_num_tmt > 1) {
+    dose_i <- map(dose, dose_string_to_vector)
+  } else {
+    dose_i <- as.integer(doses)
+  }
 
   if(as_list) {
-    return(list(
-      cohort = cohort_ids, patient = seq_along(tox),
-      dose = doses, eff = eff, tox = tox, num_patients = length(doses)
-    ))
+    return(
+      list(
+        cohort = cohort_ids,
+        patient = seq_along(tox),
+        dose_string = doses,
+        dose = dose_i,
+        eff = eff,
+        tox = tox,
+        num_patients = length(doses)
+      )
+    )
   } else {
     dose = NULL
     return(tibble(
       cohort = as.integer(cohort_ids),
       patient = seq_along(tox),
-      dose = doses,
+      dose_string = doses,
+      dose = dose_i,
       tox = tox,
       eff = eff)
     )

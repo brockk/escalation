@@ -55,39 +55,57 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_split
 #' @importFrom tibble tibble
-#'
+#' @importFrom purrr map
 parse_phase1_outcomes <- function(outcomes, as_list = TRUE) {
 
   cohorts <- phase1_outcomes_to_cohorts(outcomes)
-  dose <- integer(length = 0)
+  dose <- character(length = 0)
   tox <- integer(length = 0)
   cohort_ids <- integer(length = 0)
   cohort_id <- 1
+  max_num_tmt <- 0
   for(cohort in cohorts) {
     c_dl <- cohort$dose
+    max_num_tmt <- max(max_num_tmt, length(c_dl))
+    c_dl_s <- dose_vector_to_string(c_dl)
     c_outcomes <- cohort$outcomes
 
     these_outcomes <- str_split(c_outcomes, '')[[1]]
     these_tox = as.integer((these_outcomes == 'T'))
-    these_dose <- rep(c_dl, length(these_tox))
+    these_dose <- rep(c_dl_s, length(these_tox))
+
 
     dose <- c(dose, these_dose)
     tox = c(tox, these_tox)
     cohort_ids <- c(cohort_ids, rep(cohort_id, length(these_dose)))
     cohort_id <- cohort_id + 1
   }
+  if(max_num_tmt > 1) {
+    dose_i <- map(dose, dose_string_to_vector)
+  } else {
+    dose_i <- as.integer(dose)
+  }
 
   if(as_list) {
-    return(list(
-      cohort = cohort_ids, patient = seq_along(dose),
-      dose = dose, tox = tox, num_patients = length(dose)
-    ))
+    return(
+      list(
+        cohort = cohort_ids,
+        patient = seq_along(dose),
+        dose_string = dose,
+        dose = dose_i,
+        tox = tox,
+        num_patients = length(dose)
+      )
+    )
   } else {
-    return(tibble(
-      cohort = as.integer(cohort_ids),
-      patient = seq_along(dose),
-      dose = dose,
-      tox = tox)
+    return(
+      tibble(
+        cohort = as.integer(cohort_ids),
+        patient = seq_along(dose),
+        dose_string = dose,
+        dose = dose_i,
+        tox = tox
+      )
     )
   }
 }

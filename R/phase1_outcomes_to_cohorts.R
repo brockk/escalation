@@ -51,7 +51,7 @@
 #' BMC Medical Research Methodology, 17(1), 112.
 #' https://doi.org/10.1186/s12874-017-0381-x
 #'
-#' @importFrom stringr str_extract str_detect str_extract_all
+#' @importFrom stringr str_extract str_detect str_extract_all str_split
 phase1_outcomes_to_cohorts <- function(outcomes) {
 
   if(is.character(outcomes)) {
@@ -62,23 +62,29 @@ phase1_outcomes_to_cohorts <- function(outcomes) {
   # This pattern ensures that outcomes is valid. It is the gate-keeper.
   # It allows leading and trailing white space and demands >0 cohort strings.
   # e.g. "2NNT 3TT 2N "
-  valid_str_match <- '^\\s*(\\d+[NT]+\\s*)+$'
-  # This pattern identifies the individual cohort strings, e.g. "2NNT"
-  cohort_str_match <- '\\d+[NT]+'
-  # This pattern extracts the dose-level from a cohort string, e.g. "2"
-  dl_str_match <- '\\d+'
+
+  # This pattern extracts the dose-level from a cohort string, e.g. "2" or "1.2"
+  dl_str_match <- "\\d+\\.?\\d*"
   # And this pattern extracts the outcomes from a cohort string, e.g "NNT"
-  outcomes_match_str <- '[NT]+'
+  outcomes_match_str <- "[NT]+"
+  valid_str_match <- paste0(
+    "^\\s*(",
+    dl_str_match,
+    outcomes_match_str,
+    "\\s*)+$"
+  )
+  # This pattern identifies the individual cohort strings, e.g. "2NNT"
+  cohort_str_match <- paste0(dl_str_match, outcomes_match_str)
+
 
   cohorts <- list()
   cohort_id <- 1
-
   if(str_detect(outcomes, valid_str_match)) {
-    cohort_strs <- str_extract_all(
-      outcomes, cohort_str_match)[[1]]
+    cohort_strs <- str_extract_all(outcomes, cohort_str_match)[[1]]
     for(cohort_str in cohort_strs) {
-      c_dl <- as.integer(str_extract(cohort_str, dl_str_match))
-      if(c_dl <= 0) stop('Dose-levels must be strictly positive integers.')
+      c_dl <- str_split(str_extract(cohort_str, dl_str_match), "\\.")[[1]]
+      c_dl <- as.integer(c_dl)
+      if(any(c_dl <= 0)) stop('Dose-levels must be strictly positive integers.')
       c_outcomes <- str_extract(cohort_str, outcomes_match_str)
       cohorts[[cohort_id]] <- list(dose = c_dl, outcomes = c_outcomes)
       cohort_id <- cohort_id + 1
