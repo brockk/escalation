@@ -7,6 +7,12 @@
 #' Yan et al. (2019). FALSE to suppress the authors' stopping rule, with the
 #' assumption being that you will test the necessity to stop early in some other
 #' way.
+#' @param stop_when_deescalation_impossible TRUE to stop a trial and recommend
+#' no dose when the advice is to de-escalate but de-escalation is impossible
+#' because we are already at the lowest dose. Note that this feature was
+#' requested by a user. This param is FALSE by default so that behaviour matches
+#' what was described in the publication. The BOIN authors do advocate this
+#' behaviour.
 #' @param ... Extra args are passed to \code{\link[BOIN]{get.boundary}}.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -32,12 +38,19 @@
 #' Bayesian optimal designs for Phase I clinical trials.
 #' J. R. Stat. Soc. C, 64, 507–523.
 #' https://doi.org/10.1111/rssc.12089
-get_boin <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
+get_boin <- function(
+    num_doses,
+    target,
+    use_stopping_rule = TRUE,
+    stop_when_deescalation_impossible = FALSE,
+    ...
+) {
 
   x <- list(
     num_doses = num_doses,
     target = target,
     use_stopping_rule = use_stopping_rule,
+    stop_when_deescalation_impossible = stop_when_deescalation_impossible,
     extra_args = list(...)
   )
 
@@ -50,7 +63,8 @@ get_boin <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 #' @importFrom BOIN select.mtd get.boundary
 #' @importFrom utils tail
 #' @importFrom magrittr %>%
-boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
+boin_selector <- function(outcomes, num_doses, target, use_stopping_rule,
+                          stop_when_deescalation_impossible, ...) {
 
   if(is.character(outcomes)) {
     df <- parse_phase1_outcomes(outcomes, as_list = FALSE)
@@ -113,14 +127,25 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
           continue <- FALSE
         } else {
           # Eliminate this dose and all higher doses.
-          # Select highest non-elimnated dose
+          # Select highest non-eliminated dose
           recommended_dose <- last_dose - 1
           continue <- TRUE
         }
       } else {
         # De-escalate, if possible
-        recommended_dose <- pmax(1, last_dose - 1)
+        # recommended_dose <- pmax(1, last_dose - 1)
+        # continue <- TRUE
+
+        recommended_dose <- last_dose - 1
         continue <- TRUE
+        if(recommended_dose <= 0) {
+          if(stop_when_deescalation_impossible) {
+            recommended_dose <- NA
+            continue <- FALSE
+          } else {
+            recommended_dose <- 1
+          }
+        }
       }
     } else {
       # As you were
@@ -136,6 +161,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule, ...) {
     target = target,
     boin_fit = x,
     use_stopping_rule = use_stopping_rule,
+    stop_when_deescalation_impossible = stop_when_deescalation_impossible,
     # ..+2 to stave off error in BOIN if cohortsize == 1:
     bound = get.boundary(target = target, ncohort = 1,
                          cohortsize = nrow(df) + 2, ...),
@@ -159,7 +185,9 @@ fit.boin_selector_factory <- function(selector_factory, outcomes, ...) {
     outcomes = outcomes,
     num_doses = selector_factory$num_doses,
     target = selector_factory$target,
-    use_stopping_rule = selector_factory$use_stopping_rule
+    use_stopping_rule = selector_factory$use_stopping_rule,
+    stop_when_deescalation_impossible =
+      selector_factory$stop_when_deescalation_impossible
   )
   args <- append(args, selector_factory$extra_args)
   do.call(boin_selector, args = args)

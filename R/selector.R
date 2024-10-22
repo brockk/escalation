@@ -343,8 +343,7 @@ utility.selector <- function(x, ...) {
 
 #' @export
 weight.selector <- function(x, ...) {
-  # return(rep(1, num_patients(x)))
-  return(array(as.integer(1), dim = num_doses(x)))
+  return(rep(1, num_patients(x)))
 }
 
 #' @importFrom stringr str_to_title

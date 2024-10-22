@@ -4,7 +4,13 @@
 \alias{get_boin}
 \title{Get an object to fit the BOIN model using the BOIN package.}
 \usage{
-get_boin(num_doses, target, use_stopping_rule = TRUE, ...)
+get_boin(
+  num_doses,
+  target,
+  use_stopping_rule = TRUE,
+  stop_when_deescalation_impossible = FALSE,
+  ...
+)
 }
 \arguments{
 \item{num_doses}{Number of doses under investigation.}
@@ -15,6 +21,13 @@ get_boin(num_doses, target, use_stopping_rule = TRUE, ...)
 Yan et al. (2019). FALSE to suppress the authors' stopping rule, with the
 assumption being that you will test the necessity to stop early in some other
 way.}
+
+\item{stop_when_deescalation_impossible}{TRUE to stop a trial and recommend
+no dose when the advice is to de-escalate but de-escalation is impossible
+because we are already at the lowest dose. Note that this feature was
+requested by a user. This param is FALSE by default so that behaviour matches
+what was described in the publication. The BOIN authors do advocate this
+behaviour.}
 
 \item{...}{Extra args are passed to \code{\link[BOIN]{get.boundary}}.}
 }
