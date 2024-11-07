@@ -1,32 +1,34 @@
 
 #' Select dose by TPI's MTD-choosing algorithm.
 #'
-#' This method selects dose by the algorithm for identifying the maximum
-#' tolerable dose (MTD) described in Ji et al. (2007). This class is intended
-#' to be used when a TPI trial has reached its maximum sample size. Thus, it
-#' intends to make the final dose recommendation after the regular TPI dose
-#' selection algorithm, as implemented by \code{\link{get_tpi}}, including any
-#' additional behaviours that govern stopping (etc), has gracefully concluded a
-#' dose-finding trial. However, the class can be used in any scenario where
-#' there is a target toxicity rate. See Examples. Note - this class will not
-#' override the parent dose selector when the parent is advocating no dose. Thus
-#' this class will not reinstate a dangerous dose.
+#' Note: if you use this selector, it almost certainly needs to be the last
+#' example in the chain - see Example below. This method selects dose by the
+#' algorithm for identifying the maximum tolerable dose (MTD) described in Ji et
+#' al. (2007). This class is intended to be used when a TPI trial has reached
+#' its maximum sample size. Thus, it intends to make the final dose
+#' recommendation after the regular TPI dose selection algorithm, as implemented
+#' by \code{\link{get_tpi}}, including any additional behaviours that govern
+#' stopping (etc), has gracefully concluded a dose-finding trial. However, the
+#' class can be used in any scenario where there is a target toxicity rate. See
+#' Examples. Note - this class will not override the parent dose selector when
+#' the parent is advocating no dose. Thus this class will not reinstate a
+#' dangerous dose.
 #'
 #' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param when Either of: 'finally' to select dose only when the parent
-#' dose-selector has finished, by returning continue() == FALSE; or 'always'
-#' to use this dose-selection algorithm for every dose decision. As per the
-#' authors' original intentions, the default is 'finally'.
+#'   dose-selector has finished, by returning continue() == FALSE; or 'always'
+#'   to use this dose-selection algorithm for every dose decision. As per the
+#'   authors' original intentions, the default is 'finally'.
 #' @param target We seek a dose with this probability of toxicity. If not
-#' provided, the value will be sought from the parent dose-selector.
+#'   provided, the value will be sought from the parent dose-selector.
 #' @param exclusion_certainty Numeric, threshold posterior certainty required to
-#' exclude a dose for being excessively toxic. The authors discuss values in the
-#' range 0.7 - 0.95. Set to a value > 1 to suppress the dose exclusion
-#' mechanism. The authors use the Greek letter xi for this parameter.
+#'   exclude a dose for being excessively toxic. The authors discuss values in
+#'   the range 0.7 - 0.95. Set to a value > 1 to suppress the dose exclusion
+#'   mechanism. The authors use the Greek letter xi for this parameter.
 #' @param alpha First shape parameter of the beta prior distribution on the
-#' probability of toxicity.
+#'   probability of toxicity.
 #' @param beta Second shape parameter of the beta prior distribution on the
-#' probability of toxicity.
+#'   probability of toxicity.
 #' @param ... Extra args are passed onwards.
 #'
 #' @return an object of type \code{\link{selector_factory}}.
@@ -61,11 +63,9 @@
 #' model3 %>% fit('1NNT') %>% recommended_dose()
 #' model3 %>% fit('1NNN 2NNT') %>% recommended_dose()
 #'
-#' @references
-#' Ji, Y., Li, Y., & Bekele, B. N. (2007).
-#' Dose-finding in phase I clinical trials based on toxicity probability
-#' intervals.
-#' Clinical Trials, 4(3), 235–244. https://doi.org/10.1177/1740774507079442
+#' @references Ji, Y., Li, Y., & Bekele, B. N. (2007). Dose-finding in phase I
+#' clinical trials based on toxicity probability intervals. Clinical Trials,
+#' 4(3), 235–244. https://doi.org/10.1177/1740774507079442
 select_tpi_mtd <- function(parent_selector_factory,
                            when = c('finally', 'always'),
                            target = NULL,

@@ -1,23 +1,25 @@
 
 #' Select dose by BOIN12's OBD-choosing algorithm.
 #'
-#' This method selects dose by the algorithm for identifying the optimal
-#' biological dose (OBD) described in Lin et al. (2020). This class is intended
-#' to be used when a BOIN12 trial has reached its maximum sample size. Thus, it
-#' intends to make the final dose recommendation after the regular BOIN12 dose
-#' selection algorithm, as implemented by \code{\link{get_boin12}}, has
-#' gracefully concluded a dose-finding trial. However, the class can be used in
-#' any scenario where there is a limit toxicity rate. See Examples.
-#' Note - this class will not override the parent dose selector when the parent
-#' is advocating no dose. Thus this class will not reinstate a dangerous dose.
+#' Note: if you use this selector, it almost certainly needs to be the last
+#' example in the chain - see Example below. This method selects dose by the
+#' algorithm for identifying the optimal biological dose (OBD) described in Lin
+#' et al. (2020). This class is intended to be used when a BOIN12 trial has
+#' reached its maximum sample size. Thus, it intends to make the final dose
+#' recommendation after the regular BOIN12 dose selection algorithm, as
+#' implemented by \code{\link{get_boin12}}, has gracefully concluded a
+#' dose-finding trial. However, the class can be used in any scenario where
+#' there is a limit toxicity rate. See Examples. Note - this class will not
+#' override the parent dose selector when the parent is advocating no dose. Thus
+#' this class will not reinstate a dangerous dose.
 #'
 #' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param when Either of: 'finally' to select dose only when the parent
-#' dose-selector has finished, by returning continue() == FALSE; or 'always'
-#' to use this dose-selection algorithm for every dose decision. As per the
-#' authors' original intentions, the default is 'finally'.
-#' @param tox_limit We seek a dose with toxicity probability no greater than.
-#' If not provided, the value will be sought from the parent dose-selector.
+#'   dose-selector has finished, by returning continue() == FALSE; or 'always'
+#'   to use this dose-selection algorithm for every dose decision. As per the
+#'   authors' original intentions, the default is 'finally'.
+#' @param tox_limit We seek a dose with toxicity probability no greater than. If
+#'   not provided, the value will be sought from the parent dose-selector.
 #' @param ... Extra args are ignored.
 #'
 #' @return an object of type \code{\link{selector_factory}}.
@@ -43,11 +45,10 @@
 #' model2 %>% fit('1NNT') %>% recommended_dose()
 #' model2 %>% fit('1NNN 2NNT') %>% recommended_dose()
 #'
-#' @references
-#' Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020).
-#' BOIN12: Bayesian optimal interval phase I/II trial design for utility-based
-#' dose finding in immunotherapy and targeted therapies.
-#' JCO precision oncology, 4, 1393-1402.
+#' @references Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020). BOIN12:
+#' Bayesian optimal interval phase I/II trial design for utility-based dose
+#' finding in immunotherapy and targeted therapies. JCO precision oncology, 4,
+#' 1393-1402.
 select_boin12_obd <- function(parent_selector_factory,
                               when = c('finally', 'always'),
                               tox_limit = NULL,

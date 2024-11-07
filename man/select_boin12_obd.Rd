@@ -19,8 +19,8 @@ dose-selector has finished, by returning continue() == FALSE; or 'always'
 to use this dose-selection algorithm for every dose decision. As per the
 authors' original intentions, the default is 'finally'.}
 
-\item{tox_limit}{We seek a dose with toxicity probability no greater than.
-If not provided, the value will be sought from the parent dose-selector.}
+\item{tox_limit}{We seek a dose with toxicity probability no greater than. If
+not provided, the value will be sought from the parent dose-selector.}
 
 \item{...}{Extra args are ignored.}
 }
@@ -28,15 +28,17 @@ If not provided, the value will be sought from the parent dose-selector.}
 an object of type \code{\link{selector_factory}}.
 }
 \description{
-This method selects dose by the algorithm for identifying the optimal
-biological dose (OBD) described in Lin et al. (2020). This class is intended
-to be used when a BOIN12 trial has reached its maximum sample size. Thus, it
-intends to make the final dose recommendation after the regular BOIN12 dose
-selection algorithm, as implemented by \code{\link{get_boin12}}, has
-gracefully concluded a dose-finding trial. However, the class can be used in
-any scenario where there is a limit toxicity rate. See Examples.
-Note - this class will not override the parent dose selector when the parent
-is advocating no dose. Thus this class will not reinstate a dangerous dose.
+Note: if you use this selector, it almost certainly needs to be the last
+example in the chain - see Example below. This method selects dose by the
+algorithm for identifying the optimal biological dose (OBD) described in Lin
+et al. (2020). This class is intended to be used when a BOIN12 trial has
+reached its maximum sample size. Thus, it intends to make the final dose
+recommendation after the regular BOIN12 dose selection algorithm, as
+implemented by \code{\link{get_boin12}}, has gracefully concluded a
+dose-finding trial. However, the class can be used in any scenario where
+there is a limit toxicity rate. See Examples. Note - this class will not
+override the parent dose selector when the parent is advocating no dose. Thus
+this class will not reinstate a dangerous dose.
 }
 \examples{
 # This class is intended to make the final dose selection in a BOIN12 trial:
@@ -59,8 +61,8 @@ model2 \%>\% fit('1NNN 2NNT') \%>\% recommended_dose()
 
 }
 \references{
-Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020).
-BOIN12: Bayesian optimal interval phase I/II trial design for utility-based
-dose finding in immunotherapy and targeted therapies.
-JCO precision oncology, 4, 1393-1402.
+Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020). BOIN12:
+Bayesian optimal interval phase I/II trial design for utility-based dose
+finding in immunotherapy and targeted therapies. JCO precision oncology, 4,
+1393-1402.
 }

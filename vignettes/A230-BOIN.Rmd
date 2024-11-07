@@ -113,6 +113,24 @@ The relatively low sample size at dose 3 means that the dose has not yet been re
 fit %>% dose_admissible()
 ```
 
+## Final dose selection
+BOIN, like some other designs, selects the final dose differently to how it selects doses mid-trial.
+To achieve this in `escalation`, we need an extra selector that will kick-in when the parent selector(s) have selected a non-NA dose but expressed `continue == FALSE`, i.e. signaled _the trial ends now but we are interested in a dose_.
+If used, it will almost surely come last in the selector chain:
+
+```{r}
+model <- get_boin(num_doses = 5, target = target) %>%
+   stop_at_n(n = 12) %>%
+   select_boin_mtd()
+
+outcomes <- '1NNN 2NTN 2NNN 3NTT'
+model %>% fit(outcomes) %>% recommended_dose()
+```
+
+In the above example, `stop_at_n` stopped the trial because the threshold sample size was met, and the underlying algorithm identified that at least one dose was worthy of selection.
+At this juncture, `select_boin_mtd` took over and applied the method described by the authors.
+Whilst the underlying selector(s) were busy conducting the trial (`continue == TRUE`), `select_boin_mtd` kept silent.
+
 ## Dose paths
 We can reproduce some of the advice above using dose-paths to exhaustively calculate all possible future model advice.
 For example, after observing `1NNN` in the first cohort, we can reproduce the advice to escalate further after seeing `2NNN` and then de-escalate after seeing `3NTT` using:

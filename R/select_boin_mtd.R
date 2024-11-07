@@ -1,16 +1,18 @@
 
 #' Select dose by BOIN's MTD-choosing algorithm.
 #'
-#' This method selects dose by the algorithm for identifying the maximum
-#' tolerable dose (MTD) described in Yan et al. (2019). This class is intended
-#' to be used when a BOIN trial has reached its maximum sample size. Thus, it
-#' intends to make the final dose recommendation after the regular BOIN dose
-#' selection algorithm, as implemented by \code{\link{get_boin}}, including any
-#' additional behaviours that govern stopping (etc), has gracefully concluded a
-#' dose-finding trial. However, the class can be used in any scenario where
-#' there is a target toxicity rate. See Examples. Note - this class will not
-#' override the parent dose selector when the parent is advocating no dose. Thus
-#' this class will not reinstate a dangerous dose.
+#' Note: if you use this selector, it almost certainly needs to be the last
+#' example in the chain - see Example below. This method selects dose by the
+#' algorithm for identifying the maximum tolerable dose (MTD) described in Yan
+#' et al. (2019). This class is intended to be used when a BOIN trial has
+#' reached its maximum sample size. Thus, it intends to make the final dose
+#' recommendation after the regular BOIN dose selection algorithm, as
+#' implemented by \code{\link{get_boin}}, including any additional behaviours
+#' that govern stopping (etc), has gracefully concluded a dose-finding trial.
+#' However, the class can be used in any scenario where there is a target
+#' toxicity rate. See Examples. Note - this class will not override the parent
+#' dose selector when the parent is advocating no dose. Thus this class will not
+#' reinstate a dangerous dose.
 #'
 #' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param when Either of: 'finally' to select dose only when the parent
@@ -50,9 +52,9 @@
 #' model3 %>% fit('1NNN 2NNT') %>% recommended_dose()
 #'
 #' @references Yan, F., Pan, H., Zhang, L., Liu, S., & Yuan, Y. (2019). BOIN: An
-#' R Package for Designing Single-Agent and Drug-Combination Dose-Finding Trials
-#' Using Bayesian Optimal Interval Designs. Journal of Statistical Software,
-#' 27(November 2017), 0–35. https://doi.org/10.18637/jss.v000.i00
+#'   R Package for Designing Single-Agent and Drug-Combination Dose-Finding
+#'   Trials Using Bayesian Optimal Interval Designs. Journal of Statistical
+#'   Software, 27(November 2017), 0–35. https://doi.org/10.18637/jss.v000.i00
 select_boin_mtd <- function(parent_selector_factory,
                             when = c('finally', 'always'),
                             target = NULL,
