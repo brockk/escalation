@@ -16,6 +16,9 @@ Authors@R: c(
     person("Michael", "Sweeting", 
       role = c("aut"), 
       comment = c(ORCID = "0000-0003-0980-8965")
+    ),
+    person("Conor", "Norris", 
+      role = c("ctb")
     )
     )
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
@@ -61,6 +64,7 @@ Imports:
   binom,
   R6,
   mvtnorm,
+  graphics,
   testthat
 RoxygenNote: 7.2.3
 URL: https://brockk.github.io/escalation/, https://github.com/brockk/escalation
