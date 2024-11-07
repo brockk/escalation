@@ -1382,3 +1382,477 @@ test_that('mtpi2_selector respects suspended doses', {
   expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
 })
+
+test_that("mtpi2_selector stick_on_one_in_three_tox works as expected", {
+
+  num_doses <- 5
+  target <- 0.15
+  model1 <- get_mtpi2(num_doses = num_doses, target = target,
+                      epsilon1 = 0.05, epsilon2 = 0.05,
+                      exclusion_certainty = 0.95,
+                      stick_on_one_in_three_tox = FALSE)
+  model2 <- get_mtpi2(num_doses = num_doses, target = target,
+                      epsilon1 = 0.05, epsilon2 = 0.05,
+                      exclusion_certainty = 0.95,
+                      stick_on_one_in_three_tox = TRUE)
+
+  # Targeted tests:
+
+  # At dose 1
+  x1 <- model1 %>% fit("1NNT")
+  x2 <- model2 %>% fit("1NNT")
+  expect_equal(
+    recommended_dose(x2),
+    1
+  )
+  expect_equal(
+    recommended_dose(x1),
+    1
+  )
+
+  # At dose 2
+  x1 <- model1 %>% fit("1NNN 2NTN")
+  x2 <- model2 %>% fit("1NNN 2NTN")
+  expect_equal(
+    recommended_dose(x2),
+    2
+  )
+  expect_equal(
+    recommended_dose(x1),
+    1
+  )
+
+  # At dose 3
+  x1 <- model1 %>% fit("1NNN 3NTN")
+  x2 <- model2 %>% fit("1NNN 3NTN")
+  expect_equal(
+    recommended_dose(x2),
+    3
+  )
+  expect_equal(
+    recommended_dose(x1),
+    2
+  )
+
+  # At dose 4
+  x1 <- model1 %>% fit("1NNN 3NTN 4TNN")
+  x2 <- model2 %>% fit("1NNN 3NTN 4TNN")
+  expect_equal(
+    recommended_dose(x2),
+    4
+  )
+  expect_equal(
+    recommended_dose(x1),
+    3
+  )
+
+
+  # More general tests ----
+  # Tests at dose 1
+
+  # Three patients treated
+  fit1 <- model1 %>% fit('1NNN')
+  fit2 <- model2 %>% fit('1NNN')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 2."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 2."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit1)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NNT')
+  fit2 <- model2 %>% fit('1NNT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit1)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NTT')
+  fit2 <- model2 %>% fit('1NTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_false(continue(fit1))
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_equal(dose_admissible(fit1), rep(FALSE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(FALSE, num_doses(fit1)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1TTT')
+  fit2 <- model2 %>% fit('1TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_false(continue(fit1))
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_equal(dose_admissible(fit1), rep(FALSE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(FALSE, num_doses(fit1)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  # Six patients treated
+  fit1 <- model1 %>% fit('1NNN 1NNN')
+  fit2 <- model2 %>% fit('1NNN 1NNN')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 2."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 2."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NNN 1NNT')
+  fit2 <- model2 %>% fit('1NNN 1NNT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit1)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NNN 1NTT')
+  fit2 <- model2 %>% fit('1NNN 1NTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NNN 1TTT')
+  fit2 <- model2 %>% fit('1NNN 1TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_false(continue(fit1))
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_equal(dose_admissible(fit1), rep(FALSE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(FALSE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NNT 1TTT')
+  fit2 <- model2 %>% fit('1NNT 1TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_false(continue(fit1))
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_equal(dose_admissible(fit1), rep(FALSE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(FALSE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1NTT 1TTT')
+  fit2 <- model2 %>% fit('1NTT 1TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_false(continue(fit1))
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_equal(dose_admissible(fit1), rep(FALSE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(FALSE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('1TTT 1TTT')
+  fit2 <- model2 %>% fit('1TTT 1TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_false(continue(fit1))
+  expect_false(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates stopping and recommending no dose."
+  )
+  expect_equal(dose_admissible(fit1), rep(FALSE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(FALSE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+
+  # Tests at dose 2
+
+  # Three patients treated
+  fit1 <- model1 %>% fit('2NNN')
+  fit2 <- model2 %>% fit('2NNN')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 3."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 3."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NNT')
+  fit2 <- model2 %>% fit('2NNT')
+  expect_equal(recommended_dose(fit1), 1)
+  expect_equal(recommended_dose(fit2), 2)
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 2."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NTT')
+  fit2 <- model2 %>% fit('2NTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(dose_admissible(fit2), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2TTT')
+  fit2 <- model2 %>% fit('2TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(dose_admissible(fit2), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  # Six patients treated
+  fit1 <- model1 %>% fit('2NNN 2NNN')
+  fit2 <- model2 %>% fit('2NNN 2NNN')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 3."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 3."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NNN 2NNT')
+  fit2 <- model2 %>% fit('2NNN 2NNT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 2."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 2."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NNN 2NTT')
+  fit2 <- model2 %>% fit('2NNN 2NTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), rep(TRUE, num_doses(fit1)))
+  expect_equal(dose_admissible(fit2), rep(TRUE, num_doses(fit2)))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NNN 2TTT')
+  fit2 <- model2 %>% fit('2NNN 2TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(dose_admissible(fit2), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NNT 2TTT')
+  fit2 <- model2 %>% fit('2NNT 2TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(dose_admissible(fit2), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2NTT 2TTT')
+  fit2 <- model2 %>% fit('2NTT 2TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(dose_admissible(fit2), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+  fit1 <- model1 %>% fit('2TTT 2TTT')
+  fit2 <- model2 %>% fit('2TTT 2TTT')
+  expect_equal(recommended_dose(fit1), recommended_dose(fit2))
+  expect_true(continue(fit1))
+  expect_true(continue(fit2))
+  expect_output(
+    print(fit1),
+    "The model advocates continuing at dose 1."
+  )
+  expect_output(
+    print(fit2),
+    "The model advocates continuing at dose 1."
+  )
+  expect_equal(dose_admissible(fit1), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(dose_admissible(fit2), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  check_dose_selector_consistency(fit1)
+  check_dose_selector_consistency(fit2)
+
+
+})
