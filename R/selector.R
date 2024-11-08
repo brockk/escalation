@@ -199,14 +199,16 @@ model_frame.selector <- function(x, ...) {
       patient = seq(1, num_patients(x)),
       cohort = cohort(x) %>% as.integer(),
       dose = doses_given(x) %>% as.integer(),
-      tox = tox(x) %>% as.integer()
+      tox = tox(x) %>% as.integer(),
+      weight = weight(x)
     )
   } else {
     tibble(
       patient = integer(length = 0),
       cohort = integer(length = 0),
       dose = integer(length = 0),
-      tox = integer(length = 0)
+      tox = integer(length = 0),
+      weight = numeric(length = 0)
     )
   }
 }

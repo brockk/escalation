@@ -137,6 +137,7 @@ get_dfcrm_tite <- function(parent_selector_factory = NULL, skeleton, target,
   )
 }
 
+#' @importFrom gtools logit
 #' @importFrom dfcrm crm titecrm
 dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
                            tite = FALSE, ...) {
@@ -153,12 +154,35 @@ dfcrm_selector <- function(parent_selector = NULL, outcomes, skeleton, target,
     stop('outcomes should be a character string or a data-frame.')
   }
 
-  x <- list(
-    level = integer(length = 0),
-    tox = integer(length = 0),
-    mtd = 1,
-    ptox = skeleton
-  )
+  x <- list(...)
+  x$level = integer(length = 0)
+  x$tox = integer(length = 0)
+  x$mtd = 1
+  x$ptox = skeleton
+  x$estimate = 0
+  if("model" %in% names(x)) {
+    # do nothing
+  } else {
+    x$model <- "empiric"
+  }
+  if("intcpt" %in% names(x)) {
+    # do nothing
+  } else {
+    x$intcpt <- 3
+  }
+  if("scale" %in% names(x)) {
+    x$post.var <- x$scale
+  } else {
+    x$post.var <- 1.34
+  }
+  if(x$model == "empiric") {
+    x$dosescaled <- skeleton
+  } else if(x$model == "logistic") {
+    x$dosescaled <- logit(skeleton) - x$intcpt
+  } else {
+    stop(paste0("Don't know what to do with dfcrm model '", x$model, "'"))
+  }
+
   if(nrow(df) > 0) {
     # Checks
     if(max(df$dose) > length(skeleton)) {
