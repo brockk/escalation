@@ -1287,7 +1287,8 @@ test_that(
     expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                  cohort = c(1,1,1,2,2,2),
                                                  dose = c(1,1,1,2,2,2),
-                                                 tox = c(0,0,0,0,1,1))) == 0))
+                                                 tox = c(0,0,0,0,1,1),
+                                                 weight = c(1,1,1,1,1,1))) == 0))
     expect_equal(nrow(model_frame(x)), num_patients(x))
 
     expect_equal(num_doses(x), 5)
@@ -1376,7 +1377,7 @@ test_that(
 
     mf <- model_frame(x)
     expect_equal(nrow(mf), 0)
-    expect_equal(ncol(mf), 4)
+    expect_equal(ncol(mf), 5)
 
     expect_equal(num_doses(x), 5)
     expect_true(is.integer(num_doses(x)))
@@ -1469,7 +1470,8 @@ test_that(
     expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                  cohort = c(1,1,1,2,2,2),
                                                  dose = c(1,1,1,2,2,2),
-                                                 tox = c(0,0,0,0,1,1))) == 0))
+                                                 tox = c(0,0,0,0,1,1),
+                                                 weight = c(1,1,1,1,1,1))) == 0))
     expect_equal(nrow(model_frame(x)), num_patients(x))
 
     expect_equal(num_doses(x), 5)
@@ -1567,7 +1569,8 @@ test_that(
     expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                  cohort = c(1,1,1,2,2,2),
                                                  dose = c(1,1,1,2,2,2),
-                                                 tox = c(0,0,0,0,1,1))) == 0))
+                                                 tox = c(0,0,0,0,1,1),
+                                                 weight = c(1,1,1,1,1,1))) == 0))
     expect_equal(nrow(model_frame(x)), num_patients(x))
 
     expect_equal(num_doses(x), 5)
@@ -1656,7 +1659,7 @@ test_that(
 
     mf <- model_frame(x)
     expect_equal(nrow(mf), 0)
-    expect_equal(ncol(mf), 4)
+    expect_equal(ncol(mf), 5)
 
     expect_equal(num_doses(x), 5)
     expect_true(is.integer(num_doses(x)))
@@ -1748,7 +1751,8 @@ test_that(
     expect_true(all((model_frame(x) - data.frame(patient = c(1,2,3,4,5,6),
                                                  cohort = c(1,1,1,2,2,2),
                                                  dose = c(1,1,1,2,2,2),
-                                                 tox = c(0,0,0,0,1,1))) == 0))
+                                                 tox = c(0,0,0,0,1,1),
+                                                 weight = c(1,1,1,1,1,1))) == 0))
     expect_equal(nrow(model_frame(x)), num_patients(x))
 
     expect_equal(num_doses(x), 5)
