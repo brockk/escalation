@@ -308,6 +308,16 @@ recommended_dose.mtpi_selector <- function(x, ...) {
 
 #' @export
 continue.mtpi_selector <- function(x, ...) {
+
+  if(!is.null(x$parent)) {
+    parent_cont <- continue(x$parent)
+    # Continue if parent wants to:
+    if(parent_cont) {
+      return(TRUE)
+    }
+  }
+
+  # By default:
   return(x$continue)
 }
 
