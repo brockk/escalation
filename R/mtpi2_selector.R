@@ -20,10 +20,6 @@
 #' probability of toxicity.
 #' @param beta Second shape parameter of the beta prior distribution on the
 #' probability of toxicity.
-#' @param stick_on_one_in_three_tox TRUE to override the dose-selection model to
-#' recommend staying at the current dose when one tox is seen in exactly three
-#' patients. FALSE, the default, to not use this rule. Note this was added for a
-#' particular sponsor and not part of the original design.
 #' @param ... Extra args are passed onwards.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -89,7 +85,6 @@ get_mtpi2 <- function(parent_selector_factory = NULL, num_doses, target,
                      epsilon1, epsilon2,
                      exclusion_certainty,
                      alpha = 1, beta = 1,
-                     stick_on_one_in_three_tox = FALSE,
                      ...) {
 
   x <- list(
@@ -101,7 +96,6 @@ get_mtpi2 <- function(parent_selector_factory = NULL, num_doses, target,
     exclusion_certainty = exclusion_certainty,
     alpha = alpha,
     beta = beta,
-    stick_on_one_in_three_tox = stick_on_one_in_three_tox,
     extra_args = list(...)
   )
 
@@ -115,7 +109,6 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
                           epsilon1, epsilon2,
                           exclusion_certainty,
                           alpha, beta,
-                          stick_on_one_in_three_tox = FALSE,
                           ...) {
 
   if(is.character(outcomes)) {
@@ -235,14 +228,6 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
     } else {
       stop('Hypothetically infeasible situation in mtpi2_selector.')
     }
-
-    # Overrule all that if the user has stipulated stick on 1-in-3 DLTs:
-    if(stick_on_one_in_three_tox) {
-      if(n_d == 3 & tox_d == 1) {
-        recommended_dose <- last_dose
-        continue <- TRUE
-      }
-    }
   }
 
   l <- list(
@@ -259,8 +244,7 @@ mtpi2_selector <- function(parent_selector = NULL, outcomes, num_doses, target,
     epsilon1 = epsilon1,
     epsilon2 = epsilon2,
     recommended_dose = recommended_dose,
-    continue = continue,
-    stick_on_one_in_three_tox = stick_on_one_in_three_tox
+    continue = continue
   )
 
   class(l) = c('mtpi2_selector', 'tox_selector', 'selector')
@@ -287,7 +271,6 @@ fit.mtpi2_selector_factory <- function(selector_factory, outcomes, ...) {
     epsilon1 = selector_factory$epsilon1,
     epsilon2 = selector_factory$epsilon2,
     exclusion_certainty = selector_factory$exclusion_certainty,
-    stick_on_one_in_three_tox = selector_factory$stick_on_one_in_three_tox,
     alpha = selector_factory$alpha,
     beta = selector_factory$beta
   )

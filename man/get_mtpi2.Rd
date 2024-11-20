@@ -13,7 +13,6 @@ get_mtpi2(
   exclusion_certainty,
   alpha = 1,
   beta = 1,
-  stick_on_one_in_three_tox = FALSE,
   ...
 )
 }
@@ -40,11 +39,6 @@ probability of toxicity.}
 
 \item{beta}{Second shape parameter of the beta prior distribution on the
 probability of toxicity.}
-
-\item{stick_on_one_in_three_tox}{TRUE to override the dose-selection model to
-recommend staying at the current dose when one tox is seen in exactly three
-patients. FALSE, the default, to not use this rule. Note this was added for a
-particular sponsor and not part of the original design.}
 
 \item{...}{Extra args are passed onwards.}
 }
