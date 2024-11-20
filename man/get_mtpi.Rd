@@ -13,6 +13,7 @@ get_mtpi(
   exclusion_certainty,
   alpha = 1,
   beta = 1,
+  stop_when_deescalation_impossible = FALSE,
   ...
 )
 }
@@ -39,6 +40,13 @@ probability of toxicity.}
 
 \item{beta}{Second shape parameter of the beta prior distribution on the
 probability of toxicity.}
+
+\item{stop_when_deescalation_impossible}{TRUE to stop a trial and recommend
+no dose when the advice is to de-escalate but de-escalation is impossible
+because we are already at the lowest dose. Note that this feature was
+requested by a user. This param is FALSE by default so that behaviour matches
+what was described in the publication. The original authors do advocate this
+behaviour.}
 
 \item{...}{Extra args are passed onwards.}
 }

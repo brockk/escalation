@@ -19,6 +19,12 @@
 #' probability of toxicity.
 #' @param beta Second shape parameter of the beta prior distribution on the
 #' probability of toxicity.
+#' @param stop_when_deescalation_impossible TRUE to stop a trial and recommend
+#' no dose when the advice is to de-escalate but de-escalation is impossible
+#' because we are already at the lowest dose. Note that this feature was
+#' requested by a user. This param is FALSE by default so that behaviour matches
+#' what was described in the publication. The original authors do advocate this
+#' behaviour.
 #' @param ... Extra args are passed onwards.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -77,6 +83,7 @@ get_mtpi <- function(parent_selector_factory = NULL,
                      epsilon1, epsilon2,
                      exclusion_certainty,
                      alpha = 1, beta = 1,
+                     stop_when_deescalation_impossible = FALSE,
                      ...) {
 
   x <- list(
@@ -88,6 +95,7 @@ get_mtpi <- function(parent_selector_factory = NULL,
     exclusion_certainty = exclusion_certainty,
     alpha = alpha,
     beta = beta,
+    stop_when_deescalation_impossible = stop_when_deescalation_impossible,
     extra_args = list(...)
   )
 
@@ -102,6 +110,7 @@ mtpi_selector <- function(parent_selector = NULL,
                           epsilon1, epsilon2,
                           exclusion_certainty,
                           alpha, beta,
+                          stop_when_deescalation_impossible,
                           ...) {
 
   if(is.character(outcomes)) {
@@ -114,17 +123,7 @@ mtpi_selector <- function(parent_selector = NULL,
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
 
   # Checks
-  # print("nrow(df)")
-  # print(nrow(df))
   if(nrow(df) > 0) {
-    # print("max(df$dose)")
-    # print(max(df$dose))
-    # if(is.na(max(df$dose))) {
-    #   print("df")
-    #   print(df)
-    # }
-    # print("num_doses")
-    # print(num_doses)
     if(max(df$dose) > num_doses) {
       stop('mtpi_selector - maximum dose given exceeds number of doses.')
     }
@@ -196,6 +195,9 @@ mtpi_selector <- function(parent_selector = NULL,
         if(prob_unsafe > exclusion_certainty) {
           recommended_dose <- NA
           continue <- FALSE
+        } else if(stop_when_deescalation_impossible) {
+          recommended_dose <- NA
+          continue <- FALSE
         } else {
           recommended_dose <- 1
           continue <- TRUE
@@ -219,6 +221,7 @@ mtpi_selector <- function(parent_selector = NULL,
     exclusion_certainty = exclusion_certainty,
     epsilon1 = epsilon1,
     epsilon2 = epsilon2,
+    stop_when_deescalation_impossible = stop_when_deescalation_impossible,
     recommended_dose = recommended_dose,
     continue = continue
   )
@@ -248,7 +251,9 @@ fit.mtpi_selector_factory <- function(selector_factory, outcomes, ...) {
     epsilon2 = selector_factory$epsilon2,
     exclusion_certainty = selector_factory$exclusion_certainty,
     alpha = selector_factory$alpha,
-    beta = selector_factory$beta
+    beta = selector_factory$beta,
+    stop_when_deescalation_impossible =
+      selector_factory$stop_when_deescalation_impossible
   )
   args <- append(args, selector_factory$extra_args)
   do.call(mtpi_selector, args = args)

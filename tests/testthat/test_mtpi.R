@@ -2376,3 +2376,51 @@ test_that('mtpi_selector respects suspended doses', {
   expect_equal(fit %>% dose_admissible(), c(TRUE, TRUE, FALSE, FALSE, FALSE))
 
 })
+
+test_that("mtpi_selector stops when de-escalation is impossible", {
+
+  target <- 0.25
+  model1 <- get_mtpi(num_doses = 5, target = target,
+                     epsilon1 = 0.05, epsilon2 = 0.05,
+                     exclusion_certainty = 0.95,
+                     stop_when_deescalation_impossible = TRUE)
+
+  x <- model1 %>% fit("1NNN")
+  expect_equal(
+    x %>% recommended_dose(),
+    2
+  )
+  expect_equal(
+    x %>% continue(),
+    TRUE
+  )
+
+  x <- model1 %>% fit("1NNT")
+  expect_equal(
+    x %>% recommended_dose(),
+    1
+  )
+  expect_equal(
+    x %>% continue(),
+    TRUE
+  )
+
+  x <- model1 %>% fit("1NTT")
+  expect_true(
+    is.na(x %>% recommended_dose())
+  )
+  expect_equal(
+    x %>% continue(),
+    FALSE
+  )
+
+  x <- model1 %>% fit("1TTT")
+  expect_true(
+    is.na(x %>% recommended_dose())
+  )
+  expect_equal(
+    x %>% continue(),
+    FALSE
+  )
+
+})

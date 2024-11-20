@@ -26,7 +26,7 @@ way.}
 no dose when the advice is to de-escalate but de-escalation is impossible
 because we are already at the lowest dose. Note that this feature was
 requested by a user. This param is FALSE by default so that behaviour matches
-what was described in the publication. The BOIN authors do advocate this
+what was described in the publication. The original authors do advocate this
 behaviour.}
 
 \item{...}{Extra args are passed to \code{\link[BOIN]{get.boundary}}.}

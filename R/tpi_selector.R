@@ -18,6 +18,12 @@
 #' probability of toxicity.
 #' @param beta Second shape parameter of the beta prior distribution on the
 #' probability of toxicity.
+#' @param stop_when_deescalation_impossible TRUE to stop a trial and recommend
+#' no dose when the advice is to de-escalate but de-escalation is impossible
+#' because we are already at the lowest dose. Note that this feature was
+#' requested by a user. This param is FALSE by default so that behaviour matches
+#' what was described in the publication. The original authors do advocate this
+#' behaviour.
 #' @param ... Extra args are passed onwards.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit the
@@ -73,6 +79,7 @@ get_tpi <- function(num_doses, target,
                     k1, k2,
                     exclusion_certainty,
                     alpha = 0.005, beta = 0.005,
+                    stop_when_deescalation_impossible = FALSE,
                     ...) {
 
   x <- list(
@@ -83,6 +90,7 @@ get_tpi <- function(num_doses, target,
     exclusion_certainty = exclusion_certainty,
     alpha = alpha,
     beta = beta,
+    stop_when_deescalation_impossible = stop_when_deescalation_impossible,
     extra_args = list(...)
   )
 
@@ -96,6 +104,7 @@ tpi_selector <- function(outcomes, num_doses, target,
                          k1, k2,
                          exclusion_certainty,
                          alpha, beta,
+                         stop_when_deescalation_impossible,
                          ...) {
 
   if(is.character(outcomes)) {
@@ -176,6 +185,9 @@ tpi_selector <- function(outcomes, num_doses, target,
         if(prob_unsafe > exclusion_certainty) {
           recommended_dose <- NA
           continue <- FALSE
+        } else if(stop_when_deescalation_impossible) {
+          recommended_dose <- NA
+          continue <- FALSE
         } else {
           recommended_dose <- 1
           continue <- TRUE
@@ -198,6 +210,7 @@ tpi_selector <- function(outcomes, num_doses, target,
     exclusion_certainty = exclusion_certainty,
     k1 = k1,
     k2 = k2,
+    stop_when_deescalation_impossible = stop_when_deescalation_impossible,
     recommended_dose = recommended_dose,
     continue = continue
   )
@@ -220,7 +233,9 @@ fit.tpi_selector_factory <- function(selector_factory, outcomes, ...) {
     k2 = selector_factory$k2,
     exclusion_certainty = selector_factory$exclusion_certainty,
     alpha = selector_factory$alpha,
-    beta = selector_factory$beta
+    beta = selector_factory$beta,
+    stop_when_deescalation_impossible =
+      selector_factory$stop_when_deescalation_impossible
   )
   args <- append(args, selector_factory$extra_args)
   do.call(tpi_selector, args = args)
