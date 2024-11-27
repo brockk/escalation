@@ -1,7 +1,6 @@
 
 test_that("dose_vector_to_string works OK", {
 
-  expect_error(dose_vector_to_string(c(1, 3)))
   expect_equal(
     dose_vector_to_string(as.integer(c(1, 3))),
     "1.3"

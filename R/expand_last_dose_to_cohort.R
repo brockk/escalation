@@ -1,13 +1,16 @@
 
-#' Title
+#' Expand the cohort of the last given dose to at least n patients
 #'
-#' @param parent_selector_factory
-#' @param n
+#' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
+#' @param n Continue at current dose until at least n patients are evaluated.
 #'
-#' @return
+#' @return an object of type \code{\link{selector_factory}} that can fit a
+#' dose-finding model to outcomes.
+#'
 #' @export
 #'
 #' @examples
+#' # TODO
 expand_last_dose_to_cohort <- function(parent_selector_factory, n) {
 
   x <- list(

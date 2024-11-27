@@ -33,9 +33,9 @@ get_boin_comb <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 
   class(x) <- c(
     "boin_comb_selector_factory",
-    # "combo_selector_factory", # TODO
-    "tox_selector_factory", # TODO
-    "selector_factory" # TODO
+    # "combo_selector_factory", # Maybe one day
+    "tox_selector_factory",
+    "selector_factory"
   )
   return(x)
 }
@@ -44,8 +44,11 @@ get_boin_comb <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 #' @importFrom utils tail
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
+#' @importFrom purrr map map_lgl
 boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
                                ...) {
+
+  # target = 0.25; use_stopping_rule = TRUE
 
   # Checks
   if(length(num_doses) <= 1) {
@@ -65,12 +68,15 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
   z <- .outcomes_to_arrays(df, num_doses = num_doses)
 
   # Checks
-  # if(nrow(df) > 0) {
-  #   if(max(df$dose) > num_doses) {
-  #     stop('boin_selector - maximum dose given exceeds number of doses.')
-  #   }
-  # }
-  # TODO
+  if(nrow(df) > 0) {
+    dose_outside_bounds <-
+      map(df$dose, ~ .x > num_doses) %>%
+      map_lgl(any) %>%
+      any()
+    if(dose_outside_bounds) {
+      stop("boin_comb_selector - dose given exceeds the maximum.")
+    }
+  }
 
   if(nrow(df) == 0) {
     recommended_dose <- rep(1, num_treatments)
@@ -80,13 +86,15 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
     last_dose <- dose_string_to_vector(last_dose_string)
     x <- next.comb(target = target, npts = z$num_patients, ntox = z$num_tox,
                    dose.curr = last_dose, ...)
-    # TODO continue?
-    continue <- TRUE
+    continue <- !any(is.na(x$next_dc))
 
     # n_d <- df_c$n[last_dose]
     # tox_d <- df_c$tox[last_dose]
-    # bound <- get.boundary(target = target, ncohort = 1,
-    #                       cohortsize = n_d + 1, ...)
+
+    # Note ... params shared with next.comb above
+    # ..+2 to stave off error in BOIN if cohortsize == 1:
+    bound <- get.boundary(target = target, ncohort = 1,
+                          cohortsize = nrow(df) + 2, ...)
     # this_bound <- bound$full_boundary_tab[, n_d]
     # if(tox_d <= this_bound['Escalate if # of DLT <=']) {
     #   # The trial can continue
@@ -144,9 +152,10 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
     num_doses = as.integer(num_doses),
     target = target,
     boin_fit = x,
+    bound = bound,
     use_stopping_rule = use_stopping_rule,
 
-    # # ..+2 to stave off error in BOIN if cohortsize == 1:
+
     # bound = get.boundary(target = target, ncohort = 1,
     #                      cohortsize = nrow(df) + 2, ...),
 
@@ -184,21 +193,6 @@ fit.boin_comb_selector_factory <- function(selector_factory, outcomes, ...) {
 
 #' @export
 model_frame.boin_comb_selector <- function(x, ...) {
-  # if(num_patients(x) > 0) {
-  #   tibble(
-  #     patient = seq(1, num_patients(x)),
-  #     cohort = cohort(x) %>% as.integer(),
-  #     dose = doses_given(x) %>% as.integer(),
-  #     tox = tox(x) %>% as.integer()
-  #   )
-  # } else {
-  #   tibble(
-  #     patient = integer(length = 0),
-  #     cohort = integer(length = 0),
-  #     dose = integer(length = 0),
-  #     tox = integer(length = 0)
-  #   )
-  # }
   return(x$df)
 }
 
@@ -251,80 +245,100 @@ continue.boin_comb_selector <- function(x, ...) {
   return(x$continue)
 }
 
-#' #' @export
-#' tox_at_dose.boin_comb_selector <- function(x, ...) {
-#'   return(x$df_c$tox)
-#' }
-
+#' @importFrom Iso biviso
 #' @export
 mean_prob_tox.boin_comb_selector <- function(x, ...) {
-  # # The authors store prob(DLT) as an ordered variable with the probs as levels:
-  # # They also use '----' to show a dose has never been given.
-  # mean_s <- as.character(x$boin_fit$p_est$phat)
-  # mean_s[mean_s == '----'] <- NA
-  # return(as.numeric(mean_s))
-
-  # TODO
-  stop("Not implemented yet")
+  # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
+  # prior, and then 2-d isotonic regression to ensure increasing estimates:
+  phat = (tox_at_dose(x) + 0.05) / (n_at_dose(x) + 0.1)
+  phat = biviso(phat, n_at_dose(x) + 0.1, warn = TRUE)
+  return(phat[, ]) # The [, ] strips extraneous attributes.
 }
 
 #' @export
-median_prob_tox.boin_comb_selector <- function(x, ...) {
-  # prob_tox_quantile(x, p = 0.5, ...)
-
-  # TODO
-  stop("Not implemented yet")
+#' @param iso TRUE to use isotonic regression on the posterior medians; FALSE
+#' to return just the posterior medians, which may not be monotonically
+#' increasing by dose.
+median_prob_tox.boin_comb_selector <- function(x, iso = TRUE, ...) {
+  # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
+  # prior, and then 2-d isotonic regression to ensure increasing estimates.
+  prob_tox_quantile(x, p = 0.5, iso = iso, ...)
 }
 
 #' @export
 dose_admissible.boin_comb_selector <- function(x, ...) {
-  # if(x$use_stopping_rule) {
-  #   n_d <- n_at_dose(x)
-  #   t_d <- tox_at_dose(x)
-  #   reject <- logical(length = num_doses(x))
-  #   for(i in seq_along(reject)) {
-  #     if(n_d[i] > 0) {
-  #       this_bound <- x$bound$full_boundary_tab[, n_d[i]]
-  #       boundary_t <- this_bound['Eliminate if # of DLT >=']
-  #       if(is.na(boundary_t))
-  #         reject[i] <- FALSE # Implicitly
-  #       else
-  #         reject[i] <- t_d[i] >= boundary_t # Explicitly
-  #     } else {
-  #       reject[i] <- FALSE # Implicitly
-  #     }
-  #   }
-  #   # However, monotonic tox suggests doses higher than an inadmissible dose
-  #   # are also inadmissible:
-  #   cum_reject <- cumsum(reject) >= 1
-  #   return(!cum_reject)
-  # } else {
-  #   return(rep(TRUE, num_doses(x)))
-  # }
 
-  # TODO
-  stop("Not implemented yet")
+  n_d <- n_at_dose(x)
+  reject <- matrix(FALSE, nrow = nrow(n_d), ncol = ncol(n_d))
+  if(x$use_stopping_rule) {
+    t_d <- tox_at_dose(x)
+    for(i in seq_len(nrow(n_d))) {
+      for(j in seq_len(ncol(n_d))) {
+        if(n_d[i, j] > 0) {
+          this_bound <- x$bound$full_boundary_tab[, n_d[i, j]]
+          boundary_t <- this_bound['Eliminate if # of DLT >=']
+          if(is.na(boundary_t)) {
+            reject[i, j] <- FALSE # Implicitly
+          } else {
+            reject[i, j] <- t_d[i, j] >= boundary_t # Explicitly
+          }
+        } else {
+          reject[i, j] <- FALSE # Implicitly
+        }
+      }
+    }
+
+    # However, monotonic tox suggests doses higher than an inadmissible dose
+    # are also inadmissible.
+    # Propagate rejection rightwards across rows (i.e. towards higher doses)
+    for(i in seq_len(nrow(n_d))) {
+      reject[i, ] <- cumsum(reject[i, ]) >= 1
+    }
+    # Propagate rejection down cols (i.e. towards higher doses)
+    for(j in seq_len(ncol(n_d))) {
+      reject[, j] <- cumsum(reject[, j]) >= 1
+    }
+  }
+
+  return(!reject)
 }
 
+#' @importFrom Iso biviso
 #' @export
-prob_tox_quantile.boin_comb_selector <- function(
-    x, p,
-    quantile_candidates = seq(0, 1, length.out = 101), ...) {
-  # reverse_engineer_prob_tox_quantile(x, p, quantile_candidates, ...)
-
-  # TODO
-  stop("Not implemented yet")
+#' @param iso TRUE to use isotonic regression on the posterior quantiles; FALSE
+#' to return just the posterior quantiles, which may not be monotonically
+#' increasing by dose.
+prob_tox_quantile.boin_comb_selector <- function(x, p, iso = TRUE) {
+  # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
+  # prior, and then 2-d isotonic regression to ensure increasing estimates.
+  y <- tox_at_dose(x) + 0.05
+  n <- n_at_dose(x) + 0.1
+  q <- qbeta(p = p, shape1 = y, shape2 = n - y, lower.tail = TRUE)
+  if(iso) {
+    q_iso = biviso(q)
+    return(q_iso[, ]) # The [, ] strips extraneous attributes.
+  } else {
+    return(q)
+  }
 }
 
+#' @importFrom Iso biviso
 #' @export
-prob_tox_exceeds.boin_comb_selector <- function(x, threshold, ...) {
-  # # The authors use beta-binomial conjugate approach. They use a
-  # # Beta(0.05, 0.05) prior but I could not find a justification for that.
-  # # They also use isotonic regression to ensure increasing estimates:
-  # pava_bb_prob_tox_exceeds(x, threshold, alpha = 0.05, beta = 0.05)
-
-  # TODO
-  stop("Not implemented yet")
+#' @param iso TRUE to use isotonic regression on the posterior probabilities;
+#' FALSE to return just the posterior quantiles, which may not be monotonically
+#' increasing by dose.
+prob_tox_exceeds.boin_comb_selector <- function(x, threshold, iso = TRUE, ...) {
+  # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
+  # prior, and then 2-d isotonic regression to ensure increasing estimates.
+  y <- tox_at_dose(x) + 0.05
+  n <- n_at_dose(x) + 0.1
+  p <- pbeta(q = threshold, shape1 = y, shape2 = n - y, lower.tail = FALSE)
+  if(iso) {
+    p_iso = biviso(p)
+    return(p_iso[, ]) # The [, ] strips extraneous attributes.
+  } else {
+    return(p)
+  }
 }
 
 #' @export

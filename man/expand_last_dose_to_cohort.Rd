@@ -2,13 +2,22 @@
 % Please edit documentation in R/expand_last_dose_to_cohort.R
 \name{expand_last_dose_to_cohort}
 \alias{expand_last_dose_to_cohort}
-\title{Title}
+\title{Expand the cohort of the last given dose to at least n patients}
 \usage{
 expand_last_dose_to_cohort(parent_selector_factory, n)
 }
 \arguments{
-\item{n}{}
+\item{parent_selector_factory}{Object of type \code{\link{selector_factory}}.}
+
+\item{n}{Continue at current dose until at least n patients are evaluated.}
+}
+\value{
+an object of type \code{\link{selector_factory}} that can fit a
+dose-finding model to outcomes.
 }
 \description{
-Title
+Expand the cohort of the last given dose to at least n patients
+}
+\examples{
+# TODO
 }

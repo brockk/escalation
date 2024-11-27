@@ -79,7 +79,7 @@ boin_selector <- function(outcomes, num_doses, target, use_stopping_rule,
   # Checks
   if(nrow(df) > 0) {
     if(max(df$dose) > num_doses) {
-      stop('boin_selector - maximum dose given exceeds number of doses.')
+      stop("boin_selector - dose given exceeds the maximum.")
     }
   }
 

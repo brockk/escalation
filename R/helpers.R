@@ -263,9 +263,9 @@ cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
 #' @examples
 #' dose_vector_to_string(as.integer(c(1, 3))) # The indices must be integers!
 dose_vector_to_string <- function(x) {
-  if(!is.integer(x)) {
-    stop("x should be of type integer")
-  }
+  # if(!is.integer(x)) {
+  #   stop("x should be of type integer")
+  # }
   if(any(x <= 0)) {
     stop("x should be strictly positive")
   }
