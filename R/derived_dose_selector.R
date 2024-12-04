@@ -22,6 +22,22 @@ num_patients.derived_dose_selector <- function(x, ...) {
 }
 
 #' @export
+n_at_dose.derived_dose_selector <- function(x, dose = NULL, ...) {
+  if(!is.null(dose)) {
+    if(is.character(dose)) {
+      if(dose == "recommended") {
+        rec_d <- recommended_dose(x)
+        return(x$parent %>% n_at_dose(dose = rec_d, ...))
+      }
+    }
+  }
+
+  # By default:
+  return(x$parent %>% n_at_dose(dose = dose, ...))
+  # return(.n_at_dose(x$parent, dose, ...))
+}
+
+#' @export
 cohort.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% cohort(...))
 }
@@ -47,6 +63,16 @@ num_doses.derived_dose_selector <- function(x, ...) {
 }
 
 #' @export
+dose_indices.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% dose_indices(...))
+}
+
+#' @export
+dose_strings.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% dose_strings(...))
+}
+
+#' @export
 recommended_dose.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% recommended_dose(...))
 }
@@ -65,6 +91,11 @@ model_frame.derived_dose_selector <- function(x, ...) {
 #' @export
 is_randomising.derived_dose_selector <- function(x, ...) {
   return(x$parent %>% is_randomising(...))
+}
+
+#' @export
+prob_administer.derived_dose_selector <- function(x, ...) {
+  return(x$parent %>% prob_administer(...))
 }
 
 #' @export

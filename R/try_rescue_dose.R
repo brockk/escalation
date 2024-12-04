@@ -11,7 +11,7 @@
 #'
 #' @param parent_selector_factory Object of type \code{\link{selector_factory}}.
 #' @param n Continue at least until there are n at a dose.
-#' @param dose an integer to identify the sought rescue dose-level.
+#' @param dose index of rescue dose-level to try in extremis.
 #'
 #' @return an object of type \code{\link{selector_factory}} that can fit a
 #' dose-finding model to outcomes.
@@ -110,22 +110,22 @@ recommended_dose.try_rescue_dose_selector <- function(x, ...) {
   # This selector affects when a trial ends and which dose is selected but only
   # when the parent has selected no dose.
   parent_dose <- x$parent %>% recommended_dose()
-  if(is.na(parent_dose)) {
-    n_at_dose <- n_at_dose(x)
-    if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-      if(n_at_dose[x$dose] >= x$n) {
+  if(any(is.na(parent_dose))) {
+    # We are otherwise stopping
+    rd_str <- dose_vector_to_string(x$dose)
+    if(rd_str %in% dose_strings(x)) {
+      n_d <- n_at_dose(x, dose = x$dose)
+      if(n_d >= x$n) {
         return(x$parent %>% recommended_dose())
       } else {
         # Recommend rescue dose
         return(x$dose)
       }
     }
-
-    # By default:
-    return(x$parent %>% recommended_dose())
-  } else {
-    return(x$parent %>% recommended_dose())
   }
+
+  # By default:
+  return(x$parent %>% recommended_dose())
 }
 
 #' @importFrom magrittr %>%
@@ -135,34 +135,41 @@ continue.try_rescue_dose_selector <- function(x, ...) {
   # This selector affects when a trial ends and which dose is selected but only
   # when the parent has selected no dose.
   parent_dose <- x$parent %>% recommended_dose()
-  if(is.na(parent_dose)) {
-    n_at_dose <- n_at_dose(x)
-    if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-      if(n_at_dose[x$dose] >= x$n) {
+  if(any(is.na(parent_dose))) {
+    # We are otherwise stopping
+    rd_str <- dose_vector_to_string(x$dose)
+    if(rd_str %in% dose_strings(x)) {
+      n_d <- n_at_dose(x, dose = x$dose)
+      if(n_d >= x$n) {
         return(x$parent %>% continue())
       } else {
+        # Recommend rescue dose
         return(TRUE)
       }
     }
-
-    # By default:
-    return(x$parent %>% continue())
-  } else {
-    return(x$parent %>% continue())
   }
+
+  # By default:
+  return(x$parent %>% continue())
 }
 
 #' @export
 dose_admissible.try_rescue_dose_selector <- function(x, ...) {
   admiss <- dose_admissible(x$parent, ...)
-  if(x$dose >= 1 & x$dose <= num_doses(x)) {
-    n_at_dose <- n_at_dose(x)
-    if(n_at_dose[x$dose] < x$n) {
+  rd_str <- dose_vector_to_string(x$dose)
+  if(rd_str %in% dose_strings(x)) {
+    n_d <- n_at_dose(x, dose = x$dose)
+    if(n_d < x$n) {
       # Enforce admissibility at rescue dose because it has not yet been
       # sufficiently tested:
-      admiss[x$dose] <- TRUE
+      if(length(x$dose) > 1) {
+        admiss[t(cbind(x$dose))] <- TRUE
+      } else {
+        admiss[x$dose] <- TRUE
+      }
     }
   }
+
   return(admiss)
 }
 

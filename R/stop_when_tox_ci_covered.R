@@ -132,24 +132,42 @@ continue.stop_when_tox_ci_covered_selector <- function(x, ...) {
   lower_bounds <- prob_tox_quantile(x, p = (1 - x$width) / 2)
   upper_bounds <- prob_tox_quantile(x, p =  1 - (1 - x$width) / 2)
 
-  if(x$dose == 'any') {
-    if(any(lower_bounds >= x$lower & upper_bounds <= x$upper,
-           na.rm = TRUE)) {
-      return(FALSE)
+  if(is.character(x$dose)) {
+    if(x$dose == "any") {
+      if(any(lower_bounds >= x$lower & upper_bounds <= x$upper,
+             na.rm = TRUE)) {
+        return(FALSE)
+      }
+    } else if(x$dose == "recommended") {
+      rec_dose <- x %>% recommended_dose()
+      if(length(rec_dose) > 1) {
+        ci_cov <- !is.na(lower_bounds[t(cbind(rec_dose))]) &
+          lower_bounds[t(cbind(rec_dose))] >= x$lower &
+          !is.na(upper_bounds[t(cbind(rec_dose))]) &
+          upper_bounds[t(cbind(rec_dose))] <= x$upper
+      } else {
+        ci_cov <- !is.na(lower_bounds[rec_dose]) &
+          lower_bounds[rec_dose] >= x$lower &
+          !is.na(upper_bounds[rec_dose]) &
+          upper_bounds[rec_dose] <= x$upper
+      }
+      if(ci_cov) {
+        return(FALSE)
+      }
     }
-  } else if(x$dose == 'recommended') {
-    rec_dose <- x %>% recommended_dose()
-    if(!is.na(lower_bounds[rec_dose]) &
-       lower_bounds[rec_dose] >= x$lower &
-       !is.na(upper_bounds[rec_dose]) &
-       upper_bounds[rec_dose] <= x$upper) {
-      return(FALSE)
+  } else {
+    if(length(x$dose) > 1) {
+      ci_cov <- !is.na(lower_bounds[t(cbind(x$dose))]) &
+        lower_bounds[t(cbind(x$dose))] >= x$lower &
+        !is.na(upper_bounds[t(cbind(x$dose))]) &
+        upper_bounds[t(cbind(x$dose))] <= x$upper
+    } else {
+      ci_cov <- !is.na(lower_bounds[x$dose]) &
+        lower_bounds[x$dose] >= x$lower &
+        !is.na(upper_bounds[x$dose]) &
+        upper_bounds[x$dose] <= x$upper
     }
-  } else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-    if(!is.na(lower_bounds[x$dose]) &
-       lower_bounds[x$dose] >= x$lower &
-       !is.na(upper_bounds[x$dose]) &
-       upper_bounds[x$dose] <= x$upper) {
+    if(ci_cov) {
       return(FALSE)
     }
   }

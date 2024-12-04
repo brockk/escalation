@@ -48,7 +48,8 @@ get_boin_comb <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
                                ...) {
 
-  # target = 0.25; use_stopping_rule = TRUE
+  # Build NOTES etc
+  dose_string <- NULL
 
   # Checks
   if(length(num_doses) <= 1) {
@@ -223,7 +224,7 @@ tox.boin_comb_selector <- function(x, ...) {
 
 #' @export
 eff.boin_comb_selector <- function(x, ...) {
-  if("eff" %in% colnames(df)) {
+  if("eff" %in% colnames(x$df)) {
     return(x$df$eff)
   } else {
     return(rep(NA, num_patients(x)))
@@ -255,10 +256,11 @@ mean_prob_tox.boin_comb_selector <- function(x, ...) {
   return(phat[, ]) # The [, ] strips extraneous attributes.
 }
 
-#' @export
+#' @rdname median_prob_tox
 #' @param iso TRUE to use isotonic regression on the posterior medians; FALSE
 #' to return just the posterior medians, which may not be monotonically
 #' increasing by dose.
+#' @export
 median_prob_tox.boin_comb_selector <- function(x, iso = TRUE, ...) {
   # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
   # prior, and then 2-d isotonic regression to ensure increasing estimates.
@@ -303,12 +305,13 @@ dose_admissible.boin_comb_selector <- function(x, ...) {
   return(!reject)
 }
 
-#' @importFrom Iso biviso
-#' @export
+#' @rdname prob_tox_quantile
 #' @param iso TRUE to use isotonic regression on the posterior quantiles; FALSE
 #' to return just the posterior quantiles, which may not be monotonically
 #' increasing by dose.
-prob_tox_quantile.boin_comb_selector <- function(x, p, iso = TRUE) {
+#' @importFrom Iso biviso
+#' @export
+prob_tox_quantile.boin_comb_selector <- function(x, p, iso = TRUE, ...) {
   # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
   # prior, and then 2-d isotonic regression to ensure increasing estimates.
   y <- tox_at_dose(x) + 0.05
@@ -322,11 +325,12 @@ prob_tox_quantile.boin_comb_selector <- function(x, p, iso = TRUE) {
   }
 }
 
-#' @importFrom Iso biviso
-#' @export
+#' @rdname prob_tox_exceeds
 #' @param iso TRUE to use isotonic regression on the posterior probabilities;
 #' FALSE to return just the posterior quantiles, which may not be monotonically
 #' increasing by dose.
+#' @importFrom Iso biviso
+#' @export
 prob_tox_exceeds.boin_comb_selector <- function(x, threshold, iso = TRUE, ...) {
   # The authors use beta-binomial conjugate approach with a Beta(0.05, 0.05)
   # prior, and then 2-d isotonic regression to ensure increasing estimates.

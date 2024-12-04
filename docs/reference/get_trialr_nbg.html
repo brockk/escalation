@@ -19,7 +19,7 @@ the trialr package."><meta property="og:image" content="/logo.png"><!-- mathjax 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -57,11 +57,20 @@ the trialr package."><meta property="og:image" content="/logo.png"><!-- mathjax 
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -71,7 +80,7 @@ the trialr package."><meta property="og:image" content="/logo.png"><!-- mathjax 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get an object to fit the NBG dose-finding model using the trialr package.</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/trialr_nbg_selector.R" class="external-link"><code>R/trialr_nbg_selector.R</code></a></small>
     <div class="hidden name"><code>get_trialr_nbg.Rd</code></div>
     </div>
 
@@ -91,6 +100,7 @@ the trialr package.</p>
 <span>  <span class="va">alpha_sd</span>,</span>
 <span>  <span class="va">beta_mean</span>,</span>
 <span>  <span class="va">beta_sd</span>,</span>
+<span>  tite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -138,6 +148,11 @@ See Details. Also see documentation for trialr package for further details.</p><
 See Details. Also see documentation for trialr package for further details.</p></dd>
 
 
+<dt>tite</dt>
+<dd><p>FALSE to use regular model; TRUE to use TITE version See
+Description.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra args are passed to <code><a href="https://rdrr.io/pkg/trialr/man/stan_nbg.html" class="external-link">stan_nbg</a></code>.</p></dd>
 
@@ -163,6 +178,9 @@ provided by <code><a href="follow_path.html">follow_path</a></code>. In this exa
 trial outcomes deviate from that initial plan, the selector following the
 fixed path elects not to continue and responsibility passes to this class.
 See examples under <code><a href="get_dfcrm.html">get_dfcrm</a></code>.</p>
+<p>A time-to-event variant, like TITE-CRM, is used when you specify
+<code>tite = TRUE</code>. This weights the observations to allow dose-selections
+based on partially observed outcomes.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -191,7 +209,7 @@ arXiv preprint arXiv:1907.00161.</p>
 <span class="r-in"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="recommended_dose.html">recommended_dose</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="mean_prob_tox.html">mean_prob_tox</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1281213 0.2553182 0.5650349 0.7266780 0.8251420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1234779 0.2527768 0.5706122 0.7357963 0.8356954</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

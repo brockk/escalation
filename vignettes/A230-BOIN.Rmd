@@ -119,7 +119,7 @@ To achieve this in `escalation`, we need an extra selector that will kick-in whe
 If used, it will almost surely come last in the selector chain:
 
 ```{r}
-model <- get_boin(num_doses = 5, target = target) %>%
+model <- get_boin(num_doses = 5, target = 0.3) %>%
    stop_at_n(n = 12) %>%
    select_boin_mtd()
 

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -55,11 +55,20 @@
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -69,7 +78,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Sample times between patient arrivals using the exponential distribution.</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/helpers.R" class="external-link"><code>R/helpers.R</code></a></small>
     <div class="hidden name"><code>cohorts_of_n.Rd</code></div>
     </div>
 
@@ -104,21 +113,21 @@ between patient arrivals.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">cohorts_of_n</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   time_delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.06325165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.32054190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.28860627</span>
 <span class="r-in"><span><span class="fu">cohorts_of_n</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, mean_time_delta <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time_delta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         3.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         7.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         2.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7         9.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        11.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9         6.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        3.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    2.443756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    3.241177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3.730428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    9.395098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   11.000299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    1.631119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    3.354615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    1.338636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    1.184028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   3.665507</span>
 </code></pre></div>
     </div>
   </div>

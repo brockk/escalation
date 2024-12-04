@@ -44,35 +44,29 @@ dose_indices.combo_selector <- function(x, ...) {
 }
 
 #' @export
+#' @importFrom purrr map_chr
 dose_strings.combo_selector <- function(x, ...) {
-  return(map_chr(dose_indices(x), dose_vector_to_string))
+  d_str <- map_chr(dose_indices(x), dose_vector_to_string)
+  return(d_str)
 }
 
 #' @importFrom purrr map_chr map_int
 #' @export
 n_at_dose.combo_selector <- function(x, dose = NULL, ...) {
   if(is.null(dose)) {
-
-    # # Vector:
-    # return(
-    #   model_frame_to_counts(
-    #     model_frame = model_frame(x),
-    #     num_doses = num_doses(x)
-    #   )$n
-    # )
-
-    # Matrix:
+    # Matrix output of all doses by default:
     z <- .outcomes_to_arrays(df = model_frame(x), num_doses = num_doses(x))
     return(z$num_patients)
-
-  } else if(is.na(dose)) {
+  } else if(any(is.na(dose))) {
     return(NA)
-  } else if(dose == 'recommended') {
-    rec_d <- recommended_dose(x)
-    rec_d_str <- dose_vector_to_string(rec_d)
-    d_g <- doses_given(x)
-    d_g_str <- map_chr(d_g, dose_vector_to_string)
-    return(sum(d_g_str == rec_d_str))
+  } else if(is.character(dose)) {
+    if(dose == 'recommended') {
+      rec_d <- recommended_dose(x)
+      rec_d_str <- dose_vector_to_string(rec_d)
+      d_g <- doses_given(x)
+      d_g_str <- map_chr(d_g, dose_vector_to_string)
+      return(sum(d_g_str == rec_d_str))
+    }
   } else {
     d_str <- dose_vector_to_string(dose)
     d_g <- doses_given(x)

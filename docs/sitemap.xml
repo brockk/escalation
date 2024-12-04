@@ -28,6 +28,9 @@
     <loc>/articles/A700-Simulation.html</loc>
   </url>
   <url>
+    <loc>/articles/A710-SimulationComparison.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -49,13 +52,25 @@
     <loc>/reference/as_tibble.dose_paths.html</loc>
   </url>
   <url>
+    <loc>/reference/as_tibble.selector.html</loc>
+  </url>
+  <url>
+    <loc>/reference/as_tibble.simulations_collection.html</loc>
+  </url>
+  <url>
     <loc>/reference/calculate_probabilities.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_dose_selector_consistency.html</loc>
   </url>
   <url>
     <loc>/reference/cohort.html</loc>
   </url>
   <url>
     <loc>/reference/cohorts_of_n.html</loc>
+  </url>
+  <url>
+    <loc>/reference/combo_selector.html</loc>
   </url>
   <url>
     <loc>/reference/continue.html</loc>
@@ -76,6 +91,9 @@
     <loc>/reference/dose_admissible.html</loc>
   </url>
   <url>
+    <loc>/reference/dose_escalation_table.html</loc>
+  </url>
+  <url>
     <loc>/reference/dose_indices.html</loc>
   </url>
   <url>
@@ -83,6 +101,15 @@
   </url>
   <url>
     <loc>/reference/dose_paths_function.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dose_string_to_vector.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dose_strings.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dose_vector_to_string.html</loc>
   </url>
   <url>
     <loc>/reference/doses_given.html</loc>
@@ -109,6 +136,9 @@
     <loc>/reference/escalation-package.html</loc>
   </url>
   <url>
+    <loc>/reference/expand_last_dose_to_cohort.html</loc>
+  </url>
+  <url>
     <loc>/reference/fit.html</loc>
   </url>
   <url>
@@ -121,7 +151,16 @@
     <loc>/reference/get_boin12.html</loc>
   </url>
   <url>
+    <loc>/reference/get_boin_comb.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_dfcrm.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_dfcrm_tite.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_dose_combo_indices.html</loc>
   </url>
   <url>
     <loc>/reference/get_dose_paths.html</loc>
@@ -136,6 +175,9 @@
     <loc>/reference/get_mtpi2.html</loc>
   </url>
   <url>
+    <loc>/reference/get_potential_outcomes.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_random_selector.html</loc>
   </url>
   <url>
@@ -148,10 +190,16 @@
     <loc>/reference/get_trialr_crm.html</loc>
   </url>
   <url>
+    <loc>/reference/get_trialr_crm_tite.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_trialr_efftox.html</loc>
   </url>
   <url>
     <loc>/reference/get_trialr_nbg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_trialr_nbg_tite.html</loc>
   </url>
   <url>
     <loc>/reference/get_wages_and_tait.html</loc>
@@ -164,6 +212,9 @@
   </url>
   <url>
     <loc>/reference/is_randomising.html</loc>
+  </url>
+  <url>
+    <loc>/reference/linear_follow_up_weight.html</loc>
   </url>
   <url>
     <loc>/reference/mean_prob_eff.html</loc>
@@ -283,6 +334,9 @@
     <loc>/reference/stack_sims_vert.html</loc>
   </url>
   <url>
+    <loc>/reference/stick_on_num_tox.html</loc>
+  </url>
+  <url>
     <loc>/reference/stop_at_n.html</loc>
   </url>
   <url>
@@ -320,5 +374,8 @@
   </url>
   <url>
     <loc>/reference/utility.html</loc>
+  </url>
+  <url>
+    <loc>/reference/weight.html</loc>
   </url>
 </urlset>

@@ -20,7 +20,7 @@ calculate operating characteristics."><meta property="og:image" content="/logo.p
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -58,11 +58,20 @@ calculate operating characteristics."><meta property="og:image" content="/logo.p
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -72,7 +81,7 @@ calculate operating characteristics."><meta property="og:image" content="/logo.p
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate dose-path probabilities</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/interface.R" class="external-link"><code>R/interface.R</code></a></small>
     <div class="hidden name"><code>calculate_probabilities.Rd</code></div>
     </div>
 
@@ -136,8 +145,8 @@ if efficacy not analysed.</p></dd>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">paths</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">calculate_probabilities</span><span class="op">(</span>true_prob_tox <span class="op">=</span> <span class="va">true_prob_tox</span>,</span></span>
 <span class="r-in"><span>                                       true_prob_eff <span class="op">=</span> <span class="va">true_prob_eff</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="prob_recommend.html">prob_recommend</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     NoDose          1          2          3          4          5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.00000000 0.06919669 0.39589923 0.41960476 0.05308567 0.06221365 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      NoDose           1           2           3           4           5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.000000000 0.131673731 0.349267313 0.416361750 0.096653443 0.006043763 </span>
 </code></pre></div>
     </div>
   </div>

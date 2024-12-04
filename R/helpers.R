@@ -1,6 +1,10 @@
 
 # Make sure columns in an outcomes data-frame are present and correct types.
 spruce_outcomes_df <- function(df) {
+
+  # Avoid built NOTES etc
+  dose <- NULL
+
   if(is.list(df$dose)) {
     df$dose <- map(df$dose, as.integer)
     # Add dose_string column because, for filtering, dose must ultimately be
@@ -30,6 +34,7 @@ spruce_outcomes_df <- function(df) {
 #'
 #' @importFrom purrr map reduce pmap
 #' @importFrom tidyr expand_grid
+#' @export
 #'
 #' @examples
 #' get_dose_combo_indices(num_doses = c(1, 2))

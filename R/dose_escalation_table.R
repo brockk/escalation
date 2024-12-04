@@ -40,7 +40,7 @@ dose_escalation_table <- function(
   }
 
   # Avoid built NOTES etc
-  number_no_dlts <- cohort_n <- dlts <- NULL
+  number_no_dlts <- cohort_n <- dlts <- total_n <- number_dlts <- out <- NULL
 
   all_perms <- data.frame(
     number_dlts = rep(

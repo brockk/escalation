@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -80,13 +80,23 @@
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -103,7 +113,7 @@
       <h1 data-toc-skip>Neuenschwander, Branson &amp; Gsponer</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/vignettes/A207-NBG.Rmd" class="external-link"><code>vignettes/A207-NBG.Rmd</code></a></small>
       <div class="hidden name"><code>A207-NBG.Rmd</code></div>
 
     </div>
@@ -138,7 +148,7 @@ myriad dose-selection option provided in this package.</p>
 the authors used to demonstrate the flexibility of a two-parameter
 approach. In a trial of 15 doses, the investigators saw outcomes:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">escalation</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://brockk.github.io/escalation/" class="external-link">escalation</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: magrittr</span></span>
 <span></span>
 <span><span class="va">dose</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">75</span>, <span class="fl">100</span>, <span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">250</span><span class="op">)</span></span>
@@ -154,26 +164,26 @@ approach. In a trial of 15 doses, the investigators saw outcomes:</p>
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fit.html">fit</a></span><span class="op">(</span><span class="va">outcomes</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span>
 <span><span class="co">#&gt; Patient-level data:</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 17 × 4</span></span></span>
-<span><span class="co">#&gt;    Patient Cohort  Dose   Tox</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1      1     1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2      1     1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3      1     1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4      2     2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5      2     2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6      2     2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7      2     2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8      3     3     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9      3     3     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10      3     3     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      11      3     3     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>      12      4     4     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span>      13      4     4     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span>      14      4     4     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span>      15      4     4     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span>      16      5     7     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span>      17      5     7     1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 17 × 5</span></span></span>
+<span><span class="co">#&gt;    Patient Cohort  Dose   Tox Weight</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1      1     1     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2      1     1     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3      1     1     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4      2     2     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5      2     2     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6      2     2     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7      2     2     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8      3     3     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9      3     3     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10      3     3     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      11      3     3     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>      12      4     4     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span>      13      4     4     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span>      14      4     4     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span>      15      4     4     0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span>      16      5     7     1      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span>      17      5     7     1      1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Dose-level data:</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 16 × 9</span></span></span>
@@ -246,14 +256,14 @@ two cohorts of three patients, starting at dose 2:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">paths1</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths1</span><span class="op">)</span></span></code></pre></div>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a06bae6a92432986b454" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-a06bae6a92432986b454">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"2\" [label = \"10\", fontcolor = \"#472F7DFF\", fillcolor = \"#35B779FF\"] \n  \"3\" [label = \"12\", fontcolor = \"#39568CFF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"5\" [label = \"4\", fontcolor = \"#7AD151FF\", fillcolor = \"#39568CFF\"] \n  \"6\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"7\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"9\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"10\" [label = \"9\", fontcolor = \"#481A6CFF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"13\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"14\" [label = \"6\", fontcolor = \"#D2E21BFF\", fillcolor = \"#2A788EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"16\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"17\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"18\" [label = \"4\", fontcolor = \"#7AD151FF\", fillcolor = \"#39568CFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"20\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"21\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We can then compare these to the similar advice from the model that
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-dea41dcdde697f0c699f" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-dea41dcdde697f0c699f">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"2\" [label = \"10\", fontcolor = \"#472F7DFF\", fillcolor = \"#35B779FF\"] \n  \"3\" [label = \"12\", fontcolor = \"#39568CFF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"5\" [label = \"4\", fontcolor = \"#7AD151FF\", fillcolor = \"#39568CFF\"] \n  \"6\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"7\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"9\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"10\" [label = \"9\", fontcolor = \"#481A6CFF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"13\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"14\" [label = \"6\", fontcolor = \"#D2E21BFF\", fillcolor = \"#2A788EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"16\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"17\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"18\" [label = \"4\", fontcolor = \"#7AD151FF\", fillcolor = \"#39568CFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"20\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"21\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We can then compare these to the similar advice from the model that
 adds Mozgunov &amp; Jaki’s criterion:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">paths2</span> <span class="op">&lt;-</span> <span class="va">model2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span>cohort_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, next_dose <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">paths2</span><span class="op">)</span></span></code></pre></div>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-33b1d0f4dde91dd40c08" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-33b1d0f4dde91dd40c08">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"2\" [label = \"11\", fontcolor = \"#414487FF\", fillcolor = \"#54C568FF\"] \n  \"3\" [label = \"12\", fontcolor = \"#39568CFF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"5\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"6\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"7\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"9\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"10\" [label = \"9\", fontcolor = \"#481A6CFF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"13\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"14\" [label = \"5\", fontcolor = \"#A5DB36FF\", fillcolor = \"#31688EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"16\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"17\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"18\" [label = \"4\", fontcolor = \"#7AD151FF\", fillcolor = \"#39568CFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"20\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"21\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We can see in several situations that the second model is more
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-9762bbf6d43bd4c56e85" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-9762bbf6d43bd4c56e85">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"2\" [label = \"11\", fontcolor = \"#414487FF\", fillcolor = \"#54C568FF\"] \n  \"3\" [label = \"12\", fontcolor = \"#39568CFF\", fillcolor = \"#7AD151FF\"] \n  \"4\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"5\" [label = \"2\", fontcolor = \"#35B779FF\", fillcolor = \"#472F7DFF\"] \n  \"6\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"7\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"8\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"9\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"10\" [label = \"9\", fontcolor = \"#481A6CFF\", fillcolor = \"#22A884FF\"] \n  \"11\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"12\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"13\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"14\" [label = \"5\", fontcolor = \"#A5DB36FF\", fillcolor = \"#31688EFF\"] \n  \"15\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"16\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"17\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"18\" [label = \"4\", fontcolor = \"#7AD151FF\", fillcolor = \"#39568CFF\"] \n  \"19\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"20\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n  \"21\" [label = \"1\", fontcolor = \"#22A884FF\", fillcolor = \"#481A6CFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>We can see in several situations that the second model is more
 conservative in escalation, achieving the goal of the authors. Perhaps
 unexpectedly, however, the second design escalations to dose 11 after
 initial outcomes <code>2NNN</code>, slightly more aggessively than the
@@ -306,27 +316,27 @@ toxicity:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of recommendation:</span></span>
 <span><span class="co">#&gt; NoDose      1      2      3      4      5      6      7      8      9     10 </span></span>
-<span><span class="co">#&gt;    0.0    0.0    0.0    0.0    0.3    0.1    0.4    0.1    0.0    0.1    0.0 </span></span>
+<span><span class="co">#&gt;    0.0    0.0    0.0    0.0    0.1    0.1    0.5    0.1    0.1    0.1    0.0 </span></span>
 <span><span class="co">#&gt;     11     12     13     14     15 </span></span>
 <span><span class="co">#&gt;    0.0    0.0    0.0    0.0    0.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Probability of administration:</span></span>
 <span><span class="co">#&gt;      1      2      3      4      5      6      7      8      9     10     11 </span></span>
-<span><span class="co">#&gt; 0.1333 0.0000 0.0400 0.2133 0.1200 0.2000 0.0267 0.0267 0.0800 0.1333 0.0133 </span></span>
+<span><span class="co">#&gt; 0.1282 0.0000 0.0128 0.0385 0.1667 0.2051 0.1026 0.0641 0.0897 0.1538 0.0128 </span></span>
 <span><span class="co">#&gt;     12     13     14     15 </span></span>
-<span><span class="co">#&gt; 0.0133 0.0000 0.0000 0.0000 </span></span>
+<span><span class="co">#&gt; 0.0256 0.0000 0.0000 0.0000 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sample size:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;   15.00   21.75   24.00   22.50   24.00   24.00 </span></span>
+<span><span class="co">#&gt;    21.0    24.0    24.0    23.4    24.0    24.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total toxicities:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;     6.0     7.0     7.5     7.5     8.0     9.0 </span></span>
+<span><span class="co">#&gt;     6.0     7.0     7.0     7.8     9.0    10.0 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Trial duration:</span></span>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">#&gt;   15.60   20.55   25.30   24.79   28.30   33.30</span></span></code></pre></div>
+<span><span class="co">#&gt;   18.54   23.74   24.67   25.66   27.22   34.42</span></span></code></pre></div>
 <p>We see that the chances of stopping for excess toxicity and
 recommending no dose are low. Doses 4-7 are the favourites to be
 identified.</p>
@@ -337,7 +347,7 @@ the simulation vignette.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-mozgunov_improving_2020" class="csl-entry">
 Mozgunov, Pavel, and Thomas Jaki. 2020. <span>“Improving Safety of the
 Continual Reassessment Method via a Modified Allocation Rule.”</span>

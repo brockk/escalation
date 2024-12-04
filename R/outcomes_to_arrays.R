@@ -3,6 +3,9 @@
 
   # TODO Check dosed outside num_doses
 
+  # Build NOTES etc
+  dose_string <- NULL
+
   do_eff <- "eff" %in% colnames(df)
 
   num_dose_combos <- prod(num_doses)

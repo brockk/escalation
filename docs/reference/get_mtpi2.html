@@ -19,7 +19,7 @@ design."><meta property="og:image" content="/logo.png"><!-- mathjax --><script s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -57,11 +57,20 @@ design."><meta property="og:image" content="/logo.png"><!-- mathjax --><script s
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -71,7 +80,7 @@ design."><meta property="og:image" content="/logo.png"><!-- mathjax --><script s
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get an object to fit the mTPI-2 dose-finding model.</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/mtpi2_selector.R" class="external-link"><code>R/mtpi2_selector.R</code></a></small>
     <div class="hidden name"><code>get_mtpi2.Rd</code></div>
     </div>
 
@@ -91,6 +100,7 @@ design.</p>
 <span>  <span class="va">exclusion_certainty</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  beta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  stop_when_deescalation_impossible <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -134,6 +144,15 @@ probability of toxicity.</p></dd>
 <dt>beta</dt>
 <dd><p>Second shape parameter of the beta prior distribution on the
 probability of toxicity.</p></dd>
+
+
+<dt>stop_when_deescalation_impossible</dt>
+<dd><p>TRUE to stop a trial and recommend
+no dose when the advice is to de-escalate but de-escalation is impossible
+because we are already at the lowest dose. Note that this feature was
+requested by a user. This param is FALSE by default so that behaviour matches
+what was described in the publication. The original authors do advocate this
+behaviour.</p></dd>
 
 
 <dt>...</dt>

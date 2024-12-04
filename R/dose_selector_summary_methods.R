@@ -131,11 +131,14 @@
   cat('\n')
 }
 
-#' @importFrom purrr map_int
+#' @importFrom purrr map_int map_chr
 .n_at_dose <- function(x, dose = NULL, ...) {
   if(is.null(dose)) {
     di <- dose_indices(x)
-    return(map_int(di, ~ sum(doses_given(x) == .x)))
+    di_str <- map_chr(di, dose_vector_to_string)
+    dg <- doses_given(x)
+    dg_str <- map_chr(dg, dose_vector_to_string)
+    return(map_int(di_str, ~ sum(dg_str == .x)))
   } else if(is.na(dose)) {
     return(NA)
   } else if(dose == 'recommended') {

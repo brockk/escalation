@@ -90,20 +90,25 @@ continue.stop_when_n_at_dose_selector <- function(x, ...) {
   # Stop now if parent wants:
   if(!x$parent %>% continue()) return(FALSE)
 
-  n_at_dose <- x %>% n_at_dose()
-  if(x$dose == 'any') {
-    if(any(n_at_dose >= x$n)) {
-      return(FALSE)
+  if(is.character(x$dose)) {
+    # There are certain textual values of dose with accepted meanings.
+    # Parse those:
+
+    if(x$dose == "any") {
+      n_at_dose <- x %>% n_at_dose()
+      if(any(n_at_dose >= x$n)) {
+        return(FALSE)
+      }
+    } else if(x$dose == "recommended") {
+      rec_dose <- x %>% recommended_dose()
+      n_at_rec_d <- n_at_dose(x, dose = rec_dose)
+      if(n_at_rec_d >= x$n) {
+        return(FALSE)
+      }
     }
-  }
-  else if(x$dose == 'recommended') {
-    rec_dose <- x %>% recommended_dose()
-    if(n_at_dose[rec_dose] >= x$n) {
-      return(FALSE)
-    }
-  }
-  else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-    if(n_at_dose[x$dose] >= x$n) {
+  } else {
+    n_at_d <- n_at_dose(x$parent, dose = x$dose)
+    if(n_at_d >= x$n) {
       return(FALSE)
     }
   }

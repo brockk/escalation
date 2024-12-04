@@ -27,7 +27,7 @@ controlled by rho, the correlation of the two normal variables."><meta property=
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -65,11 +65,20 @@ controlled by rho, the correlation of the two normal variables."><meta property=
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -79,7 +88,7 @@ controlled by rho, the correlation of the two normal variables."><meta property=
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A sample of patients that experience correlated events in simulations.</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/correlated_patient_sample.R" class="external-link"><code>R/correlated_patient_sample.R</code></a></small>
     <div class="hidden name"><code>CorrelatedPatientSample.Rd</code></div>
     </div>
 
@@ -100,9 +109,9 @@ controlled by rho, the correlation of the two normal variables.</p>
 
     <div id="references">
     <h2>References</h2>
-    <p>Sweeting, M., Slade, D., Jackson, D., &amp; Brock, K. (2023).
+    <p>Sweeting, M., Slade, D., Jackson, D., &amp; Brock, K. (2024).
 Potential outcome simulation for efficient head-to-head comparison of
-adaptive dose-finding designs. Preprint.</p>
+adaptive dose-finding designs. arXiv preprint arXiv:2402.15460</p>
     </div>
     <div id="super-class">
     <h2>Super class</h2>
@@ -142,17 +151,33 @@ adaptive dose-finding designs. Preprint.</p>
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Creator.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/CorrelatedPatientSample.html">CorrelatedPatientSample</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>num_patients <span class="op">=</span> <span class="fl">0</span>, rho <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/CorrelatedPatientSample.html">CorrelatedPatientSample</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  num_patients <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  time_to_tox_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  time_to_eff_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  rho <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>num_patients</code></dt>
-<dd><p>(`integer(1)`).</p></dd>
+<dd><p>(`integer(1)`) Number of patients.</p></dd>
+
+
+<dt><code>time_to_tox_func</code></dt>
+<dd><p>(`function`) function taking no args that returns
+a single time of toxicity, given that toxicity occurs.</p></dd>
+
+
+<dt><code>time_to_eff_func</code></dt>
+<dd><p>(`function`) function taking no args that returns
+a single time of efficacy, given that efficacy occurs.</p></dd>
 
 
 <dt><code>rho</code></dt>
-<dd><p>(`integer(1)`) correlation of</p></dd>
+<dd><p>(`integer(1)`) correlation of toxicity and efficacy latent
+variables.</p></dd>
 
 
 </dl><p></p></div>

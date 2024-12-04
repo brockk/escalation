@@ -101,7 +101,7 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
     dose = selector_factory$dose,
     tox_threshold = selector_factory$tox_threshold,
     confidence = selector_factory$confidence
-    )
+  )
   )
 }
 
@@ -109,15 +109,21 @@ fit.stop_when_too_toxic_selector_factory <- function(selector_factory, outcomes,
 
 #' @export
 recommended_dose.stop_when_too_toxic_selector <- function(x, ...) {
-  if(continue(x)) {
-    return(recommended_dose(x$parent))
-  } else {
-    stop_for_tox <- stopping_for_toxicity(x)
-    if(stop_for_tox) {
-      return(NA)
+  rec_d <- recommended_dose(x$parent)
+  if(is.character(x$dose)) {
+    if(x$dose == "recommended") {
+      d <- rec_d
     } else {
-      return(recommended_dose(x$parent))
+      d <- x$dose
     }
+  } else {
+    d <- x$dose
+  }
+  stop_for_tox <- stopping_for_toxicity(x, dose = d)
+  if(stop_for_tox) {
+    return(NA)
+  } else {
+    return(rec_d)
   }
 }
 
@@ -128,7 +134,17 @@ continue.stop_when_too_toxic_selector <- function(x, ...) {
   if(!x$parent %>% continue()) return(FALSE)
 
   # Should we stop for excess toxicity?
-  stop_for_tox <- stopping_for_toxicity(x)
+  rec_d <- recommended_dose(x$parent)
+  if(is.character(x$dose)) {
+    if(x$dose == "recommended") {
+      d <- rec_d
+    } else {
+      d <- x$dose
+    }
+  } else {
+    d <- x$dose
+  }
+  stop_for_tox <- stopping_for_toxicity(x, dose = d)
   if(stop_for_tox) return(FALSE)
 
   # By default:
@@ -137,10 +153,10 @@ continue.stop_when_too_toxic_selector <- function(x, ...) {
 
 #' @export
 dose_admissible.stop_when_too_toxic_selector <- function(x, ...) {
+  parent_admiss <- dose_admissible(x$parent)
   prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
-  return(prob_too_tox < x$confidence)
+  return((prob_too_tox < x$confidence) & parent_admiss)
 }
-
 
 #' @export
 print.stop_when_too_toxic_selector <- function(x, ...) {
@@ -158,27 +174,25 @@ summary.stop_when_too_toxic_selector <- function(object, ...) {
 }
 
 # Private interface
-
-stopping_for_toxicity <- function(x) {
+stopping_for_toxicity <- function(x, dose) {
   prob_too_tox <- x %>% prob_tox_exceeds(x$tox_threshold)
-  if(x$dose == 'any') {
-    if(any(!is.na(prob_too_tox) & prob_too_tox >= x$confidence)) {
-      return(TRUE)
+  if(is.character(dose)) {
+    if(dose == "any") {
+      if(any(!is.na(prob_too_tox) & prob_too_tox >= x$confidence)) {
+        return(TRUE)
+      }
     }
-  } else if(x$dose == 'recommended') {
-    rec_dose <- x %>% recommended_dose()
-    if(!is.na(prob_too_tox[rec_dose]) &
-       prob_too_tox[rec_dose] >= x$confidence) {
-      return(TRUE)
+  } else {
+    if(length(dose) > 1) {
+      ptt <- prob_too_tox[t(cbind(dose))]
+    } else {
+      ptt <- prob_too_tox[dose]
     }
-  }
-  else if(x$dose >= 1 & x$dose <= x %>% num_doses()) {
-    if(!is.na(prob_too_tox[x$dose]) &
-       prob_too_tox[x$dose] >= x$confidence) {
+    if(!is.na(ptt) & ptt >= x$confidence) {
       return(TRUE)
     }
   }
 
-  # By default
+  # By default, do not stop:
   return(FALSE)
 }

@@ -11,7 +11,7 @@ try_rescue_dose(parent_selector_factory, n, dose)
 
 \item{n}{Continue at least until there are n at a dose.}
 
-\item{dose}{an integer to identify the sought rescue dose-level.}
+\item{dose}{index of rescue dose-level to try in extremis.}
 }
 \value{
 an object of type \code{\link{selector_factory}} that can fit a

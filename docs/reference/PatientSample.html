@@ -20,7 +20,7 @@ thus supporting reduced Monte Carlo error and more efficient comparison."><meta 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -58,11 +58,20 @@ thus supporting reduced Monte Carlo error and more efficient comparison."><meta 
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -72,7 +81,7 @@ thus supporting reduced Monte Carlo error and more efficient comparison."><meta 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A sample of patients to use in simulations.</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/HEAD/R/patient_sample.R" class="external-link"><code>R/patient_sample.R</code></a></small>
     <div class="hidden name"><code>PatientSample.Rd</code></div>
     </div>
 
@@ -86,9 +95,9 @@ thus supporting reduced Monte Carlo error and more efficient comparison.</p>
 
     <div id="references">
     <h2>References</h2>
-    <p>Sweeting, M., Slade, D., Jackson, D., &amp; Brock, K. (2023).
+    <p>Sweeting, M., Slade, D., Jackson, D., &amp; Brock, K. (2024).
 Potential outcome simulation for efficient head-to-head comparison of
-adaptive dose-finding designs. Preprint.</p>
+adaptive dose-finding designs. arXiv preprint arXiv:2402.15460</p>
     </div>
     <div id="public-fields">
     <h2>Public fields</h2>
@@ -100,7 +109,23 @@ adaptive dose-finding designs. Preprint.</p>
 <dd><p>(`numeric(num_patients)`)<br></p></dd>
 
 
+<dt><code>time_to_tox_func</code></dt>
+<dd><p>(`function`)<br></p></dd>
+
+
+<dt><code>tox_time</code></dt>
+<dd><p>(`numeric(num_patients)`)<br></p></dd>
+
+
 <dt><code>eff_u</code></dt>
+<dd><p>(`numeric(num_patients)`)<br></p></dd>
+
+
+<dt><code>time_to_eff_func</code></dt>
+<dd><p>(`function`)<br></p></dd>
+
+
+<dt><code>eff_time</code></dt>
 <dd><p>(`numeric(num_patients)`)<br></p></dd>
 
 
@@ -128,13 +153,27 @@ adaptive dose-finding designs. Preprint.</p>
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Creator.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/PatientSample.html">PatientSample</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>num_patients <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/PatientSample.html">PatientSample</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  num_patients <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  time_to_tox_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  time_to_eff_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>num_patients</code></dt>
-<dd><p>(`integer(1)`).</p></dd>
+<dd><p>(`integer(1)`) Number of patients.</p></dd>
+
+
+<dt><code>time_to_tox_func</code></dt>
+<dd><p>(`function`) function taking no args that returns
+a single time of toxicity, given that toxicity occurs.</p></dd>
+
+
+<dt><code>time_to_eff_func</code></dt>
+<dd><p>(`function`) function taking no args that returns
+a single time of efficacy, given that efficacy occurs.</p></dd>
 
 
 </dl><p></p></div>
@@ -154,17 +193,32 @@ this function, you override the ability of the class to self-manage, so
 its ability to grow is turned off by setting the internal variable
 <code>self$can_grow &lt;- FALSE</code>.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PatientSample</span><span class="op">$</span><span class="fu">set_eff_and_tox</span><span class="op">(</span><span class="va">tox_u</span>, <span class="va">eff_u</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PatientSample</span><span class="op">$</span><span class="fu">set_eff_and_tox</span><span class="op">(</span></span>
+<span>  <span class="va">tox_u</span>,</span>
+<span>  <span class="va">eff_u</span>,</span>
+<span>  tox_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tox_u</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  eff_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">eff_u</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tox_u</code></dt>
-<dd><p>(`numeric()`).</p></dd>
+<dd><p>(`numeric()`) Patient-level toxicity propensities.</p></dd>
 
 
 <dt><code>eff_u</code></dt>
-<dd><p>(`numeric()`).</p></dd>
+<dd><p>(`numeric()`) Patient-level efficacy propensities.</p></dd>
+
+
+<dt><code>tox_time</code></dt>
+<dd><p>(`numeric()`) Patient-level toxicity times, given that
+toxicity occurs.</p></dd>
+
+
+<dt><code>eff_time</code></dt>
+<dd><p>(`numeric()`) Patient-level efficacy times, given that
+efficacy occurs.</p></dd>
 
 
 </dl><p></p></div>
@@ -206,7 +260,7 @@ its ability to grow is turned off by setting the internal variable
 <h3 id="method-get-patient-tox-">Method <code>get_patient_tox()</code><a class="anchor" aria-label="anchor" href="#method-get-patient-tox-"></a></h3>
 <p>Get 0 or 1 event marker for whether toxicity occurred in patient i</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PatientSample</span><span class="op">$</span><span class="fu">get_patient_tox</span><span class="op">(</span><span class="va">i</span>, <span class="va">prob_tox</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PatientSample</span><span class="op">$</span><span class="fu">get_patient_tox</span><span class="op">(</span><span class="va">i</span>, <span class="va">prob_tox</span>, time <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -217,6 +271,10 @@ its ability to grow is turned off by setting the internal variable
 
 <dt><code>prob_tox</code></dt>
 <dd><p>(`numeric(1)`) probability of toxicity</p></dd>
+
+
+<dt><code>time</code></dt>
+<dd><p>(`numeric(1)`) at time</p></dd>
 
 
 </dl><p></p></div>
@@ -242,7 +300,7 @@ its ability to grow is turned off by setting the internal variable
 <h3 id="method-get-patient-eff-">Method <code>get_patient_eff()</code><a class="anchor" aria-label="anchor" href="#method-get-patient-eff-"></a></h3>
 <p>Get 0 or 1 event marker for whether efficacy occurred in patient i</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PatientSample</span><span class="op">$</span><span class="fu">get_patient_eff</span><span class="op">(</span><span class="va">i</span>, <span class="va">prob_eff</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PatientSample</span><span class="op">$</span><span class="fu">get_patient_eff</span><span class="op">(</span><span class="va">i</span>, <span class="va">prob_eff</span>, time <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -253,6 +311,10 @@ its ability to grow is turned off by setting the internal variable
 
 <dt><code>prob_eff</code></dt>
 <dd><p>(`numeric(1)`) probability of efficacy</p></dd>
+
+
+<dt><code>time</code></dt>
+<dd><p>(`numeric(1)`) at time</p></dd>
 
 
 </dl><p></p></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -55,11 +55,20 @@
     <li>
       <a href="../articles/A700-Simulation.html">Simulating dose-escalation trials</a>
     </li>
+    <li>
+      <a href="../articles/A710-SimulationComparison.html">Comparing dose-escalation designs by simulation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/brockk/escalation/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -88,9 +97,21 @@
         </td>
         <td><p>Cast <code>dose_paths</code> object to <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>.</p></td>
       </tr><tr><td>
+          <p><code><a href="as_tibble.selector.html">as_tibble(<i>&lt;selector&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Cast <code>dose_selector</code> object to <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>.</p></td>
+      </tr><tr><td>
+          <p><code><a href="as_tibble.simulations_collection.html">as_tibble(<i>&lt;simulations_collection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Convert a simulations_collection to a tibble</p></td>
+      </tr><tr><td>
           <p><code><a href="calculate_probabilities.html">calculate_probabilities()</a></code> </p>
         </td>
         <td><p>Calculate dose-path probabilities</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_dose_selector_consistency.html">check_dose_selector_consistency()</a></code> </p>
+        </td>
+        <td><p>Check the consistency of a dose_selector instance</p></td>
       </tr><tr><td>
           <p><code><a href="cohort.html">cohort()</a></code> </p>
         </td>
@@ -99,6 +120,10 @@
           <p><code><a href="cohorts_of_n.html">cohorts_of_n()</a></code> </p>
         </td>
         <td><p>Sample times between patient arrivals using the exponential distribution.</p></td>
+      </tr><tr><td>
+          <p><code><a href="combo_selector.html">combo_selector()</a></code> </p>
+        </td>
+        <td><p>Dose selector for combinations of treatments</p></td>
       </tr><tr><td>
           <p><code><a href="continue.html">continue()</a></code> </p>
         </td>
@@ -124,6 +149,10 @@
         </td>
         <td><p>Is each dose admissible?</p></td>
       </tr><tr><td>
+          <p><code><a href="dose_escalation_table.html">dose_escalation_table()</a></code> </p>
+        </td>
+        <td><p>Plot a table of dose escalation vs de-escalation vs stop decisions</p></td>
+      </tr><tr><td>
           <p><code><a href="dose_indices.html">dose_indices()</a></code> </p>
         </td>
         <td><p>Dose indices</p></td>
@@ -135,6 +164,18 @@
           <p><code><a href="dose_paths_function.html">dose_paths_function()</a></code> </p>
         </td>
         <td><p>Get function for calculating dose pathways.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dose_string_to_vector.html">dose_string_to_vector()</a></code> </p>
+        </td>
+        <td><p>Go from a single multi-treatment dose string to a vector of dose-indices</p></td>
+      </tr><tr><td>
+          <p><code><a href="dose_strings.html">dose_strings()</a></code> </p>
+        </td>
+        <td><p>Dose strings</p></td>
+      </tr><tr><td>
+          <p><code><a href="dose_vector_to_string.html">dose_vector_to_string()</a></code> </p>
+        </td>
+        <td><p>Go from a single multi-treatment vector of dose-indices to a dose string</p></td>
       </tr><tr><td>
           <p><code><a href="doses_given.html">doses_given()</a></code> </p>
         </td>
@@ -168,6 +209,10 @@
         </td>
         <td><p>The 'escalation' package.</p></td>
       </tr><tr><td>
+          <p><code><a href="expand_last_dose_to_cohort.html">expand_last_dose_to_cohort()</a></code> </p>
+        </td>
+        <td><p>Expand the cohort of the last given dose to at least n patients</p></td>
+      </tr><tr><td>
           <p><code><a href="fit.html">fit()</a></code> </p>
         </td>
         <td><p>Fit a dose-finding model.</p></td>
@@ -184,9 +229,21 @@
         </td>
         <td><p>Get an object to fit the BOIN12 model for phase I/II dose-finding.</p></td>
       </tr><tr><td>
+          <p><code><a href="get_boin_comb.html">get_boin_comb()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit the BOIN COMB model using the BOIN package.</p></td>
+      </tr><tr><td>
           <p><code><a href="get_dfcrm.html">get_dfcrm()</a></code> </p>
         </td>
         <td><p>Get an object to fit the CRM model using the dfcrm package.</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_dfcrm_tite.html">get_dfcrm_tite()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit the TITE-CRM model using the dfcrm package.</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_dose_combo_indices.html">get_dose_combo_indices()</a></code> </p>
+        </td>
+        <td><p>Get all combinations of dose indices</p></td>
       </tr><tr><td>
           <p><code><a href="get_dose_paths.html">get_dose_paths()</a></code> </p>
         </td>
@@ -204,6 +261,10 @@
         </td>
         <td><p>Get an object to fit the mTPI-2 dose-finding model.</p></td>
       </tr><tr><td>
+          <p><code><a href="get_potential_outcomes.html">get_potential_outcomes()</a></code> </p>
+        </td>
+        <td><p>Get potential outcomes from a list of PatientSamples</p></td>
+      </tr><tr><td>
           <p><code><a href="get_random_selector.html">get_random_selector()</a></code> </p>
         </td>
         <td><p>Get an object to fit a dose-selector that randomly selects doses.</p></td>
@@ -220,6 +281,10 @@
         </td>
         <td><p>Get an object to fit the CRM model using the trialr package.</p></td>
       </tr><tr><td>
+          <p><code><a href="get_trialr_crm_tite.html">get_trialr_crm_tite()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit the TITE-CRM model using the trialr package.</p></td>
+      </tr><tr><td>
           <p><code><a href="get_trialr_efftox.html">get_trialr_efftox()</a></code> </p>
         </td>
         <td><p>Get an object to fit the EffTox model using the trialr package.</p></td>
@@ -227,6 +292,10 @@
           <p><code><a href="get_trialr_nbg.html">get_trialr_nbg()</a></code> </p>
         </td>
         <td><p>Get an object to fit the NBG dose-finding model using the trialr package.</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_trialr_nbg_tite.html">get_trialr_nbg_tite()</a></code> </p>
+        </td>
+        <td><p>Get an object to fit a TITE version of the NBG dose-finding model using trialr</p></td>
       </tr><tr><td>
           <p><code><a href="get_wages_and_tait.html">get_wages_and_tait()</a></code> </p>
         </td>
@@ -239,6 +308,10 @@
           <p><code><a href="is_randomising.html">is_randomising()</a></code> </p>
         </td>
         <td><p>Is this selector currently randomly allocating doses?</p></td>
+      </tr><tr><td>
+          <p><code><a href="linear_follow_up_weight.html">linear_follow_up_weight()</a></code> </p>
+        </td>
+        <td><p>Weights for tolerance and toxicity events using linear function of time</p></td>
       </tr><tr><td>
           <p><code><a href="mean_prob_eff.html">mean_prob_eff()</a></code> </p>
         </td>
@@ -396,6 +469,10 @@
         </td>
         <td><p>Stack <code>simulations_collection</code> results vertically</p></td>
       </tr><tr><td>
+          <p><code><a href="stick_on_num_tox.html">stick_on_num_tox()</a></code> </p>
+        </td>
+        <td><p>Stay at the current dose when num_tox of num_patients have experienced tox</p></td>
+      </tr><tr><td>
           <p><code><a href="stop_at_n.html">stop_at_n()</a></code> </p>
         </td>
         <td><p>Stop when there are n patients in total.</p></td>
@@ -447,6 +524,10 @@
           <p><code><a href="utility.html">utility()</a></code> </p>
         </td>
         <td><p>Utility score of each dose.</p></td>
+      </tr><tr><td>
+          <p><code><a href="weight.html">weight()</a></code> </p>
+        </td>
+        <td><p>Outcome weights.</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

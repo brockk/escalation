@@ -88,6 +88,9 @@ fit.dont_skip_selector_factory <- function(selector_factory, outcomes, ...) {
 #' @export
 recommended_dose.dont_skip_selector <- function(x, ...) {
   parent_rec_d <- recommended_dose(x$parent)
+  if(length(parent_rec_d) > 1) {
+    stop("dont_skip_selector does not work with dose combinations")
+  }
   if(num_patients(x) == 0 | is.na(parent_rec_d)) {
     # No dose given, or parent selectc no dose, then just go with that
     return(parent_rec_d)

@@ -1,4 +1,9 @@
 
+# escalation 0.2.0
+
+* Added support for treatment combinations by allowing dose to become a vector of indices rather than a scalar.
+* Added BOIN COMB design for treatment combinations.
+
 # escalation 0.1.10
 
 * Added TITE methods
