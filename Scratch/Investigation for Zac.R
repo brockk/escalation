@@ -16,11 +16,11 @@ simulated_trial1 <- sims$fits[[1]]
 
 # Look at sequential fits:
 simulated_trial1[[1]]$fit # Trial start. Nothing happened yet.
-simulated_trial1[[1]]$time # 0, obvs
-simulated_trial1[[2]]$fit # First decision
-simulated_trial1[[2]]$time # Time of arrival of 1st patient. No follow-up yet!
+simulated_trial1[[1]]$time # Time of first fit. 0, obvs
+simulated_trial1[[2]]$fit # First decision is when first person arrives.
+simulated_trial1[[2]]$time # Time of 1st patient. No follow-up yet!
 simulated_trial1[[3]]$fit  # Second decision, i.e. first "proper" decision
 simulated_trial1[[3]]$time # Time of second decision
 simulated_trial1[[4]]$fit # Third decision
 simulated_trial1[[4]]$time # Time of third decision
-# Notice weight column is ticking up, and times are getting later
+# Notice weight column is ticking up, and times are getting later..
