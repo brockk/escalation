@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   A100-DoseSelectors: A100-DoseSelectors.html
@@ -11,5 +11,4 @@ articles:
   A600-DosePaths: A600-DosePaths.html
   A700-Simulation: A700-Simulation.html
   A710-SimulationComparison: A710-SimulationComparison.html
-last_built: 2024-06-27T07:19Z
-
+last_built: 2024-12-05T10:31Z
