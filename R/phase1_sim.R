@@ -74,7 +74,7 @@ phase1_sim <- function(
       time = time
     )
 
-    time_now <- time_now + max(arrival_time_deltas)
+    time_now <- time_now + tail(arrival_time_deltas, 1)
     i <- i + 1
     fit <- selector_factory %>% fit(new_data)
     next_cohort <- next_cohort + 1

@@ -12,6 +12,7 @@ phase1_tite_sim <- function(
   # next_dose = NULL,
   time_now = NULL,
   max_time,
+  min_fup_time = 0,
   get_weight = linear_follow_up_weight,
   i_like_big_trials = FALSE, # Safety mechanism to avoid infinite trials
   return_all_fits = FALSE
@@ -61,25 +62,24 @@ phase1_tite_sim <- function(
   while( fit %>% continue() & !is.na(next_dose) &
          (i_like_big_trials | i < max_i) ) {
 
-    arrival_time_delta <- sample_patient_arrivals(all_data)
-    if(nrow(arrival_time_delta) != 1) {
-      stop(paste0(
-        "sample_patient_arrivals should always return a data-frame with 1 row ",
-        "for TITE simulations."
-      ))
-    }
-    arrival_time_delta <- sum(arrival_time_delta$time_delta)
-    time_now <- time_now + arrival_time_delta
+    new_pts <- sample_patient_arrivals(all_data)
+    arrival_time_deltas <- cumsum(new_pts$time_delta)
+    n_new_pts <- nrow(new_pts)
+    new_dose <- rep(next_dose, n_new_pts)
+    new_cohort <- rep(next_cohort, n_new_pts)
 
     # TITE patient data
-    tite_cohort <- c(tite_cohort, next_cohort)
-    tite_dose <- c(tite_dose, next_dose)
-    tite_time <- c(tite_time, time_now)
+    tite_cohort <- c(tite_cohort, new_cohort)
+    tite_dose <- c(tite_dose, new_dose)
+    tite_time <- c(tite_time, time_now + arrival_time_deltas)
     tite_data <- tibble(
       cohort = tite_cohort,
       dose = tite_dose,
       time = tite_time
     )
+
+    # Decision point
+    time_now <- time_now + sum(new_pts$time_delta) + min_fup_time
     if(nrow(tite_data) > 0) {
       tite_data$tox <- patient_sample$get_patient_tox(
         i = seq_along(tite_dose),
@@ -95,21 +95,8 @@ phase1_tite_sim <- function(
                                    max_time = max_time)
     all_data <- bind_rows(base_df, tite_data)
     all_data$patient <- seq_len(nrow(all_data))
-    # print("i")
-    # print(i)
-    # print("all_data")
-    # print(all_data)
     fit <- selector_factory %>% fit(all_data)
     next_dose <- recommended_dose(fit)
-    # continue(fit)
-    # num_patients(fit)
-    # class(fit)
-    # class(fit$parent)
-
-    # tite_cohort <- c(tite_cohort, next_cohort)
-    # tite_dose <- c(tite_dose, next_dose)
-    # tite_time <- c(tite_time, time_now)
-
     i <- i + 1
     next_cohort <- next_cohort + 1
     fits[[i]] <- list(.depth = i, time = time_now, fit = fit)
@@ -125,7 +112,7 @@ phase1_tite_sim <- function(
   # Get final dose recommendation at fullest follow-up.
   # But don't override a scenario where no-dose has been advocated.
   if(!is.na(next_dose)) {
-    time_now <- time_now + max_time
+    time_now <- time_now + max_time - min_fup_time
     tite_data <- tibble(
       cohort = tite_cohort,
       dose = tite_dose,
