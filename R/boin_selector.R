@@ -35,7 +35,7 @@
 #' https://doi.org/10.18637/jss.v000.i00
 #'
 #' Liu, S., & Yuan, Y. (2015).
-#' Bayesian optimal designs for Phase I clinical trials.
+#' Bayesian optimal interval designs for phase I clinical trials.
 #' J. R. Stat. Soc. C, 64, 507–523.
 #' https://doi.org/10.1111/rssc.12089
 get_boin <- function(
