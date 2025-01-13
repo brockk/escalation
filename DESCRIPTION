@@ -1,7 +1,7 @@
 Package: escalation
 Type: Package
 Title: A Modular Approach to Dose-Finding Clinical Trials
-Version: 0.2.1
+Version: 0.2.1.9001
 Date: 2025-01-13
 Authors@R: c(
     person("Kristian", "Brock", 
@@ -20,8 +20,12 @@ Authors@R: c(
     person("Conor", "Norris", 
       role = c("ctb"),
       comment = c(ORCID = "0009-0009-8850-0811")
+    ),
+    person("Bharat", "Bhushan", 
+      role = c("ctb"),
+      comment = c(ORCID = "0009-0001-5271-7113")
     )
-    )
+  )
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
 Description: Methods for working with dose-finding clinical trials. We provide 
     implementations of many dose-finding clinical trial designs, including the 
