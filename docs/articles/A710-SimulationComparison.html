@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -183,24 +183,24 @@ stopping rule. The names we provide will be reused.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 18 × 7</span></span></span>
 <span><span class="co">#&gt;    dose     tox     n true_prob_tox prob_recommend prob_administer design      </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> NoDose  0     0             0              0.1           0      3+3         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 1       0.35  3.6           0.12           0.35          0.387  3+3         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2       0.9   3.6           0.27           0.5           0.387  3+3         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 3       1.4   1.95          0.44           0.05          0.210  3+3         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4       0.15  0.15          0.53           0             0.016<span style="text-decoration: underline;">1</span> 3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> NoDose  0     0             0              0.15          0      3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 1       0.4   3.75          0.12           0.4           0.397  3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2       1     3.3           0.27           0.35          0.349  3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 3       0.85  2.1           0.44           0.1           0.222  3+3         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4       0.25  0.3           0.53           0             0.031<span style="text-decoration: underline;">7</span> 3+3         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 5       0     0             0.57           0             0      3+3         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> NoDose  0     0             0              0             0      CRM         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1       0.45  4.95          0.12           0.2           0.412  CRM         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2       0.8   2.55          0.27           0.5           0.212  CRM         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 3       0.85  1.5           0.44           0.3           0.125  CRM         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 4       1.5   2.7           0.53           0             0.225  CRM         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 5       0.25  0.3           0.57           0             0.025  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1       0.6   5.25          0.12           0.25          0.438  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2       0.65  2.25          0.27           0.3           0.188  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 3       0.6   1.35          0.44           0.25          0.112  CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 4       1.15  2.4           0.53           0.15          0.2    CRM         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 5       0.4   0.75          0.57           0.05          0.062<span style="text-decoration: underline;">5</span> CRM         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> NoDose  0     0             0              0             0      Stopping CRM</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 1       0.45  4.95          0.12           0.2           0.412  Stopping CRM</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2       0.8   2.55          0.27           0.5           0.212  Stopping CRM</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 3       0.85  1.5           0.44           0.3           0.125  Stopping CRM</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 4       1.5   2.7           0.53           0             0.225  Stopping CRM</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 5       0.25  0.3           0.57           0             0.025  Stopping CRM</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 1       0.6   5.25          0.12           0.25          0.438  Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2       0.65  2.25          0.27           0.3           0.188  Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 3       0.6   1.35          0.44           0.25          0.112  Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 4       1.15  2.4           0.53           0.15          0.2    Stopping CRM</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 5       0.4   0.75          0.57           0.05          0.062<span style="text-decoration: underline;">5</span> Stopping CRM</span></span></code></pre></div>
 <p>We also provide a convenient function to quickly visualise how the
 probability of selecting each dose in each design evolved as the
 simulations progressed:</p>

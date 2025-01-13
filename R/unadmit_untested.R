@@ -57,27 +57,6 @@ fit.unadmit_untested_selector_factory <- function(selector_factory, outcomes,
 
 # Selector interface
 
-#' #' @export
-#' recommended_dose.dont_skip_selector <- function(x, ...) {
-#'   parent_rec_d <- recommended_dose(x$parent)
-#'   if(length(parent_rec_d) > 1) {
-#'     stop("dont_skip_selector does not work with dose combinations")
-#'   }
-#'   if(num_patients(x) == 0 | is.na(parent_rec_d)) {
-#'     # No dose given, or parent selectc no dose, then just go with that
-#'     return(parent_rec_d)
-#'   } else {
-#'     last_d <- tail(doses_given(x), 1)
-#'     if(x$when_escalating & parent_rec_d > last_d + 1) {
-#'       return(as.integer(last_d + 1))
-#'     } else if(x$when_deescalating & parent_rec_d < last_d - 1) {
-#'       return(as.integer(last_d - 1))
-#'     } else {
-#'       return(parent_rec_d)
-#'     }
-#'   }
-#' }
-
 #' @export
 dose_admissible.unadmit_untested_selector <- function(x, ...) {
   parent_rec_d <- recommended_dose(x$parent)
