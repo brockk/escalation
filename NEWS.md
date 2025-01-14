@@ -1,4 +1,8 @@
 
+# escalation 0.2.2
+
+* Added boin12_rds() to tabulate desirability scores in a BOIN12 trial.
+
 # escalation 0.2.1
 
 * Added unadmit_untested(), a selector to explicitly mark any untested and non-recomended dose as inadmissible via dose_admissible().
