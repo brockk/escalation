@@ -27,3 +27,28 @@ Having provided a flexible interface for specifying designs, we then provide
 functions to run simulations and calculate dose-paths for future cohorts of
 patients.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://brockk.github.io/escalation/}
+  \item \url{https://github.com/brockk/escalation}
+  \item Report bugs at \url{https://github.com/brockk/escalation/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Kristian Brock \email{kristian.brock@gmail.com} (\href{https://orcid.org/0000-0002-3921-0166}{ORCID})
+
+Authors:
+\itemize{
+  \item Daniel Slade (\href{https://orcid.org/0000-0001-6063-1283}{ORCID})
+  \item Michael Sweeting (\href{https://orcid.org/0000-0003-0980-8965}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Conor Norris (\href{https://orcid.org/0009-0009-8850-0811}{ORCID}) [contributor]
+  \item Bharat Bhushan (\href{https://orcid.org/0009-0001-5271-7113}{ORCID}) [contributor]
+}
+
+}

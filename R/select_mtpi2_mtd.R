@@ -29,6 +29,13 @@
 #'   probability of toxicity.
 #' @param beta Second shape parameter of the beta prior distribution on the
 #'   probability of toxicity.
+#' @param pava_just_tested_doses the design uses the PAVA method to estimate
+#'   monotonic Prob(Tox) at the doses. By default, this estimates Prob(Tox) for
+#'   doses that have not been tested in the trial and can lead to untested
+#'   doses being recommended. Set this option to TRUE to use PAVA only on tested
+#'   doses, leaving untested doses as NA and not-recommendable. Set to FALSE to
+#'   use PAVA at all doses and potentially recommend an untested dose. Default
+#'   is FALSE.
 #' @param ... Extra args are passed onwards.
 #'
 #' @return an object of type \code{\link{selector_factory}}.
@@ -67,11 +74,12 @@
 #' Interval Dose-Finding Design Addressing Ockham's Razor: mTPI-2.
 #' https://doi.org/10.1016/j.cct.2017.04.006
 select_mtpi2_mtd <- function(parent_selector_factory,
-                            when = c('finally', 'always'),
-                            target = NULL,
-                            exclusion_certainty,
-                            alpha = 1, beta = 1,
-                            ...) {
+                             when = c('finally', 'always'),
+                             target = NULL,
+                             exclusion_certainty,
+                             alpha = 1, beta = 1,
+                             pava_just_tested_doses = FALSE,
+                             ...) {
 
   when <- match.arg(when)
 
@@ -82,6 +90,7 @@ select_mtpi2_mtd <- function(parent_selector_factory,
     exclusion_certainty = exclusion_certainty,
     alpha = alpha,
     beta = beta,
+    pava_just_tested_doses = pava_just_tested_doses,
     extra_args = list(...)
   )
   class(x) <- c('mtpi2_mtd_dose_selector_factory',
@@ -95,6 +104,7 @@ mtpi2_mtd_dose_selector <- function(parent_selector,
                                     target = NULL,
                                     exclusion_certainty,
                                     alpha, beta,
+                                    pava_just_tested_doses,
                                     ...) {
 
   when <- match.arg(when)
@@ -113,7 +123,8 @@ mtpi2_mtd_dose_selector <- function(parent_selector,
     target = target,
     exclusion_certainty = exclusion_certainty,
     alpha = alpha,
-    beta = beta
+    beta = beta,
+    pava_just_tested_doses = pava_just_tested_doses
   )
 
   class(l) = c('mtpi2_mtd_dose_selector',
@@ -137,7 +148,8 @@ fit.mtpi2_mtd_dose_selector_factory <- function(selector_factory, outcomes,
     target = selector_factory$target,
     exclusion_certainty = selector_factory$exclusion_certainty,
     alpha = selector_factory$alpha,
-    beta = selector_factory$beta
+    beta = selector_factory$beta,
+    pava_just_tested_doses = selector_factory$pava_just_tested_doses
   )
   do.call(mtpi2_mtd_dose_selector, args = args)
 }
@@ -146,17 +158,36 @@ fit.mtpi2_mtd_dose_selector_factory <- function(selector_factory, outcomes,
 
 #' @export
 mean_prob_tox.mtpi2_mtd_dose_selector <- function(x, ...) {
-  # Use isotonic regression via the PAVA algorithm
+  # source("R/helpers.R")
   post_mean = (x$alpha + tox_at_dose(x)) / (x$alpha + x$beta + n_at_dose(x))
   post_var = (x$alpha + tox_at_dose(x)) *
     (x$beta + n_at_dose(x) - tox_at_dose(x)) /
-    ((x$alpha + x$beta + n_at_dose(x))^2 * (x$alpha + x$beta + n_at_dose(x) + 1))
-  post_mean = pava(post_mean, wt = 1 / post_var)
-  return(post_mean)
+    ((x$alpha + x$beta + n_at_dose(x))^2 *
+       (x$alpha + x$beta + n_at_dose(x) + 1))
+  tested <- n_at_dose(x) > 0
+  if(x$pava_just_tested_doses & sum(tested) > 0) {
+    # Apply PAVA only to tested doses
+    tested_post_mean <- post_mean[tested]
+    tested_post_var <- post_var[tested]
+    tested_post_mean <- pava(tested_post_mean, wt = 1 / tested_post_var)
+    to_return <- post_mean # Mimic shape
+    to_return[!tested] <- NA
+    to_return[tested] <- tested_post_mean
+    return(to_return)
+  } else {
+    # Apply PAVA to all doses
+    post_mean = (x$alpha + tox_at_dose(x)) / (x$alpha + x$beta + n_at_dose(x))
+    post_var = (x$alpha + tox_at_dose(x)) *
+      (x$beta + n_at_dose(x) - tox_at_dose(x)) /
+      ((x$alpha + x$beta + n_at_dose(x))^2 * (x$alpha + x$beta + n_at_dose(x) + 1))
+    post_mean = pava(post_mean, wt = 1 / post_var)
+    return(post_mean)
+  }
 }
 
 #' @export
 prob_tox_exceeds.mtpi2_mtd_dose_selector <- function(x, threshold, ...) {
+  # This routine uses only tested doses. Untested doses get NA.
   pava_bb_prob_tox_exceeds(x, threshold, alpha = x$alpha, beta = x$beta)
 }
 
@@ -193,7 +224,7 @@ recommended_dose.mtpi2_mtd_dose_selector <- function(x, ...) {
     abs_delta <- abs(prob_tox - target)
     abs_delta[!admissible] <- NA
 
-    if(sum(admissible) == 0) {
+    if(sum(!is.na(abs_delta)) == 0) {
       return(NA)
     }
 
