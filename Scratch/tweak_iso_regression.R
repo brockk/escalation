@@ -1,3 +1,4 @@
+
 library(dplyr)
 library(escalation)
 
@@ -17,10 +18,11 @@ mtpi2_mod <- get_mtpi2(
                    alpha = 1,
                    beta = 1,
                    target = 0.3,
-                   pava_just_tested_doses = FALSE)
+                   pava_just_tested_doses = TRUE)
 mtpi2_mod$pava_just_tested_doses
 
 x = mtpi2_mod %>% fit("2TTTTTT")
 x
 x = mtpi2_mod %>% fit("1NNNNNNNNNN 4T")
 x
+summary(x)

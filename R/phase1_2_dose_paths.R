@@ -49,7 +49,12 @@ phase1_2_dose_paths <- function(
   # Root node is the current scenario
   root_node_id <- 1
   base_fit <- selector_factory %>% fit(base_df)
-  if(is.null(next_dose)) next_dose <- base_fit %>% recommended_dose()
+  if(is.null(next_dose)) {
+    next_dose <- base_fit %>% recommended_dose()
+    first_dose_overridden <- FALSE
+  } else {
+    first_dose_overridden <- TRUE
+  }
   root <- dose_finding_path_node(
     node_id = root_node_id,
     parent_node_id = NA,
@@ -70,10 +75,11 @@ phase1_2_dose_paths <- function(
     pathway <- ""
     parent <- root
     fit <- root$fit
+    cont <- continue(fit) | first_dose_overridden
 
     for(j in 1:length(cohort_path)) {
       # If selector does not want to continue, this path has ended.
-      if(continue(fit)) {
+      if(cont) {
         pathway <- ifelse(nchar(pathway) > 0,
                           paste0(pathway, ' ', cohort_dose, cohort_path[j]),
                           paste0(cohort_dose, cohort_path[j])
@@ -84,6 +90,7 @@ phase1_2_dose_paths <- function(
           parent <- cache[[pathway]]
           cohort_dose <- parent$next_dose
           fit <- parent$fit
+          cont <- continue(fit)
         } else {
           # Fit model for path, and cache.
           these_outcomes <- parse_phase1_2_outcomes(pathway, as_list = FALSE)
@@ -95,6 +102,7 @@ phase1_2_dose_paths <- function(
           )
           if(verbose) print(paste0('Running ', pathway))
           fit <- selector_factory %>% fit(dat)
+          cont <- continue(fit)
           cohort_dose <- recommended_dose(fit)
           # Cache
           node <- dose_finding_path_node(

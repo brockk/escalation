@@ -79,7 +79,7 @@ parse_phase1_2_outcomes <- function(outcomes, as_list = TRUE) {
     cohort_id <- cohort_id + 1
   }
   if(max_num_tmt > 1) {
-    dose_i <- map(dose, dose_string_to_vector)
+    dose_i <- map(doses, dose_string_to_vector)
   } else {
     dose_i <- as.integer(doses)
   }
@@ -98,13 +98,15 @@ parse_phase1_2_outcomes <- function(outcomes, as_list = TRUE) {
     )
   } else {
     dose = NULL
-    return(tibble(
-      cohort = as.integer(cohort_ids),
-      patient = seq_along(tox),
-      dose_string = doses,
-      dose = dose_i,
-      tox = tox,
-      eff = eff)
+    return(
+      tibble(
+        cohort = as.integer(cohort_ids),
+        patient = seq_along(tox),
+        dose_string = doses,
+        dose = dose_i,
+        tox = tox,
+        eff = eff
+      )
     )
   }
 }

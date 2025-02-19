@@ -26,7 +26,7 @@ phase1_2_sim <- function(
   cohort <- base_df$cohort
   next_cohort <- ifelse(length(cohort) > 0, max(cohort) + 1, 1)
   if('time' %in% colnames(base_df)) {
-    time <- previous_outcomes$time
+    time <- base_df$time
   } else {
     time <- rep(0, length(dose))
   }
@@ -55,12 +55,10 @@ phase1_2_sim <- function(
     n_new_pts <- nrow(new_pts)
     new_dose <- rep(next_dose, n_new_pts)
     new_pt_indices <- nrow(current_data) + seq(1, n_new_pts)
-    # new_tox <- rbinom(n = n_new_pts, size = 1, prob = true_prob_tox[next_dose])
     new_tox <- patient_sample$get_patient_tox(
       i = new_pt_indices,
       prob_tox = true_prob_tox[next_dose]
     )
-    # new_eff <- rbinom(n = n_new_pts, size = 1, prob = true_prob_eff[next_dose])
     new_eff <- patient_sample$get_patient_eff(
       i = new_pt_indices,
       prob_eff = true_prob_eff[next_dose]

@@ -24,7 +24,7 @@ phase1_sim <- function(
   cohort <- base_df$cohort
   next_cohort <- ifelse(length(cohort) > 0, max(cohort) + 1, 1)
   if('time' %in% colnames(base_df)) {
-    time <- previous_outcomes$time
+    time <- base_df$time
   } else {
     time <- rep(0, length(dose))
   }

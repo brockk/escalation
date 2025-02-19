@@ -1,8 +1,8 @@
 Package: escalation
 Type: Package
 Title: A Modular Approach to Dose-Finding Clinical Trials
-Version: 0.2.2
-Date: 2025-01-13
+Version: 0.2.2.9004
+Date: 2025-02-19
 Authors@R: c(
     person("Kristian", "Brock", 
       email = "kristian.brock@gmail.com", 
@@ -72,7 +72,7 @@ Imports:
   graphics,
   Iso,
   testthat
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 URL: https://brockk.github.io/escalation/, https://github.com/brockk/escalation
 BugReports: https://github.com/brockk/escalation/issues
 Suggests: 

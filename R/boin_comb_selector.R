@@ -12,7 +12,13 @@
 #' @export
 #'
 #' @examples
-#' # TODO
+#' num_doses <- c(3, 4)
+#' target <- 0.25
+#' boin_fitter <- get_boin_comb(num_doses = num_doses, target = target)
+#' x1 <- fit(boin_fitter, outcomes = "1.1NNN")
+#' x1
+#' x2 <- fit(boin_fitter, outcomes = "1.1NNN 2.1TNT")
+#' x2
 #'
 #' @references
 #' Lin, R., & Yin, G. (2017).
