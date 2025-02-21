@@ -217,7 +217,7 @@ model_frame.selector <- function(x, ...) {
 dose_indices.selector <- function(x, ...) {
   n <- num_doses(x)
   if(n > 0) {
-    return(1:n)
+    return(seq_len(n))
   } else {
     return(integer(length = 0))
   }

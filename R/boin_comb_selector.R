@@ -39,7 +39,7 @@ get_boin_comb <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 
   class(x) <- c(
     "boin_comb_selector_factory",
-    # "combo_selector_factory", # Maybe one day
+    "combo_selector_factory",
     "tox_selector_factory",
     "selector_factory"
   )
@@ -88,11 +88,14 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
   if(nrow(df) == 0) {
     recommended_dose <- rep(1, num_treatments)
     continue <- TRUE
+    x <- NULL
+    bound <- NULL
   } else {
     last_dose_string <- tail(df, 1) %>% pull(dose_string)
     last_dose <- dose_string_to_vector(last_dose_string)
     x <- next.comb(target = target, npts = z$num_patients, ntox = z$num_tox,
                    dose.curr = last_dose, ...)
+    recommended_dose <- as.integer(x$next_dc)
     continue <- !any(is.na(x$next_dc))
 
     # n_d <- df_c$n[last_dose]
@@ -168,7 +171,7 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
 
     df = df,
     df_c = df_c,
-    recommended_dose = as.integer(x$next_dc),
+    recommended_dose = recommended_dose,
     continue = continue
   )
 

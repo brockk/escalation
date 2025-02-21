@@ -21,6 +21,7 @@
 #'   \item \code{\link{num_patients}}
 #'   \item \code{\link{num_doses}}
 #'   \item \code{\link{dose_indices}}
+#'   \item \code{\link{dose_strings}}
 #'   \item \code{\link{n_at_dose}}
 #'   \item \code{\link{tox_at_dose}}
 #'   \item \code{\link{num_tox}}
@@ -55,6 +56,7 @@
 #' sims %>% num_patients()
 #' sims %>% num_doses()
 #' sims %>% dose_indices()
+#' sims %>% dose_strings()
 #' sims %>% n_at_dose()
 #' sims %>% tox_at_dose()
 #' sims %>% num_tox()
@@ -100,53 +102,122 @@ num_patients.simulations <- function(x, ...) {
 #' @importFrom utils head
 #' @export
 num_doses.simulations <- function(x, ...) {
-  # Have a word with this amount of nesting!
+  # TODO - this amount of nesting is nauseating
   num_doses(head(x$fits, 1)[[1]][[1]]$fit)
 }
 
 #' @export
 dose_indices.simulations <- function(x, ...) {
   n_d <- num_doses(x)
-  if(n_d > 0) {
-    1:n_d
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    return(seq_len(n_d))
   } else {
-    integer(length = 0)
+    return(get_dose_combo_indices(num_doses(x)))
   }
 }
 
-#' @importFrom purrr map map_int
+#' @importFrom purrr map_chr
+#' @export
+dose_strings.simulations <- function(x, ...) {
+  return(
+    map_chr(
+      get_dose_combo_indices(num_doses(x)),
+      dose_vector_to_string
+    )
+  )
+}
+
+#' @param dose_string TRUE to return vector of character dose-strings; FALSE
+#' (the default) to get a numerical vector of recommended dose-indices in
+#' monotherapy studies, or a matrix of recommended dose-indices in combination
+#' studies with the different treatments in columns and simulated outcomes in
+#' rows.
+#' @importFrom purrr map map_int map_chr reduce
 #' @importFrom magrittr %>%
 #' @importFrom utils tail
 #' @export
-recommended_dose.simulations <- function(x, ...) {
-  x$fits %>%
-    map(~ tail(.x, 1)[[1]]) %>%
-    map('fit') %>%
-    map_int(recommended_dose)
+recommended_dose.simulations <- function(x, dose_string = FALSE, ...) {
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    if(dose_string) {
+      x$fits %>%
+        map(~ tail(.x, 1)[[1]]) %>%
+        map('fit') %>%
+        map(recommended_dose) %>%
+        map_chr(dose_vector_to_string)
+    } else {
+      x$fits %>%
+        map(~ tail(.x, 1)[[1]]) %>%
+        map('fit') %>%
+        map_int(recommended_dose)
+    }
+  } else {
+    # Combination study
+    if(dose_string) {
+      fits <- x$fits %>%
+        map(~ tail(.x, 1)[[1]]) %>%
+        map('fit')
+      # For some reason, fits %>% map(recommended_dose) gives unexpected output.
+      # So:
+      lapply(fits, recommended_dose) %>%
+        map_chr(dose_vector_to_string)
+    } else {
+      fits <- x$fits %>%
+        map(~ tail(.x, 1)[[1]]) %>%
+        map('fit')
+      # For some reason, fits %>% map(recommended_dose) gives unexpected output.
+      # So:
+      lapply(fits, recommended_dose) %>%
+        reduce(rbind) %>%
+        unname()
+    }
+  }
 }
 
-#' @importFrom purrr map imap_int
+#' @importFrom purrr map imap_int map2_int
 #' @importFrom magrittr %>%
 #' @importFrom utils tail
 #' @importFrom tibble as_tibble
 #' @export
 n_at_dose.simulations <- function(x, dose = NULL, ...) {
 
-  x$fits %>%
+  n_at_d <- x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
-    map(n_at_dose) %>%
-    do.call(what = rbind) -> df
-  colnames(df) <- dose_indices(x)
-  df <- df %>% as_tibble()
+    map(n_at_dose)
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    df <- n_at_d %>%
+      do.call(what = rbind)
+    colnames(df) <- dose_indices(x)
+    df <- df %>% as_tibble()
 
-  if(is.null(dose)) {
-    return(df)
-  } else if(dose == 'recommended') {
-    rec_d <- recommended_dose(x)
-    return(imap_int(rec_d, ~ ifelse(is.na(.x), NA, df[.y, .x, drop = TRUE])))
+    if(is.null(dose)) {
+      return(df)
+    } else if(dose == 'recommended') {
+      rec_d <- recommended_dose(x)
+      return(imap_int(rec_d, ~ ifelse(is.na(.x), NA, df[.y, .x, drop = TRUE])))
+    } else {
+      stop(paste0("Don't know what to do with dose = '", dose, "'"))
+    }
   } else {
-    stop(paste0("Don't know what to do with dose = '", dose, "'"))
+    # Combination study
+    if(is.null(dose)) {
+      return(n_at_d)
+    } else if(dose == 'recommended') {
+      fits <- x$fits %>%
+        map(~ tail(.x, 1)[[1]]) %>%
+        map('fit')
+      rec_d <- lapply(fits, recommended_dose)
+      # Pluck out patient count at rec-d with code like:
+      # n_at_d[[1]][t(cbind(rec_d[[1]]))]
+      map2_int(n_at_d, rec_d, ~ .x[t(cbind(.y))])
+    } else {
+      stop(paste0("Don't know what to do with dose = '", dose, "'"))
+    }
   }
 }
 
@@ -161,18 +232,40 @@ n_at_recommended_dose.simulations <- function(x, ...) {
 #' @importFrom tibble as_tibble
 #' @export
 tox_at_dose.simulations <- function(x, ...) {
-  x$fits %>%
+  tox_d <- x$fits %>%
     map(~ tail(.x, 1)[[1]]) %>%
     map('fit') %>%
-    map(tox_at_dose) %>%
-    do.call(what = rbind) -> df
-  colnames(df) <- dose_indices(x)
-  df %>% as_tibble()
+    map(tox_at_dose)
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    df <- tox_d %>%
+      do.call(what = rbind)
+    colnames(df) <- dose_indices(x)
+    df %>% as_tibble()
+  } else {
+    # Combination study
+    return(tox_d)
+  }
 }
 
+#' @importFrom purrr map_int reduce
 #' @export
 num_tox.simulations <- function(x, ...) {
-  rowSums(tox_at_dose(x, ...))
+  # tox_d <- x$fits %>%
+  #   map(~ tail(.x, 1)[[1]]) %>%
+  #   map('fit') %>%
+  #   map(tox_at_dose)
+  tox_d <- tox_at_dose(x)
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    rowSums(tox_d)
+  } else {
+    # Combination study
+    # reduce(tox_d, `+`)
+    map_int(tox_d, sum)
+  }
 }
 
 #' @importFrom purrr map
@@ -182,40 +275,89 @@ num_tox.simulations <- function(x, ...) {
 #' @export
 eff_at_dose.simulations <- function(x, ...) {
 
+  n_d <- num_doses(x)
   supports_efficacy <- ifelse(
     'supports_efficacy' %in% names(x),
     x$supports_efficacy,
     FALSE
   )
   if(supports_efficacy) {
-    x$fits %>%
+    eff_d <- x$fits %>%
       map(~ tail(.x, 1)[[1]]) %>%
       map('fit') %>%
-      map(eff_at_dose) %>%
-      do.call(what = rbind) -> df
-    colnames(df) <- dose_indices(x)
-    df %>% as_tibble()
+      map(eff_at_dose)
+
+    if(length(n_d) == 1) {
+      # Monotherapy study
+      df <- eff_d %>%
+        do.call(what = rbind)
+      colnames(df) <- dose_indices(x)
+      df %>% as_tibble()
+    } else {
+      # Combination study
+      return(eff_d)
+    }
   } else {
-    matrix(nrow = length(x$fits), ncol = num_doses(x))
+    if(length(n_d) == 1) {
+      # Monotherapy study
+      matrix(nrow = length(x$fits), ncol = num_doses(x))
+    } else {
+      # Combination study
+      map(seq_along(x$fits),
+          ~ array(NA, dim = n_d))
+    }
   }
 }
 
+#' @importFrom purrr map_int reduce
 #' @export
 num_eff.simulations <- function(x, ...) {
-  rowSums(eff_at_dose(x, ...))
+  # rowSums(eff_at_dose(x, ...))
+  eff_d <- eff_at_dose(x)
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    rowSums(eff_d)
+  } else {
+    # Combination study
+    # reduce(eff_d, `+`)
+    map_int(eff_d, sum)
+  }
 }
 
 
-#' @importFrom purrr map_int
+#' @importFrom purrr map_int map_chr map
+#' @importFrom magrittr %>%
 #' @export
 prob_recommend.simulations <- function(x, ...) {
   if(length(x$fits) > 0) {
-    n_doses <- num_doses(x)
-    rec_d <- recommended_dose(x)
-    df <- c(sum(is.na(rec_d)),
-           map_int(1:n_doses, ~ sum(rec_d == .x, na.rm = TRUE)))
-    names(df) <- c('NoDose', 1:n_doses)
-    df / sum(df)
+    n_d <- num_doses(x)
+    if(length(n_d) == 1) {
+      # Monotherapy study
+      rec_d <- recommended_dose(x)
+      df <- c(
+        sum(is.na(rec_d)),
+        map_int(seq_len(n_d), ~ sum(rec_d == .x, na.rm = TRUE))
+      )
+      names(df) <- c("NoDose", seq_len(n_d))
+      df / sum(df)
+    } else {
+      # Combination study
+      rec_d_s <- recommended_dose(x, dose_string = TRUE)
+      d_i <- dose_indices(x)
+      d_i_s <- d_i %>%
+        map_chr(dose_vector_to_string)
+      p_r <- c(
+        sum(str_detect(rec_d_s, "NA")),
+        map_int(d_i_s, ~ sum(rec_d_s == .x))
+      )
+      p_r <- p_r / sum(p_r)
+      tibble(
+        dose = c("NoDose", d_i),
+        dose_string = c("NoDose", d_i_s),
+        prob_recommend = p_r
+      )
+    }
   } else {
     return(NULL)
   }
@@ -227,18 +369,36 @@ prob_recommend.simulations <- function(x, ...) {
 #' @export
 prob_administer.simulations <- function(x, method = 0, ...) {
   if(length(x$fits) > 0) {
-    if(method == 0) {
-      n_doses <- num_doses(x)
-      total_n_at_dose <- n_at_dose(x) %>% colSums()
-      names(total_n_at_dose) <- 1:n_doses
-      total_n_at_dose / sum(total_n_at_dose)
-    } else if(method == 1) {
-      x$fits %>%
-        map(~ tail(.x, 1)[[1]]) %>%
-        map(prob_administer) %>%
-        do.call(what = rbind)
+    n_d <- num_doses(x)
+    if(length(n_d) == 1) {
+      # Monotherapy study
+      if(method == 0) {
+        total_n_at_dose <- n_at_dose(x) %>% colSums()
+        names(total_n_at_dose) <- seq_len(n_d)
+        total_n_at_dose / sum(total_n_at_dose)
+      } else if(method == 1) {
+        x$fits %>%
+          map(~ tail(.x, 1)[[1]]) %>%
+          map(prob_administer) %>%
+          do.call(what = rbind)
+      } else {
+        return(NULL)
+      }
     } else {
-      return(NULL)
+      # Combination study
+      if(method == 0) {
+        total_n_at_dose <-
+          n_at_dose(x) %>%
+          reduce(`+`)
+        total_n_at_dose / sum(total_n_at_dose)
+      } else if(method == 1) {
+        x$fits %>%
+          map(~ tail(.x, 1)[[1]]) %>%
+          map("fit") %>%
+          map(prob_administer)
+      } else {
+        return(NULL)
+      }
     }
   } else {
     return(NULL)
@@ -260,6 +420,7 @@ trial_duration.simulations <- function(x, method = 0, ...) {
 #' @export
 print.simulations <- function(x, ...) {
 
+  n_d <- num_doses(x)
   supports_efficacy <- ifelse(
     'supports_efficacy' %in% names(x),
     x$supports_efficacy,
@@ -273,14 +434,25 @@ print.simulations <- function(x, ...) {
   cat('\n')
 
   ptox <- x$true_prob_tox
-  names(ptox) <- dose_indices(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    names(ptox) <- dose_strings(x)
+  } else {
+    # Combination study
+  }
   cat('True probability of toxicity:\n')
   print(ptox, digits = 3)
   cat('\n')
 
   if(supports_efficacy) {
     peff <- x$true_prob_eff
-    names(peff) <- dose_indices(x)
+
+    if(length(n_d) == 1) {
+      # Monotherapy study
+      names(peff) <- dose_strings(x)
+    } else {
+      # Combination study
+    }
     cat('True probability of efficacy:\n')
     print(peff, digits = 3)
     cat('\n')
@@ -313,38 +485,70 @@ print.simulations <- function(x, ...) {
   cat('\n')
 }
 
+#' @importFrom magrittr %>%
+#' @importFrom tibble tibble
+#' @importFrom purrr reduce
+#' @importFrom dplyr select everything
 #' @export
 summary.simulations <- function(object, ...) {
 
+  n_d <- num_doses(object)
   supports_efficacy <- ifelse(
     'supports_efficacy' %in% names(object),
     object$supports_efficacy,
     FALSE
   )
+  dose_labs <- c('NoDose', dose_strings(object))
 
-  dose_labs <- c('NoDose', as.character(dose_indices(object)))
-
-  if(supports_efficacy) {
-    tibble(
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    df <- tibble(
       dose = ordered(dose_labs, levels = dose_labs),
       tox = c(0, colMeans(tox_at_dose(object))),
-      eff = c(0, colMeans(eff_at_dose(object))),
       n = c(0, colMeans(n_at_dose(object))),
       true_prob_tox = c(0, object$true_prob_tox),
-      true_prob_eff = c(0, object$true_prob_eff),
       prob_recommend = unname(prob_recommend(object)),
       prob_administer = c(0, prob_administer(object))
+    )
+  } else if(length(n_d) == 2) {
+    # Dual-agent study
+    # The below uses of t() only make sense in 2-d matrices, i.e. dual agent
+    # It might also work in studies with three tmts and higher, but I have not
+    # tested it.
+    df <- tibble(
+      dose = factor(dose_labs, levels = dose_labs),
+      tox = c(0, t(reduce(tox_at_dose(object), `+`) / length(object))),
+      n = c(0, t(reduce(n_at_dose(object), `+`) / length(object))),
+      true_prob_tox = c(0, t(object$true_prob_tox)),
+      prob_recommend = prob_recommend(object)$prob_recommend,
+      prob_administer = c(0, t(prob_administer(object)))
     )
   } else {
-    tibble(
-      dose = ordered(dose_labs, levels = dose_labs),
-      tox = c(0, colMeans(tox_at_dose(object))),
-      n = c(0, colMeans(n_at_dose(object))),
-      true_prob_tox = c(0, object$true_prob_tox),
-      prob_recommend = unname(prob_recommend(object)),
-      prob_administer = c(0, prob_administer(object))
+    stop(
+      "Simulation summary not implemented for combinations of more than 2 tmts"
     )
   }
+
+  if(supports_efficacy) {
+    if(length(n_d) == 1) {
+      # Monotherapy study
+      df$eff <- c(0, colMeans(eff_at_dose(object)))
+      df$true_prob_eff <- c(0, object$true_prob_eff)
+    } else if(length(n_d) == 2) {
+      # Combination study
+      df$eff <- c(0, t(reduce(eff_at_dose(object), `+`) / length(object)))
+      df$true_prob_eff <- c(0, t(object$true_prob_eff))
+    } else {
+      stop(
+        "Simulation summary not implemented for combinations of more than 2 tmts"
+      )
+    }
+    df <- df %>%
+      select(dose, tox, eff, n, true_prob_tox, true_prob_eff,
+             prob_recommend, prob_administer, everything())
+  }
+
+  return(df)
 }
 
 #' @importFrom tibble as_tibble
