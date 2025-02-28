@@ -9,7 +9,7 @@ phase1_tite_sim <- function(
   patient_sample = PatientSample$new(),
   sample_patient_arrivals = function(df) cohorts_of_n(n=1, mean_time_delta=1),
   previous_outcomes = "",
-  # next_dose = NULL,
+  next_dose = NULL,
   time_now = NULL,
   max_time,
   min_fup_time = 0,
@@ -51,7 +51,9 @@ phase1_tite_sim <- function(
   max_i <- 30 # Maximum number of dose decisions to make; ignored if
               # i_like_big_trials = TRUE.
   fit <- selector_factory %>% fit(base_df)
-  next_dose <- recommended_dose(fit)
+  if(is.null(next_dose)) {
+    next_dose <- recommended_dose(fit)
+  }
   fits <- list()
   fits[[1]] <- list(.depth = i, time = time_now, fit = fit)
 
