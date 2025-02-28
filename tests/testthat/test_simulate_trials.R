@@ -1,5 +1,5 @@
 
-test_that('Simulation results are sensible', {
+test_that("Simulation results are sensible", {
 
   true_prob_tox <- c(0.12, 0.27, 0.44, 0.53, 0.57)
   num_sims <- 10
@@ -8,7 +8,8 @@ test_that('Simulation results are sensible', {
   sims <- get_three_plus_three(num_doses = 5) %>%
     simulate_trials(num_sims = num_sims, true_prob_tox = true_prob_tox)
 
-  expect_is(sims, "simulations")
+  # expect_is(sims, "simulations")
+  check_simulations_consistency(sims)
   expect_equal(length(sims$fits), num_sims)
   # Expect one model fit each iteration
   expect_true(all(sapply(sims$fit, length) == 1))
@@ -25,7 +26,8 @@ test_that('Simulation results are sensible', {
   sims <- get_dfcrm(skeleton = skeleton, target = target) %>%
     stop_at_n(n = 12) %>%
     simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox)
-  expect_is(sims, "simulations")
+  # expect_is(sims, "simulations")
+  check_simulations_consistency(sims)
   expect_equal(length(sims$fits), num_sims)
   # Expect one model fit each iteration
   expect_true(all(sapply(sims$fit, length) == 1))
@@ -38,7 +40,8 @@ test_that('Simulation results are sensible', {
     stop_at_n(n = 12) %>%
     simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
                     previous_outcomes = '5TTT')
-  expect_is(sims, "simulations")
+  # expect_is(sims, "simulations")
+  check_simulations_consistency(sims)
   expect_equal(length(sims$fits), num_sims)
   # Expect one model fit each iteration
   expect_true(all(sapply(sims$fit, length) == 1))
@@ -55,7 +58,8 @@ test_that('Simulation results are sensible', {
     stop_at_n(n = 12) %>%
     simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox,
                     next_dose = 5)
-  expect_is(sims, "simulations")
+  # expect_is(sims, "simulations")
+  check_simulations_consistency(sims)
   expect_equal(length(sims$fits), num_sims)
   # Expect one model fit each iteration
   expect_true(all(sapply(sims$fit, length) == 1))
@@ -72,7 +76,8 @@ test_that('Simulation results are sensible', {
                    simulate_trials(num_sims = 1, true_prob_tox = true_prob_tox)
   )
   # Nevertheless, it should have succeeded and contain sensible results:
-  expect_is(sims, "simulations")
+  # expect_is(sims, "simulations")
+  check_simulations_consistency(sims)
   expect_equal(length(sims$fits), 1)
   # Expect one model fit each iteration
   expect_true(all(sapply(sims$fit, length) == 1))
@@ -88,6 +93,7 @@ test_that('Simulation results are sensible', {
     stop_at_n(n = 99) %>%
     simulate_trials(num_sims = 1, true_prob_tox = true_prob_tox,
                     i_like_big_trials = TRUE)
+  check_simulations_consistency(sims)
   # Expect one model fit each iteration
   expect_true(all(sapply(sims$fit, length) == 1))
   # Probability of recommendation should be 1
@@ -100,6 +106,7 @@ test_that('Simulation results are sensible', {
   sims <- get_three_plus_three(num_doses = 5) %>%
     simulate_trials(num_sims = num_sims, true_prob_tox = true_prob_tox,
                     return_all_fits = TRUE)
+  check_simulations_consistency(sims)
   # Expect many model fits per iteration
   expect_true(all(sapply(sims$fit, length) >= 1))
   expect_true(any(sapply(sims$fit, length) > 1))
@@ -126,6 +133,7 @@ test_that("TITE simulation results are sensible", {
     true_prob_tox = true_prob_tox,
     max_time = 2
   )
+  check_simulations_consistency(sims0)
   expect_equal(
     max(num_patients(sims0)),
     10
@@ -141,6 +149,7 @@ test_that("TITE simulation results are sensible", {
       cohorts_of_n(n = 1, mean_time_delta=2),
     max_time = 2
   )
+  check_simulations_consistency(sims1)
   expect_equal(
     max(num_patients(sims1)),
     10
@@ -159,6 +168,7 @@ test_that("TITE simulation results are sensible", {
     sample_patient_arrivals = function(df) cohorts_of_n(n = 1, mean_time_delta=2),
     max_time = 20
   )
+  check_simulations_consistency(sims2)
   expect_equal(
     max(num_patients(sims2)),
     10
@@ -186,6 +196,7 @@ test_that("TITE simulation results are sensible", {
       max_time = 20
     )
   })
+  check_simulations_consistency(sims3)
   expect_equal(
     max(num_patients(sims3)),
     10
@@ -211,6 +222,7 @@ test_that("TITE simulation results are sensible", {
     sample_patient_arrivals = sample_patient_arrivals,
     max_time = 2
   )
+  check_simulations_consistency(sims4)
   expect_equal(
     max(num_patients(sims4)),
     10
@@ -218,7 +230,12 @@ test_that("TITE simulation results are sensible", {
 
 })
 
-test_that('3+3 simulations match independent source', {
+test_that("BOIN-COMB simulations are sensible", {
+  # TODO
+  expect_true(TRUE)
+})
+
+test_that("3+3 simulations match independent source", {
 
   # Wheeler et al. published a Shiny app to calculate the exact operating
   # characteristics of 3+3 designs at  https://github.com/graham-wheeler/AplusB.
@@ -240,6 +257,7 @@ test_that('3+3 simulations match independent source', {
   # For low precision but quick computation:
   sims <- get_three_plus_three(num_doses = 5, allow_deescalate = TRUE) %>%
     simulate_trials(num_sims = 10^2, true_prob_tox = true_prob_tox)
+  check_simulations_consistency(sims)
   expect_equal(
     unname(prob_recommend(sims)),
     c(0.1, 0.28, 0.33, 0.2, 0.06, 0.02), # Wheeler stats
@@ -251,6 +269,7 @@ test_that('3+3 simulations match independent source', {
   set.seed(2023)
   sims <- get_three_plus_three(num_doses = 8, allow_deescalate = FALSE) %>%
     simulate_trials(num_sims = 10^2, true_prob_tox = true_prob_tox)
+  check_simulations_consistency(sims)
   expect_equal(
     unname(prob_recommend(sims)),
     c(0.09, 0.26, 0.33, 0.22, 0.08, 0.02, 0, 0, 0), # Wheeler stats
@@ -259,7 +278,7 @@ test_that('3+3 simulations match independent source', {
 
 })
 
-test_that('TPI simulations match independent source', {
+test_that("TPI simulations match independent source", {
 
   # In Table 2 of:
   # Ji, Y.; Li, Y.; Nebiyou Bekele, B. (2007). Dose-finding in phase I clinical
@@ -278,6 +297,7 @@ test_that('TPI simulations match independent source', {
   set.seed(123)
   sims1 <- tpi_fitter %>%
     simulate_trials(num_sims = 10^2, true_prob_tox = sc1, next_dose = 1)
+  check_simulations_consistency(sims1)
   expect_equal(
     unname(prob_recommend(sims1)),
     c(0, 0.13, 0.79, 0.08, 0, 0, 0, 0, 0),
@@ -303,7 +323,7 @@ test_that('TPI simulations match independent source', {
   # See Scratch/ of GitHub repo.
 })
 
-test_that('mTPI simulations match independent source', {
+test_that("mTPI simulations match independent source", {
 
   # In Table 1 of:
   # Yuan Ji, ; Ping Liu, ; Yisheng Li, ; Nebiyou Bekele, B.  (2010). A modified
@@ -323,6 +343,7 @@ test_that('mTPI simulations match independent source', {
   set.seed(123)
   sims1 <- model %>%
     simulate_trials(num_sims = 10^2, true_prob_tox = sc1, next_dose = 1)
+  check_simulations_consistency(sims1)
   expect_equal(
     unname(prob_recommend(sims1)),
     c(0, 0.14, 0.78, 0.08, 0, 0, 0, 0, 0),

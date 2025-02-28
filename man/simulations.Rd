@@ -42,6 +42,8 @@ The \code{simulations} object implements the following functions:
   \item \code{\link{num_patients}}
   \item \code{\link{num_doses}}
   \item \code{\link{dose_indices}}
+  \item \code{\link{dose_strings}}
+  \item \code{\link{doses_given}}
   \item \code{\link{n_at_dose}}
   \item \code{\link{tox_at_dose}}
   \item \code{\link{num_tox}}
@@ -61,6 +63,7 @@ sims <- get_three_plus_three(num_doses = 5) \%>\%
 sims \%>\% num_patients()
 sims \%>\% num_doses()
 sims \%>\% dose_indices()
+sims \%>\% dose_strings()
 sims \%>\% n_at_dose()
 sims \%>\% tox_at_dose()
 sims \%>\% num_tox()

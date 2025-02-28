@@ -119,6 +119,7 @@ phase1_2_comb_sim <- function(
       # eff = eff,
       time = time
     )
+    new_data$dose <- map(new_data$dose_string, dose_string_to_vector)
     if(!is.null(true_prob_eff)) {
       new_data$eff <- eff
     }

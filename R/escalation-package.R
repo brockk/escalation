@@ -22,7 +22,7 @@
 #' functions to run simulations and calculate dose-paths for future cohorts of
 #' patients.
 #'
-#' @docType package
 #' @name escalation-package
 #' @aliases escalation
-NULL
+#' @keywords internal
+"_PACKAGE"

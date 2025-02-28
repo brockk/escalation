@@ -5,23 +5,37 @@ spruce_outcomes_df <- function(df) {
   # Avoid built NOTES etc
   dose <- NULL
 
+  if(!("dose" %in% colnames(df))) {
+    stop("Expected dose column in df")
+  }
+  if(!("tox" %in% colnames(df))) {
+    stop("Expected tox column in df")
+  }
+
   if(is.list(df$dose)) {
+    # Combination study
     df$dose <- map(df$dose, as.integer)
-    # Add dose_string column because, for filtering, dose must ultimately be
-    # represented by a scalar primitive type:
-    df <-
-      df %>%
-      mutate(
-        dose_string = map_chr(dose, dose_vector_to_string)
-      )
+
+    # Add dose_string col if not already present.
+    # Dose must be represented by a scalar primitive type like int or character
+    if(!("dose_string" %in% colnames(df))) {
+      df <-
+        df %>%
+        mutate(
+          dose_string = map_chr(dose, dose_vector_to_string)
+        )
+    }
   } else {
+    # Monotherapy study
     df$dose <- as.integer(df$dose)
   }
+
   df$tox <- as.integer(df$tox)
   if('cohort' %in% colnames(df)) df$cohort <- as.integer(df$cohort)
   if('patient' %in% colnames(df)) df$patient <- as.integer(df$patient)
   if('eff' %in% colnames(df)) df$eff <- as.integer(df$eff)
-  df
+
+  return(df)
 }
 
 
@@ -268,12 +282,6 @@ cohorts_of_n <- function(n = 3, mean_time_delta = 1) {
 #' @examples
 #' dose_vector_to_string(as.integer(c(1, 3))) # The indices must be integers!
 dose_vector_to_string <- function(x) {
-  # if(!is.integer(x)) {
-  #   stop("x should be of type integer")
-  # }
-  if(any(x <= 0)) {
-    stop("x should be strictly positive")
-  }
   return(paste(x, collapse = "."))
 }
 

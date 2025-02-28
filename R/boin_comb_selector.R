@@ -221,9 +221,24 @@ cohort.boin_comb_selector <- function(x, ...) {
   return(x$df$cohort)
 }
 
+#' @rdname doses_given
+#' @param dose_string TRUE to return vector of character dose-strings; FALSE
+#' (the default) to get a matrix of the doses given, with the dose-indices of
+#' the treatments in columns and patients in rows.
+#' @importFrom magrittr %>%
+#' @importFrom purrr map reduce
 #' @export
-doses_given.boin_comb_selector <- function(x, ...) {
-  return(x$df$dose)
+doses_given.boin_comb_selector <- function(x, dose_string = FALSE, ...) {
+  if(dose_string) {
+    return(x$df$dose_string)
+  } else {
+    return(
+      x$df$dose_string %>%
+        map(dose_string_to_vector) %>%
+        map(rbind) %>%
+        reduce(rbind)
+    )
+  }
 }
 
 #' @export

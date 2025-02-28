@@ -22,6 +22,7 @@
 #'   \item \code{\link{num_doses}}
 #'   \item \code{\link{dose_indices}}
 #'   \item \code{\link{dose_strings}}
+#'   \item \code{\link{doses_given}}
 #'   \item \code{\link{n_at_dose}}
 #'   \item \code{\link{tox_at_dose}}
 #'   \item \code{\link{num_tox}}
@@ -120,14 +121,63 @@ dose_indices.simulations <- function(x, ...) {
 #' @importFrom purrr map_chr
 #' @export
 dose_strings.simulations <- function(x, ...) {
-  return(
-    map_chr(
-      get_dose_combo_indices(num_doses(x)),
-      dose_vector_to_string
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    return(as.character(seq_len(n_d)))
+  } else {
+    # Combination study
+    return(
+      map_chr(
+        get_dose_combo_indices(num_doses(x)),
+        dose_vector_to_string
+      )
     )
-  )
+  }
 }
 
+#' @rdname doses_given
+#' @param dose_string TRUE to return vector of character dose-strings; FALSE
+#' (the default) to get a list of matrices, one for each simulated trial, with
+#' the dose-indices of the different treatments in columns and patients in rows.
+#' @importFrom magrittr %>%
+#' @importFrom purrr map reduce
+#' @export
+doses_given.simulations <- function(x, dose_strings = FALSE, ...) {
+  n_d <- num_doses(x)
+  if(length(n_d) == 1) {
+    # Monotherapy study
+    return(
+      x$fits %>%
+        map(~ tail(.x, 1)[[1]]) %>%
+        map("fit") %>%
+        map(doses_given) %>%
+        reduce(rbind) %>%
+        unname()
+    )
+  } else {
+    # Combination study
+    if(dose_strings) {
+      return(
+        x$fits %>%
+          map(~ tail(.x, 1)[[1]]) %>%
+          map("fit") %>%
+          map(doses_given, dose_string = TRUE) %>%
+          reduce(rbind) %>%
+          unname()
+      )
+    } else {
+      return(
+        x$fits %>%
+          map(~ tail(.x, 1)[[1]]) %>%
+          map("fit") %>%
+          map(doses_given)
+      )
+    }
+  }
+}
+
+#' @rdname recommended_dose
 #' @param dose_string TRUE to return vector of character dose-strings; FALSE
 #' (the default) to get a numerical vector of recommended dose-indices in
 #' monotherapy studies, or a matrix of recommended dose-indices in combination
@@ -379,6 +429,7 @@ prob_administer.simulations <- function(x, method = 0, ...) {
       } else if(method == 1) {
         x$fits %>%
           map(~ tail(.x, 1)[[1]]) %>%
+          map("fit") %>%
           map(prob_administer) %>%
           do.call(what = rbind)
       } else {
