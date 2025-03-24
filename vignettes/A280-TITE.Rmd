@@ -1,11 +1,11 @@
 ---
-title: "Time-to-Event Designs"
+title: "TITE-CRM and TITE-NBG - Time-to-Event Designs"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble
 bibliography: library.bib
 vignette: >
-  %\VignetteIndexEntry{TITE-CRM and TITE-NBG}
+  %\VignetteIndexEntry{TITE-CRM and TITE-NBG - Time-to-Event Designs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

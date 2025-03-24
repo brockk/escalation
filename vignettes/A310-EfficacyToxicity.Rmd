@@ -1,5 +1,5 @@
 ---
-title: "Efficacy & Toxicity Designs"
+title: "EffTox, Wages & Tait, and BOIN12 - Efficacy & Toxicity Designs"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble

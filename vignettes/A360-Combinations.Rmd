@@ -1,11 +1,11 @@
 ---
-title: "Treatment Combination Designs"
+title: "BOIN-COMB - Treatment Combination Designs"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble
 bibliography: library.bib
 vignette: >
-  %\VignetteIndexEntry{Treatment Combination Designs}
+  %\VignetteIndexEntry{BOIN-COMB - Treatment Combination Designs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

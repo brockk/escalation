@@ -1,4 +1,11 @@
 
+# escalation 0.2.3
+
+* Added three new vignettes on phase I/II designs, TITE-designs, and combination designs.
+* Added BOIN-COMB MTD selector
+* Added tests and docs
+* Fixed bugs and typos
+
 # escalation 0.2.2
 
 * Added boin12_rds() to tabulate desirability scores in a BOIN12 trial.

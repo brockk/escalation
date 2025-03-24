@@ -1,5 +1,5 @@
 ---
-title: "Modified Toxicity Probability Interval Design"
+title: "mTPI - Modified Toxicity Probability Interval Design"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble

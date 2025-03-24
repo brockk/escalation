@@ -1,5 +1,5 @@
 ---
-title: "Toxicity Probability Interval Design"
+title: "TPI - Toxicity Probability Interval Design"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble

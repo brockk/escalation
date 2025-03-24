@@ -1,5 +1,5 @@
 ---
-title: "Neuenschwander, Branson & Gsponer"
+title: "NBG - Neuenschwander, Branson & Gsponer"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble

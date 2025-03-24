@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Optimal Interval Design"
+title: "BOIN - Bayesian Optimal Interval Design"
 output: 
   rmarkdown::html_vignette:
     df_print: tibble
