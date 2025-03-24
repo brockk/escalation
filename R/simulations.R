@@ -143,7 +143,7 @@ dose_strings.simulations <- function(x, ...) {
 #' @importFrom magrittr %>%
 #' @importFrom purrr map reduce
 #' @export
-doses_given.simulations <- function(x, dose_strings = FALSE, ...) {
+doses_given.simulations <- function(x, dose_string = FALSE, ...) {
   n_d <- num_doses(x)
   if(length(n_d) == 1) {
     # Monotherapy study
@@ -157,7 +157,7 @@ doses_given.simulations <- function(x, dose_strings = FALSE, ...) {
     )
   } else {
     # Combination study
-    if(dose_strings) {
+    if(dose_string) {
       return(
         x$fits %>%
           map(~ tail(.x, 1)[[1]]) %>%

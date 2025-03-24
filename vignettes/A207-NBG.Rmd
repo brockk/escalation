@@ -5,7 +5,7 @@ output:
     df_print: tibble
 bibliography: library.bib
 vignette: >
-  %\VignetteIndexEntry{Neuenschwander, Branson & Gsponer}
+  %\VignetteIndexEntry{NBG - Neuenschwander, Branson & Gsponer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

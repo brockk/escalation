@@ -63,14 +63,12 @@ n_at_dose.combo_selector <- function(x, dose = NULL, ...) {
     if(dose == 'recommended') {
       rec_d <- recommended_dose(x)
       rec_d_str <- dose_vector_to_string(rec_d)
-      d_g <- doses_given(x)
-      d_g_str <- map_chr(d_g, dose_vector_to_string)
+      d_g_str <- doses_given(x, dose_string = TRUE)
       return(sum(d_g_str == rec_d_str))
     }
   } else {
     d_str <- dose_vector_to_string(dose)
-    d_g <- doses_given(x)
-    d_g_str <- map_chr(d_g, dose_vector_to_string)
+    d_g_str <- doses_given(x, dose_string = TRUE)
     return(sum(d_g_str == d_str))
   }
 }

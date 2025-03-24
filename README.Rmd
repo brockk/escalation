@@ -55,6 +55,7 @@ When it sees two-out-of-six toxicities at dose 3, it concludes that dose 3 is to
 
 `escalation` provides functions to use common dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), the TPI suite of designs, efficacy-toxicity designs like EffTox or Wages & Tait, and (as we have seen) the perennial 3+3:
 
+* `get_three_plus_three()`
 * `get_dfcrm()`
 * `get_trialr_crm()`
 * `get_trialr_nbg()`
@@ -62,9 +63,13 @@ When it sees two-out-of-six toxicities at dose 3, it concludes that dose 3 is to
 * `get_mtpi()`
 * `get_mtpi2()`
 * `get_boin()`
+* `get_dfcrm_tite()`
+* `get_trialr_crm_tite()`
+* `get_trialr_nbg_tite()`
 * `get_trialr_efftox()`
+* `get_boin12()`
 * `get_wages_and_tait()`
-* `get_three_plus_three()`
+* `get_boin_comb()`
 
 These functions create model fitting objects.
 Where possible, technical implementations are imported from existing R packages like `dfcrm`, `trialr`, and `BOIN`.
@@ -83,6 +88,8 @@ For example, we can add behaviours to prevent skipping doses, or to stop when we
 * `try_rescue_dose()`
 * `follow_path()`
 * `select_dose_by_cibp()`
+* `unadmit_untested()`
+* `expand_last_dose_to_cohort()`
 
 Each of these functions overrides the way doses are selected or when a design decides to stop the trial.
 The behaviours can be flexibly combined using the `%>%` operator from the `tidyverse` suite.

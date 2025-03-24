@@ -21,12 +21,12 @@ check_simulations_consistency <- function(x) {
   })
   suppressWarnings({
     expect_no_error({
-      doses_given(x, dose_strings = TRUE)
+      doses_given(x, dose_string = TRUE)
     })
   })
   suppressWarnings({
     expect_no_error({
-      doses_given(x, dose_strings = FALSE)
+      doses_given(x, dose_string = FALSE)
     })
   })
   expect_no_error({

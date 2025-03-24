@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 To provide dose selection decisions, the `escalation` package daisy-chains together objects that support a common interface, each deriving from type `selector`.
 This vignette demonstrates the entire interface supported by `selector` objects.
-For the purpose of illustratration, we use a BOIN selector but the same functions will work on every type of dose selector in `escalation`.
+For the purpose of illustration, we use a BOIN selector but the same functions will work on every type of dose selector in `escalation`.
 
 ```{r setup}
 library(escalation)
@@ -49,7 +49,7 @@ Cohort IDs for the treated patients:
 ```{r}
 cohort(fit)
 ```
-The code infers from the spaces in the outcome string that a dose-decision was made after the second, fourth , and sixth patients.
+The code infers from the spaces in the outcome string that a dose-decision was made after the second, fourth, and sixth patients.
 
 Integers representing the dose-levels given:
 ```{r}
@@ -80,6 +80,13 @@ The indices of the dose-levels under investigation:
 ```{r}
 dose_indices(fit)
 ```
+
+plus textual representations of the dose-levels under investigation:
+```{r}
+dose_strings(fit)
+```
+In this monotherapy setting, these textual representations offer little more than the integer dose-indices.
+However, in subsequent articles we will see the value of the dose_strings as a succinct way to represent doses in treatment combination dose-finding trials.
 
 The dose-level recommended for the next patient:
 ```{r}

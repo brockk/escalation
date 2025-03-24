@@ -51,22 +51,40 @@ stack_sims_vert <- function(sim_map, target_dose = NULL, alpha = 0.05) {
   sim_map %>%
     imap(
       ~ {
-        if(is.null(target_dose)) target_dose <- dose_indices(.x)
+        n_d <- num_doses(.x)
         rec_d <- recommended_dose(.x)
         rec_d[is.na(rec_d)] <- 0 # Replace NAs with 0
-
-        target_dose %>%
-          map(.f = function(td) {
-            tibble(
-              dose = td,
-              hit = rec_d == td,
-              r = cumsum(hit),
-              n = seq_len(length(.x))
-            )
-          }) %>%
-          reduce(bind_rows) %>%
-          mutate(design = .y)
-
+        if(length(n_d) > 1) {
+          # Combination scenario
+          if(is.null(target_dose)) target_dose <- dose_strings(.x)
+          rec_d_str <- recommended_dose(.x, dose_string = TRUE)
+          target_dose %>%
+            map(.f = function(td) {
+              tibble(
+                # dose_string = td,
+                dose = td,
+                hit = rec_d_str == td,
+                r = cumsum(hit),
+                n = seq_len(length(.x))
+              )
+            }) %>%
+            reduce(bind_rows) %>%
+            mutate(design = .y)
+        } else {
+          if(is.null(target_dose)) target_dose <- dose_indices(.x)
+          # Monotherapy scenario
+          target_dose %>%
+            map(.f = function(td) {
+              tibble(
+                dose = td,
+                hit = rec_d == td,
+                r = cumsum(hit),
+                n = seq_len(length(.x))
+              )
+            }) %>%
+            reduce(bind_rows) %>%
+            mutate(design = .y)
+        }
       }
     ) %>%
     reduce(bind_rows) %>%

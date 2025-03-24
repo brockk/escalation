@@ -51,7 +51,7 @@ Yan, F., Pan, H., Zhang, L., Liu, S., & Yuan, Y. (2019).
 BOIN: An R Package for Designing Single-Agent and Drug-Combination
 Dose-Finding Trials Using Bayesian Optimal Interval Designs.
 Journal of Statistical Software, 27(November 2017), 0–35.
-https://doi.org/10.18637/jss.v000.i00
+https://doi.org/10.18637/jss.v094.i13
 
 Liu, S., & Yuan, Y. (2015).
 Bayesian optimal interval designs for phase I clinical trials.

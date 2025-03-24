@@ -1,0 +1,275 @@
+---
+title: "Time-to-Event Designs"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{TITE-CRM and TITE-NBG}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>",
+fig.width = 7, fig.height = 5
+)
+```
+
+# Introduction
+
+## TITE-CRM
+@Cheung2000 introduced TITE-CRM as a variant of the regular CRM [@OQuigley1990] that handles late-onset toxicities.
+Dose-finding trials tend to use a short toxicity window after the commencement of therapy, during which each patient is evaluated for the presence or absence of dose-limiting toxicity (DLT).
+This approach works well in treatments like chemotherapy where toxic reactions are expected to manifest relatively quickly.
+In contrast, one of the hallmarks of radiotherapy, for instance, is that related adverse reactions can manifest many months after the start of treatment.
+A similar phenomenon may arise with immunotherapies.
+
+In adaptive dose-finding clinical trials, where doses are selected mid-trial in response to the outcomes experienced by patients evaluated hitherto, late-onset toxic events present a distinct methodological challenge.
+Naturally, the toxicity window will need to be long enough to give the trial a good chance of observing events of interest.
+If, however, we wait until each patient completes the evaluation window before using their outcome to forecast the best dose, the trial may take an infeasibly long time and ignore pertinent interim data.
+
+TITE-CRM presents a solution by introducing the notion of a _partial tolerance_ event. 
+If a patient is half way through the evaluation window and has not yet experienced toxicity, we may say that they have experienced half a tolerance. 
+This simple novelty allows partial information to be used in dose-recommendation decisions.
+If the patient goes on to complete the window with no toxic reaction, they will be regarded as having completely tolerated treatment, as is normally the case with CRM and other dose-finding algorithms.
+This notion of partial events is only applied to tolerances, however.
+If a patient experiences toxicity at any point during the evaluation window, they are immediately regarded as having experienced 100% of a DLT event.
+
+To illustrate TITE-CRM mathematically, we start with the likelihood from the plain vanilla CRM.
+Let $Y_i$ be a random variable taking values $\{0, 1\}$ reflecting the absence and presence of DLT respectively in patient $i$.
+A patient administered dose $x_i$ has estimated probability of toxicity $F(x_i, \theta)$, where $\theta$ represents the set of model parameters.
+The likelihood component arising from patient $i$ is
+
+$$ F(x_i, \theta)^{Y_i} (1 - F(x_i, \theta))^{1-Y_i} $$
+
+and the aggregate likelihood after the evaluation of $J$ patients is 
+
+$$ L_J(\theta) = \prod_{i=1}^J \left\{ F(x_i, \theta) \right\}^{Y_i} \left\{ 1 - F(x_i, \theta) \right\}^{1-Y_i} $$
+
+@Cheung2000 observed that each patient may provide a weight, $w_i$, reflecting the extend to which their outcome has been evaluated.
+The weighted likelihood is
+
+$$ L_J(\theta) = \prod_{i=1}^J \left\{ w_i F(x_i, \theta) \right\}^{Y_i} \left\{ 1 - w_i F(x_i, \theta) \right\}^{1-Y_i} $$
+
+TITE-CRM weights the outcomes according to the extend to which patients have completed the evaluation period.
+To illustrate the design, we reproduce the example given on p.124 of @Cheung2011.
+Four patients have been treated at dose-level 3 and all are part-way through the 126-day toxicity evaluation window.
+
+The authors use the empiric model so that there is one parameter, $\theta = \beta$, the dose-toxicity relation is $F(x_i, \beta) = x_i^{exp(\beta)}$, and a $N(0, \sigma_{\beta}^2)$ prior is specified on $\beta$.
+
+## TITE-NBG
+@Neuenschwander2008 (NBG) introduced a derivative of the CRM for dose-escalation clinical trials using a two-parameter model (see the NBG vignette).
+
+The authors did not introduce a time-to-event variant of their design but it was simple to add one to `escalation` using the same method presented above with a weight parameter, $w$.
+We demonstrate that method here alongside TITE-CRM.
+
+
+# Implementation in `escalation`
+
+## TITE-CRM
+As with the regular CRM, we require a dose-toxicity skeleton and a target toxicity value.
+For illustration, we use the same parameters as used in the plain CRM vignette:
+
+```{r, message=FALSE}
+library(escalation)
+
+skeleton <- c(0.05, 0.12, 0.25, 0.40, 0.55)
+target <- 0.25
+
+a0 <- 3
+beta_sd <- sqrt(1.34)
+```
+
+`a0` is the fixed intercept value and `beta_sd` is the SD of the slope parameter.
+We then have design:
+
+```{r}
+model <- get_dfcrm_tite(
+  skeleton = skeleton, 
+  target = target,
+  model = "logistic", 
+  intcpt = a0, 
+  scale = beta_sd
+)
+```
+
+Elsewhere in `escalation`, we have represented outcomes using character strings.
+The complexity of specifying patient-level weights prevents that approach in time-to-event trials.
+Instead we represent outcomes in data-frames.
+For example:
+
+```{r}
+outcomes <- data.frame(
+  dose = c(1, 1, 2, 2, 3, 3),
+  tox = c(0, 0, 0, 0, 1, 0),
+  weight = c(1, 1, 1, 0.9, 1, 0.5),
+  cohort = c(1, 2, 3, 4, 5, 6)
+)
+
+outcomes
+```
+
+represents a scenario where we have sequentially had two patients each at dose-levels 1, 2 and 3.
+The first three patients have been fully evaluated as tolerating treatment (their `tox` parameters are 0 and their `weight` parameters are 1).
+The fifth patient is also fully-weighted because they unfortunately experienced toxicity (their `tox` parameter is 1 and their `weight` parameter is also 1).
+Finally, the fourth and sixth patients are still being evaluated without having experienced toxicity so far (their `tox` parameters are 0 and their `weight` parameters are less than 1).
+
+To fit the model to these outcomes, we run:
+
+```{r}
+x <- model %>% fit(outcomes)
+```
+
+The usual generic functions apply:
+
+```{r}
+print(x)
+```
+
+Note the `Weight` columns in the patient-level output.
+
+```{r}
+recommended_dose(x)
+```
+
+
+
+## TITE-NBG
+Let us reuse the design presented and justified by @Neuenschwander2008 and demonstrated in the NBG vignette:
+
+```{r}
+dose <- c(1, 2.5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250)
+
+model <- get_trialr_nbg_tite(
+  real_doses = dose, d_star = 250, target = 0.3,
+  alpha_mean = 2.15, alpha_sd = 0.84,
+  beta_mean = 0.52, beta_sd = 0.8,
+  seed = 2020
+)
+```
+
+To fit the model to the outcomes from the TITE-CRM example, we run:
+
+```{r}
+x <- model %>% fit(outcomes)
+```
+
+The usual generic functions apply:
+
+```{r}
+print(x)
+```
+
+```{r}
+recommended_dose(x)
+```
+
+
+## Dose paths
+Dose-paths do not make sense for time-to-event designs because there are practically infinite trial states once continuous patient-level weights are considered.
+Dose-paths are not implemented.
+
+
+## Simulation
+
+```{r}
+true_prob_tox <- c(0.25, 0.35, 0.5, 0.6, 0.7, 0.8)
+```
+
+For the sake of speed, we will run just a few iterations:
+
+```{r}
+num_sims <- 20
+```
+
+In real life, however, we would naturally run many iterations.
+
+Let us restrict the design to a sample size of 12 for a quick illustration.
+Running the simulation:
+
+```{r}
+model <- get_dfcrm_tite(
+  skeleton = skeleton, 
+  target = target,
+  model = "logistic", 
+  intcpt = a0, 
+  scale = beta_sd
+) %>% 
+  stop_at_n(n = 12)
+
+set.seed(2025)
+sims <- model %>% 
+  simulate_trials(
+    num_sims = num_sims, 
+    true_prob_tox = true_prob_tox,
+    max_time = 10
+  )
+```
+
+we see that from this small sample size that the low doses are most likely to be recommended:
+
+```{r}
+prob_recommend(sims)
+```
+
+with most patients treated at low dose-levels too:
+
+```{r}
+colMeans(n_at_dose(sims))
+```
+
+The simulated trial durations could be of interest in a time-to-event trial:
+
+```{r}
+trial_duration(sims)
+```
+
+The `max_time` parameter was specified so that the design could calculate the patient-level weights (i.e. how much of the observation window had been completed).
+In the above example, patients were assumed to arrive one at a time with the intra-patient arrival times distributed by an Exponential(1) distribution; this is the default.
+To override that, we specify a function in the `sample_patient_arrivals` parameter.
+The function must take the patient-level data-frame of the prevailing trial data as a parameter (i.e. with columns `cohort`, `patient`, `dose`, `tox`, and `time`), and return a data-frame with column `time_delta` and $n$ rows containing the arrival deltas of the next $n$ patients.
+For example, consider that you want to evaluate patients in cohorts of two.
+This is somewhat strange because a time-to-event design frees you from the obligation to use cohorts, but it is simple to implement.
+We could run:
+
+```{r}
+set.seed(2025)
+sims <- model %>% 
+  simulate_trials(
+    num_sims = num_sims, 
+    true_prob_tox = true_prob_tox,
+    max_time = 10,
+    sample_patient_arrivals = function(df) {
+      cohorts_of_n(n = 2, mean_time_delta = 1)
+    },
+    return_all_fits = TRUE
+  )
+```
+
+Note: the `return_all_fits = TRUE` param means that every model fit (all interims and final fits) are returned.
+We use it here to peak into the way simulations occur.
+However, in a production run with a large number of iterates and many patients, doing this could lead to memory problems.
+By default, `return_all_fits` is `FALSE`.
+
+The patient arrival times for the (for instance) third simulated trial iterate are random and always increasing:
+
+```{r}
+library(purrr)
+map_dbl(sims$fits[[3]], "time")
+```
+
+However, the doses given (patients in columns, simulated iterates in rows) appear in pairs to reflect that patients were treated in cohorts of two:
+
+```{r}
+doses_given(sims)
+```
+
+The inclusion of `df` as a parameter in the call to `sample_patient_arrivals` lets you tailor the patient arrival process in many creative ways, including variable cohort sizes, minimum intra-patient gaps, etc.
+
+For more information on running dose-finding simulations, refer to the simulation vignette.
+
+
+# References

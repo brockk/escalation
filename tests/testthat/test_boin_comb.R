@@ -1,5 +1,5 @@
 
-test_that("", {
+test_that("get_boin_comb works as expected", {
 
   # p.17 of https://odin.mdacc.tmc.edu/~yyuan/Software/BOIN/BOIN2.6_tutorial.pdf
 
@@ -20,10 +20,10 @@ test_that("", {
   expect_true(
     continue(x)
   )
-  # expect_output(
-  #   print(x),
-  #   "The model advocates continuing at dose '1.2'."
-  # )
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1.2"
+  )
   # check_dose_selector_consistency(x)
 
   # Describing outcomes as data.frame
@@ -59,10 +59,10 @@ test_that("", {
   expect_true(
     continue(x)
   )
-  # expect_output(
-  #   print(x),
-  #   "The model advocates continuing at dose '1.2'."
-  # )
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1.2."
+  )
   # check_dose_selector_consistency(x)
 
 
@@ -76,10 +76,10 @@ test_that("", {
   expect_true(
     continue(x)
   )
-  # expect_output(
-  #   print(x),
-  #   "The model advocates continuing at dose '1.1'."
-  # )
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1.1."
+  )
   # check_dose_selector_consistency(x)
 
   outcomes <-
@@ -131,12 +131,45 @@ test_that("", {
   expect_true(
     continue(x)
   )
-  # expect_output(
-  #   print(x),
-  #   "The model advocates continuing at dose '1.1'."
-  # )
+  expect_output(
+    print(x),
+    "The model advocates continuing at dose 1.1."
+  )
   # check_dose_selector_consistency(x)
 
+  # Describing outcomes as character string
+  outcomes <- "1.1NNN"
+  set.seed(2024)
+  x <- fit(boin_fitter, outcomes)
 
+
+  # Check it is possible to override p.saf and p.tox
+  num_doses <- c(3, 5)
+  target <- 0.3
+  boin_fitter1 <- get_boin_comb(
+    num_doses = num_doses, target = target,
+    p.saf = 0.18, p.tox = 0.42
+  )
+  boin_fitter2 <- get_boin_comb(
+    num_doses = num_doses, target = target,
+    p.saf = 0.01, p.tox = 0.99
+  )
+
+  outcomes <- "1.1NNN 2.1NNNNNNT 2.2NNNNNT"
+  set.seed(2025)
+  x1 <- fit(boin_fitter1, outcomes)
+  # First design should escalate:
+  expect_equal(
+    recommended_dose(x1),
+    c(2, 3)
+  )
+
+  set.seed(2025)
+  x2 <- fit(boin_fitter2, outcomes)
+  # Second design should stick:
+  expect_equal(
+    recommended_dose(x2),
+    c(2, 2)
+  )
 
 })

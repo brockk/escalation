@@ -116,3 +116,11 @@ expect_equal(
   max(num_patients(sims4)),
   10
 )
+
+sample_patient_arrivals = function(df, mean_time_delta = 1) {
+  time_delta <- rexp(n = 1, rate = 1 / mean_time_delta)
+  if(nrow(df) < 6) {
+    time_delta <- max(time_delta, 1)
+  }
+  data.frame(time_delta = time_delta)
+}

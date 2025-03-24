@@ -1,5 +1,5 @@
 
-#' Select dose by BOIN's MTD-choosing algorithm.
+#' Select dose by BOIN-COMB's MTD-choosing algorithm.
 #'
 #' Note: if you use this selector, it almost certainly needs to be the last
 #' example in the chain - see Example below. This method selects dose by the
@@ -21,14 +21,17 @@
 #'   authors' original intentions, the default is 'finally'.
 #' @param target We seek a dose with this probability of toxicity. If not
 #'   provided, the value will be sought from the parent dose-selector.
-#' @param ... Extra args are passed to \code{\link[BOIN]{select.mtd}}.
+#' @param ... Extra args are passed to \code{\link[BOIN]{select.mtd.comb}}.
 #'
 #' @return an object of type \code{\link{selector_factory}}.
 #'
 #' @export
 #'
 #' @examples
-#' # This class is intended to make the final dose selection in a BOIN trial:
+#' # This class is intended to make the final dose selection in a BOIN-COMB
+#' # trial:
+#' # TODO
+#'
 #' target <- 0.25
 #' model <- get_boin(num_doses = 5, target = target) %>%
 #'   stop_at_n(n = 12) %>%
@@ -55,7 +58,7 @@
 #'   R Package for Designing Single-Agent and Drug-Combination Dose-Finding
 #'   Trials Using Bayesian Optimal Interval Designs. Journal of Statistical
 #'   Software, 27(November 2017), 0–35. https://doi.org/10.18637/jss.v094.i13
-select_boin_mtd <- function(parent_selector_factory,
+select_boin_comb_mtd <- function(parent_selector_factory,
                             when = c('finally', 'always'),
                             target = NULL,
                             ...) {
@@ -68,29 +71,33 @@ select_boin_mtd <- function(parent_selector_factory,
     target = target,
     extra_args = list(...)
   )
-  class(x) <- c('boin_mtd_dose_selector_factory',
+  class(x) <- c('boin_comb_mtd_dose_selector_factory',
                 'derived_dose_selector_factory',
                 'selector_factory')
   return(x)
 }
 
-#' @importFrom BOIN select.mtd
-boin_mtd_dose_selector <- function(parent_selector,
-                                   when = c('finally', 'always'),
-                                   target = NULL,
-                                   ...) {
+#' @importFrom BOIN select.mtd.comb
+boin_comb_mtd_dose_selector <- function(parent_selector,
+                                        when = c('finally', 'always'),
+                                        target = NULL,
+                                        ...) {
 
   when <- match.arg(when)
 
   if(is.null(target)) {
     target <- tox_target(parent_selector)
     if(is.null(target)) {
-      stop(paste0("Target toxicity probability is required when selecting dose",
-                  " by BOIN's MTD algorithm. Could not fetch from parent."))
+      stop(
+        paste0(
+          "Target toxicity probability is required when selecting dose",
+          " by BOIN-COMB's MTD algorithm. Could not fetch from parent."
+        )
+      )
     }
   }
 
-  boin_fit <- select.mtd(
+  boin_fit <- select.mtd.comb(
     target = target,
     npts = n_at_dose(parent_selector),
     ntox = tox_at_dose(parent_selector),
@@ -104,7 +111,7 @@ boin_mtd_dose_selector <- function(parent_selector,
     boin_fit = boin_fit
   )
 
-  class(l) = c('boin_mtd_dose_selector',
+  class(l) = c('boin_comb_mtd_dose_selector',
                'derived_dose_selector',
                'selector')
   l
@@ -114,7 +121,8 @@ boin_mtd_dose_selector <- function(parent_selector,
 
 #' @importFrom magrittr %>%
 #' @export
-fit.boin_mtd_dose_selector_factory <- function(selector_factory, outcomes, ...) {
+fit.boin_comb_mtd_dose_selector_factory <-
+  function(selector_factory, outcomes, ...) {
 
   parent_selector <- selector_factory$parent %>% fit(outcomes, ...)
 
@@ -123,18 +131,19 @@ fit.boin_mtd_dose_selector_factory <- function(selector_factory, outcomes, ...) 
     when = selector_factory$when,
     target = selector_factory$target
   )
-  do.call(boin_mtd_dose_selector, args = args)
+  do.call(boin_comb_mtd_dose_selector, args = args)
 }
 
 # Selector interface
 
 #' @export
-recommended_dose.boin_mtd_dose_selector <- function(x, ...) {
-  # Note: For yucks, BOIN::select.mtd returns 99 when sample size is 0, like NA
-  # does not exist. Handle that.
+recommended_dose.boin_comb_mtd_dose_selector <- function(x, ...) {
+
+  # Note: For yucks, BOIN::select.mtd.comb returns c(99, 99) when sample size
+  # is 0, like NA does not exist. Handle that.
   if(x$when == 'always') {
     if(num_patients(x) > 0)
-      return(x$boin_fit$MTD)
+      return(as.numeric(x$boin_fit$MTD))
     else
       return(recommended_dose(x$parent, ...))
   } else if(x$when == 'finally') {
@@ -148,22 +157,22 @@ recommended_dose.boin_mtd_dose_selector <- function(x, ...) {
       return(NA)
     } else {
       # The parent has stopped and recommends a non-NA dose. Get involved:
-      return(x$boin_fit$MTD)
+      return(as.numeric(x$boin_fit$MTD))
     }
   }
 }
 
 #' @export
-print.boin_mtd_dose_selector <- function(x, ...) {
+print.boin_comb_mtd_dose_selector <- function(x, ...) {
   .dose_selector_print(x, ...)
 }
 
 #' @export
-as_tibble.boin_mtd_dose_selector <- function(x, ...) {
+as_tibble.boin_comb_mtd_dose_selector <- function(x, ...) {
   .dose_selector_to_tibble(x, ...)
 }
 
 #' @export
-summary.boin_mtd_dose_selector <- function(object, ...) {
+summary.boin_comb_mtd_dose_selector <- function(object, ...) {
   .dose_selector_summary(object, ...)
 }

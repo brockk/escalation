@@ -11,7 +11,7 @@
 
 doses_given(x, ...)
 
-\method{doses_given}{simulations}(x, dose_strings = FALSE, ...)
+\method{doses_given}{simulations}(x, dose_string = FALSE, ...)
 }
 \arguments{
 \item{x}{Object of type \code{\link{selector}}.}

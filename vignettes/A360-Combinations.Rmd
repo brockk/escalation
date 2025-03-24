@@ -1,0 +1,389 @@
+---
+title: "Treatment Combination Designs"
+output: 
+  rmarkdown::html_vignette:
+    df_print: tibble
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Treatment Combination Designs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7, fig.height = 5
+)
+```
+
+# Introduction
+The great majority of dose-finding designs are intended for use on a single treatment whose dose is being varied.
+There are a small number of designs that are intended for dose-finding in multiple therapies combined, where the dose of more than one treatment can be varied.
+A notable feature of this challenge is that the resulting dose space is multi-dimensional.
+There is no longer a single optimal dose or maximum tolerable dose to identify but a contour of treatment combinations that have similar event probabilities.
+
+# Outcome nomenclature
+The outcome syntax used elsewhere in `escalation` to represent the patient-level doses administered and outcomes experienced has been extended to handle treatment combinations.
+The only material change is in how the dose is written.
+In a monotherapy setting, we would write `1` for dose-level 1 and `2` for dose-level 2, etc.
+In the treatment combination setting, we use a dotted decimal notation (like that used in IP-addresses), so that, for example, the third dose-level of the first treatment paired with the fourth dose-level of the second treatment is written as `3.4`.
+The same outcome designators `E`, `T`, `B` and `N` (representing efficacy only, toxicity only, both effiecacy and toxicity, and neither efficacy nor toxicity) are strung after the dose to represent the outcomes of patients in cohorts.
+There currently are no designs implemented in `escalation` that investigate efficacy and toxicity in treatment combincations but the syntax can theoretically accomodate them.
+
+For illustration, let us imagine a dose-finding trial of three treatments in a trial where each patient can either experience toxicity `T`, or no toxicity `N`.
+Suppose further the first cohort of three patients is treated at the first dose-level of each of the three therapies and none of the patients experiences toxicity.
+The outcome string to reflect this is:
+
+`1.1.1NNN`
+
+Now suppose, by way of some experimental design, we decide that the dose-level of the first treatment should be escalated to the second level whilst the dose-level of the second and third treatments is kept at level 1.
+The dose string will become `2.1.1`.
+Suppose we give this dose to a cohort of three new patients, and that two of the patients tolerate without toxicity but the third patient experiences tox.
+The outcome string for the whole trial so far is:
+
+`1.1.1NNN 2.1.1NNT`
+
+This syntax can be used to describe the doses and outcomes for any arrangement of discrete dose-levels in any number of treatments.
+
+
+# BOIN-COMB
+The BOIN method was originally presented by @liu_bayesian_2015 for dose-finding in a single treatment.
+BOIN-COMB [@lin2017bayesian] generalises BOIN to investigate doses in exactly two treatments (not more) in search of dose pairs with toxicity probability close to a pre-specified target rate.
+Currently, BOIN-COMB is the only design for treatment combinations implemented in `escalation` 
+We demonstrate some examples below.
+
+
+# Implementation in `escalation`
+
+## BOIN-COMB
+We now demonstrate BOIN-COMB, focusing on how the shape of returned objects is different to monotherapy dose-finding.
+
+In their treatment combination examples, the `BOIN` package authors investigate a situation where there are three doses of the first treatment being paired with five doses of the second treatment, targeting a 30% toxicity rate.
+The first big difference compared to monotherapy dose-finding is that `num_doses` now must be a vector rather than a scalar integer:
+
+```{r, message=FALSE}
+library(escalation)
+
+num_doses <- c(3, 5)
+target <- 0.3
+```
+
+We create a dose selector:
+
+```{r}
+boin_fitter <- get_boin_comb(
+  num_doses = num_doses, target = target
+)
+```
+
+By default, the lower and upper toxicity rate thresholds in BOIN-COMB are set to `p.saf = 0.6 * target = 0.18` and `p.tox = 1.4 * target = 0.42`, so the above call is equivalent to:
+
+```{r}
+model <- get_boin_comb(
+  num_doses = num_doses, target = target, 
+  p.saf = 0.18, p.tox = 0.42
+)
+```
+
+Naturally we can override those with our own values to make escalation harder or easier.
+
+We now fit the model to outcomes.
+The authors investigate outcomes:
+
+```{r}
+outcomes <- "1.1NNN 2.1NNNNNNT 2.2NNNNNT"
+```
+
+I.e. the first cohort of three is treated at the lowest dose combination with no tox experienced; the second cohort, comprising seven patients, is dosed at the second dose-level of the first treatment paired with the first dose-level of the second treatment, with one patient experiencing tox; and the third cohort, comprising six patients, is dosed at the second dose-level of the first treatment paired with the second dose-level of the second treatment, again with one patient experiencing tox.
+As you can see, a lot of information is conveyed in 27 characters.
+
+Let's fit the model:
+
+```{r}
+set.seed(2025)
+fit <- model %>% fit(outcomes)
+```
+
+leading to advice to continue:
+
+```{r}
+fit %>% continue()
+```
+
+at dose `2.3`:
+
+```{r}
+fit %>% recommended_dose()
+```
+
+### Final dose selection
+BOIN-COMB, like some other designs, selects the final dose differently to how it selects doses mid-trial.
+To achieve this in `escalation`, we need an extra selector that will kick-in when the parent selector(s) have selected a non-NA dose but expressed `continue == FALSE`, i.e. signaled _the trial ends now but we are interested in a dose_.
+If used, it will almost surely come last in the selector chain:
+
+```{r}
+model <- get_boin_comb(num_doses = num_doses, target = target)  %>%
+   stop_at_n(n = 12) %>%
+   select_boin_comb_mtd()
+
+outcomes <- '1.1NNN 1.2NTN 1.2NNN 2.1TNT'
+model %>% fit(outcomes) %>% recommended_dose()
+```
+
+In the above example, `stop_at_n` stopped the trial because the threshold sample size was met, and the underlying algorithm identified that at least one dose was worthy of selection.
+At this juncture, `select_boin_comb_mtd` took over and applied the method described by the authors.
+Whilst the underlying selector(s) were busy conducting the trial (`continue == TRUE`), `select_boin_comb_mtd` kept silent.
+
+
+## Combination with other dose selectors
+We demonstrated above how `get_boin_comb` works with the auxiliary dose-selector `stop_at_n`.
+In a similar way, `get_boin_comb` will work with many other dose-selectors in `escalation`.
+
+For instance, we might wish to stop the trial once we have reached a target sample size at recommended dose.
+For instance, the following model wants to recommended dose `2.1`:
+
+```{r}
+set.seed(2025)
+model <- get_boin_comb(num_doses = num_doses, target = target)  %>%
+   stop_when_n_at_dose(n = 3, dose = "recommended")
+
+outcomes <- '1.1NNN 2.1NTN'
+x <- model %>% fit(outcomes) 
+recommended_dose(x)
+```
+
+But it has reached the target sample size at that dose so it advocates stopping:
+
+```{r}
+continue(x)
+```
+
+Likewise, we could have specified a dose explicitly by the dose-indices:
+
+```{r}
+set.seed(2025)
+model <- get_boin_comb(num_doses = num_doses, target = target)  %>%
+   stop_when_n_at_dose(n = 3, dose = c(2, 1))
+
+outcomes <- '1.1NNN 2.1NTN'
+x <- model %>% fit(outcomes) 
+recommended_dose(x)
+continue(x)
+```
+
+There are many other dose-selectors in escalation.
+PLease get in contact if you discover a combination that does not work and you are pretty sure that it should!
+
+
+## Dose paths
+Dose-paths for combinations are theoretically possible.
+However, at present they are not implemented yet:
+
+```{r, error=TRUE}
+cohort_sizes <- c(3, 3)
+paths <- model %>% 
+  get_dose_paths(
+    cohort_sizes = cohort_sizes, 
+    previous_outcomes = '1NNN', next_dose = 2
+  )
+```
+
+For more information on working with dose-paths, refer to the dose-paths vignette.
+
+
+## Simulation
+Simulations are implemented for combination designs but there are some necessary differences compared to monotherapy situations.
+To illustrate, we will continue with the BOIN-COMB design already introduced, that will use a modest sample size:
+
+```{r}
+model <- get_boin_comb(num_doses = num_doses, target = target)  %>%
+   stop_at_n(n = 12) %>%
+   select_boin_comb_mtd()
+```
+
+Let us specify a plausible true dose-toxicity scenario:
+
+```{r}
+true_prob_tox <- matrix(c(0.1, 0.2, 0.3, 0.4, 0.5,
+                          0.25, 0.35, 0.45, 0.55, 0.65,
+                          0.3, 0.4, 0.5, 0.6, 0.7),
+                        nrow = num_doses[1],
+                        ncol = num_doses[2],
+                        byrow = TRUE)
+true_prob_tox
+```
+
+As with all designs in `escalation`, we perform simulations like this:
+
+```{r}
+set.seed(2025)
+sims <- model %>%
+  simulate_trials(num_sims = 10, true_prob_tox = true_prob_tox)
+```
+
+By default, we get some useful output:
+
+```{r}
+sims
+```
+
+However, we can dive deeper.
+The same generics that can be invoked on the sims object in monotherapy scenarios can also be used in combinations studies.
+However, some of the formats of the returned objects are different to reflect that dose is multi-dimensional.
+We consider those generics each briefly now.
+
+The number of patients in each simulated trial behaves as before: 
+
+```{r}
+num_patients(sims)
+```
+
+
+The number of doses is now a vector:
+
+```{r}
+num_doses(sims)
+```
+
+The set of possible dose-indices is a list, with each element being a vector on integers:
+
+```{r}
+dose_indices(sims)
+```
+
+That some information is more succinctly represented in dotted-decimal string notation:
+
+```{r}
+dose_strings(sims)
+```
+
+The recommended final dose in each iterate is available in string form:
+
+```{r}
+recommended_dose(sims, dose_string = TRUE)
+```
+
+or in matrix form, with simulated iterates in rows, treatment in columns, and matrix cells represending the dose-index of the relevant treatment:
+
+```{r}
+recommended_dose(sims, dose_string = FALSE)
+```
+
+The number of patients at each dose for a given trial is now a multi-dimensional array, and a 2*2 matrix in BOIN-COMB.
+The same info for many trials for convenience is represented as a list, with one item for each simulated iterate:
+
+```{r}
+n_at_dose(sims)
+```
+
+When focusing just on the sample size at the recommended dose, the data is represented as a vector of integers:
+
+```{r}
+n_at_dose(sims, dose = "recommended")
+```
+
+That same information is returned by:
+
+```{r}
+n_at_recommended_dose(sims)
+```
+
+Likewise, the number of toxicity events seen at each dose combination in each ieterate is returned in a congruent form:
+
+```{r}
+tox_at_dose(sims)
+```
+
+The total number of toxicities seen over all doses in each iterate is simple to understand:
+
+```{r}
+num_tox(sims)
+```
+
+BOIN-COMB does not assess efficacy, but if it did, equivalent functions would return the counts (but merely return NA here:)
+
+```{r}
+eff_at_dose(sims) %>% head(2)
+```
+
+```{r}
+num_eff(sims)
+```
+
+The probability of each dose being recommended is presented in a data-frame, with column `dose` containing a vector of dose indices for each dose (e.g. `c(1, 1)` for the pair of first dose), and `dose_string` comprising the same in dotted-decimal string format:
+
+```{r}
+prob_recommend(sims)
+```
+
+The probability of each dose being administered to a patient is available average over all simulated iterates:
+
+```{r}
+prob_administer(sims, method = 0)
+```
+
+or within in each iterate:
+
+```{r}
+prob_administer(sims, method = 1)
+```
+
+The trial duration is simple to understand:
+
+```{r}
+trial_duration(sims)
+```
+
+`summary` gives a data-frame summary with doses (and stopping without selecting a dose) as rows and much of the above information in columns:
+
+```{r}
+summary(sims)
+```
+
+`as_tibble` returns one row for each dose in each simulated iterate, offering a deep-dive into the simulated trials:
+
+```{r}
+tibble::as_tibble(sims)
+```
+
+Furthermore, the simulation comparison method of @sweeting2023 is implemented, allowing us to efficiently investigate small differences in competing designs with code like:
+
+```{r}
+model1 <- get_boin_comb(
+  num_doses = num_doses, target = target, 
+  p.saf = 0.6 * target, p.tox = 1.4 * target
+) %>% 
+  stop_at_n(n = 12) %>%
+   select_boin_comb_mtd()
+
+model2 <- get_boin_comb(
+  num_doses = num_doses, target = target, 
+  p.saf = 0.5 * target, p.tox = 1.5 * target
+) %>% 
+  stop_at_n(n = 12) %>%
+   select_boin_comb_mtd()
+
+designs <- list(
+  model1 = model1,
+  model2 = model2
+)
+
+set.seed(2025)
+sims <- simulate_compare(
+  designs = designs,
+  num_sims = 10,
+  true_prob_tox = true_prob_tox
+)
+convergence_plot(sims)
+```
+
+```{r}
+tibble::as_tibble(sims)
+```
+
+For more information on running dose-finding simulations, refer to the simulation vignette.
+
+
+# References
