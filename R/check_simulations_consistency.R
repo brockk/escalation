@@ -2,7 +2,7 @@
 #' Check the consistency of a dose_selector instance
 #'
 #' @param x simulations object
-#' @importFrom testthat expect_is expect_no_error
+#' @importFrom testthat expect_is expect_no_error expect_output
 check_simulations_consistency <- function(x) {
 
   expect_is(x, "simulations")

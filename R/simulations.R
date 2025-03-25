@@ -594,6 +594,9 @@ summary.simulations <- function(object, ...) {
         "Simulation summary not implemented for combinations of more than 2 tmts"
       )
     }
+
+    # Avoid NOTEs in checks
+    dose <- n <- true_prob_tox <- true_prob_eff <- NULL
     df <- df %>%
       select(dose, tox, eff, n, true_prob_tox, true_prob_eff,
              prob_recommend, prob_administer, everything())

@@ -158,7 +158,7 @@ fit.mtpi2_mtd_dose_selector_factory <- function(selector_factory, outcomes,
 
 #' @export
 mean_prob_tox.mtpi2_mtd_dose_selector <- function(x, ...) {
-  # source("R/helpers.R")
+  # Use isotonic regression via the PAVA algorithm
   post_mean = (x$alpha + tox_at_dose(x)) / (x$alpha + x$beta + n_at_dose(x))
   post_var = (x$alpha + tox_at_dose(x)) *
     (x$beta + n_at_dose(x) - tox_at_dose(x)) /
@@ -176,10 +176,6 @@ mean_prob_tox.mtpi2_mtd_dose_selector <- function(x, ...) {
     return(to_return)
   } else {
     # Apply PAVA to all doses
-    post_mean = (x$alpha + tox_at_dose(x)) / (x$alpha + x$beta + n_at_dose(x))
-    post_var = (x$alpha + tox_at_dose(x)) *
-      (x$beta + n_at_dose(x) - tox_at_dose(x)) /
-      ((x$alpha + x$beta + n_at_dose(x))^2 * (x$alpha + x$beta + n_at_dose(x) + 1))
     post_mean = pava(post_mean, wt = 1 / post_var)
     return(post_mean)
   }

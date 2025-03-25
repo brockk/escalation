@@ -11,6 +11,7 @@ select_mtpi_mtd(
   exclusion_certainty,
   alpha = 1,
   beta = 1,
+  pava_just_tested_doses = FALSE,
   ...
 )
 }
@@ -35,6 +36,14 @@ probability of toxicity.}
 
 \item{beta}{Second shape parameter of the beta prior distribution on the
 probability of toxicity.}
+
+\item{pava_just_tested_doses}{the design uses the PAVA method to estimate
+monotonic Prob(Tox) at the doses. By default, this estimates Prob(Tox) for
+doses that have not been tested in the trial and can lead to untested
+doses being recommended. Set this option to TRUE to use PAVA only on tested
+doses, leaving untested doses as NA and not-recommendable. Set to FALSE to
+use PAVA at all doses and potentially recommend an untested dose. Default
+is FALSE.}
 
 \item{...}{Extra args are passed onwards.}
 }
