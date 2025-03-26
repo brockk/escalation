@@ -16,6 +16,8 @@
 #' @return an object of type \code{\link{selector_factory}} that can fit a
 #' dose-finding model to outcomes.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom purrr map reduce
 #' @export
 #'
 #' @examples
@@ -60,9 +62,12 @@ follow_path_selector <- function(outcomes, path) {
     stop('path should be a character string or a data-frame.')
   }
   if(nrow(path_df) > 0) {
-    num_doses <- max(path_df$dose)
+    num_doses_path <-
+      map(path_df$dose, rbind) %>%
+      reduce(rbind) %>%
+      apply(2, max)
   } else {
-    num_doses <- 0
+    num_doses_path <- 0
   }
 
   if(is.character(outcomes)) {
@@ -73,7 +78,31 @@ follow_path_selector <- function(outcomes, path) {
     stop('outcomes should be a character string or a data-frame.')
   }
   if(nrow(df) > 0) {
-    num_doses <- max(max(df$dose), num_doses)
+    num_doses_df <-
+      map(df$dose, rbind) %>%
+      reduce(rbind) %>%
+      apply(2, max)
+  } else {
+    num_doses_df <- 0
+  }
+
+  if(length(num_doses_path) == length(num_doses_df)) {
+    num_doses <-
+      rbind(
+        rbind(num_doses_path),
+        rbind(num_doses_df)
+      ) %>%
+      apply(2, max)
+  } else if(num_doses_path == 0) {
+    num_doses <- num_doses_df
+  } else if(num_doses_df == 0) {
+    num_doses <- num_doses_path
+  } else {
+    stop(
+      paste0(
+        "Cannot resolve num_doses from ", num_doses_path, " and ", num_doses_df
+      )
+    )
   }
 
   df_c <- model_frame_to_counts(df, num_doses = num_doses)
@@ -85,9 +114,11 @@ follow_path_selector <- function(outcomes, path) {
     rec_d <- head(path_df$dose, 1)
   } else if(num_pats >= length_path) {
     rec_d <- NA
-  } else if(all(df$dose == path_df$dose[1:num_pats]) &
-            all(df$tox == path_df$tox[1:num_pats])) {
-    rec_d <- path_df$dose[num_pats + 1]
+  } else if(
+    identical(df$dose, path_df$dose[1:num_pats]) &
+    identical(df$tox, path_df$tox[1:num_pats])
+  ) {
+    rec_d <- path_df$dose[[num_pats + 1]]
   } else {
     rec_d <- NA
   }
@@ -105,8 +136,12 @@ follow_path_selector <- function(outcomes, path) {
 
 #' @export
 fit.follow_path_selector_factory <- function(selector_factory, outcomes, ...) {
-  return(follow_path_selector(outcomes = outcomes,
-                              path = selector_factory$path))
+  return(
+    follow_path_selector(
+      outcomes = outcomes,
+      path = selector_factory$path
+    )
+  )
 }
 
 # Selector interface
@@ -143,7 +178,7 @@ recommended_dose.follow_path_selector <- function(x, ...) {
 
 #' @export
 continue.follow_path_selector <- function(x, ...) {
-  return(!is.na(x$recommended_dose))
+  return(!any(is.na(x$recommended_dose)))
 }
 
 #' @export

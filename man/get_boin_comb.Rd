@@ -4,9 +4,19 @@
 \alias{get_boin_comb}
 \title{Get an object to fit the BOIN COMB model using the BOIN package.}
 \usage{
-get_boin_comb(num_doses, target, use_stopping_rule = TRUE, ...)
+get_boin_comb(
+  parent_selector_factory = NULL,
+  num_doses,
+  target,
+  use_stopping_rule = TRUE,
+  ...
+)
 }
 \arguments{
+\item{parent_selector_factory}{optional object of type
+\code{\link{selector_factory}} that is in charge of dose selection before
+this class gets involved. Leave as NULL to just use CRM from the start.}
+
 \item{num_doses}{integer vector of the number of doses of treatment 1, 2}
 
 \item{target}{We seek a dose with this probability of toxicity.}

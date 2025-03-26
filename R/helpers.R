@@ -81,7 +81,7 @@ model_frame_to_counts <- function(model_frame, num_doses) {
 
     # Single treatment scenario
     df <- model_frame
-    dose_indices <- 1:num_doses
+    dose_indices <- seq_len(num_doses)
     dose_counts <- map_int(dose_indices, ~ sum(df$dose == .x))
     tox_counts <- map_int(dose_indices, ~ sum(df$tox[df$dose == .x]))
     df_c <- tibble(

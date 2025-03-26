@@ -1,6 +1,9 @@
 
 #' Get an object to fit the BOIN COMB model using the BOIN package.
 #'
+#' @param parent_selector_factory optional object of type
+#' \code{\link{selector_factory}} that is in charge of dose selection before
+#' this class gets involved. Leave as NULL to just use CRM from the start.
 #' @param num_doses integer vector of the number of doses of treatment 1, 2
 #' @param target We seek a dose with this probability of toxicity.
 #' @param use_stopping_rule TODO
@@ -24,13 +27,15 @@
 #' Lin, R., & Yin, G. (2017).
 #' Bayesian optimal interval design for dose finding in drug-combination trials.
 #' Statistical methods in medical research, 26(5), 2155-2167.
-get_boin_comb <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
+get_boin_comb <- function(parent_selector_factory = NULL,
+                          num_doses, target, use_stopping_rule = TRUE, ...) {
 
   if(length(num_doses) <= 1) {
     stop("Expecting num_doses to be at least of length 2.")
   }
 
   x <- list(
+    parent_selector_factory = parent_selector_factory,
     num_doses = num_doses,
     target = target,
     use_stopping_rule = use_stopping_rule,
@@ -51,7 +56,8 @@ get_boin_comb <- function(num_doses, target, use_stopping_rule = TRUE, ...) {
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
 #' @importFrom purrr map map_lgl
-boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
+boin_comb_selector <- function(parent_selector = NULL,
+                               outcomes, num_doses, target, use_stopping_rule,
                                ...) {
 
   # Build NOTES etc
@@ -157,6 +163,7 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
   }
 
   l <- list(
+    parent = parent_selector,
     cohort = df$cohort,
     df = df,
     num_doses = as.integer(num_doses),
@@ -189,7 +196,14 @@ boin_comb_selector <- function(outcomes, num_doses, target, use_stopping_rule,
 #' @export
 fit.boin_comb_selector_factory <- function(selector_factory, outcomes, ...) {
 
+  if(is.null(selector_factory$parent)) {
+    parent <- NULL
+  } else {
+    parent <- selector_factory$parent %>% fit(outcomes, ...)
+  }
+
   args <- list(
+    parent = parent,
     outcomes = outcomes,
     num_doses = selector_factory$num_doses,
     target = selector_factory$target,
@@ -262,6 +276,15 @@ num_doses.boin_comb_selector <- function(x, ...) {
 
 #' @export
 recommended_dose.boin_comb_selector <- function(x, ...) {
+  if(!is.null(x$parent)) {
+    parent_dose <- recommended_dose(x$parent)
+    parent_cont <- continue(x$parent)
+    if(parent_cont & !any(is.na(parent_dose))) {
+      return(parent_dose)
+    }
+  }
+
+  # By default:
   return(x$recommended_dose)
 }
 
