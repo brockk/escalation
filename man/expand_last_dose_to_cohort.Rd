@@ -19,5 +19,12 @@ dose-finding model to outcomes.
 Expand the cohort of the last given dose to at least n patients
 }
 \examples{
-# TODO
+model <- follow_path(path = "1N 2N 3N") \%>\%
+  expand_last_dose_to_cohort(n = 3)
+x <- model \%>\% fit("1N 2N 3T")
+# Design will continue:
+continue(x)
+# at dose 3:
+recommended_dose(x)
+# because it is expanding the last dose to a cohort of three.
 }

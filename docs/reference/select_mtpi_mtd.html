@@ -28,7 +28,7 @@ reinstate a dangerous dose."><meta property="og:image" content="/logo.png"><!-- 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -165,6 +165,16 @@ probability of toxicity.</p></dd>
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
 <dd><p>Second shape parameter of the beta prior distribution on the
 probability of toxicity.</p></dd>
+
+
+<dt id="arg-pava-just-tested-doses">pava_just_tested_doses<a class="anchor" aria-label="anchor" href="#arg-pava-just-tested-doses"></a></dt>
+<dd><p>the design uses the PAVA method to estimate
+monotonic Prob(Tox) at the doses. By default, this estimates Prob(Tox) for
+doses that have not been tested in the trial and can lead to untested
+doses being recommended. Set this option to TRUE to use PAVA only on tested
+doses, leaving untested doses as NA and not-recommendable. Set to FALSE to
+use PAVA at all doses and potentially recommend an untested dose. Default
+is FALSE.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

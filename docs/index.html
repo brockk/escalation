@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -157,6 +157,7 @@
 <p>When it sees two-out-of-six toxicities at dose 3, it concludes that dose 3 is too toxic, dose 2 is the MTD, and the trial should stop.</p>
 <p><code>escalation</code> provides functions to use common dose-escalation methodologies like the continual reassessment method (CRM), the Bayesian optimal interval design (BOIN), the TPI suite of designs, efficacy-toxicity designs like EffTox or Wages &amp; Tait, and (as we have seen) the perennial 3+3:</p>
 <ul>
+<li><code><a href="reference/get_three_plus_three.html">get_three_plus_three()</a></code></li>
 <li><code><a href="reference/get_dfcrm.html">get_dfcrm()</a></code></li>
 <li><code><a href="reference/get_trialr_crm.html">get_trialr_crm()</a></code></li>
 <li><code><a href="reference/get_trialr_nbg.html">get_trialr_nbg()</a></code></li>
@@ -164,9 +165,13 @@
 <li><code><a href="reference/get_mtpi.html">get_mtpi()</a></code></li>
 <li><code><a href="reference/get_mtpi2.html">get_mtpi2()</a></code></li>
 <li><code><a href="reference/get_boin.html">get_boin()</a></code></li>
+<li><code><a href="reference/get_dfcrm_tite.html">get_dfcrm_tite()</a></code></li>
+<li><code><a href="reference/get_trialr_crm_tite.html">get_trialr_crm_tite()</a></code></li>
+<li><code><a href="reference/get_trialr_nbg_tite.html">get_trialr_nbg_tite()</a></code></li>
 <li><code><a href="reference/get_trialr_efftox.html">get_trialr_efftox()</a></code></li>
+<li><code><a href="reference/get_boin12.html">get_boin12()</a></code></li>
 <li><code><a href="reference/get_wages_and_tait.html">get_wages_and_tait()</a></code></li>
-<li><code><a href="reference/get_three_plus_three.html">get_three_plus_three()</a></code></li>
+<li><code><a href="reference/get_boin_comb.html">get_boin_comb()</a></code></li>
 </ul>
 <p>These functions create model fitting objects. Where possible, technical implementations are imported from existing R packages like <code>dfcrm</code>, <code>trialr</code>, and <code>BOIN</code>. Where no external implementations is available however, methods are implemented natively in <code>escalation</code>.</p>
 <p>These dose-finding approaches can then be augmented with extra behaviours to specialise the dose selection process. For example, we can add behaviours to prevent skipping doses, or to stop when we reach a certain sample size. <code>escalation</code> supports the following behaviours:</p>
@@ -180,6 +185,9 @@
 <li><code><a href="reference/try_rescue_dose.html">try_rescue_dose()</a></code></li>
 <li><code><a href="reference/follow_path.html">follow_path()</a></code></li>
 <li><code><a href="reference/select_dose_by_cibp.html">select_dose_by_cibp()</a></code></li>
+<li><code><a href="reference/unadmit_untested.html">unadmit_untested()</a></code></li>
+<li><code><a href="reference/expand_last_dose_to_cohort.html">expand_last_dose_to_cohort()</a></code></li>
+<li><code><a href="reference/stick_on_num_tox.html">stick_on_num_tox()</a></code></li>
 </ul>
 <p>Each of these functions overrides the way doses are selected or when a design decides to stop the trial. The behaviours can be flexibly combined using the <code>%&gt;%</code> operator from the <code>tidyverse</code> suite.</p>
 <p>These models are then fit to trial outcomes to produce dose recommendations. No matter how the dose selection behaviours were combined, the resulting model fits supports a standard interface. The two most important methods are <code><a href="reference/recommended_dose.html">recommended_dose()</a></code> to get the current dose recommendation, and <code><a href="reference/continue.html">continue()</a></code> to learn whether the design advocates continuing patient recruitment.</p>
@@ -314,18 +322,18 @@
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/prob_tox_samples.html">prob_tox_samples</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb31"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="do">## # A tibble: 10 × 6</span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="do">##    .draw      `1`      `2`          `3`        `4`     `5`</span></span>
-<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="do">##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="do">##  1 1     4.39e- 2 9.04e- 2 0.235        0.384      0.587  </span></span>
-<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="do">##  2 2     3.39e- 6 6.24e- 5 0.00294      0.0212     0.117  </span></span>
-<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="do">##  3 3     8.03e- 2 1.44e- 1 0.311        0.462      0.651  </span></span>
-<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="do">##  4 4     7.41e- 2 1.35e- 1 0.300        0.451      0.642  </span></span>
-<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a><span class="do">##  5 5     5.32e- 2 1.05e- 1 0.257        0.408      0.606  </span></span>
-<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a><span class="do">##  6 6     5.60e- 7 1.57e- 5 0.00128      0.0122     0.0859 </span></span>
-<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="do">##  7 7     2.28e-17 1.62e-13 0.0000000199 0.00000812 0.00145</span></span>
-<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a><span class="do">##  8 8     2.14e- 1 3.06e- 1 0.490        0.624      0.769  </span></span>
-<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="do">##  9 9     2.63e- 1 3.58e- 1 0.539        0.664      0.796  </span></span>
-<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="do">## 10 10    1.70e- 1 2.56e- 1 0.441        0.582      0.739</span></span></code></pre></div>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="do">##    .draw        `1`       `2`     `3`    `4`   `5`</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="do">##    &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="do">##  1 1     0.00215    0.00891   0.0583  0.153  0.351</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="do">##  2 2     0.00105    0.00512   0.0418  0.123  0.310</span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="do">##  3 3     0.214      0.306     0.490   0.624  0.769</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="do">##  4 4     0.0974     0.167     0.340   0.491  0.672</span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a><span class="do">##  5 5     0.00133    0.00617   0.0467  0.132  0.323</span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a><span class="do">##  6 6     0.0319     0.0708    0.203   0.349  0.556</span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="do">##  7 7     0.0000405  0.000420  0.00927 0.0453 0.178</span></span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a><span class="do">##  8 8     0.00000595 0.0000963 0.00382 0.0252 0.129</span></span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="do">##  9 9     0.0177     0.0451    0.155   0.291  0.503</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="do">## 10 10    0.0257     0.0600    0.184   0.326  0.536</span></span></code></pre></div>
 <p>That facilitates really flexible inference. For example, what is the probability that toxicity at dose 3 is at least 5% greater than that at dose 2? Simple to answer using the posterior samples:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -334,7 +342,7 @@
 <div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="do">## # A tibble: 1 × 1</span></span>
 <span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="do">##    prob</span></span>
 <span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="do">##   &lt;dbl&gt;</span></span>
-<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="do">## 1 0.586</span></span></code></pre></div>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="do">## 1 0.573</span></span></code></pre></div>
 <p>‘More likely than not’, is the answer.</p>
 <p>See the Continual Reassessment Method vignette for more details.</p>
 </div>
@@ -816,7 +824,7 @@
 <div class="section level2">
 <h2 id="simulation-and-dose-paths">Simulation and dose-paths<a class="anchor" aria-label="anchor" href="#simulation-and-dose-paths"></a>
 </h2>
-<p>We have described at length above the flexible methods that <code>escalation</code> provides to specify dose-escalation designs and tailor trial behaviour. Once designs are specified, we can investigate their operating characteristics by simulation using the <code>simulate_trials</code> function, and efficiently compare designs using Sweeting et al. (2023)’s method in <code>simulate_compare</code>. We can also exhaustively calculate dose recommendations for future cohorts using the <code>get_dose_paths</code> function. Both of these topics are the topics of full vignettes so please check them out.</p>
+<p>We have described at length above the flexible methods that <code>escalation</code> provides to specify dose-escalation designs and tailor trial behaviour. Once designs are specified, we can investigate their operating characteristics by simulation using the <code>simulate_trials</code> function, and efficiently compare designs using Sweeting et al. (2024)’s method in <code>simulate_compare</code>. We can also exhaustively calculate dose recommendations for future cohorts using the <code>get_dose_paths</code> function. Both of these topics are the topics of full vignettes so please check them out.</p>
 </div>
 </div>
 <div class="section level1">
@@ -845,7 +853,7 @@
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Brock2019" class="csl-entry">
 Brock, Kristian. 2019. “<span class="nocase">trialr: Bayesian Clinical Trial Designs in R and Stan</span>.” <em>arXiv e-Prints</em>, June, arXiv:1907.00161. <a href="https://arxiv.org/abs/1907.00161" class="external-link uri">https://arxiv.org/abs/1907.00161</a>.
 </div>
@@ -889,7 +897,7 @@ Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008. “<span class=
 O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual Reassessment Method: A Practical Design for Phase 1 Clinical Trials in Cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628" class="external-link uri">https://doi.org/10.2307/2531628</a>.
 </div>
 <div id="ref-sweeting2023" class="csl-entry">
-Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock. 2023. “Potential Outcome Simulation for Efficient Head-to-Head Comparison of Adaptive Dose-Finding Designs.” <em>Preprint</em>.
+Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock. 2024. “Potential Outcome Simulation for Efficient Head-to-Head Comparison of Adaptive Dose-Finding Designs.” <em>arXiv Preprint arXiv:2402.15460</em>.
 </div>
 <div id="ref-thall2004dose" class="csl-entry">
 Thall, Peter F, and John D Cook. 2004. “Dose-Finding Based on Efficacy–Toxicity Trade-Offs.” <em>Biometrics</em> 60 (3): 684–93.

@@ -90,6 +90,7 @@ For example, we can add behaviours to prevent skipping doses, or to stop when we
 * `select_dose_by_cibp()`
 * `unadmit_untested()`
 * `expand_last_dose_to_cohort()`
+* `stick_on_num_tox()`
 
 Each of these functions overrides the way doses are selected or when a design decides to stop the trial.
 The behaviours can be flexibly combined using the `%>%` operator from the `tidyverse` suite.

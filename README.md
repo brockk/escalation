@@ -75,6 +75,7 @@ optimal interval design (BOIN), the TPI suite of designs,
 efficacy-toxicity designs like EffTox or Wages & Tait, and (as we have
 seen) the perennial 3+3:
 
+- `get_three_plus_three()`
 - `get_dfcrm()`
 - `get_trialr_crm()`
 - `get_trialr_nbg()`
@@ -82,9 +83,13 @@ seen) the perennial 3+3:
 - `get_mtpi()`
 - `get_mtpi2()`
 - `get_boin()`
+- `get_dfcrm_tite()`
+- `get_trialr_crm_tite()`
+- `get_trialr_nbg_tite()`
 - `get_trialr_efftox()`
+- `get_boin12()`
 - `get_wages_and_tait()`
-- `get_three_plus_three()`
+- `get_boin_comb()`
 
 These functions create model fitting objects. Where possible, technical
 implementations are imported from existing R packages like `dfcrm`,
@@ -105,6 +110,9 @@ certain sample size. `escalation` supports the following behaviours:
 - `try_rescue_dose()`
 - `follow_path()`
 - `select_dose_by_cibp()`
+- `unadmit_untested()`
+- `expand_last_dose_to_cohort()`
+- `stick_on_num_tox()`
 
 Each of these functions overrides the way doses are selected or when a
 design decides to stop the trial. The behaviours can be flexibly
@@ -344,18 +352,18 @@ fit %>% prob_tox_samples() %>% head(10)
 ```
 
     ## # A tibble: 10 × 6
-    ##    .draw      `1`      `2`          `3`        `4`     `5`
-    ##    <chr>    <dbl>    <dbl>        <dbl>      <dbl>   <dbl>
-    ##  1 1     4.39e- 2 9.04e- 2 0.235        0.384      0.587  
-    ##  2 2     3.39e- 6 6.24e- 5 0.00294      0.0212     0.117  
-    ##  3 3     8.03e- 2 1.44e- 1 0.311        0.462      0.651  
-    ##  4 4     7.41e- 2 1.35e- 1 0.300        0.451      0.642  
-    ##  5 5     5.32e- 2 1.05e- 1 0.257        0.408      0.606  
-    ##  6 6     5.60e- 7 1.57e- 5 0.00128      0.0122     0.0859 
-    ##  7 7     2.28e-17 1.62e-13 0.0000000199 0.00000812 0.00145
-    ##  8 8     2.14e- 1 3.06e- 1 0.490        0.624      0.769  
-    ##  9 9     2.63e- 1 3.58e- 1 0.539        0.664      0.796  
-    ## 10 10    1.70e- 1 2.56e- 1 0.441        0.582      0.739
+    ##    .draw        `1`       `2`     `3`    `4`   `5`
+    ##    <chr>      <dbl>     <dbl>   <dbl>  <dbl> <dbl>
+    ##  1 1     0.00215    0.00891   0.0583  0.153  0.351
+    ##  2 2     0.00105    0.00512   0.0418  0.123  0.310
+    ##  3 3     0.214      0.306     0.490   0.624  0.769
+    ##  4 4     0.0974     0.167     0.340   0.491  0.672
+    ##  5 5     0.00133    0.00617   0.0467  0.132  0.323
+    ##  6 6     0.0319     0.0708    0.203   0.349  0.556
+    ##  7 7     0.0000405  0.000420  0.00927 0.0453 0.178
+    ##  8 8     0.00000595 0.0000963 0.00382 0.0252 0.129
+    ##  9 9     0.0177     0.0451    0.155   0.291  0.503
+    ## 10 10    0.0257     0.0600    0.184   0.326  0.536
 
 That facilitates really flexible inference. For example, what is the
 probability that toxicity at dose 3 is at least 5% greater than that at
@@ -370,7 +378,7 @@ fit %>% prob_tox_samples() %>%
     ## # A tibble: 1 × 1
     ##    prob
     ##   <dbl>
-    ## 1 0.586
+    ## 1 0.573
 
 ‘More likely than not’, is the answer.
 
@@ -1333,7 +1341,7 @@ We have described at length above the flexible methods that `escalation`
 provides to specify dose-escalation designs and tailor trial behaviour.
 Once designs are specified, we can investigate their operating
 characteristics by simulation using the `simulate_trials` function, and
-efficiently compare designs using Sweeting et al. (2023)’s method in
+efficiently compare designs using Sweeting et al. (2024)’s method in
 `simulate_compare`. We can also exhaustively calculate dose
 recommendations for future cohorts using the `get_dose_paths` function.
 Both of these topics are the topics of full vignettes so please check
@@ -1376,7 +1384,8 @@ If you want help using the package, feel free to contact me by email.
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-Brock2019" class="csl-entry">
 
@@ -1500,8 +1509,9 @@ Method: A Practical Design for Phase 1 Clinical Trials in Cancer.”
 <div id="ref-sweeting2023" class="csl-entry">
 
 Sweeting, Michael, Daniel Slade, Daniel Jackson, and Kristian Brock.
-2023. “Potential Outcome Simulation for Efficient Head-to-Head
-Comparison of Adaptive Dose-Finding Designs.” *Preprint*.
+2024. “Potential Outcome Simulation for Efficient Head-to-Head
+Comparison of Adaptive Dose-Finding Designs.” *arXiv Preprint
+arXiv:2402.15460*.
 
 </div>
 

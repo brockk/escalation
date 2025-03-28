@@ -291,6 +291,35 @@ In the above example, `stop_at_n` stopped the trial because the threshold sample
 At this juncture, `select_boin12_obd` took over and applied the method described by the authors.
 Whilst the underlying selector(s) were busy conducting the trial (`continue == TRUE`), `select_boin12_obd` kept silent.
 
+### RDS tabulation
+For convenience, we have also implemented BOIN12's RDS (rank-based desirability score) algorithm:
+
+```{r}
+boin12_rds(
+ sample_sizes = c(0, 3, 6, 9),
+ phi_t = 0.35,
+ phi_e = 0.25,
+ u1 = 100,
+ u2 = 40,
+ u3 = 60,
+ u4 = 0,
+ c_t = 0.95,
+ c_e = 0.9,
+ prior_alpha = 1,
+ prior_beta = 1
+)
+```
+
+The return data-frame comprises:
+
+* `Patients`, the number of patients
+* `Toxicity`, the number of patients experiencing toxicity events
+* `Efficacy`, the number of patients experiencing efficacy events
+* `Admissible`, a character label denoting admissibility status
+* `RDS`, a character label denoting the score in text format
+* `RDS_x`, the RDS in numerical form (i.e. appropriate for sorting)
+
+
 # Dose paths
 As with all designs in `escalation`, we can use dose-paths to exhaustively calculate model advice for all possible future cohorts.
 However, first, a note of warning.

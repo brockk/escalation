@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -96,14 +96,26 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_boin_comb</span><span class="op">(</span><span class="va">num_doses</span>, <span class="va">target</span>, use_stopping_rule <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_boin_comb</span><span class="op">(</span></span>
+<span>  parent_selector_factory <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">num_doses</span>,</span>
+<span>  <span class="va">target</span>,</span>
+<span>  use_stopping_rule <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-num-doses">num_doses<a class="anchor" aria-label="anchor" href="#arg-num-doses"></a></dt>
+<dl><dt id="arg-parent-selector-factory">parent_selector_factory<a class="anchor" aria-label="anchor" href="#arg-parent-selector-factory"></a></dt>
+<dd><p>optional object of type
+<code><a href="selector_factory.html">selector_factory</a></code> that is in charge of dose selection before
+this class gets involved. Leave as NULL to just use CRM from the start.</p></dd>
+
+
+<dt id="arg-num-doses">num_doses<a class="anchor" aria-label="anchor" href="#arg-num-doses"></a></dt>
 <dd><p>integer vector of the number of doses of treatment 1, 2</p></dd>
 
 

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -481,6 +481,60 @@ method described by the authors. Whilst the underlying selector(s) were
 busy conducting the trial (<code>continue == TRUE</code>),
 <code>select_boin12_obd</code> kept silent.</p>
 </div>
+<div class="section level4">
+<h4 id="rds-tabulation">RDS tabulation<a class="anchor" aria-label="anchor" href="#rds-tabulation"></a>
+</h4>
+<p>For convenience, we have also implemented BOIN12’s RDS (rank-based
+desirability score) algorithm:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/boin12_rds.html">boin12_rds</a></span><span class="op">(</span></span>
+<span> sample_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span>,</span>
+<span> phi_t <span class="op">=</span> <span class="fl">0.35</span>,</span>
+<span> phi_e <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span> u1 <span class="op">=</span> <span class="fl">100</span>,</span>
+<span> u2 <span class="op">=</span> <span class="fl">40</span>,</span>
+<span> u3 <span class="op">=</span> <span class="fl">60</span>,</span>
+<span> u4 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span> c_t <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span> c_e <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span> prior_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span> prior_beta <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 166 × 6</span></span></span>
+<span><span class="co">#&gt;    Patients Toxicity Efficacy Admissible RDS   RDS_x</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        0        0        0 Admissible 60       60</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        3        0        0 Admissible 35       35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        3        0        1 Admissible 55       55</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        3        0        2 Admissible 76       76</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        3        0        3 Admissible 91       91</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        3        1        0 Admissible 24       24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        3        1        1 Admissible 44       44</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        3        1        2 Admissible 63       63</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        3        1        3 Admissible 80       80</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        3        2        0 Admissible 13       13</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 156 more rows</span></span></span></code></pre></div>
+<p>The return data-frame comprises:</p>
+<ul>
+<li>
+<code>Patients</code>, the number of patients</li>
+<li>
+<code>Toxicity</code>, the number of patients experiencing toxicity
+events</li>
+<li>
+<code>Efficacy</code>, the number of patients experiencing efficacy
+events</li>
+<li>
+<code>Admissible</code>, a character label denoting admissibility
+status</li>
+<li>
+<code>RDS</code>, a character label denoting the score in text
+format</li>
+<li>
+<code>RDS_x</code>, the RDS in numerical form (i.e. appropriate for
+sorting)</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -503,7 +557,7 @@ the next dose will be 2. This starts the designs from a common place.
 Naturally, this option can be omitted and the design would start from
 whatever dose it recommended after seeing outcomes <code>1NN</code>.</p>
 <p>To visualise paths for the EffTox design, we run:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cohort_sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">outcomes</span> <span class="op">&lt;-</span> <span class="st">"1NN"</span></span>
 <span></span>
@@ -522,7 +576,7 @@ trial), we could have omitted the <code>previous_outcomes</code>
 parameter.</p>
 <p>We can visualise the equivalent using the Wages &amp; Tait
 design:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wt_paths</span> <span class="op">&lt;-</span> <span class="va">wt_model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span></span>
 <span>    cohort_sizes <span class="op">=</span> <span class="va">cohort_sizes</span>, </span>
@@ -534,7 +588,7 @@ design:</p>
 <span><span class="fu"><a href="../reference/graph_paths.html">graph_paths</a></span><span class="op">(</span><span class="va">wt_paths</span><span class="op">)</span></span></code></pre></div>
 <div class="grViz html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:672px;height:480px;"></div>
 <script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"2\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"3\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"4\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"5\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"6\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"7\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"8\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"9\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"10\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"11\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"12\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"13\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"14\" [label = \"5\", fillcolor = \"#FDE725FF\", fontcolor = \"#2A788EFF\"] \n  \"15\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"16\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"17\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"18\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"19\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"20\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"21\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"22\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"23\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"24\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"25\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"26\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"27\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"28\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"29\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"30\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"31\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"32\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"33\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"34\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"35\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"36\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"37\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"38\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"39\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"40\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"41\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"42\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"43\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"44\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"45\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"46\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"47\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"48\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"49\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"50\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"51\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"52\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"53\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"54\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"55\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"56\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"57\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"58\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"59\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"60\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"61\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"62\" [label = \"3\", fillcolor = \"#22A884FF\", fontcolor = \"#440154FF\"] \n  \"63\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"64\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"65\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"66\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"67\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"68\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"69\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"70\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"71\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"72\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"73\" [label = \"4\", fillcolor = \"#7AD151FF\", fontcolor = \"#414487FF\"] \n  \"74\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"75\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"76\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"77\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"78\" [label = \"1\", fillcolor = \"#414487FF\", fontcolor = \"#7AD151FF\"] \n  \"79\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n  \"80\" [label = \"2\", fillcolor = \"#2A788EFF\", fontcolor = \"#FDE725FF\"] \n  \"81\" [label = \"Stop\", fillcolor = \"#440154FF\", fontcolor = \"#22A884FF\"] \n\"1\"->\"2\" [label = \"BB\"] \n\"1\"->\"3\" [label = \"BE\"] \n\"3\"->\"4\" [label = \"BB\"] \n\"1\"->\"5\" [label = \"BN\"] \n\"5\"->\"6\" [label = \"BB\"] \n\"1\"->\"7\" [label = \"BT\"] \n\"1\"->\"8\" [label = \"EE\"] \n\"8\"->\"9\" [label = \"BB\"] \n\"1\"->\"10\" [label = \"EN\"] \n\"10\"->\"11\" [label = \"BB\"] \n\"1\"->\"12\" [label = \"ET\"] \n\"12\"->\"13\" [label = \"BB\"] \n\"1\"->\"14\" [label = \"NN\"] \n\"14\"->\"15\" [label = \"BB\"] \n\"1\"->\"16\" [label = \"NT\"] \n\"16\"->\"17\" [label = \"BB\"] \n\"1\"->\"18\" [label = \"TT\"] \n\"3\"->\"19\" [label = \"BE\"] \n\"5\"->\"20\" [label = \"BE\"] \n\"8\"->\"21\" [label = \"BE\"] \n\"10\"->\"22\" [label = \"BE\"] \n\"12\"->\"23\" [label = \"BE\"] \n\"14\"->\"24\" [label = \"BE\"] \n\"16\"->\"25\" [label = \"BE\"] \n\"3\"->\"26\" [label = \"BN\"] \n\"5\"->\"27\" [label = \"BN\"] \n\"8\"->\"28\" [label = \"BN\"] \n\"10\"->\"29\" [label = \"BN\"] \n\"12\"->\"30\" [label = \"BN\"] \n\"14\"->\"31\" [label = \"BN\"] \n\"16\"->\"32\" [label = \"BN\"] \n\"3\"->\"33\" [label = \"BT\"] \n\"5\"->\"34\" [label = \"BT\"] \n\"8\"->\"35\" [label = \"BT\"] \n\"10\"->\"36\" [label = \"BT\"] \n\"12\"->\"37\" [label = \"BT\"] \n\"14\"->\"38\" [label = \"BT\"] \n\"16\"->\"39\" [label = \"BT\"] \n\"3\"->\"40\" [label = \"EE\"] \n\"5\"->\"41\" [label = \"EE\"] \n\"8\"->\"42\" [label = \"EE\"] \n\"10\"->\"43\" [label = \"EE\"] \n\"12\"->\"44\" [label = \"EE\"] \n\"14\"->\"45\" [label = \"EE\"] \n\"16\"->\"46\" [label = \"EE\"] \n\"3\"->\"47\" [label = \"EN\"] \n\"5\"->\"48\" [label = \"EN\"] \n\"8\"->\"49\" [label = \"EN\"] \n\"10\"->\"50\" [label = \"EN\"] \n\"12\"->\"51\" [label = \"EN\"] \n\"14\"->\"52\" [label = \"EN\"] \n\"16\"->\"53\" [label = \"EN\"] \n\"3\"->\"54\" [label = \"ET\"] \n\"5\"->\"55\" [label = \"ET\"] \n\"8\"->\"56\" [label = \"ET\"] \n\"10\"->\"57\" [label = \"ET\"] \n\"12\"->\"58\" [label = \"ET\"] \n\"14\"->\"59\" [label = \"ET\"] \n\"16\"->\"60\" [label = \"ET\"] \n\"3\"->\"61\" [label = \"NN\"] \n\"5\"->\"62\" [label = \"NN\"] \n\"8\"->\"63\" [label = \"NN\"] \n\"10\"->\"64\" [label = \"NN\"] \n\"12\"->\"65\" [label = \"NN\"] \n\"14\"->\"66\" [label = \"NN\"] \n\"16\"->\"67\" [label = \"NN\"] \n\"3\"->\"68\" [label = \"NT\"] \n\"5\"->\"69\" [label = \"NT\"] \n\"8\"->\"70\" [label = \"NT\"] \n\"10\"->\"71\" [label = \"NT\"] \n\"12\"->\"72\" [label = \"NT\"] \n\"14\"->\"73\" [label = \"NT\"] \n\"16\"->\"74\" [label = \"NT\"] \n\"3\"->\"75\" [label = \"TT\"] \n\"5\"->\"76\" [label = \"TT\"] \n\"8\"->\"77\" [label = \"TT\"] \n\"10\"->\"78\" [label = \"TT\"] \n\"12\"->\"79\" [label = \"TT\"] \n\"14\"->\"80\" [label = \"TT\"] \n\"16\"->\"81\" [label = \"TT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>and the BOIN12 design:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_paths</span> <span class="op">&lt;-</span> <span class="va">b_model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/get_dose_paths.html">get_dose_paths</a></span><span class="op">(</span></span>
 <span>    cohort_sizes <span class="op">=</span> <span class="va">cohort_sizes</span>, </span>
@@ -558,7 +612,7 @@ Computation using Bayesian designs can be computationally costly so for
 the purposes of illustration in this vignette, we will simulate just
 twenty trials per design at the following true toxicity and efficacy
 curves:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_sim</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
 <span><span class="va">true_prob_tox</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="fl">0.12</span>, <span class="fl">0.17</span>, <span class="fl">0.38</span>, <span class="fl">0.55</span><span class="op">)</span></span>
 <span><span class="va">true_prob_eff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.27</span>, <span class="fl">0.52</span>, <span class="fl">0.54</span>, <span class="fl">0.54</span><span class="op">)</span></span></code></pre></div>
@@ -566,7 +620,7 @@ curves:</p>
 (again, just for illustration) and prevent each design from skipping
 doses in escalation.</p>
 <p>To simulate under the EffTox design, we run:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">et_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_trialr_efftox.html">get_trialr_efftox</a></span><span class="op">(</span></span>
 <span>  real_doses <span class="op">=</span> <span class="va">real_doses</span>,</span>
 <span>  efficacy_hurdle <span class="op">=</span> <span class="fl">0.5</span>, toxicity_hurdle <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -624,7 +678,7 @@ doses in escalation.</p>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
 <span><span class="co">#&gt;   5.844   8.951   9.953  10.759  12.937  22.432</span></span></code></pre></div>
 <p>And under the Wages &amp; Tait design:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wt_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_wages_and_tait.html">get_wages_and_tait</a></span><span class="op">(</span></span>
 <span>  tox_skeleton <span class="op">=</span> <span class="va">tox_skeleton</span>,</span>
 <span>  eff_skeletons <span class="op">=</span> <span class="va">eff_skeletons</span>,</span>
@@ -678,7 +732,7 @@ doses in escalation.</p>
 <span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
 <span><span class="co">#&gt;  0.3197  6.5617 11.1565 11.0194 13.9553 19.9895</span></span></code></pre></div>
 <p>And under the BOIN12 design:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_boin12.html">get_boin12</a></span><span class="op">(</span></span>
 <span>  num_doses <span class="op">=</span> <span class="fl">5</span>, phi_t <span class="op">=</span> <span class="fl">0.3</span>, phi_e <span class="op">=</span> <span class="fl">0.5</span>, u2 <span class="op">=</span> <span class="fl">40</span>, u3 <span class="op">=</span> <span class="fl">60</span>, n_star <span class="op">=</span> <span class="fl">6</span></span>
 <span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -732,7 +786,7 @@ doses in escalation.</p>
 <p>To compare designs, however, it is much more efficient to use the
 method presented in <span class="citation">Sweeting et al. (2024)</span>
 using <code>simulate_compare</code>:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">designs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  EffTox <span class="op">=</span> <span class="va">et_model</span>,</span>
 <span>  WagesTait <span class="op">=</span> <span class="va">wt_model</span>,</span>
@@ -749,7 +803,7 @@ using <code>simulate_compare</code>:</p>
 <span><span class="co">#&gt; Running EffTox </span></span>
 <span><span class="co">#&gt; Running WagesTait</span></span>
 <span><span class="fu"><a href="../reference/convergence_plot.html">convergence_plot</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></code></pre></div>
-<p><img src="A310-EfficacyToxicity_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+<p><img src="A310-EfficacyToxicity_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
 <p>We stress again, the design parameters in these examples have been
 chosen in haste merely for illustration. The work presented here in no
 way constitutes a valid comparison of these three designs.</p>
