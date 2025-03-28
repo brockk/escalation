@@ -6,6 +6,9 @@
 <url><loc>/articles/A210-TPI.html</loc></url>
 <url><loc>/articles/A220-mTPI.html</loc></url>
 <url><loc>/articles/A230-BOIN.html</loc></url>
+<url><loc>/articles/A280-TITE.html</loc></url>
+<url><loc>/articles/A310-EfficacyToxicity.html</loc></url>
+<url><loc>/articles/A360-Combinations.html</loc></url>
 <url><loc>/articles/A600-DosePaths.html</loc></url>
 <url><loc>/articles/A700-Simulation.html</loc></url>
 <url><loc>/articles/A710-SimulationComparison.html</loc></url>
@@ -21,6 +24,7 @@
 <url><loc>/reference/boin12_rds.html</loc></url>
 <url><loc>/reference/calculate_probabilities.html</loc></url>
 <url><loc>/reference/check_dose_selector_consistency.html</loc></url>
+<url><loc>/reference/check_simulations_consistency.html</loc></url>
 <url><loc>/reference/cohort.html</loc></url>
 <url><loc>/reference/cohorts_of_n.html</loc></url>
 <url><loc>/reference/combo_selector.html</loc></url>
@@ -97,6 +101,7 @@
 <url><loc>/reference/prob_tox_samples.html</loc></url>
 <url><loc>/reference/recommended_dose.html</loc></url>
 <url><loc>/reference/select_boin12_obd.html</loc></url>
+<url><loc>/reference/select_boin_comb_mtd.html</loc></url>
 <url><loc>/reference/select_boin_mtd.html</loc></url>
 <url><loc>/reference/select_dose_by_cibp.html</loc></url>
 <url><loc>/reference/select_mtpi2_mtd.html</loc></url>

@@ -28,7 +28,7 @@ dangerous dose."><meta property="og:image" content="/logo.png"><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -46,19 +46,28 @@ dangerous dose."><meta property="og:image" content="/logo.png"><!-- mathjax --><
       <a href="../articles/A100-DoseSelectors.html">Using escalation</a>
     </li>
     <li>
-      <a href="../articles/A205-CRM.html">Continual Reassessment Method</a>
+      <a href="../articles/A205-CRM.html">CRM - Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/A207-NBG.html">Neuenschwander, Branson &amp; Gsponer</a>
+      <a href="../articles/A207-NBG.html">NBG - Neuenschwander, Branson &amp; Gsponer</a>
     </li>
     <li>
-      <a href="../articles/A210-TPI.html">Toxicity Probability Interval Design</a>
+      <a href="../articles/A210-TPI.html">TPI - Toxicity Probability Interval Design</a>
     </li>
     <li>
-      <a href="../articles/A220-mTPI.html">Modified Toxicity Probability Interval Design</a>
+      <a href="../articles/A220-mTPI.html">mTPI - Modified Toxicity Probability Interval Design</a>
     </li>
     <li>
-      <a href="../articles/A230-BOIN.html">Bayesian Optimal Interval Design</a>
+      <a href="../articles/A230-BOIN.html">BOIN - Bayesian Optimal Interval Design</a>
+    </li>
+    <li>
+      <a href="../articles/A280-TITE.html">TITE-CRM and TITE-NBG - Time-to-Event Designs</a>
+    </li>
+    <li>
+      <a href="../articles/A310-EfficacyToxicity.html">EffTox, Wages &amp; Tait, and BOIN12 - Efficacy &amp; Toxicity Designs</a>
+    </li>
+    <li>
+      <a href="../articles/A360-Combinations.html">BOIN-COMB - Treatment Combination Designs</a>
     </li>
     <li>
       <a href="../articles/A600-DosePaths.html">Working with dose-paths</a>
@@ -116,6 +125,7 @@ dangerous dose.</p>
 <span>  <span class="va">exclusion_certainty</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  beta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  pava_just_tested_doses <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -155,6 +165,16 @@ probability of toxicity.</p></dd>
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
 <dd><p>Second shape parameter of the beta prior distribution on the
 probability of toxicity.</p></dd>
+
+
+<dt id="arg-pava-just-tested-doses">pava_just_tested_doses<a class="anchor" aria-label="anchor" href="#arg-pava-just-tested-doses"></a></dt>
+<dd><p>the design uses the PAVA method to estimate
+monotonic Prob(Tox) at the doses. By default, this estimates Prob(Tox) for
+doses that have not been tested in the trial and can lead to untested
+doses being recommended. Set this option to TRUE to use PAVA only on tested
+doses, leaving untested doses as NA and not-recommendable. Set to FALSE to
+use PAVA at all doses and potentially recommend an untested dose. Default
+is FALSE.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

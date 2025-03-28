@@ -18,7 +18,7 @@ trial."><meta property="og:image" content="/logo.png"><!-- mathjax --><script sr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -36,19 +36,28 @@ trial."><meta property="og:image" content="/logo.png"><!-- mathjax --><script sr
       <a href="../articles/A100-DoseSelectors.html">Using escalation</a>
     </li>
     <li>
-      <a href="../articles/A205-CRM.html">Continual Reassessment Method</a>
+      <a href="../articles/A205-CRM.html">CRM - Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/A207-NBG.html">Neuenschwander, Branson &amp; Gsponer</a>
+      <a href="../articles/A207-NBG.html">NBG - Neuenschwander, Branson &amp; Gsponer</a>
     </li>
     <li>
-      <a href="../articles/A210-TPI.html">Toxicity Probability Interval Design</a>
+      <a href="../articles/A210-TPI.html">TPI - Toxicity Probability Interval Design</a>
     </li>
     <li>
-      <a href="../articles/A220-mTPI.html">Modified Toxicity Probability Interval Design</a>
+      <a href="../articles/A220-mTPI.html">mTPI - Modified Toxicity Probability Interval Design</a>
     </li>
     <li>
-      <a href="../articles/A230-BOIN.html">Bayesian Optimal Interval Design</a>
+      <a href="../articles/A230-BOIN.html">BOIN - Bayesian Optimal Interval Design</a>
+    </li>
+    <li>
+      <a href="../articles/A280-TITE.html">TITE-CRM and TITE-NBG - Time-to-Event Designs</a>
+    </li>
+    <li>
+      <a href="../articles/A310-EfficacyToxicity.html">EffTox, Wages &amp; Tait, and BOIN12 - Efficacy &amp; Toxicity Designs</a>
+    </li>
+    <li>
+      <a href="../articles/A360-Combinations.html">BOIN-COMB - Treatment Combination Designs</a>
     </li>
     <li>
       <a href="../articles/A600-DosePaths.html">Working with dose-paths</a>
@@ -79,7 +88,7 @@ trial."><meta property="og:image" content="/logo.png"><!-- mathjax --><script sr
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Recommended dose for next patient or cohort.</h1>
-    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/master/R/interface.R" class="external-link"><code>R/interface.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/brockk/escalation/blob/master/R/interface.R" class="external-link"><code>R/interface.R</code></a>, <a href="https://github.com/brockk/escalation/blob/master/R/simulations.R" class="external-link"><code>R/simulations.R</code></a></small>
     <div class="hidden name"><code>recommended_dose.Rd</code></div>
     </div>
 
@@ -89,7 +98,10 @@ trial.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recommended_dose</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recommended_dose</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'simulations'</span></span>
+<span><span class="fu">recommended_dose</span><span class="op">(</span><span class="va">x</span>, dose_string <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -102,6 +114,14 @@ trial.</p>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Extra args are passed onwards.</p></dd>
+
+
+<dt id="arg-dose-string">dose_string<a class="anchor" aria-label="anchor" href="#arg-dose-string"></a></dt>
+<dd><p>TRUE to return vector of character dose-strings; FALSE
+(the default) to get a numerical vector of recommended dose-indices in
+monotherapy studies, or a matrix of recommended dose-indices in combination
+studies with the different treatments in columns and simulated outcomes in
+rows.</p></dd>
 
 </dl></div>
     <div id="value">

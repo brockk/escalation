@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">escalation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -35,19 +35,28 @@
       <a href="../articles/A100-DoseSelectors.html">Using escalation</a>
     </li>
     <li>
-      <a href="../articles/A205-CRM.html">Continual Reassessment Method</a>
+      <a href="../articles/A205-CRM.html">CRM - Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/A207-NBG.html">Neuenschwander, Branson &amp; Gsponer</a>
+      <a href="../articles/A207-NBG.html">NBG - Neuenschwander, Branson &amp; Gsponer</a>
     </li>
     <li>
-      <a href="../articles/A210-TPI.html">Toxicity Probability Interval Design</a>
+      <a href="../articles/A210-TPI.html">TPI - Toxicity Probability Interval Design</a>
     </li>
     <li>
-      <a href="../articles/A220-mTPI.html">Modified Toxicity Probability Interval Design</a>
+      <a href="../articles/A220-mTPI.html">mTPI - Modified Toxicity Probability Interval Design</a>
     </li>
     <li>
-      <a href="../articles/A230-BOIN.html">Bayesian Optimal Interval Design</a>
+      <a href="../articles/A230-BOIN.html">BOIN - Bayesian Optimal Interval Design</a>
+    </li>
+    <li>
+      <a href="../articles/A280-TITE.html">TITE-CRM and TITE-NBG - Time-to-Event Designs</a>
+    </li>
+    <li>
+      <a href="../articles/A310-EfficacyToxicity.html">EffTox, Wages &amp; Tait, and BOIN12 - Efficacy &amp; Toxicity Designs</a>
+    </li>
+    <li>
+      <a href="../articles/A360-Combinations.html">BOIN-COMB - Treatment Combination Designs</a>
     </li>
     <li>
       <a href="../articles/A600-DosePaths.html">Working with dose-paths</a>
@@ -114,6 +123,10 @@
         <td><p>Calculate dose-path probabilities</p></td>
       </tr><tr><td>
           <p><code><a href="check_dose_selector_consistency.html">check_dose_selector_consistency()</a></code> </p>
+        </td>
+        <td><p>Check the consistency of a dose_selector instance</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_simulations_consistency.html">check_simulations_consistency()</a></code> </p>
         </td>
         <td><p>Check the consistency of a dose_selector instance</p></td>
       </tr><tr><td>
@@ -208,10 +221,6 @@
           <p><code><a href="enforce_three_plus_three.html">enforce_three_plus_three()</a></code> </p>
         </td>
         <td><p>Enforce that a trial path has followed the 3+3 method.</p></td>
-      </tr><tr><td>
-          <p><code><a href="escalation-package.html">escalation-package</a></code> <code><a href="escalation-package.html">escalation</a></code> </p>
-        </td>
-        <td><p>The 'escalation' package.</p></td>
       </tr><tr><td>
           <p><code><a href="expand_last_dose_to_cohort.html">expand_last_dose_to_cohort()</a></code> </p>
         </td>
@@ -416,6 +425,10 @@
           <p><code><a href="select_boin12_obd.html">select_boin12_obd()</a></code> </p>
         </td>
         <td><p>Select dose by BOIN12's OBD-choosing algorithm.</p></td>
+      </tr><tr><td>
+          <p><code><a href="select_boin_comb_mtd.html">select_boin_comb_mtd()</a></code> </p>
+        </td>
+        <td><p>Select dose by BOIN-COMB's MTD-choosing algorithm.</p></td>
       </tr><tr><td>
           <p><code><a href="select_boin_mtd.html">select_boin_mtd()</a></code> </p>
         </td>

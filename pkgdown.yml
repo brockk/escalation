@@ -8,7 +8,10 @@ articles:
   A210-TPI: A210-TPI.html
   A220-mTPI: A220-mTPI.html
   A230-BOIN: A230-BOIN.html
+  A280-TITE: A280-TITE.html
+  A310-EfficacyToxicity: A310-EfficacyToxicity.html
+  A360-Combinations: A360-Combinations.html
   A600-DosePaths: A600-DosePaths.html
   A700-Simulation: A700-Simulation.html
   A710-SimulationComparison: A710-SimulationComparison.html
-last_built: 2025-01-14T08:56Z
+last_built: 2025-03-28T15:40Z
