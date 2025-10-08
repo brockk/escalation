@@ -17,6 +17,14 @@
 #' @importFrom stats pbeta
 #' @export
 #'
+#' @author Bharat Bhushan, Kristian Brock
+#'
+#' @references
+#' Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020).
+#' BOIN12: Bayesian optimal interval phase I/II trial design for utility-based
+#' dose finding in immunotherapy and targeted therapies.
+#' JCO Precision Oncology, 4, 1393-1402.
+#'
 #' @examples
 #' # Table 3 in Lin et al.
 #' x <- boin12_rds(
@@ -32,14 +40,6 @@
 #'   prior_alpha = 1,
 #'   prior_beta = 1
 #' )
-#'
-#' @author Bharat Bhushan, Kristian Brock
-#'
-#' @references
-#' Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020).
-#' BOIN12: Bayesian optimal interval phase I/II trial design for utility-based
-#' dose finding in immunotherapy and targeted therapies.
-#' JCO Precision Oncology, 4, 1393-1402.
 boin12_rds <- function(
     # max_num_patients,
     sample_sizes,

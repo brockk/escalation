@@ -68,7 +68,6 @@ x <- boin12_rds(
   prior_alpha = 1,
   prior_beta = 1
 )
-
 }
 \references{
 Lin, R., Zhou, Y., Yan, F., Li, D., & Yuan, Y. (2020).
